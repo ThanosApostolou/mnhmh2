@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "./logo.svg";
+import logo from "./resources/logo.svg";
 import "./App.css";
 
 import { HomePage } from "./Gui/HomePage";
@@ -11,12 +11,18 @@ import {
   Route,
   Link,
   useRouteMatch,
-  useParams
+  useParams,
+  withRouter
 } from "react-router-dom";
 
 const name = "Thanoss";
 
 class App extends React.Component {
+
+  onRouteChange(path: string) {
+    console.log("path: " + path);
+  }
+
   render() {
     return (
       <div className="App">
@@ -42,12 +48,14 @@ class App extends React.Component {
             </ul>
 
             <Switch>
-              <Route path="/armory">
-                <ArmoryPage />
-              </Route>
-              <Route path="/" component={HomePage}>
-                <HomePage />
-              </Route>
+              <Route path="/armory" render={(props) => { 
+                  this.onRouteChange("/armory");
+                  return <ArmoryPage {...props} />;
+              }} />
+              <Route path="/" render={(props) => { 
+                  this.onRouteChange("/");
+                  return <HomePage {...props} />;
+              }} />
             </Switch>
           </div>
         </Router>
