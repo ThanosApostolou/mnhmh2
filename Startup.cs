@@ -1,3 +1,4 @@
+using ASP.NETCoreWebApplication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -63,7 +64,7 @@ namespace mnhmh2
 
                 if (env.IsDevelopment())
                 {
-                    spa.UseReactDevelopmentServer(npmScript: "start");
+                    spa.UseVueDevelopmentServer(npmScript: "start");
                 }
             });
         }
