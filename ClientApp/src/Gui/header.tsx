@@ -1,21 +1,29 @@
 import React from "react";
 
-import { AppBar, Toolbar, IconButton, MenuItem, Typography, Button } from "@material-ui/core";
+import { AppBar, Toolbar, IconButton, Menu, MenuItem, Typography, Button } from "@material-ui/core";
+import { NavLink, withRouter } from "react-router-dom";
 
-export class HomePage extends React.Component {
+class Header extends React.Component<any, any> {
+  constructor(props: any) {
+    super(props);
+  }
+
   render() {
+    const path = this.props.location.pathname;
     return (
       <AppBar position="static">
         <Toolbar>
           <IconButton edge="start" color="inherit" aria-label="menu">
           </IconButton>
-          <Typography variant="h6">
-            News
-          </Typography>
-          <Button color="inherit">Login</Button>
+          <MenuItem component={NavLink} to="/" selected={path === "/" ? true : false}>ΜΝΗΜΗ 2</MenuItem>
+          <MenuItem component={NavLink} to="/materialtabs" selected={path === "/materialtabs" ? true : false}>Καρτέλες Υλικών</MenuItem>
+          <MenuItem component={NavLink} to="/debitnotes" selected={path === "/debitnotes" ? true : false}>Χρεωστικά</MenuItem>
+          <MenuItem component={NavLink} to="/comparisons" selected={path === "/comparisons" ? true : false}>Συγρκιτικές</MenuItem>
+          <MenuItem component={NavLink} to="/ammunition" selected={path === "/ammunition" ? true : false}>Πυρομαχικά</MenuItem>
         </Toolbar>
       </AppBar>
     );
   }
 }
 
+export default withRouter(Header);
