@@ -4,7 +4,8 @@ import { BrowserRouter as Router, Switch, Route, Link, useRouteMatch, useParams,
 import logo from "./resources/logo.svg";
 import "./App.css";
 
-import Header from "./Gui/Header";
+import Header from "./Gui/components/Header";
+import { Footer } from "./Gui/components/Footer";
 import { HomePage } from "./Gui/HomePage";
 import { MaterialTabsPage } from "./Gui/MaterialTabsPage";
 import { DebitNotesPage } from "./Gui/DebitNotesPage";
@@ -21,6 +22,7 @@ class App extends React.Component<any, any> {
       <div className="App">
         <Router>
           <Header />
+
           <Switch>
             <Route path="/materialtabs">
               <MaterialTabsPage />
@@ -38,6 +40,7 @@ class App extends React.Component<any, any> {
               <HomePage />
             </Route>
           </Switch>
+
         </Router>
       </div>
     );

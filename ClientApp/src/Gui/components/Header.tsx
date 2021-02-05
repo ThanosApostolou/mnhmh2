@@ -4,7 +4,7 @@ import { AppBar, Toolbar, IconButton, Menu, MenuItem, Popper, Typography, Button
 import { ArrowDropDown, ListAlt, MenuBook, CompareArrows, Whatshot, FolderOpen, Save } from '@material-ui/icons';
 import { NavLink, withRouter } from "react-router-dom";
 
-import brainImage from "../resources/brain-chip-white.png";
+import brainImage from "../../resources/brain-chip-white.png";
 
 class Header extends React.Component<any, any> {
   constructor(props: any) {
@@ -30,27 +30,27 @@ class Header extends React.Component<any, any> {
         <Toolbar variant="dense">
           <Button variant="contained" color="primary" disableElevation component={NavLink} to="/">
             <img src={brainImage} height="36" />
-            ΜΝΗΜΗ 2
+            &nbsp;ΜΝΗΜΗ 2
           </Button>
           <MenuItem component={NavLink} to="/materialtabs" selected={path === "/materialtabs" ? true : false}>
             <ListAlt />
-            Καρτέλες Υλικών
+            &nbsp;Καρτέλες Υλικών
           </MenuItem>
           <MenuItem component={NavLink} to="/debitnotes" selected={path === "/debitnotes" ? true : false}>
             <MenuBook />
-            Χρεωστικά
+            &nbsp;Χρεωστικά
           </MenuItem>
           <MenuItem component={NavLink} to="/comparisons" selected={path === "/comparisons" ? true : false}>
             <CompareArrows />
-            Συγρκιτικές
+            &nbsp;Συγρκιτικές
           </MenuItem>
           <MenuItem component={NavLink} to="/ammunition" selected={path === "/ammunition" ? true : false}>
             <Whatshot />
-            Πυρομαχικά
+            &nbsp;Πυρομαχικά
           </MenuItem>
           <MenuItem onClick={this.handleClick.bind(this)}>
             <FolderOpen />
-            Δεδομένα
+            &nbsp;Δεδομένα
             <ArrowDropDown />
           </MenuItem>
           <Popper id="simple-popper" open={Boolean(this.state.anchorEl)} anchorEl={this.state.anchorEl}>
@@ -62,7 +62,7 @@ class Header extends React.Component<any, any> {
           </Popper>
           <MenuItem onClick={this.handleClick.bind(this)}>
             <Save />
-            Διαχείριση Βάσης Δεδομένων
+            &nbsp;Διαχείριση Βάσης Δεδομένων
             <ArrowDropDown />
           </MenuItem>
           <Popper id="simple-popper" open={Boolean(this.state.anchorEl)} anchorEl={this.state.anchorEl}>
