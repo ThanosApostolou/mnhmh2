@@ -39,7 +39,8 @@ module.exports = {
         "quotes":                   [1, "double"],
         "no-use-before-define": "off",
         "@typescript-eslint/no-use-before-define": "off",
-        "@typescript-eslint/no-inferrable-types": 0,
+        "@typescript-eslint/no-inferrable-types": 1,
+        "@typescript-eslint/no-extra-semi": 1,
         "@typescript-eslint/indent": [1, 2],
         "react/jsx-indent": [2, 2]
     }
