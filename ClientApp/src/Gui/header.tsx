@@ -1,7 +1,7 @@
 import React from "react";
 
 import { AppBar, Toolbar, IconButton, Menu, MenuItem, Popper, Typography, Button } from "@material-ui/core";
-import { ArrowDropDown } from '@material-ui/icons';
+import { ArrowDropDown, ListAlt, MenuBook, CompareArrows, Whatshot, FolderOpen, Save } from '@material-ui/icons';
 import { NavLink, withRouter } from "react-router-dom";
 
 import brainImage from "../resources/brain-chip-white.png";
@@ -32,11 +32,24 @@ class Header extends React.Component<any, any> {
             <img src={brainImage} height="36" />
             ΜΝΗΜΗ 2
           </Button>
-          <MenuItem component={NavLink} to="/materialtabs" selected={path === "/materialtabs" ? true : false}>Καρτέλες Υλικών</MenuItem>
-          <MenuItem component={NavLink} to="/debitnotes" selected={path === "/debitnotes" ? true : false}>Χρεωστικά</MenuItem>
-          <MenuItem component={NavLink} to="/comparisons" selected={path === "/comparisons" ? true : false}>Συγρκιτικές</MenuItem>
-          <MenuItem component={NavLink} to="/ammunition" selected={path === "/ammunition" ? true : false}>Πυρομαχικά</MenuItem>
+          <MenuItem component={NavLink} to="/materialtabs" selected={path === "/materialtabs" ? true : false}>
+            <ListAlt />
+            Καρτέλες Υλικών
+          </MenuItem>
+          <MenuItem component={NavLink} to="/debitnotes" selected={path === "/debitnotes" ? true : false}>
+            <MenuBook />
+            Χρεωστικά
+          </MenuItem>
+          <MenuItem component={NavLink} to="/comparisons" selected={path === "/comparisons" ? true : false}>
+            <CompareArrows />
+            Συγρκιτικές
+          </MenuItem>
+          <MenuItem component={NavLink} to="/ammunition" selected={path === "/ammunition" ? true : false}>
+            <Whatshot />
+            Πυρομαχικά
+          </MenuItem>
           <MenuItem onClick={this.handleClick.bind(this)}>
+            <FolderOpen />
             Δεδομένα
             <ArrowDropDown />
           </MenuItem>
@@ -48,6 +61,7 @@ class Header extends React.Component<any, any> {
             </Menu>
           </Popper>
           <MenuItem onClick={this.handleClick.bind(this)}>
+            <Save />
             Διαχείριση Βάσης Δεδομένων
             <ArrowDropDown />
           </MenuItem>
