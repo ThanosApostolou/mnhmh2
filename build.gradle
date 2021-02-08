@@ -25,4 +25,25 @@ test {
 
 node {
     download = false
+	nodeProjectDir = file("${project.projectDir}/ClientApp")
+}
+
+task buildReact(type: NpxTask) {
+  println "building react app"
+  command = 'react-scripts'
+  args = ['build']
+}
+
+task copyReact(type: Sync) {
+  println "copyiing react app into resources/static"
+  from 'ClientApp/build'
+  into 'src/main/resources/static'
+}
+
+task finalRun(type: GradleBuild) {
+  tasks = ['buildReact', 'copyReact', 'bootRun']
+}
+
+task finalJar(type: GradleBuild) {
+  tasks = ['buildReact', 'copyReact', 'bootJar']
 }
