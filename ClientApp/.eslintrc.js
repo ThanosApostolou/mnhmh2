@@ -42,6 +42,6 @@ module.exports = {
         "@typescript-eslint/no-inferrable-types": 1,
         "@typescript-eslint/no-extra-semi": 1,
         "@typescript-eslint/indent": [1, 2],
-        "react/jsx-indent": [2, 2]
+        "react/jsx-indent": [1, 2]
     }
 };

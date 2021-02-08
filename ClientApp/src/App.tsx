@@ -6,6 +6,7 @@ import "./App.css";
 
 import Header from "./Gui/components/Header";
 import { Footer } from "./Gui/components/Footer";
+import NotFoundPage from "./Gui/NotFoundPage";
 import { HomePage } from "./Gui/HomePage";
 import { MaterialTabsPage } from "./Gui/MaterialTabsPage";
 import { DebitNotesPage } from "./Gui/DebitNotesPage";
@@ -38,6 +39,9 @@ class App extends React.Component<any, any> {
             </Route>
             <Route path="/" exact>
               <HomePage />
+            </Route>
+            <Route path="/**" exact>
+              <NotFoundPage />
             </Route>
           </Switch>
 
