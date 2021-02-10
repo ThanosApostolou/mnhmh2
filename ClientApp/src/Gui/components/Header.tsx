@@ -29,7 +29,7 @@ class Header extends React.Component<any, any> {
       <AppBar position="static">
         <Toolbar variant="dense">
           <Grid container alignItems="center">
-            <Grid item xs={10}>
+            <Grid item xs={11}>
               <Grid container direction="row" justify="flex-start" alignItems="center">
                 <Button variant="contained" color="primary" disableElevation component={NavLink} to="/">
                   <img src={brainImage} height="36" />
@@ -47,14 +47,6 @@ class Header extends React.Component<any, any> {
                   <CompareArrows />
                   &nbsp;Συγρκιτικές
                 </MenuItem>
-                <MenuItem component={NavLink} to="/ammunition" selected={path === "/ammunition" ? true : false}>
-                  <Whatshot />
-                  &nbsp;Πυρομαχικά
-                </MenuItem>
-                <MenuItem component={NavLink} to="/teams" selected={path === "/teams" ? true : false}>
-                  <Group />
-                  &nbsp;Ομάδες
-                </MenuItem>
                 <MenuItem component={NavLink} to="/compounds" selected={path === "/compounds" ? true : false}>
                   <GroupWork />
                   &nbsp;Συγκροτήματα
@@ -63,34 +55,39 @@ class Header extends React.Component<any, any> {
                   <GroupWorkTwoTone />
                   &nbsp;Υποσυγκροτήματα
                 </MenuItem>
-                <MenuItem component={NavLink} to="/partialmanagers" selected={path === "/partialmanagers" ? true : false}>
-                  <RecentActors />
-                  &nbsp;Μερικοί Διαχειριστές
-                </MenuItem>
-                <MenuItem component={NavLink} to="/commition" selected={path === "/commition" ? true : false}>
-                  <GroupWorkTwoTone />
-                  &nbsp;Επιτροπή
+                <MenuItem component={NavLink} to="/ammunition" selected={path === "/ammunition" ? true : false}>
+                  <Whatshot />
+                  &nbsp;Πυρομαχικά
                 </MenuItem>
                 <MenuItem component={NavLink} to="/warehouses" selected={path === "/warehouses" ? true : false}>
                   <Store />
                   &nbsp;Αποθήκες
                 </MenuItem>
-                <MenuItem onClick={this.handleClick.bind(this)}>
+                <MenuItem selected={path === "/partialmanagers" || path==="/teams" || path==="/commition" ? true : false} onClick={this.handleClick.bind(this)}>
                   <FolderOpen />
                   &nbsp;Δεδομένα
                   <ArrowDropDown />
                 </MenuItem>
                 <Popper id="simple-popper" open={Boolean(this.state.anchorEl)} anchorEl={this.state.anchorEl}>
-                  <Menu id="menu1" anchorEl={this.state.anchorEl} keepMounted open={Boolean(this.state.anchorEl)} onClose={this.handleClose.bind(this)}>
-                    <MenuItem onClick={this.handleClose.bind(this)}>Profile</MenuItem>
-                    <MenuItem onClick={this.handleClose.bind(this)}>My account</MenuItem>
-                    <MenuItem onClick={this.handleClose.bind(this)}>Logout</MenuItem>
+                  <Menu id="menu1" anchorEl={this.state.anchorEl} keepMounted open={Boolean(this.state.anchorEl)} onClose={this.handleClose.bind(this)}>                    
+                    <MenuItem component={NavLink} to="/partialmanagers" selected={path === "/partialmanagers" ? true : false} onClick={this.handleClose.bind(this)}>
+                      <RecentActors />
+                      &nbsp;Μερικοί Διαχειριστές
+                    </MenuItem>
+                    <MenuItem component={NavLink} to="/teams" selected={path === "/teams" ? true : false} onClick={this.handleClose.bind(this)}>
+                      <Group />
+                      &nbsp;Ομάδες
+                    </MenuItem>
+                    <MenuItem component={NavLink} to="/commition" selected={path === "/commition" ? true : false} onClick={this.handleClose.bind(this)}>
+                      <GroupWorkTwoTone />
+                      &nbsp;Επιτροπή
+                    </MenuItem>
                   </Menu>
                 </Popper>
               </Grid>
             </Grid>
           
-            <Grid item xs={2} alignContent="center" alignItems="center">
+            <Grid item xs={1} alignContent="center" alignItems="center">
               
               <Grid container direction="row" justify="flex-end" alignItems="center">
                 <Button variant="contained" color="primary" disableElevation>
