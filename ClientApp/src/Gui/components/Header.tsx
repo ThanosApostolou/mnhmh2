@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Grid, AppBar, Toolbar, IconButton, Menu, MenuItem, Popper, Typography, Button } from "@material-ui/core";
-import { ArrowDropDown, ListAlt, MenuBook, CompareArrows, Whatshot, FolderOpen, Settings, AccountCircle } from '@material-ui/icons';
+import { ArrowDropDown, ListAlt, MenuBook, CompareArrows, Whatshot, FolderOpen, Settings, AccountCircle, Group, GroupWork, GroupWorkTwoTone, RecentActors, Store } from '@material-ui/icons';
 import { NavLink, withRouter } from "react-router-dom";
 
 import brainImage from "../../resources/brain-chip-white.png";
@@ -50,6 +50,30 @@ class Header extends React.Component<any, any> {
                 <MenuItem component={NavLink} to="/ammunition" selected={path === "/ammunition" ? true : false}>
                   <Whatshot />
                   &nbsp;Πυρομαχικά
+                </MenuItem>
+                <MenuItem component={NavLink} to="/teams" selected={path === "/teams" ? true : false}>
+                  <Group />
+                  &nbsp;Ομάδες
+                </MenuItem>
+                <MenuItem component={NavLink} to="/compounds" selected={path === "/compounds" ? true : false}>
+                  <GroupWork />
+                  &nbsp;Συγκροτήματα
+                </MenuItem>
+                <MenuItem component={NavLink} to="/subcompounds" selected={path === "/subcompounds" ? true : false}>
+                  <GroupWorkTwoTone />
+                  &nbsp;Υποσυγκροτήματα
+                </MenuItem>
+                <MenuItem component={NavLink} to="/partialmanagers" selected={path === "/partialmanagers" ? true : false}>
+                  <RecentActors />
+                  &nbsp;Μερικοί Διαχειριστές
+                </MenuItem>
+                <MenuItem component={NavLink} to="/commition" selected={path === "/commition" ? true : false}>
+                  <GroupWorkTwoTone />
+                  &nbsp;Επιτροπή
+                </MenuItem>
+                <MenuItem component={NavLink} to="/warehouses" selected={path === "/warehouses" ? true : false}>
+                  <Store />
+                  &nbsp;Αποθήκες
                 </MenuItem>
                 <MenuItem onClick={this.handleClick.bind(this)}>
                   <FolderOpen />
