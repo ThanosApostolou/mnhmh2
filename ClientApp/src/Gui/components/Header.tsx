@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Grid, AppBar, Toolbar, IconButton, Menu, MenuItem, Popper, Typography, Button } from "@material-ui/core";
-import { ArrowDropDown, ListAlt, MenuBook, CompareArrows, Whatshot, FolderOpen, Settings, AccountCircle, Group, GroupWork, GroupWorkTwoTone, RecentActors, Store } from '@material-ui/icons';
+import { ArrowDropDown, ListAlt, MenuBook, CompareArrows, Whatshot, FolderOpen, Settings, AccountCircle, Group, GroupWork, GroupWorkTwoTone, RecentActors, Store, SupervisorAccount } from '@material-ui/icons';
 import { NavLink, withRouter } from "react-router-dom";
 
 import brainImage from "../../resources/brain-chip-white.png";
@@ -79,7 +79,7 @@ class Header extends React.Component<any, any> {
                       &nbsp;Ομάδες
                     </MenuItem>
                     <MenuItem component={NavLink} to="/commition" selected={path === "/commition" ? true : false} onClick={this.handleClose.bind(this)}>
-                      <GroupWorkTwoTone />
+                      <SupervisorAccount />
                       &nbsp;Επιτροπή
                     </MenuItem>
                   </Menu>
