@@ -1,0 +1,49 @@
+plugins {
+	id 'org.springframework.boot' version '2.4.2'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id "com.github.node-gradle.node" version "3.0.0"
+	id 'java'
+}
+
+group = 'com.stratos'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-devtools'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+test {
+	useJUnitPlatform()
+}
+
+node {
+    download = false
+	nodeProjectDir = file("${project.projectDir}/ClientApp")
+}
+
+task buildReact(type: NpxTask) {
+  println "building react app"
+  command = 'react-scripts'
+  args = ['build']
+}
+
+task copyReact(type: Sync) {
+  println "copyiing react app into resources/static"
+  from 'ClientApp/build'
+  into 'src/main/resources/static'
+}
+
+task finalRun(type: GradleBuild) {
+  tasks = ['buildReact', 'copyReact', 'bootRun']
+}
+
+task finalJar(type: GradleBuild) {
+  tasks = ['buildReact', 'copyReact', 'bootJar']
+}
