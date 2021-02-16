@@ -69,6 +69,6 @@
   },
   "exclude": [
     "node_modules",
-    "ClientApp"
+    "client"
   ]
 }

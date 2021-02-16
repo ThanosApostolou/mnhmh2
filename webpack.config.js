@@ -21,13 +21,13 @@ module.exports = {
             {
                 test: /\.ts$/,
                 use: 'ts-loader',
-                exclude: ['/node_modules', '/ClientApp/', '/build/']
+                exclude: ['/node_modules', '/client/', '/build/']
             },            
             {
                 test: /\.js$/,
-                exclude: ['/node_modules', '/ClientApp/', '/build/']
+                exclude: ['/node_modules', '/client/', '/build/']
             }
         ],
-        noParse: '/ClientApp/'
+        noParse: '/client/'
     },
 }
