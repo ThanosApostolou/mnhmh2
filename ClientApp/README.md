@@ -2,7 +2,7 @@
 ```
   1. npx create-react-app mnhmh2-client --template typescript && cd mnhmh2-client
   2. npm install react-router-dom @types/react-router-dom @material-ui/core @material-ui/icons
-  3. npm install --save-dev eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin eslint-plugin-react
+  3. npm install --save-dev eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin eslint-plugin-react cra-build-watch
 ```
 
 Runs the app in the development mode.\

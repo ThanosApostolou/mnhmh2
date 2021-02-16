@@ -4,10 +4,12 @@
   "description": "",
   "main": "build/main.js",
   "scripts": {
-    "watch": "webpack --watch --progress",
+    "watch:server": "webpack --watch --progress --mode development",
+    "watch:client": "cd ClientApp; npm run watch",
+    "watch": "run-p watch:server watch:client",
     "start": "nodemon .",
-    "serve": "run-p watch start",
-    "build": "webpack --progress",
+    "serve": "run-p watch:server watch:client start",
+    "build": "webpack --progress --mode production",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
