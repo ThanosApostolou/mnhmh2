@@ -1,5 +1,6 @@
 const path = require('path');
 const { NODE_ENV = 'production' } = process.env;
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
     entry: './src/main.ts',
@@ -7,11 +8,14 @@ module.exports = {
     target: 'node',
     output: {
         path: path.resolve(__dirname, 'build'),
-        filename: 'main.js'
+        filename: 'mnhmh2.js'
     },
     resolve: {
         extensions: ['.ts', '.js']
     },
+    plugins: [
+        new CleanWebpackPlugin()
+    ],
     module: {
         rules: [
             {
