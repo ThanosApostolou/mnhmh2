@@ -5,8 +5,11 @@ module.exports = {
     },
     "extends": [
         "eslint:recommended",
-        "plugin:react/recommended",
-        "plugin:@typescript-eslint/recommended"
+        "plugin:import/errors",
+        "plugin:import/warnings",
+        "plugin:import/typescript",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:react/recommended"
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
@@ -25,10 +28,7 @@ module.exports = {
             "createClass": "createReactClass", // Regex for Component Factory to use, default to "createReactClass"
             "pragma": "React",  // Pragma to use, default to "React"
             "fragment": "Fragment",  // Fragment to use (may be a property of <pragma>), default to "Fragment"
-            "version": "detect", // React version. "detect" automatically picks the version you have installed.
-                                // You can also use `16.0`, `16.3`, etc, if you want to override the detected value.
-                                // default to latest and warns if missing
-                                // It will default to "detect" in the future
+            "version": "detect",
             "flowVersion": "0.53" // Flow version
         },
         "propWrapperFunctions": [
@@ -44,15 +44,17 @@ module.exports = {
         ]
     },
     "rules": {
+        "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
+        "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
         "strict":                   "error",
-        "semi":                     "error",
+        "semi":                     "warn",
         "no-template-curly-in-string":"error",
         "block-scoped-var":         "error",
         "class-methods-use-this":   "error",
         "consistent-return":        "error",
         "no-param-reassign":        "error",
         "no-invalid-this":          "error",
-        "init-declarations":        "error",
+        "init-declarations":        "warn",
         "no-label-var":             "error",
         "no-undef-init":            "error",
         "no-undefined":             "error",
@@ -63,6 +65,7 @@ module.exports = {
         "no-use-before-define": "off",
         "@typescript-eslint/no-use-before-define": "off",
         "@typescript-eslint/no-inferrable-types": 1,
+        "@typescript-eslint/no-explicit-any": 0,
         "@typescript-eslint/no-extra-semi": 1,
         "@typescript-eslint/indent": [1, 4],
         "react/jsx-indent": [1, 4]

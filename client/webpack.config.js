@@ -10,7 +10,7 @@ module.exports = {
         filename: "mnhmh2-client.js"
     },
     resolve: {
-        extensions: [".ts", ".tsx", ".js"]
+        extensions: [".ts", ".tsx", ".js", ".jsx"]
     },
 
     module: {
