@@ -64,7 +64,7 @@ class App extends React.Component<any, any> {
                         <Route path="/" exact>
                             <HomePage />
                         </Route>
-                        <Route path="/**" exact>
+                        <Route>
                             <NotFoundPage />
                         </Route>
                     </Switch>

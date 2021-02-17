@@ -11,7 +11,7 @@
         "watch": "concurrently npm:watch:server npm:watch:client",
         "build:server": "webpack --mode production --color --progress",
         "build:client": "cd ../mnhmh2-client && npx webpack --mode production --color --progress -o ../mnhmh2-server/build/public",
-        "build": "concurrently npm:build:server npm:build:client",
+        "build": "npm:build:server && npm:build:client",
         "serve": "concurrently npm:watch npm:start",
         "pkg:win64": "npm run build && pkg -t node14-win-x64 --out-path packages .",
         "pkg:win32": "npm run build && pkg -t node14-win-x86 --out-path packages .",
@@ -24,7 +24,10 @@
     "license": "ISC",
     "pkg": {
         "scripts": "build/**/*.js",
-        "assets": "build/assets/**/*"
+        "assets": [
+            "build/assets/**/*",
+            "build/public/**/*"
+        ]
     },
     "devDependencies": {
         "@typescript-eslint/eslint-plugin": "^4.15.1",
@@ -40,5 +43,9 @@
         "typescript": "^4.1.5",
         "webpack": "^5.22.0",
         "webpack-cli": "^4.5.0"
+    },
+    "dependencies": {
+        "@types/express": "^4.17.11",
+        "express": "^4.17.1"
     }
 }

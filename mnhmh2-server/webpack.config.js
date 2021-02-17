@@ -2,6 +2,8 @@ const path = require("path");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const ESLintPlugin = require("eslint-webpack-plugin");
 
+const isProd = process.env.NODE_ENV === 'production';
+
 module.exports = {
     entry: "./src/main.ts",
     target: 'node',
@@ -37,7 +39,6 @@ module.exports = {
         ]
     },
     plugins: [
-        new CleanWebpackPlugin(),
         new ESLintPlugin({
             context: "src/",
             extensions: ["js", "ts"],
@@ -45,3 +46,7 @@ module.exports = {
         })
     ]
 };
+
+if (isProd) {
+    module.exports.plugins.push(new CleanWebpackPlugin());
+}

@@ -41,6 +41,7 @@ module.exports = {
         "@typescript-eslint/no-inferrable-types": 1,
         "@typescript-eslint/no-explicit-any": 0,
         "@typescript-eslint/no-extra-semi": 1,
+        "@typescript-eslint/no-var-requires": 0,
         "@typescript-eslint/indent": [1, 4]
     }
 };
