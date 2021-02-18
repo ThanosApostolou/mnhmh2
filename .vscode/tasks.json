@@ -1,0 +1,30 @@
+{
+	"version": "2.0.0",
+	"tasks": [		
+		{
+			"type": "npm",
+			"script": "install",
+			"problemMatcher": [],
+			"label": "npm: install",
+			"detail": "install dependencies from package"
+		},
+		{
+			"type": "npm",
+			"script": "serve",
+			"problemMatcher": [],
+			"label": "npm: serve",
+			"detail": "run-p watch:server watch:client start"
+		},
+		{
+			"type": "npm",
+			"script": "build",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"problemMatcher": [],
+			"label": "npm: build",
+			"detail": "webpack --progress --mode production"
+		}
+	]
+}
