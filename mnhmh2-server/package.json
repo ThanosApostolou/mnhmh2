@@ -11,7 +11,7 @@
         "watch": "concurrently npm:watch:server npm:watch:client",
         "build:server": "webpack --mode production --color --progress",
         "build:client": "cd ../mnhmh2-client && npx webpack --mode production --color --progress -o ../mnhmh2-server/build/public",
-        "build": "npm:build:server && npm:build:client",
+        "build": "npm run build:server && npm run build:client",
         "serve": "concurrently npm:watch npm:start",
         "pkg:win64": "npm run build && pkg -t node14-win-x64 --out-path packages .",
         "pkg:win32": "npm run build && pkg -t node14-win-x86 --out-path packages .",
