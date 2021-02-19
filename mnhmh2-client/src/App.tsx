@@ -33,53 +33,51 @@ class App extends React.Component<any, any> {
     render() {
         return (
             <ThemeProvider theme={this.thememanager.theme}>
-                <Box height="100vh" style={{"minHeight": "100%", "color": "red", "backgroundColor": "red"}}>
-                    <Paper style={{"height": "100vh"}}>
-                        <Router>
-                            <Header />
+                <Paper style={{"minHeight": "100vh"}}>
+                    <Router>
+                        <Header />
 
-                            <Switch>
-                                <Route path="/materialtabs">
-                                    <MaterialTabsPage />
-                                </Route>
-                                <Route path="/debitnotes">
-                                    <DebitNotesPage />
-                                </Route>
-                                <Route path="/comparisons">
-                                    <ComparisonsPage />
-                                </Route>
-                                <Route path="/ammunition">
-                                    <AmmunitionPage />
-                                </Route>
-                                <Route path="/teams">
-                                    <TeamsPage />
-                                </Route>
-                                <Route path="/compounds">
-                                    <Compounds />
-                                </Route>
-                                <Route path="/subcompounds">
-                                    <SubCompounds />
-                                </Route>
-                                <Route path="/partialmanagers">
-                                    <PartialManagers />
-                                </Route>
-                                <Route path="/commition">
-                                    <Commition />
-                                </Route>
-                                <Route path="/warehouses">
-                                    <Warehouses />
-                                </Route>
-                                <Route path="/" exact>
-                                    <HomePage />
-                                </Route>
-                                <Route>
-                                    <NotFoundPage />
-                                </Route>
-                            </Switch>
+                        <Switch>
+                            <Route path="/materialtabs">
+                                <MaterialTabsPage />
+                            </Route>
+                            <Route path="/debitnotes">
+                                <DebitNotesPage />
+                            </Route>
+                            <Route path="/comparisons">
+                                <ComparisonsPage />
+                            </Route>
+                            <Route path="/ammunition">
+                                <AmmunitionPage />
+                            </Route>
+                            <Route path="/teams">
+                                <TeamsPage />
+                            </Route>
+                            <Route path="/compounds">
+                                <Compounds />
+                            </Route>
+                            <Route path="/subcompounds">
+                                <SubCompounds />
+                            </Route>
+                            <Route path="/partialmanagers">
+                                <PartialManagers />
+                            </Route>
+                            <Route path="/commition">
+                                <Commition />
+                            </Route>
+                            <Route path="/warehouses">
+                                <Warehouses />
+                            </Route>
+                            <Route path="/" exact>
+                                <HomePage />
+                            </Route>
+                            <Route>
+                                <NotFoundPage />
+                            </Route>
+                        </Switch>
 
-                        </Router>
-                    </Paper>
-                </Box>
+                    </Router>
+                </Paper>
             </ThemeProvider>
         );
     }

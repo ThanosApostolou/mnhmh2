@@ -1,25 +1,40 @@
 import React from "react";
 
-import { Grid, AppBar, Toolbar, IconButton, Menu, MenuItem, Popper, Typography, Button } from "@material-ui/core";
+import { Grid, AppBar, Toolbar, Menu, MenuItem, Popper } from "@material-ui/core";
 import { ArrowDropDown, ListAlt, MenuBook, CompareArrows, Whatshot, FolderOpen, Settings, AccountCircle, Group, GroupWork, GroupWorkTwoTone, RecentActors, Store, SupervisorAccount } from "@material-ui/icons";
 import { NavLink, withRouter } from "react-router-dom";
 
 import brainImage from "../../resources/brain-chip-white.png";
+import { SettingsDialog } from "./SettingsDialog";
 
 class Header extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
         this.state = {
-            anchorEl: null
+            anchorMenuEl: null,
+            openSettingsDialog: false
         };
     }
 
     handleClick(event: React.MouseEvent<HTMLButtonElement> | React.MouseEvent<HTMLLIElement>) {
-        this.setState({anchorEl: event.currentTarget});
+        this.setState({anchorMenuEl: event.currentTarget});
     }
 
     handleClose() {
-        this.setState({anchorEl: null});
+        this.setState({anchorMenuEl: null});
+    }
+
+    /**
+     * Open Settings Dialog by setting openSettingsDialog state to true
+     */
+    handleOpenSettingsDialog() {
+        this.setState({openSettingsDialog: true});
+    }
+    /**
+     * Closes Settings Dialog by setting openSettingsDialog state to false
+     */
+    handleCloseSettingsDialog() {
+        this.setState({openSettingsDialog: false});
     }
 
     render() {
@@ -68,28 +83,13 @@ class Header extends React.Component<any, any> {
                                     &nbsp;Δεδομένα
                                     <ArrowDropDown />
                                 </MenuItem>
-                                <Popper id="simple-popper" open={Boolean(this.state.anchorEl)} anchorEl={this.state.anchorEl}>
-                                    <Menu id="menu1" anchorEl={this.state.anchorEl} keepMounted open={Boolean(this.state.anchorEl)} onClose={this.handleClose.bind(this)}>                    
-                                        <MenuItem component={NavLink} to="/partialmanagers" selected={path === "/partialmanagers" ? true : false} onClick={this.handleClose.bind(this)}>
-                                            <RecentActors />
-                                            &nbsp;Μερικοί Διαχειριστές
-                                        </MenuItem>
-                                        <MenuItem component={NavLink} to="/teams" selected={path === "/teams" ? true : false} onClick={this.handleClose.bind(this)}>
-                                            <Group />
-                                            &nbsp;Ομάδες
-                                        </MenuItem>
-                                        <MenuItem component={NavLink} to="/commition" selected={path === "/commition" ? true : false} onClick={this.handleClose.bind(this)}>
-                                            <SupervisorAccount />
-                                            &nbsp;Επιτροπή
-                                        </MenuItem>
-                                    </Menu>
-                                </Popper>
+                                
                             </Grid>
                         </Grid>
           
                         <Grid item xs={1}>              
                             <Grid container direction="row" justify="flex-end" alignItems="center">
-                                <MenuItem onClick={this.handleClose.bind(this)}>
+                                <MenuItem onClick={this.handleOpenSettingsDialog.bind(this)}>
                                     <Settings />
                                 </MenuItem>
                                 <MenuItem onClick={this.handleClose.bind(this)}>
@@ -99,6 +99,29 @@ class Header extends React.Component<any, any> {
                         </Grid>
                     </Grid>
                 </Toolbar>
+                <Popper id="simple-popper" open={Boolean(this.state.anchorMenuEl)} anchorEl={this.state.anchorMenuEl}>
+                    <Menu id="menu1" anchorEl={this.state.anchorMenuEl} keepMounted open={Boolean(this.state.anchorMenuEl)} onClose={this.handleClose.bind(this)}
+                        transformOrigin={{
+                            vertical: "top",
+                            horizontal: "center",
+                        }
+                        }>                    
+                        <MenuItem component={NavLink} to="/partialmanagers" selected={path === "/partialmanagers" ? true : false} onClick={this.handleClose.bind(this)}>
+                            <RecentActors />
+                                            &nbsp;Μερικοί Διαχειριστές
+                        </MenuItem>
+                        <MenuItem component={NavLink} to="/teams" selected={path === "/teams" ? true : false} onClick={this.handleClose.bind(this)}>
+                            <Group />
+                                            &nbsp;Ομάδες
+                        </MenuItem>
+                        <MenuItem component={NavLink} to="/commition" selected={path === "/commition" ? true : false} onClick={this.handleClose.bind(this)}>
+                            <SupervisorAccount />
+                                            &nbsp;Επιτροπή
+                        </MenuItem>
+                    </Menu>
+                </Popper>
+                <SettingsDialog openSettingsDialog={this.state.openSettingsDialog} handleCloseSettingsDialog={this.handleCloseSettingsDialog.bind(this)} />
+                
             </AppBar>
         );
     }
