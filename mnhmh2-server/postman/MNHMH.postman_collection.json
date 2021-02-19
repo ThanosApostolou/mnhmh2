@@ -1,0 +1,46 @@
+{
+	"info": {
+		"_postman_id": "0dc8959f-3e47-4c2e-8ebf-00a679e03be8",
+		"name": "MNHMH",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/api",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/materialtab",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/materialtab",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"materialtab"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
