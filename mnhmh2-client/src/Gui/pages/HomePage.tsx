@@ -1,11 +1,11 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { Card, CardHeader, CardContent, CardMedia, Container, Grid, Button } from "@material-ui/core";
 import { ArrowDropDown, ListAlt, MenuBook, CompareArrows, Whatshot, SupervisorAccount, Group, GroupWork, GroupWorkTwoTone, RecentActors, Store } from "@material-ui/icons";
 import { NavLink } from "react-router-dom";
 
 export class HomePage extends React.Component {
   
-    render() {
+    render(): ReactNode {
         const styles = {
             largeIcon: {
                 width: 128,
@@ -16,7 +16,7 @@ export class HomePage extends React.Component {
             <Container maxWidth="xl">
                 <br />
                 <Card elevation={24}>
-                    <CardHeader title="ΒΑΣΙΚΕΣ ΛΕΙΤΟΥΡΓΙΕΣ" />
+                    <CardHeader title="ΒΑΣΙΚΕΣ ΛΕΙΤΟΥΡΓΙΕΣ" style={{ textAlign: "center" }} />
                     <Grid container direction="row" justify="center" alignItems="center">
                         <Button variant="contained" component={NavLink} to="/materialtabs" style={{margin: "10px"}}>
                             <Grid container direction="column" justify="center" alignItems="center">
@@ -64,31 +64,25 @@ export class HomePage extends React.Component {
                 </Card>
                 <br />
                 <Card elevation={24}>
-                    <CardHeader title="ΔΕΔΟΜΕΝΑ" />
+                    <CardHeader title="ΔΕΔΟΜΕΝΑ" style={{ textAlign: "center" }} />
                     <Grid container direction="row" justify="center" alignItems="center">
-                        <Button component={NavLink} to="/partialmanagers">
-                            <Card elevation={5}>
-                                <CardHeader title="ΜΕΡΙΚΟΙ ΔΙΑΧΕΙΡΙΣΤΕΣ" />
-                                <Grid container justify="center" alignItems="center">
-                                    <CardMedia component={RecentActors} style={styles.largeIcon} />
-                                </Grid>
-                            </Card>
+                        <Button variant="contained" component={NavLink} to="/partialmanagers" style={{margin: "10px"}}>
+                            <Grid container direction="column" justify="center" alignItems="center">
+                                <h3>ΜΕΡΙΚΟΙ ΔΙΑΧΕΙΡΙΣΤΕΣ</h3>
+                                <RecentActors style={styles.largeIcon} />
+                            </Grid>
                         </Button>
-                        <Button component={NavLink} to="/teams">              
-                            <Card elevation={5}>
-                                <CardHeader title="ΟΜΑΔΕΣ" />
-                                <Grid container justify="center" alignItems="center">
-                                    <CardMedia component={Group} style={styles.largeIcon} />
-                                </Grid>
-                            </Card>
+                        <Button variant="contained" component={NavLink} to="/teams" style={{margin: "10px"}}>
+                            <Grid container direction="column" justify="center" alignItems="center">
+                                <h3>ΟΜΑΔΕΣ</h3>
+                                <Group style={styles.largeIcon} />
+                            </Grid>
                         </Button>
-                        <Button component={NavLink} to="/commition">              
-                            <Card elevation={5}>
-                                <CardHeader title="ΕΠΙΤΡΟΠΗ" />
-                                <Grid container justify="center" alignItems="center">
-                                    <CardMedia component={SupervisorAccount} style={styles.largeIcon} />
-                                </Grid>
-                            </Card>
+                        <Button variant="contained" component={NavLink} to="/commition" style={{margin: "10px"}}>
+                            <Grid container direction="column" justify="center" alignItems="center">
+                                <h3>ΕΠΙΤΡΟΠΗ</h3>
+                                <SupervisorAccount style={styles.largeIcon} />
+                            </Grid>
                         </Button>
                     </Grid>
                 </Card>

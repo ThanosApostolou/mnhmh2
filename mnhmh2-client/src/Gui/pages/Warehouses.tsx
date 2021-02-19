@@ -1,7 +1,7 @@
-import React from "react";
+import React, { ReactNode } from "react";
 
 export class Warehouses extends React.Component {
-    render() {
+    render(): ReactNode {
         return (
             <p>This is Warehouses page</p>
         );

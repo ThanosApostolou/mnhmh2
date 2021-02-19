@@ -1,7 +1,7 @@
-import React from "react";
+import React, { ReactNode } from "react";
 
 export class ArmoryPage extends React.Component {
-  render() {
+  render(): ReactNode {
     return (
       <p>This is Armory page</p>
     );

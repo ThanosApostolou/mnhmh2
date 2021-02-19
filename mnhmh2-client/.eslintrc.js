@@ -59,7 +59,7 @@ module.exports = {
         "no-undef-init":            "error",
         "no-undefined":             "error",
         "no-use-before-define":     "error",
-        "class-methods-use-this":   "warn",
+        "class-methods-use-this":   "off",
         "indent":                   [1, 4],
         "quotes":                   [1, "double"],
         "no-use-before-define": "off",

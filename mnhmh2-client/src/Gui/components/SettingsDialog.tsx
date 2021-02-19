@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { Button, Dialog, DialogContent, DialogActions } from "@material-ui/core";
 
 
@@ -20,7 +20,7 @@ export class SettingsDialog extends React.Component<any, any> {
         console.log("handleSave");
         this.props.handleCloseSettingsDialog();
     }
-    render() {
+    render(): ReactNode {
         return (
             <Dialog open={this.props.openSettingsDialog}  fullWidth={true} maxWidth="xl" disableBackdropClick disableEscapeKeyDown>
                 <DialogContent>

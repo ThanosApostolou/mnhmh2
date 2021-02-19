@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 
 import { AppBar, Toolbar, IconButton, Menu, MenuItem, Popper, Typography, Button } from "@material-ui/core";
 import { Theme } from '@material-ui/core';
@@ -41,7 +41,7 @@ export class Footer extends React.Component<any, any> {
         super(props);
     }
     
-    render() {
+    render(): ReactNode {
       const classes = useStyles();
       return (
         <AppBar position="fixed" className={classes.appBar}>

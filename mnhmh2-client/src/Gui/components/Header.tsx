@@ -1,6 +1,6 @@
-import React from "react";
+import React, { ReactNode } from "react";
 
-import { Grid, AppBar, Toolbar, Menu, MenuItem, Popper } from "@material-ui/core";
+import { Grid, AppBar, Toolbar, Menu, MenuItem, } from "@material-ui/core";
 import { ArrowDropDown, ListAlt, MenuBook, CompareArrows, Whatshot, FolderOpen, Settings, AccountCircle, Group, GroupWork, GroupWorkTwoTone, RecentActors, Store, SupervisorAccount } from "@material-ui/icons";
 import { NavLink, withRouter } from "react-router-dom";
 
@@ -37,9 +37,8 @@ class Header extends React.Component<any, any> {
         this.setState({openSettingsDialog: false});
     }
 
-    render() {
+    render(): ReactNode {
         const path = this.props.location.pathname;
-
         return (
             <AppBar position="static" color="default">
                 <Toolbar variant="dense">
@@ -99,27 +98,25 @@ class Header extends React.Component<any, any> {
                         </Grid>
                     </Grid>
                 </Toolbar>
-                <Popper id="simple-popper" open={Boolean(this.state.anchorMenuEl)} anchorEl={this.state.anchorMenuEl}>
-                    <Menu id="menu1" anchorEl={this.state.anchorMenuEl} keepMounted open={Boolean(this.state.anchorMenuEl)} onClose={this.handleClose.bind(this)}
-                        transformOrigin={{
-                            vertical: "top",
-                            horizontal: "center",
-                        }
-                        }>                    
-                        <MenuItem component={NavLink} to="/partialmanagers" selected={path === "/partialmanagers" ? true : false} onClick={this.handleClose.bind(this)}>
-                            <RecentActors />
-                                            &nbsp;Μερικοί Διαχειριστές
-                        </MenuItem>
-                        <MenuItem component={NavLink} to="/teams" selected={path === "/teams" ? true : false} onClick={this.handleClose.bind(this)}>
-                            <Group />
-                                            &nbsp;Ομάδες
-                        </MenuItem>
-                        <MenuItem component={NavLink} to="/commition" selected={path === "/commition" ? true : false} onClick={this.handleClose.bind(this)}>
-                            <SupervisorAccount />
-                                            &nbsp;Επιτροπή
-                        </MenuItem>
-                    </Menu>
-                </Popper>
+                <Menu id="menu1" anchorEl={this.state.anchorMenuEl} keepMounted open={Boolean(this.state.anchorMenuEl)} onClose={this.handleClose.bind(this)}
+                    transformOrigin={{
+                        vertical: "top",
+                        horizontal: "center",
+                    }
+                    }>                    
+                    <MenuItem component={NavLink} to="/partialmanagers" selected={path === "/partialmanagers" ? true : false} onClick={this.handleClose.bind(this)}>
+                        <RecentActors />
+                                        &nbsp;Μερικοί Διαχειριστές
+                    </MenuItem>
+                    <MenuItem component={NavLink} to="/teams" selected={path === "/teams" ? true : false} onClick={this.handleClose.bind(this)}>
+                        <Group />
+                                        &nbsp;Ομάδες
+                    </MenuItem>
+                    <MenuItem component={NavLink} to="/commition" selected={path === "/commition" ? true : false} onClick={this.handleClose.bind(this)}>
+                        <SupervisorAccount />
+                                        &nbsp;Επιτροπή
+                    </MenuItem>
+                </Menu>
                 <SettingsDialog openSettingsDialog={this.state.openSettingsDialog} handleCloseSettingsDialog={this.handleCloseSettingsDialog.bind(this)} />
                 
             </AppBar>

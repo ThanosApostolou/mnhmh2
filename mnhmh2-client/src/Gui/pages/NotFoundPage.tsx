@@ -1,9 +1,9 @@
-import React from "react";
+import React, { ReactNode } from "react";
 
 import { withRouter } from "react-router-dom";
 
 class NotFoundPage extends React.Component<any, any> {
-    render() {
+    render(): ReactNode {
         const path = this.props.location.pathname;
 
         return (

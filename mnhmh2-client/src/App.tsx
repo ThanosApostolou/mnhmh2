@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { BrowserRouter as Router, Switch, Route, Link, useRouteMatch, useParams, withRouter } from "react-router-dom";
 
 import Header from "./Gui/components/Header";
@@ -30,7 +30,7 @@ class App extends React.Component<any, any> {
         this.thememanager.init();
     }
 
-    render() {
+    render(): ReactNode {
         return (
             <ThemeProvider theme={this.thememanager.theme}>
                 <Paper style={{"minHeight": "100vh"}}>
