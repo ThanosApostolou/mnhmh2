@@ -58,7 +58,9 @@ export class SettingsDialog extends React.Component<any, any> {
                 </DialogContent>
                 <DialogContent>
                     <InputLabel shrink id="themeSelect" disabled={this.state.isThemeDefault}>Theme:</InputLabel>
-                    <Select id="themeSelect" defaultValue={this.state.theme} disabled={this.state.isThemeDefault} onChange={(e) => this.setState({theme: e.target.value})}>
+                    <Select id="themeSelect" defaultValue={this.state.theme} disabled={this.state.isThemeDefault}
+                        onChange={(e) => this.setState({theme: e.target.value})}
+                    >
                         <MenuItem value="dark">Dark</MenuItem>
                         <MenuItem value="light">Light</MenuItem>
                     </Select>

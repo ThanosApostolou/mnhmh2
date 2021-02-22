@@ -6,6 +6,7 @@ import { NavLink, withRouter } from "react-router-dom";
 
 import brainImage from "../../resources/brain-chip-white.png";
 import { SettingsDialog } from "./SettingsDialog";
+import App from "../../App";
 
 class Header extends React.Component<any, any> {
     constructor(props: any) {
@@ -41,7 +42,7 @@ class Header extends React.Component<any, any> {
         const path = this.props.location.pathname;
         const settingsdialog = this.state.openSettingsDialog === true ?  <SettingsDialog openSettingsDialog={this.state.openSettingsDialog} handleCloseSettingsDialog={this.handleCloseSettingsDialog.bind(this)} /> : null;
         return (
-            <AppBar position="static" color="default">
+            <AppBar position="static" color={App.app.state.thememanager.type === "dark" ? "default" : "primary"}>
                 <Toolbar variant="dense">
                     <Grid container alignItems="center">
                         <Grid item xs={11}>
@@ -103,8 +104,8 @@ class Header extends React.Component<any, any> {
                     transformOrigin={{
                         vertical: "top",
                         horizontal: "center",
-                    }
-                    }>                    
+                    }}
+                >                    
                     <MenuItem component={NavLink} to="/partialmanagers" selected={path === "/partialmanagers" ? true : false} onClick={this.handleClose.bind(this)}>
                         <RecentActors />
                                         &nbsp;Μερικοί Διαχειριστές

@@ -31,16 +31,19 @@ class App extends React.Component<any, any> {
         super(props);
         App.app = this;
         (window as any).app = App.app;
-        this.settingsmanager = new SettingsManager();
-        this.settingsmanager.init();
         this.thememanager = new ThemeManager();
         this.thememanager.init();
+        this.settingsmanager = new SettingsManager();
+        this.settingsmanager.init();
         console.log((window as any).settings);
+        this.state = {
+            thememanager: this.thememanager
+        };
     }
 
     render(): ReactNode {
         return (
-            <ThemeProvider theme={this.thememanager.theme}>
+            <ThemeProvider theme={this.state.thememanager.theme}>
                 <Paper style={{"minHeight": "100vh"}}>
                     <Router>
                         <Header />

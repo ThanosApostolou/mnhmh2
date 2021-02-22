@@ -1,3 +1,5 @@
+import App from "./App";
+
 export class SettingsManager {
     defaultServer: string;
     server: string;
@@ -32,6 +34,8 @@ export class SettingsManager {
             this.theme = this.defaultTheme;
             this.isThemeDefault = true;
         }
+        console.log("theme ", this.theme);
+        App.app.thememanager.setTheme(this.theme);
     }
 
 
