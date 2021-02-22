@@ -15,19 +15,27 @@ import { SubCompounds } from "./Gui/pages/SubCompounds";
 import { PartialManagers } from "./Gui/pages/PartialManagers";
 import { Commition } from "./Gui/pages/Commition";
 import { Warehouses } from "./Gui/pages/Warehouses";
-import { ThemeManager } from "./Gui/ThemeManager";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { Paper, Box } from "@material-ui/core";
 
 import "./index.css";
+import { SettingsManager } from "./SettingsManager";
+import { ThemeManager } from "./Gui/ThemeManager";
 
 class App extends React.Component<any, any> {
+    static app: App;
     thememanager: ThemeManager;
+    settingsmanager: SettingsManager;
 
     constructor(props: any) {
         super(props);
+        App.app = this;
+        (window as any).app = App.app;
+        this.settingsmanager = new SettingsManager();
+        this.settingsmanager.init();
         this.thememanager = new ThemeManager();
         this.thememanager.init();
+        console.log((window as any).settings);
     }
 
     render(): ReactNode {

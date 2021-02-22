@@ -33,6 +33,14 @@ module.exports = (env, argv) => {
                     exclude: [/node_modules/, /build/]
                 },
                 {
+                    test: /\.json/,
+                    type: "asset/resource",
+                    generator: {
+                        filename: '[name][ext][query]'
+                    },
+                    exclude: [/node_modules/, /build/]
+                },
+                {
                     test: /\.css$/,
                     use: ["style-loader", "css-loader"],
                     exclude: [/node_modules/, /build/]
@@ -42,7 +50,8 @@ module.exports = (env, argv) => {
         plugins: [
             new HtmlWebpackPlugin({
                 template: "./public/index.html",
-                favicon: "./public/favicon.ico"
+                favicon: "./public/favicon.ico",
+
             }),
             new CleanWebpackPlugin(),
             new ESLintPlugin({

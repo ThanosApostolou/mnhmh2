@@ -39,6 +39,7 @@ class Header extends React.Component<any, any> {
 
     render(): ReactNode {
         const path = this.props.location.pathname;
+        const settingsdialog = this.state.openSettingsDialog === true ?  <SettingsDialog openSettingsDialog={this.state.openSettingsDialog} handleCloseSettingsDialog={this.handleCloseSettingsDialog.bind(this)} /> : null;
         return (
             <AppBar position="static" color="default">
                 <Toolbar variant="dense">
@@ -117,7 +118,7 @@ class Header extends React.Component<any, any> {
                                         &nbsp;Επιτροπή
                     </MenuItem>
                 </Menu>
-                <SettingsDialog openSettingsDialog={this.state.openSettingsDialog} handleCloseSettingsDialog={this.handleCloseSettingsDialog.bind(this)} />
+                {settingsdialog}
                 
             </AppBar>
         );
