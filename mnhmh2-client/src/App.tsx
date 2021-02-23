@@ -21,11 +21,13 @@ import { Paper, Box } from "@material-ui/core";
 import "./index.css";
 import { SettingsManager } from "./SettingsManager";
 import { ThemeManager } from "./Gui/ThemeManager";
+import { ApiConsumer } from "./ApiConsumer";
 
 class App extends React.Component<any, any> {
     static app: App;
     thememanager: ThemeManager;
     settingsmanager: SettingsManager;
+    apiconsumer: ApiConsumer;
 
     constructor(props: any) {
         super(props);
@@ -33,18 +35,23 @@ class App extends React.Component<any, any> {
         (window as any).app = App.app;
         this.thememanager = new ThemeManager();
         this.thememanager.init();
+        this.apiconsumer = new ApiConsumer();
         this.settingsmanager = new SettingsManager();
         this.settingsmanager.init();
         console.log((window as any).settings);
         this.state = {
             thememanager: this.thememanager
         };
+
+        this.apiconsumer.axios.get("/").then((res) => {
+            console.log(res);
+        });
     }
 
     render(): ReactNode {
         return (
             <ThemeProvider theme={this.state.thememanager.theme}>
-                <Paper style={{"minHeight": "100vh"}}>
+                <Paper elevation={0} style={{"minHeight": "100vh"}}>
                     <Router>
                         <Header />
 

@@ -26,6 +26,7 @@ export class SettingsManager {
             this.server = this.defaultServer;
             this.isServerDefault = true;
         }
+        App.app.apiconsumer.updateConfig();
     }
     readThemeSetting() {        
         this.theme = window.localStorage.getItem("theme");
