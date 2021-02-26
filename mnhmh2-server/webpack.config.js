@@ -24,7 +24,9 @@ module.exports = (env, argv) => {
         resolve: {
             extensions: [".ts", ".js"]
         },
-
+        watchOptions: {
+            ignored: ["**/node_modules", "**/build/"]
+        },
         module: {
             rules: [
                 {
