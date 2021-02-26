@@ -9,7 +9,7 @@ export class ThemeManager {
         this.theme = null;
     }
 
-    init() {
+    init(): void {
         this.theme = createMuiTheme({
             palette: {
                 type: "dark",

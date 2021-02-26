@@ -68,6 +68,6 @@ module.exports = {
         "@typescript-eslint/no-explicit-any": 0,
         "@typescript-eslint/no-extra-semi": 1,
         "@typescript-eslint/indent": [1, 4],
-        "react/jsx-indent": [1, 4]
+        "react/jsx-indent": 0
     }
 };

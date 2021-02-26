@@ -48,10 +48,10 @@ export class MaterialTabsPage extends React.Component<any, any> {
         } else {
             resultdom =
                 <DataComp rows={rows} columns={columns} />;
-                    <div>
+            <div>
                 <code>
-                            {JSON.stringify(this.state.data)}
-                        </code>
+                    {JSON.stringify(this.state.data)}
+                </code>
             </div>
             ;
         }

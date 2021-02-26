@@ -1,19 +1,8 @@
 const path = require("path");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const ESLintPlugin = require("eslint-webpack-plugin");
 
 module.exports = (env, argv) => {    
     const isProd = argv.mode === 'production';
-    let plugins = [
-        new ESLintPlugin({
-            context: "src/",
-            extensions: ["js", "ts"],
-            fix: true
-        })
-    ];
-    if (isProd) {
-        plugins.push(new CleanWebpackPlugin());
-    }
     return {
         entry: "./src/main.ts",
         target: 'node',
@@ -25,7 +14,7 @@ module.exports = (env, argv) => {
             extensions: [".ts", ".js"]
         },
         watchOptions: {
-            ignored: ["**/node_modules", "**/build/"]
+            ignored: [path.join(__dirname, "/node_modules"), path.join(__dirname, "/build")]
         },
         module: {
             rules: [
@@ -50,6 +39,12 @@ module.exports = (env, argv) => {
                 }
             ]
         },
-        plugins: plugins
+        plugins: [
+            new ESLintPlugin({
+                context: "src/",
+                extensions: ["js", "ts"],
+                fix: true
+            })
+        ]
     };
 };
