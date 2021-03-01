@@ -1,10 +1,7 @@
 import React, { ReactNode } from "react";
-import { AxiosResponse } from "axios";
 import { CircularProgress, Container } from "@material-ui/core";
 
-import App from "../../App";
 import { DataComp } from "../components/DataComp";
-import { ColDef, RowsProp } from "@material-ui/data-grid";
 import { MaterialTab } from "../../entities/MaterialTab";
 
 export class MaterialTabsPage extends React.Component<any, any> {

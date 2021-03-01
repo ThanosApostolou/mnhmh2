@@ -1,5 +1,4 @@
 import { ColDef, RowData, RowsProp } from "@material-ui/data-grid";
-import { AxiosResponse } from "axios";
 import App from "../App";
 
 export class MaterialTab {
