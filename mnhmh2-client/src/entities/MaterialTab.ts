@@ -1,4 +1,4 @@
-import { ColDef } from "@material-ui/data-grid";
+import { ColDef, RowData, RowsProp } from "@material-ui/data-grid";
 import { AxiosResponse } from "axios";
 import App from "../App";
 
@@ -92,13 +92,79 @@ export class MaterialTab {
         }
     }
 
-    static listToColsRows(materialtabs: MaterialTab[]) {
+    static getColumns(): ColDef[] {
         const columns: ColDef[] = [
-            { field: "AA", headerName: "AA", flex: 1 },
-            { field: "Id", headerName: "Id", flex: 1 },
-            { field: "col2", headerName: "Column 2", flex: 1 },
-            { field: "col3", headerName: "Column 3", flex: 1 },
+            { field: "AA", headerName: "AA" },
+            { field: "Id", headerName: "Id" },
+            { field: "VersionTimestamp", headerName: "VersionTimestamp" },
+            { field: "PartialRegistryCode", headerName: "PartialRegistryCode" },
+            { field: "PartialRegistryCodeNumber", headerName: "PartialRegistryCodeNumber" },
+            { field: "AOEF", headerName: "AOEF" },
+            { field: "Name", headerName: "Name" },
+            { field: "MeasurementUnit", headerName: "MeasurementUnit" },
+            { field: "TabRemainder", headerName: "TabRemainder" },
+            { field: "Sum", headerName: "Sum" },
+            { field: "Difference", headerName: "Difference" },
+            { field: "Comments", headerName: "Comments" },
+            { field: "ImportSum", headerName: "ImportSum" },
+            { field: "ExportSum", headerName: "ExportSum" },
+            { field: "Found", headerName: "Found" },
+            { field: "PendingCrediting", headerName: "PendingCrediting" },
+            { field: "Surplus", headerName: "Surplus" },
+            { field: "Deficit", headerName: "Deficit" },
+            { field: "Image", headerName: "Image" },
+            { field: "GeneralRegistryCode", headerName: "GeneralRegistryCode" },
+            { field: "Archived", headerName: "Archived" },
+            { field: "SerialNumber", headerName: "SerialNumber" },
+            { field: "MaterialWithoutTab", headerName: "MaterialWithoutTab" },
+            { field: "CurrentMaterialTab", headerName: "CurrentMaterialTab" },
+            { field: "FEEFCode", headerName: "FEEFCode" },
+            { field: "Group", headerName: "Group" },
+            { field: "Category", headerName: "Category" },
+            { field: "ComparativesPrintPage_MaterialTabs", headerName: "ComparativesPrintPage_MaterialTabs" },
         ];
+        return columns;
+    }
+
+    static getRows(materialtabs: MaterialTab[]): RowsProp {
+        const rows: RowsProp = [];
+        let count = 0;
+        for (const mt of materialtabs) {
+            const row: RowData = {
+                id: count,
+                AA: count,
+                Id: mt.Id,
+                VersionTimestamp: JSON.stringify(mt.VersionTimestamp),
+                PartialRegistryCode: mt.PartialRegistryCode,
+                PartialRegistryCodeNumber: mt.PartialRegistryCodeNumber,
+                AOEF: mt.AOEF,
+                Name: mt.Name,
+                MeasurementUnit: mt.MeasurementUnit,
+                TabRemainder: mt.TabRemainder,
+                Sum: mt.Sum,
+                Difference: mt.Difference,
+                Comments: mt.Comments,
+                ImportSum: mt.ImportSum,
+                ExportSum: mt.ExportSum,
+                Found: mt.Found,
+                PendingCrediting: mt.PendingCrediting,
+                Surplus: mt.Surplus,
+                Deficit: mt.Deficit,
+                Image: mt.Image,
+                GeneralRegistryCode: mt.GeneralRegistryCode,
+                Archived: mt.Archived,
+                SerialNumber: mt.SerialNumber,
+                MaterialWithoutTab: mt.MaterialWithoutTab,
+                CurrentMaterialTab: mt.CurrentMaterialTab,
+                FEEFCode: mt.FEEFCode,
+                Group: mt.Group,
+                Category: mt.Category,
+                ComparativesPrintPage_MaterialTabs: mt.ComparativesPrintPage_MaterialTabs
+            };
+            count++;
+            rows.push(row);
+        }
+        return rows;
 
     }
 

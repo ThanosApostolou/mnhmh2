@@ -1,13 +1,9 @@
+import { DistributionCharge } from "../../entities/DistributionCharge";
 import React, { ReactNode } from "react";
-import { AxiosResponse } from "axios";
 import { CircularProgress, Container } from "@material-ui/core";
-
-import App from "../../App";
 import { DataComp } from "../components/DataComp";
-import { ColDef, RowsProp } from "@material-ui/data-grid";
-import { MaterialTab } from "../../entities/MaterialTab";
 
-export class MaterialTabsPage extends React.Component<any, any> {
+export class DistributionChargesPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -15,13 +11,13 @@ export class MaterialTabsPage extends React.Component<any, any> {
         };
     }
     componentDidMount() {
-        MaterialTab.listFromApi().then((materialtabs) => {
-            this.setState({data: materialtabs});
+        DistributionCharge.listFromApi().then((distributioncharges) => {
+            this.setState({data: distributioncharges});
         }).catch((error) => {
             this.setState({data: null});
         });
     }
-
+    
     render(): ReactNode {
         let resultdom = null;
 
@@ -34,7 +30,7 @@ export class MaterialTabsPage extends React.Component<any, any> {
         } else {
             resultdom =
                 <div>
-                    <DataComp rows={MaterialTab.getRows(this.state.data)} columns={MaterialTab.getColumns()} />
+                    <DataComp rows={DistributionCharge.getRows(this.state.data)} columns={DistributionCharge.getColumns()} />
                 </div>
             ;
         }

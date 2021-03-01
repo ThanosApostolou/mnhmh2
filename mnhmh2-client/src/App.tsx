@@ -6,7 +6,7 @@ import { Footer } from "./Gui/components/Footer";
 import NotFoundPage from "./Gui/pages/NotFoundPage";
 import { HomePage } from "./Gui/pages/HomePage";
 import { MaterialTabsPage } from "./Gui/pages/MaterialTabsPage";
-import { DebitNotesPage } from "./Gui/pages/DebitNotesPage";
+import { DistributionChargesPage } from "./Gui/pages/DistributionChargesPage";
 import { ComparisonsPage } from "./Gui/pages/ComparisonsPage";
 import { AmmunitionPage } from "./Gui/pages/AmmunitionPage";
 import { TeamsPage } from "./Gui/pages/TeamsPage";
@@ -51,7 +51,7 @@ class App extends React.Component<any, any> {
     render(): ReactNode {
         return (
             <ThemeProvider theme={this.state.thememanager.theme}>
-                <Paper elevation={0} style={{"minHeight": "100vh"}}>
+                <Paper elevation={0} style={{"minHeight": "100vh", minWidth: "600px"}}>
                     <Router>
                         <Header />
 
@@ -59,8 +59,8 @@ class App extends React.Component<any, any> {
                             <Route path="/materialtabs">
                                 <MaterialTabsPage />
                             </Route>
-                            <Route path="/debitnotes">
-                                <DebitNotesPage />
+                            <Route path="/distributioncharges">
+                                <DistributionChargesPage />
                             </Route>
                             <Route path="/comparisons">
                                 <ComparisonsPage />
