@@ -1,4 +1,4 @@
-import { ColDef, RowData, RowsProp } from "@material-ui/data-grid";
+import { GridColDef, GridRowData, GridRowsProp } from "@material-ui/data-grid";
 import App from "../App";
 
 export class MaterialTab {
@@ -91,8 +91,8 @@ export class MaterialTab {
         }
     }
 
-    static getColumns(): ColDef[] {
-        const columns: ColDef[] = [
+    static getColumns(): GridColDef[] {
+        const columns: GridColDef[] = [
             { field: "AA", headerName: "AA" },
             { field: "Id", headerName: "Id" },
             { field: "VersionTimestamp", headerName: "VersionTimestamp" },
@@ -125,11 +125,11 @@ export class MaterialTab {
         return columns;
     }
 
-    static getRows(materialtabs: MaterialTab[]): RowsProp {
-        const rows: RowsProp = [];
+    static getRows(materialtabs: MaterialTab[]): GridRowsProp {
+        const rows: GridRowsProp = [];
         let count = 0;
         for (const mt of materialtabs) {
-            const row: RowData = {
+            const row: GridRowData = {
                 id: count,
                 AA: count,
                 Id: mt.Id,

@@ -1,4 +1,4 @@
-import { ColDef, RowData, RowsProp } from "@material-ui/data-grid";
+import { GridColDef, GridRowData, GridRowsProp } from "@material-ui/data-grid";
 import App from "../App";
 
 export class DistributionCharge {
@@ -57,8 +57,8 @@ export class DistributionCharge {
         }
     }
 
-    static getColumns(): ColDef[] {
-        const columns: ColDef[] = [
+    static getColumns(): GridColDef[] {
+        const columns: GridColDef[] = [
             { field: "AA", headerName: "AA" },
             { field: "Id", headerName: "Id" },
             { field: "PartialRegistryCode", headerName: "PartialRegistryCode" },
@@ -74,11 +74,11 @@ export class DistributionCharge {
         return columns;
     }
 
-    static getRows(distributioncharges: DistributionCharge[]): RowsProp {
-        const rows: RowsProp = [];
+    static getRows(distributioncharges: DistributionCharge[]): GridRowsProp {
+        const rows: GridRowsProp = [];
         let count = 0;
         for (const dc of distributioncharges) {
-            const row: RowData = {
+            const row: GridRowData = {
                 id: count,
                 AA: count,
                 Id: dc.Id,

@@ -3,7 +3,7 @@ import React, { ReactNode } from "react";
 import { CircularProgress, Container } from "@material-ui/core";
 import { DataComp } from "../components/DataComp";
 
-export class DistributionChargesPage extends React.Component {
+export class DistributionChargesPage extends React.Component<any, any> {
     constructor(props) {
         super(props);
         this.state = {
