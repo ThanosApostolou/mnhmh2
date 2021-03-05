@@ -1,6 +1,6 @@
 import { DistributionCharge } from "../../entities/DistributionCharge";
 import React, { ReactNode } from "react";
-import { CircularProgress, Container } from "@material-ui/core";
+import { CircularProgress, Grid } from "@material-ui/core";
 import { DataComp } from "../components/DataComp";
 
 export class DistributionChargesPage extends React.Component<any, any> {
@@ -23,21 +23,17 @@ export class DistributionChargesPage extends React.Component<any, any> {
 
         if (this.state.data === null) {
             resultdom = 
-                <Container maxWidth={false} style={{display: "flex", alignItems: "center", justifyContent: "center"}}>
-                    <CircularProgress />
-                </Container>
+            <Grid container direction="column" alignContent="center" alignItems="center" justify="center" style={{height: "100%"}}>
+                <CircularProgress />
+            </Grid>
             ;
         } else {
             resultdom =
-                <div>
-                    <DataComp rows={DistributionCharge.getRows(this.state.data)} columns={DistributionCharge.getColumns()} />
-                </div>
+            <Grid container direction="column" style={{height: "100%"}}>
+                <DataComp rows={DistributionCharge.getRows(this.state.data)} columns={DistributionCharge.getColumns()} />
+            </Grid>
             ;
         }
-        return (
-            <div>
-                { resultdom }
-            </div>
-        );
+        return (resultdom);
     }
 }

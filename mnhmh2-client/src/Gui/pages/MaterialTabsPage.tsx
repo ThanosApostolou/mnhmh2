@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { CircularProgress, Container } from "@material-ui/core";
+import { CircularProgress, Container, Grid } from "@material-ui/core";
 
 import { DataComp } from "../components/DataComp";
 import { MaterialTab } from "../../entities/MaterialTab";
@@ -23,22 +23,18 @@ export class MaterialTabsPage extends React.Component<any, any> {
         let resultdom = null;
 
         if (this.state.data === null) {
-            resultdom = 
-                <Container maxWidth={false} style={{display: "flex", alignItems: "center", justifyContent: "center"}}>
+            resultdom =                 
+                <Grid container direction="column" alignContent="center" alignItems="center" justify="center" style={{height: "100%"}}>
                     <CircularProgress />
-                </Container>
+                </Grid>
             ;
         } else {
             resultdom =
-                <div>
-                    <DataComp rows={MaterialTab.getRows(this.state.data)} columns={MaterialTab.getColumns()} />
-                </div>
+            <Grid container direction="column" style={{height: "100%"}}>
+                <DataComp rows={MaterialTab.getRows(this.state.data)} columns={MaterialTab.getColumns()} />
+            </Grid>
             ;
         }
-        return (
-            <div>
-                { resultdom }
-            </div>
-        );
+        return (resultdom);
     }
 }

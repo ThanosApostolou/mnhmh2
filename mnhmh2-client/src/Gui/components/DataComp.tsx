@@ -26,7 +26,7 @@ export class DataComp extends React.Component<any, any> {
     render(): ReactNode {
         
         return (                
-            <Card elevation={6} style={{height: "80vh", maxHeight: "100%", maxWidth: "100%"}}>
+            <Card elevation={6} style={{height: "100%", width: "100%"}}>
                 <DataGrid rows={this.props.rows} columns={this.props.columns} rowsPerPageOptions={[10, 25, 50, 100]} pagination showColumnRightBorder={true} showCellRightBorder={true}
                     components={{
                         Toolbar: MyGridToolbar,

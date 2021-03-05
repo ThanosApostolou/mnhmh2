@@ -49,53 +49,57 @@ class App extends React.Component<any, any> {
     }
 
     render(): ReactNode {
-        return (
-            <ThemeProvider theme={this.state.thememanager.theme}>
-                <Paper elevation={0} style={{"minHeight": "100vh", minWidth: "600px"}}>
-                    <Router>
-                        <Header />
-
-                        <Switch>
-                            <Route path="/materialtabs">
-                                <MaterialTabsPage />
-                            </Route>
-                            <Route path="/distributioncharges">
-                                <DistributionChargesPage />
-                            </Route>
-                            <Route path="/comparisons">
-                                <ComparisonsPage />
-                            </Route>
-                            <Route path="/ammunition">
-                                <AmmunitionPage />
-                            </Route>
-                            <Route path="/teams">
-                                <TeamsPage />
-                            </Route>
-                            <Route path="/compounds">
-                                <Compounds />
-                            </Route>
-                            <Route path="/subcompounds">
-                                <SubCompounds />
-                            </Route>
-                            <Route path="/partialmanagers">
-                                <PartialManagers />
-                            </Route>
-                            <Route path="/commition">
-                                <Commition />
-                            </Route>
-                            <Route path="/warehouses">
-                                <Warehouses />
-                            </Route>
-                            <Route path="/" exact>
-                                <HomePage />
-                            </Route>
-                            <Route>
-                                <NotFoundPage />
-                            </Route>
-                        </Switch>
-
-                    </Router>
-                </Paper>
+        const bodycolor= this.state.thememanager.type === "dark" ? "#606060" : "#D3D3D3";
+        return (            
+            <ThemeProvider theme={this.state.thememanager.theme}>     
+                <Router>
+                    
+                    <div style={{height: "100%", display: "flex", flexDirection: "column", alignItems: "stretch"}}>
+                        <div>
+                            <Header />
+                        </div>
+                        <div style={{flexGrow: 1, backgroundColor: bodycolor}}>
+                            <Switch>
+                                <Route path="/materialtabs">
+                                    <MaterialTabsPage />
+                                </Route>
+                                <Route path="/distributioncharges">
+                                    <DistributionChargesPage />
+                                </Route>
+                                <Route path="/comparisons">
+                                    <ComparisonsPage />
+                                </Route>
+                                <Route path="/ammunition">
+                                    <AmmunitionPage />
+                                </Route>
+                                <Route path="/teams">
+                                    <TeamsPage />
+                                </Route>
+                                <Route path="/compounds">
+                                    <Compounds />
+                                </Route>
+                                <Route path="/subcompounds">
+                                    <SubCompounds />
+                                </Route>
+                                <Route path="/partialmanagers">
+                                    <PartialManagers />
+                                </Route>
+                                <Route path="/commition">
+                                    <Commition />
+                                </Route>
+                                <Route path="/warehouses">
+                                    <Warehouses />
+                                </Route>
+                                <Route path="/" exact>
+                                    <HomePage />
+                                </Route>
+                                <Route>
+                                    <NotFoundPage />
+                                </Route>
+                            </Switch>
+                        </div>
+                    </div>
+                </Router>
             </ThemeProvider>
         );
     }
