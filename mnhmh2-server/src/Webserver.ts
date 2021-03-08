@@ -6,6 +6,7 @@ import { App } from "./App";
 import { RootController } from "./controllers/RootController";
 import { MaterialTabController } from "./controllers/MaterialTabController";
 import { DistributionChargeController } from "./controllers/DistributionChargeController";
+import { GroupController } from "./controllers/GroupController";
 
 export class Webserver {
     expressapp: any = null;
@@ -25,6 +26,10 @@ export class Webserver {
 
         this.expressapp.get("/api/distributioncharge", (req: Request, res: Response) => {
             new DistributionChargeController(req, res).GET();
+        });
+
+        this.expressapp.get("/api/group", (req: Request, res: Response) => {
+            new GroupController(req, res).GET();
         });
         this.expressapp.use(redirectUnmatched);
         this.expressapp.listen(PORT, () => {

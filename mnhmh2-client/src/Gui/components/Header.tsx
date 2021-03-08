@@ -110,7 +110,7 @@ class Header extends React.Component<any, any> {
                         <RecentActors />
                                         &nbsp;Μερικοί Διαχειριστές
                     </MenuItem>
-                    <MenuItem component={NavLink} to="/teams" selected={path === "/teams" ? true : false} onClick={this.handleClose.bind(this)}>
+                    <MenuItem component={NavLink} to="/groups" selected={path === "/groups" ? true : false} onClick={this.handleClose.bind(this)}>
                         <Group />
                                         &nbsp;Ομάδες
                     </MenuItem>

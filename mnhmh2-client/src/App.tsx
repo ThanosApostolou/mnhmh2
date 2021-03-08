@@ -9,7 +9,7 @@ import { MaterialTabsPage } from "./Gui/pages/MaterialTabsPage";
 import { DistributionChargesPage } from "./Gui/pages/DistributionChargesPage";
 import { ComparisonsPage } from "./Gui/pages/ComparisonsPage";
 import { AmmunitionPage } from "./Gui/pages/AmmunitionPage";
-import { TeamsPage } from "./Gui/pages/TeamsPage";
+import { GroupsPage } from "./Gui/pages/GroupsPage";
 import { Compounds } from "./Gui/pages/Compounds";
 import { SubCompounds } from "./Gui/pages/SubCompounds";
 import { PartialManagers } from "./Gui/pages/PartialManagers";
@@ -72,8 +72,8 @@ class App extends React.Component<any, any> {
                                 <Route path="/ammunition">
                                     <AmmunitionPage />
                                 </Route>
-                                <Route path="/teams">
-                                    <TeamsPage />
+                                <Route path="/groups">
+                                    <GroupsPage />
                                 </Route>
                                 <Route path="/compounds">
                                     <Compounds />
