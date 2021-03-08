@@ -1,11 +1,12 @@
 import { App } from "../App";
+import { Manager } from "./Manager";
 
 export class Borrower {
     Id: number;
     VersionTimestamp: string;
     Name: string;
     SerialNumber: number;
-    Manager: number;
+    Manager: Manager;
 
     toJson(): string {
         return JSON.stringify(this);
@@ -37,6 +38,12 @@ export class Borrower {
         let borrowers: Borrower[] = [];
         try {
             const result = await App.app.dbmanager.execute("SELECT * FROM Borrowers");
+            for (const obj of result.recordset) {
+                obj.Manager = await Manager.listSelectFromDB("Id = " + obj.Manager);
+                if (obj.Manager.length > 0) {
+                    obj.Manager = obj.Manager[0];
+                }
+            }
             borrowers = Borrower.listFromObjectList(result.recordset);
             return borrowers;
         } catch(err) {

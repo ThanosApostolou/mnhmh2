@@ -14,7 +14,7 @@ export class ManagerController {
 
     async GET(): Promise<void> {
         try {
-            const managers = await Manager.listSelectFromDB();
+            const managers = await Manager.listSelectFromDB(null);
             this.res.setHeader("Content-Type", "application/json");
             this.res.send(Manager.listToJson(managers));
         } catch(err) {

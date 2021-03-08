@@ -1,12 +1,13 @@
 import { GridColDef, GridRowData, GridRowsProp } from "@material-ui/data-grid";
 import App from "../App";
+import { Manager } from "./Manager";
 
 export class Borrower {
     Id: number;
     VersionTimestamp: string;
     Name: string;
     SerialNumber: number;
-    Manager: number;
+    Manager: Manager;
 
     toJson(): string {
         return JSON.stringify(this);
@@ -22,7 +23,7 @@ export class Borrower {
         borrower.VersionTimestamp = obj.VersionTimestamp;
         borrower.Name = obj.Name;
         borrower.SerialNumber = obj.SerialNumber;
-        borrower.Manager = obj.Manager;
+        borrower.Manager = Manager.fromObject(obj.Manager);
         return borrower;
     }
 
@@ -54,7 +55,8 @@ export class Borrower {
             { field: "VersionTimestamp", headerName: "VersionTimestamp" },
             { field: "Name", headerName: "Name" },
             { field: "SerialNumber", headerName: "SerialNumber" },
-            { field: "Manager", headerName: "Manager" },
+            { field: "ManagerId", headerName: "ManagerId" },
+            { field: "ManagerName", headerName: "ManagerName" },
         ];
         return columns;
     }
@@ -70,7 +72,8 @@ export class Borrower {
                 VersionTimestamp: JSON.stringify(borrower.VersionTimestamp),
                 Name: borrower.Name,
                 SerialNumber: borrower.SerialNumber,
-                Manager: borrower.Manager
+                ManagerId: borrower.Manager.Id,
+                ManagerName: borrower.Manager.Name
             };
             count++;
             rows.push(row);

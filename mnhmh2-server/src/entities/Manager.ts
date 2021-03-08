@@ -33,10 +33,11 @@ export class Manager {
         return managers;
     }
 
-    static async listSelectFromDB(): Promise<Manager[]> {
+    static async listSelectFromDB(whereclause: string): Promise<Manager[]> {
+        const query: string = whereclause === null ? "SELECT * FROM Managers" : "SELECT * FROM Managers WHERE " + whereclause;
         let managers: Manager[] = [];
         try {
-            const result = await App.app.dbmanager.execute("SELECT * FROM Managers");
+            const result = await App.app.dbmanager.execute(query);
             managers = Manager.listFromObjectList(result.recordset);
             return managers;
         } catch(err) {
