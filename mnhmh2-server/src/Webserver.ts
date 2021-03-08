@@ -9,6 +9,7 @@ import { DistributionChargeController } from "./controllers/DistributionChargeCo
 import { GroupController } from "./controllers/GroupController";
 import { ManagerController } from "./controllers/ManagerController";
 import { BorrowerController } from "./controllers/BorrowerController";
+import { AmmunitionStoreController } from "./controllers/AmmunitionStoreController";
 
 export class Webserver {
     expressapp: any = null;
@@ -28,6 +29,10 @@ export class Webserver {
 
         this.expressapp.get("/api/distributioncharge", (req: Request, res: Response) => {
             new DistributionChargeController(req, res).GET();
+        });
+
+        this.expressapp.get("/api/ammunitionstore", (req: Request, res: Response) => {
+            new AmmunitionStoreController(req, res).GET();
         });
 
         this.expressapp.get("/api/borrower", (req: Request, res: Response) => {

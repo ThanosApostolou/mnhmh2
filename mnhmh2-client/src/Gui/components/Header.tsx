@@ -75,7 +75,7 @@ class Header extends React.Component<any, any> {
                                     <Whatshot />
                                     &nbsp;Πυρομαχικά
                                 </MenuItem>
-                                <MenuItem component={NavLink} to="/warehouses" selected={path === "/warehouses" ? true : false}>
+                                <MenuItem component={NavLink} to="/ammunitionstores" selected={path === "/ammunitionstores" ? true : false}>
                                     <Store />
                                     &nbsp;Αποθήκες
                                 </MenuItem>

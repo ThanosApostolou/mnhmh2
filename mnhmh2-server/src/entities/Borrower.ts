@@ -11,8 +11,8 @@ export class Borrower {
         return JSON.stringify(this);
     }
 
-    static listToJson(manager: Borrower[]) {
-        return JSON.stringify(manager);
+    static listToJson(borrower: Borrower[]) {
+        return JSON.stringify(borrower);
     }
 
     static fromObject(obj: any): Borrower {

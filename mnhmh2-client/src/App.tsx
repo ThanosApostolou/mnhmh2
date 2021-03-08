@@ -8,6 +8,7 @@ import { HomePage } from "./Gui/pages/HomePage";
 import { MaterialTabsPage } from "./Gui/pages/MaterialTabsPage";
 import { DistributionChargesPage } from "./Gui/pages/DistributionChargesPage";
 import { ComparisonsPage } from "./Gui/pages/ComparisonsPage";
+import { AmmunitionStoresPage } from "./Gui/pages/AmmunitionStoresPage";
 import { AmmunitionPage } from "./Gui/pages/AmmunitionPage";
 import { GroupsPage } from "./Gui/pages/GroupsPage";
 import { Compounds } from "./Gui/pages/Compounds";
@@ -78,8 +79,8 @@ class App extends React.Component<any, any> {
                                 <Route path="/subcompounds">
                                     <SubCompounds />
                                 </Route>
-                                <Route path="/warehouses">
-                                    <Warehouses />
+                                <Route path="/ammunitionstores">
+                                    <AmmunitionStoresPage />
                                 </Route>
                                 <Route path="/borrowers">
                                     <BorrowersPage />

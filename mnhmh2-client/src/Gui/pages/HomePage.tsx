@@ -54,7 +54,7 @@ export class HomePage extends React.Component {
                                 <Whatshot style={styles.largeIcon} />
                             </Grid>
                         </Button>
-                        <Button variant="contained" component={NavLink} to="/warehouses" style={{margin: "10px"}}>
+                        <Button variant="contained" component={NavLink} to="/ammunitionstores" style={{margin: "10px"}}>
                             <Grid container direction="column" justify="center" alignItems="center">
                                 <h3>ΑΠΟΘΗΚΕΣ</h3>
                                 <Store style={styles.largeIcon} />
@@ -66,19 +66,19 @@ export class HomePage extends React.Component {
                 <Card elevation={24}>
                     <CardHeader title="ΔΕΔΟΜΕΝΑ" style={{ textAlign: "center" }} />
                     <Grid container direction="row" justify="center" alignItems="center">
-                        <Button variant="contained" component={NavLink} to="/partialmanagers" style={{margin: "10px"}}>
+                        <Button variant="contained" component={NavLink} to="/borrowers" style={{margin: "10px"}}>
                             <Grid container direction="column" justify="center" alignItems="center">
                                 <h3>ΜΕΡΙΚΟΙ ΔΙΑΧΕΙΡΙΣΤΕΣ</h3>
                                 <RecentActors style={styles.largeIcon} />
                             </Grid>
                         </Button>
-                        <Button variant="contained" component={NavLink} to="/teams" style={{margin: "10px"}}>
+                        <Button variant="contained" component={NavLink} to="/groups" style={{margin: "10px"}}>
                             <Grid container direction="column" justify="center" alignItems="center">
                                 <h3>ΟΜΑΔΕΣ</h3>
                                 <Group style={styles.largeIcon} />
                             </Grid>
                         </Button>
-                        <Button variant="contained" component={NavLink} to="/commition" style={{margin: "10px"}}>
+                        <Button variant="contained" component={NavLink} to="/managers" style={{margin: "10px"}}>
                             <Grid container direction="column" justify="center" alignItems="center">
                                 <h3>ΕΠΙΤΡΟΠΗ</h3>
                                 <SupervisorAccount style={styles.largeIcon} />

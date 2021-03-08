@@ -59,18 +59,18 @@ export class Borrower {
         return columns;
     }
 
-    static getRows(groups: Borrower[]): GridRowsProp {
+    static getRows(borrowers: Borrower[]): GridRowsProp {
         const rows: GridRowsProp = [];
         let count = 1;
-        for (const grp of groups) {
+        for (const borrower of borrowers) {
             const row: GridRowData = {
                 id: count,
                 AA: count,
-                Id: grp.Id,
-                VersionTimestamp: JSON.stringify(grp.VersionTimestamp),
-                Name: grp.Name,
-                SerialNumber: grp.SerialNumber,
-                Manager: grp.Manager
+                Id: borrower.Id,
+                VersionTimestamp: JSON.stringify(borrower.VersionTimestamp),
+                Name: borrower.Name,
+                SerialNumber: borrower.SerialNumber,
+                Manager: borrower.Manager
             };
             count++;
             rows.push(row);
