@@ -59,18 +59,18 @@ export class Manager {
         return columns;
     }
 
-    static getRows(groups: Manager[]): GridRowsProp {
+    static getRows(managers: Manager[]): GridRowsProp {
         const rows: GridRowsProp = [];
         let count = 1;
-        for (const grp of groups) {
+        for (const manager of managers) {
             const row: GridRowData = {
                 id: count,
                 AA: count,
-                Id: grp.Id,
-                VersionTimestamp: JSON.stringify(grp.VersionTimestamp),
-                Name: grp.Name,
-                Rank: grp.Rank,
-                Position: grp.Position
+                Id: manager.Id,
+                VersionTimestamp: JSON.stringify(manager.VersionTimestamp),
+                Name: manager.Name,
+                Rank: manager.Rank,
+                Position: manager.Position
             };
             count++;
             rows.push(row);

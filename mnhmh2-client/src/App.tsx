@@ -11,7 +11,7 @@ import { ComparisonsPage } from "./Gui/pages/ComparisonsPage";
 import { AmmunitionStoresPage } from "./Gui/pages/AmmunitionStoresPage";
 import { AmmunitionPage } from "./Gui/pages/AmmunitionPage";
 import { GroupsPage } from "./Gui/pages/GroupsPage";
-import { Compounds } from "./Gui/pages/Compounds";
+import { CategoriesPage } from "./Gui/pages/CategoriesPage";
 import { SubCompounds } from "./Gui/pages/SubCompounds";
 import { ManagersPage } from "./Gui/pages/ManagersPage";
 import { BorrowersPage } from "./Gui/pages/BorrowersPage";
@@ -73,8 +73,8 @@ class App extends React.Component<any, any> {
                                 <Route path="/ammunition">
                                     <AmmunitionPage />
                                 </Route>
-                                <Route path="/compounds">
-                                    <Compounds />
+                                <Route path="/categories">
+                                    <CategoriesPage />
                                 </Route>
                                 <Route path="/subcompounds">
                                     <SubCompounds />

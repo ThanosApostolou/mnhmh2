@@ -11,6 +11,7 @@ import { ManagerController } from "./controllers/ManagerController";
 import { BorrowerController } from "./controllers/BorrowerController";
 import { AmmunitionStoreController } from "./controllers/AmmunitionStoreController";
 import { AmmunitionPortionController } from "./controllers/AmmunitionPortionController";
+import { CategoryController } from "./controllers/CategoryController";
 
 export class Webserver {
     expressapp: any = null;
@@ -30,6 +31,10 @@ export class Webserver {
 
         this.expressapp.get("/api/distributioncharge", (req: Request, res: Response) => {
             new DistributionChargeController(req, res).GET();
+        });
+
+        this.expressapp.get("/api/category", (req: Request, res: Response) => {
+            new CategoryController(req, res).GET();
         });
 
         this.expressapp.get("/api/ammunitionportion", (req: Request, res: Response) => {

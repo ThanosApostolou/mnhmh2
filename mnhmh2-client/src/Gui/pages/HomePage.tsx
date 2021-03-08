@@ -36,7 +36,7 @@ export class HomePage extends React.Component {
                                 <CompareArrows style={styles.largeIcon} />
                             </Grid>
                         </Button>
-                        <Button variant="contained" component={NavLink} to="/compounds" style={{margin: "10px"}}>
+                        <Button variant="contained" component={NavLink} to="/categories" style={{margin: "10px"}}>
                             <Grid container direction="column" justify="center" alignItems="center">
                                 <h3>ΣΥΓΚΡΟΤΗΜΑΤΑ</h3>
                                 <GroupWork style={styles.largeIcon} />
