@@ -77,10 +77,11 @@ export class MaterialTab {
         return materialtabs;
     }
 
-    static async listSelectFromDB(): Promise<MaterialTab[]> {
+    static async listSelectFromDB(whereclause: string): Promise<MaterialTab[]> {
+        const query: string = whereclause === null ? "SELECT * FROM MaterialTabs" : "SELECT * FROM MaterialTabs WHERE " + whereclause;
         let materialtabs: MaterialTab[] = [];
         try {
-            const result = await App.app.dbmanager.execute("SELECT * FROM MaterialTabs");
+            const result = await App.app.dbmanager.execute(query);
             materialtabs = MaterialTab.listFromObjectList(result.recordset);
             return materialtabs;
         } catch(err) {

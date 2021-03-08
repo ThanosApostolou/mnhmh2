@@ -12,7 +12,7 @@ import { AmmunitionStoresPage } from "./Gui/pages/AmmunitionStoresPage";
 import { AmmunitionPage } from "./Gui/pages/AmmunitionPage";
 import { GroupsPage } from "./Gui/pages/GroupsPage";
 import { CategoriesPage } from "./Gui/pages/CategoriesPage";
-import { SubCompounds } from "./Gui/pages/SubCompounds";
+import { SubcategoriesPage } from "./Gui/pages/SubcategoriesPage";
 import { ManagersPage } from "./Gui/pages/ManagersPage";
 import { BorrowersPage } from "./Gui/pages/BorrowersPage";
 import { Warehouses } from "./Gui/pages/Warehouses";
@@ -76,8 +76,8 @@ class App extends React.Component<any, any> {
                                 <Route path="/categories">
                                     <CategoriesPage />
                                 </Route>
-                                <Route path="/subcompounds">
-                                    <SubCompounds />
+                                <Route path="/subcategories">
+                                    <SubcategoriesPage />
                                 </Route>
                                 <Route path="/ammunitionstores">
                                     <AmmunitionStoresPage />

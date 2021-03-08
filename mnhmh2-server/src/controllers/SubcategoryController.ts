@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 
 import { App } from "../App";
-import { MaterialTab } from "../entities/MaterialTab";
+import { Subcategory } from "../entities/Subcategory";
 
-export class MaterialTabController {
+export class SubcategoryController {
     req: Request = null;
     res: Response = null;
     
@@ -14,9 +14,9 @@ export class MaterialTabController {
 
     async GET(): Promise<void> {
         try {
-            const materialtabs = await MaterialTab.listSelectFromDB(null);
+            const subcategories = await Subcategory.listSelectFromDB(null);
             this.res.setHeader("Content-Type", "application/json");
-            this.res.send(MaterialTab.listToJson(materialtabs));
+            this.res.send(Subcategory.listToJson(subcategories));
         } catch(err) {
             console.log(err);
             this.res.status(500);

@@ -67,7 +67,7 @@ class Header extends React.Component<any, any> {
                                     <GroupWork />
                                     &nbsp;Συγκροτήματα
                                 </MenuItem>
-                                <MenuItem component={NavLink} to="/subcompounds" selected={path === "/subcompounds" ? true : false}>
+                                <MenuItem component={NavLink} to="/subcategories" selected={path === "/subcategories" ? true : false}>
                                     <GroupWorkTwoTone />
                                     &nbsp;Υποσυγκροτήματα
                                 </MenuItem>

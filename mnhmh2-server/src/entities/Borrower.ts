@@ -34,14 +34,15 @@ export class Borrower {
         return borrowers;
     }
 
-    static async listSelectFromDB(): Promise<Borrower[]> {
+    static async listSelectFromDB(whereclause: string): Promise<Borrower[]> {
+        const query: string = whereclause === null ? "SELECT * FROM Borrowers" : "SELECT * FROM Borrowers WHERE " + whereclause;
         let borrowers: Borrower[] = [];
         try {
-            const result = await App.app.dbmanager.execute("SELECT * FROM Borrowers");
-            for (const obj of result.recordset) {
-                obj.Manager = await Manager.listSelectFromDB("Id = " + obj.Manager);
-                if (obj.Manager.length > 0) {
-                    obj.Manager = obj.Manager[0];
+            const result = await App.app.dbmanager.execute(query);
+            for (const record of result.recordset) {
+                record.Manager = await Manager.listSelectFromDB("Id = " + record.Manager);
+                if (record.Manager.length > 0) {
+                    record.Manager = record.Manager[0];
                 }
             }
             borrowers = Borrower.listFromObjectList(result.recordset);

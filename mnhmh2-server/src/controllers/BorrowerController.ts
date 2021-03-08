@@ -14,7 +14,7 @@ export class BorrowerController {
 
     async GET(): Promise<void> {
         try {
-            const borrowers = await Borrower.listSelectFromDB();
+            const borrowers = await Borrower.listSelectFromDB(null);
             this.res.setHeader("Content-Type", "application/json");
             this.res.send(Borrower.listToJson(borrowers));
         } catch(err) {
