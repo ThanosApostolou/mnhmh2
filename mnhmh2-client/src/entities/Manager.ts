@@ -1,47 +1,47 @@
 import { GridColDef, GridRowData, GridRowsProp } from "@material-ui/data-grid";
 import App from "../App";
 
-export class Group {
+export class Manager {
     Id: number;
     VersionTimestamp: string;
     Name: string;
-    LastRegistryCode: number;
-    SerialNumber: number;
+    Rank: string;
+    Position: string;
 
     toJson(): string {
         return JSON.stringify(this);
     }
 
-    static listToJson(groups: Group[]) {
-        return JSON.stringify(groups);
+    static listToJson(manager: Manager[]) {
+        return JSON.stringify(manager);
     }
 
-    static fromObject(obj: any): Group {
-        const group = new Group();
-        group.Id = obj.Id;
-        group.VersionTimestamp = obj.VersionTimestamp;
-        group.Name = obj.Name;
-        group.LastRegistryCode = obj.LastRegistryCode;
-        group.SerialNumber = obj.SerialNumber;
-        return group;
+    static fromObject(obj: any): Manager {
+        const manager = new Manager();
+        manager.Id = obj.Id;
+        manager.VersionTimestamp = obj.VersionTimestamp;
+        manager.Name = obj.Name;
+        manager.Rank = obj.Rank;
+        manager.Position = obj.Position;
+        return manager;
     }
 
-    static listFromObjectList(objlist: any[]): Group[] {
-        const groups: Group[] = [];
+    static listFromObjectList(objlist: any[]): Manager[] {
+        const managers: Manager[] = [];
         for (const obj of objlist) {
-            groups.push(Group.fromObject(obj));
+            managers.push(Manager.fromObject(obj));
         }
-        return groups;
+        return managers;
     }
 
-    static async listFromApi(): Promise<Group[]> {
+    static async listFromApi(): Promise<Manager[]> {
         try {
             const response = await App.app.apiconsumer.axios.request({
                 method: "get",
-                url: "/group"
+                url: "/manager"
             });
-            const groups: Group[] = Group.listFromObjectList(response.data);
-            return groups;
+            const managers: Manager[] = Manager.listFromObjectList(response.data);
+            return managers;
         } catch (error) {
             return error;
         }
@@ -53,13 +53,13 @@ export class Group {
             { field: "Id", headerName: "Id" },
             { field: "VersionTimestamp", headerName: "VersionTimestamp" },
             { field: "Name", headerName: "Name" },
-            { field: "LastRegistryCode", headerName: "LastRegistryCode" },
-            { field: "SerialNumber", headerName: "SerialNumber" },
+            { field: "Rank", headerName: "Rank" },
+            { field: "Position", headerName: "Position" },
         ];
         return columns;
     }
 
-    static getRows(groups: Group[]): GridRowsProp {
+    static getRows(groups: Manager[]): GridRowsProp {
         const rows: GridRowsProp = [];
         let count = 1;
         for (const grp of groups) {
@@ -69,8 +69,8 @@ export class Group {
                 Id: grp.Id,
                 VersionTimestamp: JSON.stringify(grp.VersionTimestamp),
                 Name: grp.Name,
-                LastRegistryCode: grp.LastRegistryCode,
-                SerialNumber: grp.SerialNumber
+                Rank: grp.Rank,
+                Position: grp.Position
             };
             count++;
             rows.push(row);

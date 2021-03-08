@@ -7,6 +7,8 @@ import { RootController } from "./controllers/RootController";
 import { MaterialTabController } from "./controllers/MaterialTabController";
 import { DistributionChargeController } from "./controllers/DistributionChargeController";
 import { GroupController } from "./controllers/GroupController";
+import { ManagerController } from "./controllers/ManagerController";
+import { BorrowerController } from "./controllers/BorrowerController";
 
 export class Webserver {
     expressapp: any = null;
@@ -28,9 +30,18 @@ export class Webserver {
             new DistributionChargeController(req, res).GET();
         });
 
+        this.expressapp.get("/api/borrower", (req: Request, res: Response) => {
+            new BorrowerController(req, res).GET();
+        });
+
         this.expressapp.get("/api/group", (req: Request, res: Response) => {
             new GroupController(req, res).GET();
         });
+
+        this.expressapp.get("/api/manager", (req: Request, res: Response) => {
+            new ManagerController(req, res).GET();
+        });
+
         this.expressapp.use(redirectUnmatched);
         this.expressapp.listen(PORT, () => {
             console.log("server started at http://localhost:"+PORT);

@@ -12,8 +12,8 @@ import { AmmunitionPage } from "./Gui/pages/AmmunitionPage";
 import { GroupsPage } from "./Gui/pages/GroupsPage";
 import { Compounds } from "./Gui/pages/Compounds";
 import { SubCompounds } from "./Gui/pages/SubCompounds";
-import { PartialManagers } from "./Gui/pages/PartialManagers";
-import { Commition } from "./Gui/pages/Commition";
+import { ManagersPage } from "./Gui/pages/ManagersPage";
+import { BorrowersPage } from "./Gui/pages/BorrowersPage";
 import { Warehouses } from "./Gui/pages/Warehouses";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { Paper, Box } from "@material-ui/core";
@@ -72,23 +72,23 @@ class App extends React.Component<any, any> {
                                 <Route path="/ammunition">
                                     <AmmunitionPage />
                                 </Route>
-                                <Route path="/groups">
-                                    <GroupsPage />
-                                </Route>
                                 <Route path="/compounds">
                                     <Compounds />
                                 </Route>
                                 <Route path="/subcompounds">
                                     <SubCompounds />
                                 </Route>
-                                <Route path="/partialmanagers">
-                                    <PartialManagers />
-                                </Route>
-                                <Route path="/commition">
-                                    <Commition />
-                                </Route>
                                 <Route path="/warehouses">
                                     <Warehouses />
+                                </Route>
+                                <Route path="/borrowers">
+                                    <BorrowersPage />
+                                </Route>
+                                <Route path="/groups">
+                                    <GroupsPage />
+                                </Route>
+                                <Route path="/managers">
+                                    <ManagersPage />
                                 </Route>
                                 <Route path="/" exact>
                                     <HomePage />

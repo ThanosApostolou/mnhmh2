@@ -106,7 +106,7 @@ class Header extends React.Component<any, any> {
                         horizontal: "center",
                     }}
                 >                    
-                    <MenuItem component={NavLink} to="/partialmanagers" selected={path === "/partialmanagers" ? true : false} onClick={this.handleClose.bind(this)}>
+                    <MenuItem component={NavLink} to="/borrowers" selected={path === "/borrowers" ? true : false} onClick={this.handleClose.bind(this)}>
                         <RecentActors />
                                         &nbsp;Μερικοί Διαχειριστές
                     </MenuItem>
@@ -114,7 +114,7 @@ class Header extends React.Component<any, any> {
                         <Group />
                                         &nbsp;Ομάδες
                     </MenuItem>
-                    <MenuItem component={NavLink} to="/commition" selected={path === "/commition" ? true : false} onClick={this.handleClose.bind(this)}>
+                    <MenuItem component={NavLink} to="/managers" selected={path === "/managers" ? true : false} onClick={this.handleClose.bind(this)}>
                         <SupervisorAccount />
                                         &nbsp;Επιτροπή
                     </MenuItem>

@@ -127,7 +127,7 @@ export class MaterialTab {
 
     static getRows(materialtabs: MaterialTab[]): GridRowsProp {
         const rows: GridRowsProp = [];
-        let count = 0;
+        let count = 1;
         for (const mt of materialtabs) {
             const row: GridRowData = {
                 id: count,

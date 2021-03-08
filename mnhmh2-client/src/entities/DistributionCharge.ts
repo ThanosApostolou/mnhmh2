@@ -76,7 +76,7 @@ export class DistributionCharge {
 
     static getRows(distributioncharges: DistributionCharge[]): GridRowsProp {
         const rows: GridRowsProp = [];
-        let count = 0;
+        let count = 1;
         for (const dc of distributioncharges) {
             const row: GridRowData = {
                 id: count,
