@@ -41,6 +41,101 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "/api/distributioncharge",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/distributioncharge",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"distributioncharge"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/ammunitionstores",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/ammunitionstore",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"ammunitionstore"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/borrower",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/borrower",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"borrower"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/group",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/group",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"group"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/manager",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/manager",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"manager"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
