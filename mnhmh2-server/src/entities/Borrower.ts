@@ -22,7 +22,7 @@ export class Borrower {
         borrower.VersionTimestamp = obj.VersionTimestamp;
         borrower.Name = obj.Name;
         borrower.SerialNumber = obj.SerialNumber;
-        borrower.Manager = obj.Manager;
+        borrower.Manager = Manager.fromObject(obj.Manager);
         return borrower;
     }
 
