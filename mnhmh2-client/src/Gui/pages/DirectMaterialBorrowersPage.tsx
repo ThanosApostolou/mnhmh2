@@ -1,9 +1,9 @@
-import { DistributionCharge } from "../../entities/DistributionCharge";
+import { DirectMaterialBorrower } from "../../entities/DirectMaterialBorrower";
 import React, { ReactNode } from "react";
 import { CircularProgress, Grid } from "@material-ui/core";
 import { DataComp } from "../components/DataComp";
 
-export class DistributionChargesPage extends React.Component<any, any> {
+export class DirectMaterialBorrowersPage extends React.Component<any, any> {
     constructor(props) {
         super(props);
         this.state = {
@@ -11,8 +11,8 @@ export class DistributionChargesPage extends React.Component<any, any> {
         };
     }
     componentDidMount() {
-        DistributionCharge.listFromApi().then((distributioncharges) => {
-            this.setState({data: distributioncharges});
+        DirectMaterialBorrower.listFromApi().then((dmbs) => {
+            this.setState({data: dmbs});
         }).catch((error) => {
             this.setState({data: null});
         });
@@ -30,7 +30,7 @@ export class DistributionChargesPage extends React.Component<any, any> {
         } else {
             resultdom =
             <Grid container direction="column" style={{height: "100%"}}>
-                <DataComp rows={DistributionCharge.getRows(this.state.data)} columns={DistributionCharge.getColumns()} />
+                <DataComp rows={DirectMaterialBorrower.getRows(this.state.data)} columns={DirectMaterialBorrower.getColumns()} />
             </Grid>
             ;
         }

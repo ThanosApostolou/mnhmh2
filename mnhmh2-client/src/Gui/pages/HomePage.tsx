@@ -24,7 +24,7 @@ export class HomePage extends React.Component {
                                 <ListAlt style={styles.largeIcon} />
                             </Grid>
                         </Button>
-                        <Button variant="contained" component={NavLink} to="/debitnotes" style={{margin: "10px"}}>
+                        <Button variant="contained" component={NavLink} to="/directmaterialborrowers" style={{margin: "10px"}}>
                             <Grid container direction="column" justify="center" alignItems="center">
                                 <h3>ΧΡΕΩΣΤΙΚΑ</h3>
                                 <MenuBook style={styles.largeIcon} />

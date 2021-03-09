@@ -55,7 +55,7 @@ class Header extends React.Component<any, any> {
                                     <ListAlt />
                                     &nbsp;Καρτέλες Υλικών
                                 </MenuItem>
-                                <MenuItem component={NavLink} to="/distributioncharges" selected={path === "/distributioncharges" ? true : false}>
+                                <MenuItem component={NavLink} to="/directmaterialborrowers" selected={path === "/directmaterialborrowers" ? true : false}>
                                     <MenuBook />
                                     &nbsp;Χρεωστικά
                                 </MenuItem>

@@ -6,7 +6,7 @@ import { Footer } from "./Gui/components/Footer";
 import NotFoundPage from "./Gui/pages/NotFoundPage";
 import { HomePage } from "./Gui/pages/HomePage";
 import { MaterialTabsPage } from "./Gui/pages/MaterialTabsPage";
-import { DistributionChargesPage } from "./Gui/pages/DistributionChargesPage";
+import { DirectMaterialBorrowersPage } from "./Gui/pages/DirectMaterialBorrowersPage";
 import { ComparisonsPage } from "./Gui/pages/ComparisonsPage";
 import { AmmunitionStoresPage } from "./Gui/pages/AmmunitionStoresPage";
 import { AmmunitionPage } from "./Gui/pages/AmmunitionPage";
@@ -64,8 +64,8 @@ class App extends React.Component<any, any> {
                                 <Route path="/materialtabs">
                                     <MaterialTabsPage />
                                 </Route>
-                                <Route path="/distributioncharges">
-                                    <DistributionChargesPage />
+                                <Route path="/directmaterialborrowers">
+                                    <DirectMaterialBorrowersPage />
                                 </Route>
                                 <Route path="/comparisons">
                                     <ComparisonsPage />
