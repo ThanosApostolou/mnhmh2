@@ -3,7 +3,6 @@ import App from "../App";
 
 export class MaterialTab {
     Id: number;
-    VersionTimestamp: string;
     PartialRegistryCode: string;
     PartialRegistryCodeNumber: number;
     AOEF: string;
@@ -34,14 +33,13 @@ export class MaterialTab {
         return JSON.stringify(this);
     }
 
-    static listToJson(materialtabs: MaterialTab[]) {
+    static listToJson(materialtabs: MaterialTab[]): string {
         return JSON.stringify(materialtabs);
     }
 
     static fromObject(obj: any): MaterialTab {
         const materialtab = new MaterialTab();
         materialtab.Id = obj.Id;
-        materialtab.VersionTimestamp = obj.VersionTimestamp;
         materialtab.PartialRegistryCode = obj.PartialRegistryCode;
         materialtab.PartialRegistryCodeNumber = obj.PartialRegistryCodeNumber;
         materialtab.AOEF = obj.AOEF;
@@ -133,7 +131,6 @@ export class MaterialTab {
                 id: count,
                 AA: count,
                 Id: mt.Id,
-                VersionTimestamp: JSON.stringify(mt.VersionTimestamp),
                 PartialRegistryCode: mt.PartialRegistryCode,
                 PartialRegistryCodeNumber: mt.PartialRegistryCodeNumber,
                 AOEF: mt.AOEF,

@@ -1,5 +1,5 @@
 import { App } from "../App";
-import { Borrower } from "./Borrower";
+import { Borrower, BorrowerObj } from "./Borrower";
 import { MaterialTab } from "./MaterialTab";
 
 export class DirectMaterialBorrower {
@@ -13,7 +13,7 @@ export class DirectMaterialBorrower {
         return JSON.stringify(this);
     }
 
-    static listToJson(dmb: DirectMaterialBorrower[]) {
+    static listToJson(dmb: DirectMaterialBorrower[]): string {
         return JSON.stringify(dmb);
     }
 
@@ -59,4 +59,12 @@ export class DirectMaterialBorrower {
             return (err);
         }
     }
+}
+
+export interface DirectMaterialBorrowerObj {
+    Id: number;
+    VersionTimestamp: string;
+    Quantity: number;
+    Borrower: BorrowerObj;
+    MaterialTab: MaterialTab;
 }

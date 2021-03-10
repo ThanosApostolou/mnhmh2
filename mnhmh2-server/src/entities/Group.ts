@@ -52,9 +52,10 @@ export class Group {
         return columns;
     }
     static selectQuery(whereclause: string): string {
-        let query = " \
-            (SELECT " + Group._selectColumns() + " \
-            FROM Groups";
+        let query = `
+            (SELECT ${Group._selectColumns()}
+            FROM Groups
+        `;
         if (whereclause != null) {
             query += " WHERE " + whereclause;
         }

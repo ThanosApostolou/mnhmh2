@@ -2,7 +2,6 @@ const express = require("express");
 import { Request, Response } from "express";
 import path from "path";
 
-import { App } from "./App";
 import { RootController } from "./controllers/RootController";
 import { MaterialTabController } from "./controllers/MaterialTabController";
 import { DistributionChargeController } from "./controllers/DistributionChargeController";
@@ -72,10 +71,10 @@ export class Webserver {
             console.log("server started at http://localhost:"+PORT);
         });
 
-        
+
     }
 }
 
 function redirectUnmatched(req: Request, res: Response) {
     res.sendFile(path.join(__dirname+"/public/index.html/"));
-}  
+}
