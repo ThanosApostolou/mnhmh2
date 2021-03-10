@@ -3,7 +3,6 @@ import App from "../App";
 
 export class Category {
     Id: number;
-    VersionTimestamp: string;
     Name: string;
     SerialNumber: number;
 
@@ -18,7 +17,6 @@ export class Category {
     static fromObject(obj: any): Category {
         const category = new Category();
         category.Id = obj.Id;
-        category.VersionTimestamp = obj.VersionTimestamp;
         category.Name = obj.Name;
         category.SerialNumber = obj.SerialNumber;
         return category;
@@ -49,7 +47,6 @@ export class Category {
         const columns: GridColDef[] = [
             { field: "AA", headerName: "AA" },
             { field: "Id", headerName: "Id" },
-            { field: "VersionTimestamp", headerName: "VersionTimestamp" },
             { field: "Name", headerName: "Name" },
             { field: "SerialNumber", headerName: "SerialNumber" }
         ];
@@ -64,7 +61,6 @@ export class Category {
                 id: count,
                 AA: count,
                 Id: category.Id,
-                VersionTimestamp: JSON.stringify(category.VersionTimestamp),
                 Name: category.Name,
                 SerialNumber: category.SerialNumber
             };

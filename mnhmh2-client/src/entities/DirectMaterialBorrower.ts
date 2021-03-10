@@ -5,7 +5,6 @@ import { MaterialTab } from "./MaterialTab";
 
 export class DirectMaterialBorrower {
     Id: number;
-    VersionTimestamp: string;
     Quantity: number;
     Borrower: Borrower;
     MaterialTab: MaterialTab;
@@ -21,7 +20,6 @@ export class DirectMaterialBorrower {
     static fromObject(obj: any): DirectMaterialBorrower {
         const dmb = new DirectMaterialBorrower();
         dmb.Id = obj.Id;
-        dmb.VersionTimestamp = obj.VersionTimestamp;
         dmb.Quantity = obj.Quantity;
         dmb.Borrower = obj.Borrower;
         dmb.MaterialTab = obj.MaterialTab;
@@ -54,7 +52,6 @@ export class DirectMaterialBorrower {
         const columns: GridColDef[] = [
             { field: "AA", headerName: "AA" },
             { field: "Id", headerName: "Id" },
-            { field: "VersionTimestamp", headerName: "VersionTimestamp" },
             { field: "Quantity", headerName: "Quantity" },
             { field: "MaterialTabId", headerName: "MaterialTabId" },
             { field: "MaterialTabPartialRegistryCode", headerName: "MaterialTabPartialRegistryCode" },
@@ -72,7 +69,6 @@ export class DirectMaterialBorrower {
                 id: count,
                 AA: count,
                 Id: subcategory.Id,
-                VersionTimestamp: JSON.stringify(subcategory.VersionTimestamp),
                 Quantity: subcategory.Quantity,
                 MaterialTabId: subcategory.MaterialTab.Id,
                 MaterialTabPartialRegistryCode: subcategory.MaterialTab.PartialRegistryCode,

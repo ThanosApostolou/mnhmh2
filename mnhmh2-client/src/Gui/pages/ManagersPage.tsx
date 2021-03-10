@@ -11,7 +11,7 @@ export class ManagersPage extends React.Component<any, any> {
             data: null
         };
     }
-    componentDidMount() {
+    componentDidMount(): void {
         Manager.listFromApi().then((groups) => {
             this.setState({data: groups});
         }).catch((error) => {
@@ -23,7 +23,7 @@ export class ManagersPage extends React.Component<any, any> {
         let resultdom = null;
 
         if (this.state.data === null) {
-            resultdom =                 
+            resultdom =
                 <Grid container direction="column" alignContent="center" alignItems="center" justify="center" style={{height: "100%"}}>
                     <CircularProgress />
                 </Grid>

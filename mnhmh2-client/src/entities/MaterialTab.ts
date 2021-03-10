@@ -93,7 +93,6 @@ export class MaterialTab {
         const columns: GridColDef[] = [
             { field: "AA", headerName: "AA" },
             { field: "Id", headerName: "Id" },
-            { field: "VersionTimestamp", headerName: "VersionTimestamp" },
             { field: "PartialRegistryCode", headerName: "PartialRegistryCode" },
             { field: "PartialRegistryCodeNumber", headerName: "PartialRegistryCodeNumber" },
             { field: "AOEF", headerName: "AOEF" },

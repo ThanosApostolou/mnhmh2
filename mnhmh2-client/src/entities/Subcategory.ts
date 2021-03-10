@@ -5,7 +5,6 @@ import { MaterialTab } from "./MaterialTab";
 
 export class Subcategory {
     Id: number;
-    VersionTimestamp: string;
     Name: string;
     MaterialTab: MaterialTab;
     Borrower: Borrower;
@@ -21,7 +20,6 @@ export class Subcategory {
     static fromObject(obj: any): Subcategory {
         const subcategory = new Subcategory();
         subcategory.Id = obj.Id;
-        subcategory.VersionTimestamp = obj.VersionTimestamp;
         subcategory.Name = obj.Name;
         subcategory.MaterialTab = obj.MaterialTab;
         subcategory.Borrower = obj.Borrower;
@@ -53,7 +51,6 @@ export class Subcategory {
         const columns: GridColDef[] = [
             { field: "AA", headerName: "AA" },
             { field: "Id", headerName: "Id" },
-            { field: "VersionTimestamp", headerName: "VersionTimestamp" },
             { field: "Name", headerName: "Name" },
             { field: "MaterialTabId", headerName: "MaterialTabId" },
             { field: "MaterialTabPartialRegistryCode", headerName: "MaterialTabPartialRegistryCode" },
@@ -71,7 +68,6 @@ export class Subcategory {
                 id: count,
                 AA: count,
                 Id: subcategory.Id,
-                VersionTimestamp: JSON.stringify(subcategory.VersionTimestamp),
                 Name: subcategory.Name,
                 MaterialTabId: subcategory.MaterialTab.Id,
                 MaterialTabPartialRegistryCode: subcategory.MaterialTab.PartialRegistryCode,
