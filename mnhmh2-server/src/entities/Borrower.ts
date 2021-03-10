@@ -92,7 +92,6 @@ export interface BorrowerDBObj {
     "Borrowers.Id": number;
     "Borrowers.Name": string;
     "Borrowers.SerialNumber": number;
-    "Borrowers.Manager": ManagerDBObj;
     "Managers.Id": number;
     "Managers.Name": string;
     "Managers.Rank": string;

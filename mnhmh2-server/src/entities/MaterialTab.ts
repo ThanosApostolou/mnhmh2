@@ -146,9 +146,9 @@ export class MaterialTab {
             query += " WHERE " + whereclause;
         }
         query += ")";
-        console.log("query: \n", query);
         return query;
     }
+
     static async listSelectFromDB(whereclause: string): Promise<MaterialTab[]> {
         let materialtabs: MaterialTab[] = [];
         try {
