@@ -3,7 +3,6 @@ import App from "../App";
 
 export class Group {
     Id: number;
-    VersionTimestamp: string;
     Name: string;
     LastRegistryCode: number;
     SerialNumber: number;
@@ -19,7 +18,6 @@ export class Group {
     static fromObject(obj: any): Group {
         const group = new Group();
         group.Id = obj.Id;
-        group.VersionTimestamp = obj.VersionTimestamp;
         group.Name = obj.Name;
         group.LastRegistryCode = obj.LastRegistryCode;
         group.SerialNumber = obj.SerialNumber;
@@ -51,7 +49,6 @@ export class Group {
         const columns: GridColDef[] = [
             { field: "AA", headerName: "AA" },
             { field: "Id", headerName: "Id" },
-            { field: "VersionTimestamp", headerName: "VersionTimestamp" },
             { field: "Name", headerName: "Name" },
             { field: "LastRegistryCode", headerName: "LastRegistryCode" },
             { field: "SerialNumber", headerName: "SerialNumber" },
@@ -67,7 +64,6 @@ export class Group {
                 id: count,
                 AA: count,
                 Id: grp.Id,
-                VersionTimestamp: JSON.stringify(grp.VersionTimestamp),
                 Name: grp.Name,
                 LastRegistryCode: grp.LastRegistryCode,
                 SerialNumber: grp.SerialNumber

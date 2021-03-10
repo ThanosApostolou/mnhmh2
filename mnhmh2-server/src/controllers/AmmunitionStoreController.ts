@@ -6,7 +6,7 @@ import { AmmunitionStore } from "../entities/AmmunitionStore";
 export class AmmunitionStoreController {
     req: Request = null;
     res: Response = null;
-    
+
     constructor(req: Request, res: Response) {
         this.req = req;
         this.res = res;
@@ -14,7 +14,7 @@ export class AmmunitionStoreController {
 
     async GET(): Promise<void> {
         try {
-            const stores = await AmmunitionStore.listSelectFromDB();
+            const stores = await AmmunitionStore.listSelectFromDB(null);
             this.res.setHeader("Content-Type", "application/json");
             this.res.send(AmmunitionStore.listToJson(stores));
         } catch(err) {

@@ -3,7 +3,6 @@ import App from "../App";
 
 export class Manager {
     Id: number;
-    VersionTimestamp: string;
     Name: string;
     Rank: string;
     Position: string;
@@ -19,7 +18,6 @@ export class Manager {
     static fromObject(obj: any): Manager {
         const manager = new Manager();
         manager.Id = obj.Id;
-        manager.VersionTimestamp = obj.VersionTimestamp;
         manager.Name = obj.Name;
         manager.Rank = obj.Rank;
         manager.Position = obj.Position;
@@ -51,7 +49,6 @@ export class Manager {
         const columns: GridColDef[] = [
             { field: "AA", headerName: "AA" },
             { field: "Id", headerName: "Id" },
-            { field: "VersionTimestamp", headerName: "VersionTimestamp" },
             { field: "Name", headerName: "Name" },
             { field: "Rank", headerName: "Rank" },
             { field: "Position", headerName: "Position" },
@@ -67,7 +64,6 @@ export class Manager {
                 id: count,
                 AA: count,
                 Id: manager.Id,
-                VersionTimestamp: JSON.stringify(manager.VersionTimestamp),
                 Name: manager.Name,
                 Rank: manager.Rank,
                 Position: manager.Position

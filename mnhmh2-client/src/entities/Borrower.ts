@@ -4,7 +4,6 @@ import { Manager } from "./Manager";
 
 export class Borrower {
     Id: number;
-    VersionTimestamp: string;
     Name: string;
     SerialNumber: number;
     Manager: Manager;
@@ -13,14 +12,13 @@ export class Borrower {
         return JSON.stringify(this);
     }
 
-    static listToJson(manager: Borrower[]) {
+    static listToJson(manager: Borrower[]): string {
         return JSON.stringify(manager);
     }
 
     static fromObject(obj: any): Borrower {
         const borrower = new Borrower();
         borrower.Id = obj.Id;
-        borrower.VersionTimestamp = obj.VersionTimestamp;
         borrower.Name = obj.Name;
         borrower.SerialNumber = obj.SerialNumber;
         borrower.Manager = Manager.fromObject(obj.Manager);
@@ -52,7 +50,6 @@ export class Borrower {
         const columns: GridColDef[] = [
             { field: "AA", headerName: "AA" },
             { field: "Id", headerName: "Id" },
-            { field: "VersionTimestamp", headerName: "VersionTimestamp" },
             { field: "Name", headerName: "Name" },
             { field: "SerialNumber", headerName: "SerialNumber" },
             { field: "ManagerId", headerName: "ManagerId" },
@@ -69,7 +66,6 @@ export class Borrower {
                 id: count,
                 AA: count,
                 Id: borrower.Id,
-                VersionTimestamp: JSON.stringify(borrower.VersionTimestamp),
                 Name: borrower.Name,
                 SerialNumber: borrower.SerialNumber,
                 ManagerId: borrower.Manager.Id,

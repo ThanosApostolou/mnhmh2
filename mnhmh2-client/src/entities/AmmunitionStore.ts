@@ -3,7 +3,6 @@ import App from "../App";
 
 export class AmmunitionStore {
     Id: number;
-    VersionTimestamp: string;
     Name: string;
     SerialNumber: number;
 
@@ -11,14 +10,13 @@ export class AmmunitionStore {
         return JSON.stringify(this);
     }
 
-    static listToJson(store: AmmunitionStore[]) {
+    static listToJson(store: AmmunitionStore[]): string {
         return JSON.stringify(store);
     }
 
     static fromObject(obj: any): AmmunitionStore {
         const store = new AmmunitionStore();
         store.Id = obj.Id;
-        store.VersionTimestamp = obj.VersionTimestamp;
         store.Name = obj.Name;
         store.SerialNumber = obj.SerialNumber;
         return store;
@@ -49,7 +47,6 @@ export class AmmunitionStore {
         const columns: GridColDef[] = [
             { field: "AA", headerName: "AA" },
             { field: "Id", headerName: "Id" },
-            { field: "VersionTimestamp", headerName: "VersionTimestamp" },
             { field: "Name", headerName: "Name" },
             { field: "SerialNumber", headerName: "SerialNumber" }
         ];
@@ -64,7 +61,6 @@ export class AmmunitionStore {
                 id: count,
                 AA: count,
                 Id: store.Id,
-                VersionTimestamp: JSON.stringify(store.VersionTimestamp),
                 Name: store.Name,
                 SerialNumber: store.SerialNumber
             };
