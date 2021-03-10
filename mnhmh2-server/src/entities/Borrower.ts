@@ -1,9 +1,8 @@
 import { App } from "../App";
-import { Manager } from "./Manager";
+import { Manager, ManagerDBObj, ManagerObj } from "./Manager";
 
 export class Borrower {
     Id: number;
-    VersionTimestamp: string;
     Name: string;
     SerialNumber: number;
     Manager: Manager;
@@ -12,14 +11,13 @@ export class Borrower {
         return JSON.stringify(this);
     }
 
-    static listToJson(borrower: Borrower[]) {
+    static listToJson(borrower: Borrower[]): string {
         return JSON.stringify(borrower);
     }
 
-    static fromObject(obj: any): Borrower {
+    static fromObject(obj: BorrowerObj): Borrower {
         const borrower = new Borrower();
         borrower.Id = obj.Id;
-        borrower.VersionTimestamp = obj.VersionTimestamp;
         borrower.Name = obj.Name;
         borrower.SerialNumber = obj.SerialNumber;
         borrower.Manager = Manager.fromObject(obj.Manager);
@@ -34,22 +32,69 @@ export class Borrower {
         return borrowers;
     }
 
+    static fromDBObject(dbobj: BorrowerDBObj): Borrower {
+        const borrower = new Borrower();
+        borrower.Id = dbobj["Borrowers.Id"];
+        borrower.Name = dbobj["Borrowers.Name"];
+        borrower.SerialNumber = dbobj["Borrowers.SerialNumber"];
+        borrower.Manager = Manager.fromDBObject(dbobj);
+        return borrower;
+    }
+
+    static listFromDBObjectList(objlist: BorrowerDBObj[]): Borrower[] {
+        const borrowers: Borrower[] = [];
+        for (const dbobj of objlist) {
+            borrowers.push(Borrower.fromDBObject(dbobj));
+        }
+        return borrowers;
+    }
+
+    private static _selectColumns(): string {
+        const columns ="Borrowers.Id as [Borrowers.Id], Borrowers.Name as [Borrowers.Name], Borrowers.SerialNumber as [Borrowers.SerialNumber]";
+        return columns;
+    }
+
+    static selectQuery(whereclause: string): string {
+        let query = " \
+            (SELECT " + Borrower._selectColumns() + ", Managers.* \
+            FROM Borrowers \
+            LEFT JOIN " + Manager.selectQuery(null) + " as Managers \
+            ON Borrowers.Manager = Managers.[Managers.Id] \
+        ";
+        if (whereclause != null) {
+            query += " WHERE " + whereclause;
+        }
+        query += ")";
+        return query;
+    }
+
     static async listSelectFromDB(whereclause: string): Promise<Borrower[]> {
-        const query: string = whereclause === null ? "SELECT * FROM Borrowers" : "SELECT * FROM Borrowers WHERE " + whereclause;
         let borrowers: Borrower[] = [];
         try {
-            const result = await App.app.dbmanager.execute(query);
-            for (const record of result.recordset) {
-                record.Manager = await Manager.listSelectFromDB("Id = " + record.Manager);
-                if (record.Manager.length > 0) {
-                    record.Manager = record.Manager[0];
-                }
-            }
-            borrowers = Borrower.listFromObjectList(result.recordset);
+            const result = await App.app.dbmanager.execute(Borrower.selectQuery(whereclause));
+            borrowers = Borrower.listFromDBObjectList(result.recordset);
             return borrowers;
         } catch(err) {
             console.log(err);
             return (err);
         }
     }
+}
+
+export interface BorrowerObj {
+    Id: number;
+    Name: string;
+    SerialNumber: number;
+    Manager: ManagerObj;
+}
+
+export interface BorrowerDBObj {
+    "Borrowers.Id": number;
+    "Borrowers.Name": string;
+    "Borrowers.SerialNumber": number;
+    "Borrowers.Manager": ManagerDBObj;
+    "Managers.Id": number;
+    "Managers.Name": string;
+    "Managers.Rank": string;
+    "Managers.Position": string;
 }

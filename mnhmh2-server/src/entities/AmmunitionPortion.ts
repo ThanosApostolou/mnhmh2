@@ -18,7 +18,7 @@ export class AmmunitionPortion {
 
     static fromObject(obj: any): AmmunitionPortion {
         const portion = new AmmunitionPortion();
-        portion.Id = obj.Id;
+        portion.Id = obj.APId;
         portion.VersionTimestamp = obj.VersionTimestamp;
         portion.Name = obj.Name;
         portion.Quantity = obj.Quantity;
@@ -38,7 +38,7 @@ export class AmmunitionPortion {
     static async listSelectFromDB(): Promise<AmmunitionPortion[]> {
         let portions: AmmunitionPortion[] = [];
         try {
-            const result = await App.app.dbmanager.execute("SELECT * FROM AmmunitionPortions");
+            const result = await App.app.dbmanager.execute("SELECT AP.* FROM AmmunitionPortions as AP");
             portions = AmmunitionPortion.listFromObjectList(result.recordset);
             return portions;
         } catch(err) {

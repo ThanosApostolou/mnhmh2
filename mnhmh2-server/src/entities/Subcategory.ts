@@ -13,7 +13,7 @@ export class Subcategory {
         return JSON.stringify(this);
     }
 
-    static listToJson(subcategory: Subcategory[]) {
+    static listToJson(subcategory: Subcategory[]): string {
         return JSON.stringify(subcategory);
     }
 

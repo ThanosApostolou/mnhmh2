@@ -6,7 +6,7 @@ import { Group } from "../entities/Group";
 export class GroupController {
     req: Request = null;
     res: Response = null;
-    
+
     constructor(req: Request, res: Response) {
         this.req = req;
         this.res = res;
@@ -14,7 +14,7 @@ export class GroupController {
 
     async GET(): Promise<void> {
         try {
-            const groups = await Group.listSelectFromDB();
+            const groups = await Group.listSelectFromDB(null);
             this.res.setHeader("Content-Type", "application/json");
             this.res.send(Group.listToJson(groups));
         } catch(err) {
