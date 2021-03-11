@@ -1,5 +1,6 @@
 import { App } from "../App";
-import { Manager, ManagerDBObj, ManagerObj } from "./Manager";
+import { DBManager } from "../DBManager";
+import { Manager, ManagerObj } from "./Manager";
 
 export class Borrower {
     Id: number;
@@ -32,47 +33,48 @@ export class Borrower {
         return borrowers;
     }
 
-    static fromDBObject(dbobj: BorrowerDBObj): Borrower {
+    static fromDBObject(dbobj: any, prefix: string): Borrower {
         const borrower = new Borrower();
-        borrower.Id = dbobj["Borrowers.Id"];
-        borrower.Name = dbobj["Borrowers.Name"];
-        borrower.SerialNumber = dbobj["Borrowers.SerialNumber"];
-        borrower.Manager = Manager.fromDBObject(dbobj);
+        borrower.Id = dbobj[`${prefix}Id`];
+        borrower.Name = dbobj[`${prefix}Name`];
+        borrower.SerialNumber = dbobj[`${prefix}SerialNumber`];
+        borrower.Manager = Manager.fromDBObject(dbobj, "Managers.");
         return borrower;
     }
 
-    static listFromDBObjectList(objlist: BorrowerDBObj[]): Borrower[] {
+    static listFromDBObjectList(objlist: any[], prefix: string): Borrower[] {
         const borrowers: Borrower[] = [];
         for (const dbobj of objlist) {
-            borrowers.push(Borrower.fromDBObject(dbobj));
+            borrowers.push(Borrower.fromDBObject(dbobj, prefix));
         }
         return borrowers;
     }
 
-    private static _selectColumns(): string {
-        const columns ="Borrowers.Id as [Borrowers.Id], Borrowers.Name as [Borrowers.Name], Borrowers.SerialNumber as [Borrowers.SerialNumber]";
-        return columns;
+    /**
+     * Returns a list with table's own (non foreign) fields
+     */
+    private static _getOwnFieldsList(): string[] {
+        return ["Id", "Name", "SerialNumber"];
     }
 
-    static selectQuery(whereclause: string): string {
-        let query = " \
-            (SELECT " + Borrower._selectColumns() + ", Managers.* \
-            FROM Borrowers \
-            LEFT JOIN " + Manager.selectQuery(null) + " as Managers \
-            ON Borrowers.Manager = Managers.[Managers.Id] \
-        ";
-        if (whereclause != null) {
-            query += " WHERE " + whereclause;
-        }
-        query += ")";
+    static selectQuery(whereclause: string, prefix: string): string {
+        const wherestring = whereclause === null ? "" : ` WHERE ${whereclause}`;
+        const query = `
+            (SELECT ${DBManager.columnsStringFromList(Borrower._getOwnFieldsList(), prefix)}, Managers.*
+            FROM Borrowers
+            LEFT JOIN ${Manager.selectQuery(null, `${prefix}Managers.`)} as Managers
+            ON Borrowers.Manager = Managers.[${prefix}Managers.Id]
+            ${wherestring})
+        `;
         return query;
     }
 
     static async listSelectFromDB(whereclause: string): Promise<Borrower[]> {
         let borrowers: Borrower[] = [];
         try {
-            const result = await App.app.dbmanager.execute(Borrower.selectQuery(whereclause));
-            borrowers = Borrower.listFromDBObjectList(result.recordset);
+            const result = await App.app.dbmanager.execute(Borrower.selectQuery(whereclause, ""));
+            const recordset: BorrowerDBObj[] = result.recordset;
+            borrowers = Borrower.listFromDBObjectList(recordset, "");
             return borrowers;
         } catch(err) {
             console.log(err);
@@ -89,9 +91,9 @@ export interface BorrowerObj {
 }
 
 export interface BorrowerDBObj {
-    "Borrowers.Id": number;
-    "Borrowers.Name": string;
-    "Borrowers.SerialNumber": number;
+    "Id": number;
+    "Name": string;
+    "SerialNumber": number;
     "Managers.Id": number;
     "Managers.Name": string;
     "Managers.Rank": string;

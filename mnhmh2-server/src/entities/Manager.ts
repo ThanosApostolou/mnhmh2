@@ -1,4 +1,5 @@
 import { App } from "../App";
+import { DBManager } from "../DBManager";
 
 export class Manager {
     Id: number;
@@ -31,43 +32,46 @@ export class Manager {
         return managers;
     }
 
-    static fromDBObject(dbobj: ManagerDBObj): Manager {
+    static fromDBObject(dbobj: any, prefix: string): Manager {
         const manager: Manager = new Manager();
-        manager.Id = dbobj["Managers.Id"];
-        manager.Name = dbobj["Managers.Name"];
-        manager.Rank = dbobj["Managers.Rank"];
-        manager.Position = dbobj["Managers.Position"];
+        manager.Id = dbobj[prefix+"Id"];
+        manager.Name = dbobj[prefix+"Name"];
+        manager.Rank = dbobj[prefix+"Rank"];
+        manager.Position = dbobj[prefix+"Position"];
         return manager;
     }
 
-    static listFromDBObjectList(objlist: ManagerDBObj[]): Manager[] {
+    static listFromDBObjectList(objlist: any[], prefix: string): Manager[] {
         const managers: Manager[] = [];
         for (const obj of objlist) {
-            managers.push(Manager.fromDBObject(obj));
+            managers.push(Manager.fromDBObject(obj, prefix));
         }
         return managers;
     }
 
-    private static _selectColumns(): string {
-        const columns = "Managers.Id as [Managers.Id], Managers.Name as [Managers.Name], Managers.Rank as [Managers.Rank], Managers.Position as [Managers.Position]";
-        return columns;
+    /**
+     * Returns a list with table's own (non foreign) fields
+     */
+    private static _getOwnFieldsList(): string[] {
+        return ["Id", "Name", "Rank", "Position"];
     }
-    static selectQuery(whereclause: string): string {
-        let query = " \
-            (SELECT " + Manager._selectColumns() + " \
-            FROM Managers";
-        if (whereclause != null) {
-            query += " WHERE " + whereclause;
-        }
-        query += ")";
+
+    static selectQuery(whereclause: string, prefix: string): string {
+        const wherestring = whereclause === null ? "" : ` WHERE ${whereclause}`;
+        const query = `
+            (SELECT ${DBManager.columnsStringFromList(Manager._getOwnFieldsList(), prefix)}
+            FROM Managers
+            ${wherestring})
+        `;
         return query;
     }
 
     static async listSelectFromDB(whereclause: string): Promise<Manager[]> {
         let managers: Manager[] = [];
         try {
-            const result = await App.app.dbmanager.execute(Manager.selectQuery(whereclause));
-            managers = Manager.listFromDBObjectList(result.recordset);
+            const result = await App.app.dbmanager.execute(Manager.selectQuery(whereclause, ""));
+            const recordset: ManagerObj[] = result.recordset;
+            managers = Manager.listFromDBObjectList(recordset, "");
             return managers;
         } catch(err) {
             console.log(err);
@@ -81,11 +85,4 @@ export interface ManagerObj {
     Name: string;
     Rank: string;
     Position: string;
-}
-
-export interface ManagerDBObj {
-    "Managers.Id": number;
-    "Managers.Name": string;
-    "Managers.Rank": string;
-    "Managers.Position": string;
 }

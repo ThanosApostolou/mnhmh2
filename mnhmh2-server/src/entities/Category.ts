@@ -1,4 +1,5 @@
 import { App } from "../App";
+import { DBManager } from "../DBManager";
 
 export class Category {
     Id: number;
@@ -29,42 +30,44 @@ export class Category {
         return categories;
     }
 
-    static fromDBObject(obj: CategoryDBObj): Category {
+    static fromDBObject(obj: any, prefix: string): Category {
         const category = new Category();
-        category.Id = obj["Categories.Id"];
-        category.Name = obj["Categories.Name"];
-        category.SerialNumber = obj["Categories.SerialNumber"];
+        category.Id = obj[`${prefix}Id`];
+        category.Name = obj[`${prefix}Name`];
+        category.SerialNumber = obj[`${prefix}SerialNumber`];
         return category;
     }
-    static listFromDBObjectList(objlist: CategoryDBObj[]): Category[] {
+    static listFromDBObjectList(objlist: any[], prefix: string): Category[] {
         const categories: Category[] = [];
         for (const obj of objlist) {
-            categories.push(Category.fromDBObject(obj));
+            categories.push(Category.fromDBObject(obj, prefix));
         }
         return categories;
     }
 
-    private static _selectColumns(): string {
-        const columns = "Categories.Id as [Categories.Id], Categories.Name as [Categories.Name], Categories.SerialNumber as [Categories.SerialNumber]";
-        return columns;
+    /**
+     * Returns a list with table's own (non foreign) fields
+     */
+    private static _getOwnFieldsList(): string[] {
+        return ["Id", "Name", "SerialNumber"];
     }
-    static selectQuery(whereclause: string): string {
-        let query = `
-            (SELECT ${Category._selectColumns()}
+
+    static selectQuery(whereclause: string, prefix: string): string {
+        const wherestring = whereclause === null ? "" : ` WHERE ${whereclause}`;
+        const query = `
+            (SELECT ${DBManager.columnsStringFromList(Category._getOwnFieldsList(), prefix)}
             FROM Categories
+            ${wherestring})
         `;
-        if (whereclause != null) {
-            query += " WHERE " + whereclause;
-        }
-        query += ")";
         return query;
     }
 
     static async listSelectFromDB(whereclause: string): Promise<Category[]> {
         let categories: Category[] = [];
         try {
-            const result = await App.app.dbmanager.execute(Category.selectQuery(whereclause));
-            categories = Category.listFromDBObjectList(result.recordset);
+            const result = await App.app.dbmanager.execute(Category.selectQuery(whereclause, ""));
+            const recordset: CategoryObj[] = result.recordset;
+            categories = Category.listFromDBObjectList(recordset, "");
             return categories;
         } catch(err) {
             console.log(err);
@@ -77,10 +80,4 @@ export interface CategoryObj {
     Id: number;
     Name: string;
     SerialNumber: number;
-}
-
-export interface CategoryDBObj {
-    "Categories.Id": number;
-    "Categories.Name": string;
-    "Categories.SerialNumber": number;
 }

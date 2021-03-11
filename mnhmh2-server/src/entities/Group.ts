@@ -1,4 +1,5 @@
 import { App } from "../App";
+import { DBManager } from "../DBManager";
 
 export class Group {
     Id: number;
@@ -31,42 +32,44 @@ export class Group {
         return groups;
     }
 
-    static fromDBObject(obj: GroupDBObj): Group {
+    static fromDBObject(obj: any, prefix: string): Group {
         const group = new Group();
-        group.Id = obj["Groups.Id"];
-        group.Name = obj["Groups.Name"];
-        group.LastRegistryCode = obj["Groups.LastRegistryCode"];
-        group.SerialNumber = obj["Groups.SerialNumber"];
+        group.Id = obj[`${prefix}Id`];
+        group.Name = obj[`${prefix}Name`];
+        group.LastRegistryCode = obj[`${prefix}LastRegistryCode`];
+        group.SerialNumber = obj[`${prefix}SerialNumber`];
         return group;
     }
-    static listFromDBObjectList(objlist: GroupDBObj[]): Group[] {
+    static listFromDBObjectList(objlist: any[], prefix: string): Group[] {
         const groups: Group[] = [];
         for (const obj of objlist) {
-            groups.push(Group.fromDBObject(obj));
+            groups.push(Group.fromDBObject(obj, prefix));
         }
         return groups;
     }
 
-    private static _selectColumns(): string {
-        const columns = "Groups.Id as [Groups.Id], Groups.Name as [Groups.Name], Groups.LastRegistryCode as [Groups.LastRegistryCode], Groups.SerialNumber as [Groups.SerialNumber]";
-        return columns;
+    /**
+     * Returns a list with table's own (non foreign) fields
+     */
+    private static _getOwnFieldsList(): string[] {
+        return ["Id", "Name", "LastRegistryCode", "SerialNumber"];
     }
-    static selectQuery(whereclause: string): string {
-        let query = `
-            (SELECT ${Group._selectColumns()}
+
+    static selectQuery(whereclause: string, prefix: string): string {
+        const wherestring = whereclause === null ? "" : ` WHERE ${whereclause}`;
+        const query = `
+            (SELECT ${DBManager.columnsStringFromList(Group._getOwnFieldsList(), prefix)}
             FROM Groups
+            ${wherestring})
         `;
-        if (whereclause != null) {
-            query += " WHERE " + whereclause;
-        }
-        query += ")";
         return query;
     }
     static async listSelectFromDB(whereclause: string): Promise<Group[]> {
         let groups: Group[] = [];
         try {
-            const result = await App.app.dbmanager.execute(Group.selectQuery(whereclause));
-            groups = Group.listFromDBObjectList(result.recordset);
+            const result = await App.app.dbmanager.execute(Group.selectQuery(whereclause, ""));
+            const recordset: GroupObj[] = result.recordset;
+            groups = Group.listFromDBObjectList(recordset, "");
             return groups;
         } catch(err) {
             console.log(err);
@@ -80,10 +83,4 @@ export interface GroupObj {
     Name: string;
     LastRegistryCode: number;
     SerialNumber: number;
-}
-export interface GroupDBObj {
-    "Groups.Id": number;
-    "Groups.Name": string;
-    "Groups.LastRegistryCode": number;
-    "Groups.SerialNumber": number;
 }

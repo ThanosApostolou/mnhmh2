@@ -1,4 +1,5 @@
 import { App } from "../App";
+import { DBManager } from "../DBManager";
 import { Category, CategoryObj } from "./Category";
 import { Group, GroupObj } from "./Group";
 
@@ -77,83 +78,76 @@ export class MaterialTab {
         return materialtabs;
     }
 
-    static fromDBObject(obj: MaterialTabDBObj): MaterialTab {
+    static fromDBObject(obj: any, prefix: string): MaterialTab {
         const materialtab = new MaterialTab();
-        materialtab.Id = obj["MaterialTabs.Id"];
-        materialtab.PartialRegistryCode = obj["MaterialTabs.PartialRegistryCode"];
-        materialtab.PartialRegistryCodeNumber = obj["MaterialTabs.PartialRegistryCodeNumber"];
-        materialtab.AOEF = obj["MaterialTabs.AOEF"];
-        materialtab.Name = obj["MaterialTabs.Name"];
-        materialtab.MeasurementUnit = obj["MaterialTabs.MeasurementUnit"];
-        materialtab.TabRemainder = obj["MaterialTabs.TabRemainder"];
-        materialtab.Sum = obj["MaterialTabs.Sum"];
-        materialtab.Difference = obj["MaterialTabs.Difference"];
-        materialtab.Comments = obj["MaterialTabs.Comments"];
-        materialtab.ImportSum = obj["MaterialTabs.ImportSum"];
-        materialtab.ExportSum = obj["MaterialTabs.ExportSum"];
-        materialtab.Found = obj["MaterialTabs.Found"];
-        materialtab.PendingCrediting = obj["MaterialTabs.PendingCrediting"];
-        materialtab.Surplus = obj["MaterialTabs.Surplus"];
-        materialtab.Deficit = obj["MaterialTabs.Deficit"];
-        materialtab.Image = obj["MaterialTabs.Image"];
-        materialtab.GeneralRegistryCode = obj["MaterialTabs.GeneralRegistryCode"];
-        materialtab.Archived = obj["MaterialTabs.Archived"];
-        materialtab.SerialNumber = obj["MaterialTabs.SerialNumber"];
-        materialtab.MaterialWithoutTab = obj["MaterialTabs.MaterialWithoutTab"];
-        materialtab.CurrentMaterialTab = obj["MaterialTabs.CurrentMaterialTab"];
-        materialtab.GEEFCode = obj["MaterialTabs.GEEFCode"];
-        materialtab.Group = Group.fromDBObject(obj);
-        materialtab.Category = Category.fromDBObject(obj);
-        materialtab.ComparativesPrintPage_MaterialTabs = obj["MaterialTabs.ComparativesPrintPage_MaterialTabs"];
+        materialtab.Id = obj[`${prefix}Id`];
+        materialtab.PartialRegistryCode = obj[`${prefix}PartialRegistryCode`];
+        materialtab.PartialRegistryCodeNumber = obj[`${prefix}PartialRegistryCodeNumber`];
+        materialtab.AOEF = obj[`${prefix}AOEF`];
+        materialtab.Name = obj[`${prefix}Name`];
+        materialtab.MeasurementUnit = obj[`${prefix}MeasurementUnit`];
+        materialtab.TabRemainder = obj[`${prefix}TabRemainder`];
+        materialtab.Sum = obj[`${prefix}Sum`];
+        materialtab.Difference = obj[`${prefix}Difference`];
+        materialtab.Comments = obj[`${prefix}Comments`];
+        materialtab.ImportSum = obj[`${prefix}ImportSum`];
+        materialtab.ExportSum = obj[`${prefix}ExportSum`];
+        materialtab.Found = obj[`${prefix}Found`];
+        materialtab.PendingCrediting = obj[`${prefix}PendingCrediting`];
+        materialtab.Surplus = obj[`${prefix}Surplus`];
+        materialtab.Deficit = obj[`${prefix}Deficit`];
+        materialtab.Image = obj[`${prefix}Image`];
+        materialtab.GeneralRegistryCode = obj[`${prefix}GeneralRegistryCode`];
+        materialtab.Archived = obj[`${prefix}Archived`];
+        materialtab.SerialNumber = obj[`${prefix}SerialNumber`];
+        materialtab.MaterialWithoutTab = obj[`${prefix}MaterialWithoutTab`];
+        materialtab.CurrentMaterialTab = obj[`${prefix}CurrentMaterialTab`];
+        materialtab.GEEFCode = obj[`${prefix}GEEFCode`];
+        materialtab.Group = Group.fromDBObject(obj, `${prefix}Groups.`);
+        materialtab.Category = Category.fromDBObject(obj, `${prefix}Categories.`);
+        materialtab.ComparativesPrintPage_MaterialTabs = obj[`${prefix}ComparativesPrintPage_MaterialTabs`];
         return materialtab;
     }
 
 
-    static listFromDBObjectList(objlist: MaterialTabDBObj[]): MaterialTab[] {
+    static listFromDBObjectList(objlist: any[], prefix: string): MaterialTab[] {
         const materialtabs: MaterialTab[] = [];
         for (const dbobj of objlist) {
-            materialtabs.push(MaterialTab.fromDBObject(dbobj));
+            materialtabs.push(MaterialTab.fromDBObject(dbobj, prefix));
         }
         return materialtabs;
     }
 
-    private static _selectColumns(): string {
-        const column_list = ["Id", "PartialRegistryCode", "PartialRegistryCodeNumber",
+    /**
+     * Returns a list with table's own (non foreign) fields
+     */
+    private static _getOwnFieldsList(): string[] {
+        return ["Id", "PartialRegistryCode", "PartialRegistryCodeNumber",
             "AOEF", "Name", "MeasurementUnit", "TabRemainder", "Sum", "Difference", "Comments", "ImportSum", "ExportSum", "Found",
             "PendingCrediting", "Surplus", "Deficit", "Image", "GeneralRegistryCode", "Archived", "SerialNumber", "MaterialWithoutTab",
             "CurrentMaterialTab", "GEEFCode", "ComparativesPrintPage_MaterialTabs"];
-
-        let columns = "";
-        for (const [index, item] of column_list.entries()) {
-            columns += " MaterialTabs." + item + " as [MaterialTabs." + item + "]";
-            if (index + 1 < column_list.length) {
-                columns += ",";
-            }
-        }
-        return columns;
     }
 
-    static selectQuery(whereclause: string): string {
-        let query = `
-            (SELECT ${MaterialTab._selectColumns()} , Groups.* , Categories.*
+    static selectQuery(whereclause: string, prefix: string): string {
+        const wherestring = whereclause === null ? "" : ` WHERE ${whereclause}`;
+        const query = `
+            (SELECT ${DBManager.columnsStringFromList(MaterialTab._getOwnFieldsList(), prefix)} , Groups.* , Categories.*
             FROM MaterialTabs
-            LEFT JOIN ${Group.selectQuery(null)} as Groups
-            ON MaterialTabs.[Group] = Groups.[Groups.Id]
-            LEFT JOIN ${Category.selectQuery(null)} as Categories
-            ON MaterialTabs.[Category] = Categories.[Categories.Id]
+            LEFT JOIN ${Group.selectQuery(null, `${prefix}Groups.`)} as Groups
+            ON MaterialTabs.[Group] = Groups.[${prefix}Groups.Id]
+            LEFT JOIN ${Category.selectQuery(null, `${prefix}Categories.`)} as Categories
+            ON MaterialTabs.[Category] = Categories.[${prefix}Categories.Id]
+            ${wherestring})
         `;
-        if (whereclause != null) {
-            query += " WHERE " + whereclause;
-        }
-        query += ")";
         return query;
     }
 
     static async listSelectFromDB(whereclause: string): Promise<MaterialTab[]> {
         let materialtabs: MaterialTab[] = [];
         try {
-            const result = await App.app.dbmanager.execute(MaterialTab.selectQuery(whereclause));
-            materialtabs = MaterialTab.listFromDBObjectList(result.recordset);
+            const result = await App.app.dbmanager.execute(MaterialTab.selectQuery(whereclause, ""));
+            const recordset: MaterialTabDBObj[] = result.recordset;
+            materialtabs = MaterialTab.listFromDBObjectList(recordset, "");
             return materialtabs;
         } catch(err) {
             console.log(err);

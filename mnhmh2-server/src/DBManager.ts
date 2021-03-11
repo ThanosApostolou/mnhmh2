@@ -3,8 +3,8 @@ const mssql = require("mssql");
 const config = {
     user: "retsi17",
     password: "1821",
-    server: "DESKTOP-RO1RABI\\SQLEXPRESS", 
-    database: "MNHMH" 
+    server: "DESKTOP-RO1RABI\\SQLEXPRESS",
+    database: "MNHMH"
 };
 
 export class DBManager {
@@ -27,5 +27,16 @@ export class DBManager {
             return this.error;
         }
         return (await this.pool.query(query));
+    }
+
+    static columnsStringFromList(fieldsList: string[], prefix: string): string {
+        let columns = "";
+        for (const [index, item] of fieldsList.entries()) {
+            columns += ` ${item} as [${prefix}${item}] `;
+            if (index + 1 < fieldsList.length) {
+                columns += ",";
+            }
+        }
+        return columns;
     }
 }
