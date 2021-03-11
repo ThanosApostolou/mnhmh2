@@ -13,6 +13,7 @@ import { AmmunitionPortionController } from "./controllers/AmmunitionPortionCont
 import { CategoryController } from "./controllers/CategoryController";
 import { SubcategoryController } from "./controllers/SubcategoryController";
 import { DirectMaterialBorrowerController } from "./controllers/DirectMaterialBorrowerController";
+import { ImportsExportsTblController } from "./controllers/ImportsExportsTblController";
 
 export class Webserver {
     expressapp: any = null;
@@ -36,6 +37,10 @@ export class Webserver {
 
         this.expressapp.get("/api/directmaterialborrower", (req: Request, res: Response) => {
             new DirectMaterialBorrowerController(req, res).GET();
+        });
+
+        this.expressapp.get("/api/importsexportstbl", (req: Request, res: Response) => {
+            new ImportsExportsTblController(req, res).GET();
         });
 
         this.expressapp.get("/api/category", (req: Request, res: Response) => {

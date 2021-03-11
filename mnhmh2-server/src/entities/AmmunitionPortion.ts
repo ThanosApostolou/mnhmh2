@@ -67,9 +67,9 @@ export class AmmunitionPortion {
             (SELECT ${DBManager.columnsStringFromList(AmmunitionPortion._getOwnFieldsList(), prefix)} , MaterialTabs.*, AmmunitionStores.*
             FROM AmmunitionPortions
             LEFT JOIN ${MaterialTab.selectQuery(null, "MaterialTabs.")} as MaterialTabs
-            ON AmmunitionPortions.[${prefix}MaterialTab] = MaterialTabs.[${prefix}MaterialTabs.Id]
+            ON AmmunitionPortions.[MaterialTab] = MaterialTabs.[${prefix}MaterialTabs.Id]
             LEFT JOIN ${AmmunitionStore.selectQuery(null, "AmmunitionStores.")} as AmmunitionStores
-            ON AmmunitionPortions.[${prefix}AmmunitionStore] = AmmunitionStores.[${prefix}AmmunitionStores.Id]
+            ON AmmunitionPortions.[AmmunitionStore] = AmmunitionStores.[${prefix}AmmunitionStores.Id]
             ${wherestring})
         `;
         return query;

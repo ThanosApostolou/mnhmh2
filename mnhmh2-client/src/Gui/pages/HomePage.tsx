@@ -30,7 +30,7 @@ export class HomePage extends React.Component {
                                 <MenuBook style={styles.largeIcon} />
                             </Grid>
                         </Button>
-                        <Button variant="contained" component={NavLink} to="/comparisons" style={{margin: "10px"}}>
+                        <Button variant="contained" component={NavLink} to="/importsexportstbl" style={{margin: "10px"}}>
                             <Grid container direction="column" justify="center" alignItems="center">
                                 <h3>ΣΥΓΚΡΙΤΙΚΕΣ</h3>
                                 <CompareArrows style={styles.largeIcon} />

@@ -59,7 +59,7 @@ class Header extends React.Component<any, any> {
                                     <MenuBook />
                                     &nbsp;Χρεωστικά
                                 </MenuItem>
-                                <MenuItem component={NavLink} to="/comparisons" selected={path === "/comparisons" ? true : false}>
+                                <MenuItem component={NavLink} to="/importsexportstbl" selected={path === "/importsexportstbl" ? true : false}>
                                     <CompareArrows />
                                     &nbsp;Συγρκιτικές
                                 </MenuItem>

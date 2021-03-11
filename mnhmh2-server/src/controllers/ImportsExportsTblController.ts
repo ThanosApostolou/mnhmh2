@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 
-import { DirectMaterialBorrower } from "../entities/DirectMaterialBorrower";
+import { ImportsExportsTbl } from "../entities/ImportsExportsTbl";
 
-export class DirectMaterialBorrowerController {
+export class ImportsExportsTblController {
     req: Request = null;
     res: Response = null;
 
@@ -13,9 +13,9 @@ export class DirectMaterialBorrowerController {
 
     async GET(): Promise<void> {
         try {
-            const subcategories = await DirectMaterialBorrower.listSelectFromDB(null);
+            const ietbls = await ImportsExportsTbl.listSelectFromDB(null);
             this.res.setHeader("Content-Type", "application/json");
-            this.res.send(DirectMaterialBorrower.listToJson(subcategories));
+            this.res.send(ImportsExportsTbl.listToJson(ietbls));
         } catch(err) {
             console.log(err);
             this.res.status(500);

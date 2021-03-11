@@ -7,7 +7,7 @@ import NotFoundPage from "./Gui/pages/NotFoundPage";
 import { HomePage } from "./Gui/pages/HomePage";
 import { MaterialTabsPage } from "./Gui/pages/MaterialTabsPage";
 import { DirectMaterialBorrowersPage } from "./Gui/pages/DirectMaterialBorrowersPage";
-import { ComparisonsPage } from "./Gui/pages/ComparisonsPage";
+import { ImportsExportsTblPage } from "./Gui/pages/ImportsExportsTblPage";
 import { AmmunitionStoresPage } from "./Gui/pages/AmmunitionStoresPage";
 import { AmmunitionPortionsPage } from "./Gui/pages/AmmunitionPortionsPage";
 import { GroupsPage } from "./Gui/pages/GroupsPage";
@@ -67,8 +67,8 @@ class App extends React.Component<any, any> {
                                 <Route path="/directmaterialborrowers">
                                     <DirectMaterialBorrowersPage />
                                 </Route>
-                                <Route path="/comparisons">
-                                    <ComparisonsPage />
+                                <Route path="/importsexportstbl">
+                                    <ImportsExportsTblPage />
                                 </Route>
                                 <Route path="/ammunitionportions">
                                     <AmmunitionPortionsPage />
