@@ -4,13 +4,13 @@ import { ArrowDropDown, ListAlt, MenuBook, CompareArrows, Whatshot, SupervisorAc
 import { NavLink } from "react-router-dom";
 
 export class HomePage extends React.Component {
-  
+
     render(): ReactNode {
         const styles = {
             largeIcon: {
                 width: 128,
                 height: 128,
-            },    
+            },
         };
         return (
             <Container maxWidth="xl">
@@ -48,7 +48,7 @@ export class HomePage extends React.Component {
                                 <GroupWorkTwoTone style={styles.largeIcon} />
                             </Grid>
                         </Button>
-                        <Button variant="contained" component={NavLink} to="/ammunition" style={{margin: "10px"}}>
+                        <Button variant="contained" component={NavLink} to="/ammunitionportions" style={{margin: "10px"}}>
                             <Grid container direction="column" justify="center" alignItems="center">
                                 <h3>ΠΥΡΟΜΑΧΙΚΑ</h3>
                                 <Whatshot style={styles.largeIcon} />

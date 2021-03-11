@@ -9,7 +9,7 @@ import { MaterialTabsPage } from "./Gui/pages/MaterialTabsPage";
 import { DirectMaterialBorrowersPage } from "./Gui/pages/DirectMaterialBorrowersPage";
 import { ComparisonsPage } from "./Gui/pages/ComparisonsPage";
 import { AmmunitionStoresPage } from "./Gui/pages/AmmunitionStoresPage";
-import { AmmunitionPage } from "./Gui/pages/AmmunitionPage";
+import { AmmunitionPortionsPage } from "./Gui/pages/AmmunitionPortionsPage";
 import { GroupsPage } from "./Gui/pages/GroupsPage";
 import { CategoriesPage } from "./Gui/pages/CategoriesPage";
 import { SubcategoriesPage } from "./Gui/pages/SubcategoriesPage";
@@ -51,10 +51,10 @@ class App extends React.Component<any, any> {
 
     render(): ReactNode {
         const bodycolor= this.state.thememanager.type === "dark" ? "#606060" : "#D3D3D3";
-        return (            
-            <ThemeProvider theme={this.state.thememanager.theme}>     
+        return (
+            <ThemeProvider theme={this.state.thememanager.theme}>
                 <Router>
-                    
+
                     <div style={{height: "100%", display: "flex", flexDirection: "column", alignItems: "stretch"}}>
                         <div>
                             <Header />
@@ -70,8 +70,8 @@ class App extends React.Component<any, any> {
                                 <Route path="/comparisons">
                                     <ComparisonsPage />
                                 </Route>
-                                <Route path="/ammunition">
-                                    <AmmunitionPage />
+                                <Route path="/ammunitionportions">
+                                    <AmmunitionPortionsPage />
                                 </Route>
                                 <Route path="/categories">
                                     <CategoriesPage />

@@ -1,4 +1,5 @@
 import { App } from "../App";
+import { DBManager } from "../DBManager";
 
 export class AmmunitionStore {
     Id: number;
@@ -29,41 +30,43 @@ export class AmmunitionStore {
         return stores;
     }
 
-    static fromDBObject(obj: AmmunitionStoreDBObj): AmmunitionStore {
+    static fromDBObject(obj: any, prefix: string): AmmunitionStore {
         const store = new AmmunitionStore();
-        store.Id = obj["AmmunitionStores.Id"];
-        store.Name = obj["AmmunitionStores.Name"];
-        store.SerialNumber = obj["AmmunitionStores.SerialNumber"];
+        store.Id = obj[`${prefix}Id`];
+        store.Name = obj[`${prefix}Name`];
+        store.SerialNumber = obj[`${prefix}SerialNumber`];
         return store;
     }
-    static listFromDBObjectList(objlist: AmmunitionStoreDBObj[]): AmmunitionStore[] {
+    static listFromDBObjectList(objlist: any[], prefix: string): AmmunitionStore[] {
         const stores: AmmunitionStore[] = [];
         for (const obj of objlist) {
-            stores.push(AmmunitionStore.fromDBObject(obj));
+            stores.push(AmmunitionStore.fromDBObject(obj, prefix));
         }
         return stores;
     }
 
-    private static _selectColumns(): string {
-        const columns = "AmmunitionStores.Id as [AmmunitionStores.Id], AmmunitionStores.Name as [AmmunitionStores.Name], AmmunitionStores.SerialNumber as [AmmunitionStores.SerialNumber]";
-        return columns;
+    /**
+     * Returns a list with table's own (non foreign) fields
+     */
+    private static _getOwnFieldsList(): string[] {
+        return ["Id", "Name", "SerialNumber"];
     }
-    static selectQuery(whereclause: string): string {
-        let query = " \
-            (SELECT " + AmmunitionStore._selectColumns() + " \
-            FROM AmmunitionStores";
-        if (whereclause != null) {
-            query += " WHERE " + whereclause;
-        }
-        query += ")";
+
+    static selectQuery(whereclause: string, prefix: string): string {
+        const wherestring = whereclause === null ? "" : ` WHERE ${whereclause}`;
+        const query = `
+            (SELECT ${DBManager.columnsStringFromList(AmmunitionStore._getOwnFieldsList(), prefix)}
+            FROM AmmunitionStores
+            ${wherestring})
+        `;
         return query;
     }
 
     static async listSelectFromDB(whereclause: string): Promise<AmmunitionStore[]> {
         let stores: AmmunitionStore[] = [];
         try {
-            const result = await App.app.dbmanager.execute(AmmunitionStore.selectQuery(whereclause));
-            stores = AmmunitionStore.listFromDBObjectList(result.recordset);
+            const result = await App.app.dbmanager.execute(AmmunitionStore.selectQuery(whereclause, ""));
+            stores = AmmunitionStore.listFromDBObjectList(result.recordset, "");
             return stores;
         } catch(err) {
             console.log(err);

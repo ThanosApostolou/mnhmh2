@@ -71,7 +71,7 @@ class Header extends React.Component<any, any> {
                                     <GroupWorkTwoTone />
                                     &nbsp;Υποσυγκροτήματα
                                 </MenuItem>
-                                <MenuItem component={NavLink} to="/ammunition" selected={path === "/ammunition" ? true : false}>
+                                <MenuItem component={NavLink} to="/ammunitionportions" selected={path === "/ammunitionportions" ? true : false}>
                                     <Whatshot />
                                     &nbsp;Πυρομαχικά
                                 </MenuItem>
@@ -84,11 +84,11 @@ class Header extends React.Component<any, any> {
                                     &nbsp;Δεδομένα
                                     <ArrowDropDown />
                                 </MenuItem>
-                                
+
                             </Grid>
                         </Grid>
-          
-                        <Grid item xs={1}>              
+
+                        <Grid item xs={1}>
                             <Grid container direction="row" justify="flex-end" alignItems="center">
                                 <MenuItem onClick={this.handleOpenSettingsDialog.bind(this)}>
                                     <Settings />
@@ -105,7 +105,7 @@ class Header extends React.Component<any, any> {
                         vertical: "top",
                         horizontal: "center",
                     }}
-                >                    
+                >
                     <MenuItem component={NavLink} to="/borrowers" selected={path === "/borrowers" ? true : false} onClick={this.handleClose.bind(this)}>
                         <RecentActors />
                                         &nbsp;Μερικοί Διαχειριστές
@@ -120,7 +120,7 @@ class Header extends React.Component<any, any> {
                     </MenuItem>
                 </Menu>
                 {settingsdialog}
-                
+
             </AppBar>
         );
     }
