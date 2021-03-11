@@ -38,7 +38,7 @@ export class Borrower {
         borrower.Id = dbobj[`${prefix}Id`];
         borrower.Name = dbobj[`${prefix}Name`];
         borrower.SerialNumber = dbobj[`${prefix}SerialNumber`];
-        borrower.Manager = Manager.fromDBObject(dbobj, "Managers.");
+        borrower.Manager = Manager.fromDBObject(dbobj, `${prefix}Managers.`);
         return borrower;
     }
 

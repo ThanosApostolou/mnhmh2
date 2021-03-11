@@ -73,28 +73,6 @@ export class Subcategory {
     }
 
     static async listSelectFromDB(whereclause: string): Promise<Subcategory[]> {
-        /*
-        const query: string = whereclause === null ? "SELECT * FROM Subcategories" : "SELECT * FROM Subcategories WHERE " + whereclause;
-        let subcategories: Subcategory[] = [];
-        try {
-            const result = await App.app.dbmanager.execute(query);
-            for (const record of result.recordset) {
-                record.MaterialTab = await MaterialTab.listSelectFromDB("Id = " + record.MaterialTab);
-                if (record.MaterialTab.length > 0) {
-                    record.MaterialTab = record.MaterialTab[0];
-                }
-                record.Borrower = await Borrower.listSelectFromDB("Id = " + record.Borrower);
-                if (record.Borrower.length > 0) {
-                    record.Borrower = record.Borrower[0];
-                }
-            }
-            subcategories = Subcategory.listFromObjectList(result.recordset);
-            return subcategories;
-        } catch(err) {
-            console.log(err);
-            return (err);
-        }
-        */
         let subcategories: Subcategory[] = [];
         try {
             const result = await App.app.dbmanager.execute(Subcategory.selectQuery(whereclause, ""));

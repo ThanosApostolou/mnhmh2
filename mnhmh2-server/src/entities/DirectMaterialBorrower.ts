@@ -1,4 +1,5 @@
 import { App } from "../App";
+import { DBManager } from "../DBManager";
 import { Borrower, BorrowerObj } from "./Borrower";
 import { MaterialTab, MaterialTabObj } from "./MaterialTab";
 
@@ -33,21 +34,28 @@ export class DirectMaterialBorrower {
         return dmbs;
     }
 
-    static fromDBObject(obj: DirectMaterialBorrowerDBObj): DirectMaterialBorrower {
+    static fromDBObject(obj: any, prefix: string): DirectMaterialBorrower {
         const dmb: DirectMaterialBorrower = new DirectMaterialBorrower();
-        dmb.Id = obj["DirectMaterialBorrowers.Id"];
-        dmb.Quantity = obj["DirectMaterialBorrowers.Quantity"];
-        dmb.Borrower = Borrower.fromDBObject(obj);
-        dmb.MaterialTab = MaterialTab.fromDBObject(obj);
+        dmb.Id = obj[`${prefix}Id`];
+        dmb.Quantity = obj[`${prefix}Quantity`];
+        dmb.Borrower = Borrower.fromDBObject(obj, `${prefix}Borrowers.`);
+        dmb.MaterialTab = MaterialTab.fromDBObject(obj, `${prefix}MaterialTabs.`);
         return dmb;
     }
 
-    static listFromDBObjectList(objlist: DirectMaterialBorrowerDBObj[]): DirectMaterialBorrower[] {
+    static listFromDBObjectList(objlist: any[], prefix: string): DirectMaterialBorrower[] {
         const dmbs: DirectMaterialBorrower[] = [];
         for (const obj of objlist) {
-            dmbs.push(DirectMaterialBorrower.fromDBObject(obj));
+            dmbs.push(DirectMaterialBorrower.fromDBObject(obj, prefix));
         }
         return dmbs;
+    }
+
+    /**
+     * Returns a list with table's own (non foreign) fields
+     */
+    private static _getOwnFieldsList(): string[] {
+        return ["Id", "Quantity"];
     }
 
     private static _selectColumns(): string {
@@ -55,53 +63,25 @@ export class DirectMaterialBorrower {
         return columns;
     }
 
-    static selectQuery(whereclause: string): string {
-        let query = `
-            (SELECT ${DirectMaterialBorrower._selectColumns()} , Borrowers.* , MaterialTabs.*
+    static selectQuery(whereclause: string, prefix: string): string {
+        const wherestring = whereclause === null ? "" : ` WHERE ${whereclause}`;
+        const query = `
+            (SELECT ${DBManager.columnsStringFromList(DirectMaterialBorrower._getOwnFieldsList(), prefix)} , Borrowers.*, MaterialTabs.*
             FROM DirectMaterialBorrowers
-            LEFT JOIN ${Borrower.selectQuery(null)} as Borrowers
-            ON DirectMaterialBorrowers.[Borrower] = Borrowers.[Borrowers.Id]
-            LEFT JOIN ${MaterialTab.selectQuery(null)} as MaterialTabs
-            ON DirectMaterialBorrowers.[MaterialTab] = MaterialTabs.[MaterialTabs.Id]
+            LEFT JOIN ${Borrower.selectQuery(null, `${prefix}Borrowers.`)} as Borrowers
+            ON DirectMaterialBorrowers.[Borrower] = Borrowers.[${prefix}Borrowers.Id]
+            LEFT JOIN ${MaterialTab.selectQuery(null, `${prefix}MaterialTabs.`)} as MaterialTabs
+            ON DirectMaterialBorrowers.[MaterialTab] = MaterialTabs.[${prefix}MaterialTabs.Id]
+            ${wherestring})
         `;
-        /*
-            */
-        if (whereclause != null) {
-            query += " WHERE " + whereclause;
-        }
-        query += ")";
         return query;
     }
 
     static async listSelectFromDB(whereclause: string): Promise<DirectMaterialBorrower[]> {
-        /*
-        const query: string = whereclause === null ? "SELECT * FROM DirectMaterialBorrowers" : "SELECT * FROM DirectMaterialBorrowers WHERE " + whereclause;
         let dmbs: DirectMaterialBorrower[] = [];
         try {
-            const result = await App.app.dbmanager.execute(query);
-            const promises: Promise<any>[] = [];
-            for (const record of result.recordset) {
-                record.Borrower = await Borrower.listSelectFromDB("Id = " + record.Borrower);
-
-                if (record.Borrower.length > 0) {
-                    record.Borrower = record.Borrower[0];
-                }
-                record.MaterialTab = await MaterialTab.listSelectFromDB("Id = " + record.MaterialTab);
-                if (record.MaterialTab.length > 0) {
-                    record.MaterialTab = record.MaterialTab[0];
-                }
-            }
-            dmbs = DirectMaterialBorrower.listFromObjectList(result.recordset);
-            return dmbs;
-        } catch(err) {
-            console.log(err);
-            return (err);
-        }
-        */
-        let dmbs: DirectMaterialBorrower[] = [];
-        try {
-            const result = await App.app.dbmanager.execute(DirectMaterialBorrower.selectQuery(whereclause));
-            dmbs = DirectMaterialBorrower.listFromDBObjectList(result.recordset);
+            const result = await App.app.dbmanager.execute(DirectMaterialBorrower.selectQuery(whereclause, ""));
+            dmbs = DirectMaterialBorrower.listFromDBObjectList(result.recordset, "");
             return dmbs;
         } catch(err) {
             console.log(err);
