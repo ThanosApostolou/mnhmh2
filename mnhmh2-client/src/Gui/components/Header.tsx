@@ -79,7 +79,7 @@ class Header extends React.Component<any, any> {
                                     <Store />
                                     &nbsp;Αποθήκες
                                 </MenuItem>
-                                <MenuItem selected={path === "/partialmanagers" || path==="/teams" || path==="/commition" ? true : false} onClick={this.handleClick.bind(this)}>
+                                <MenuItem selected={path === "/borrowers" || path==="/groups" || path==="/managers" ? true : false} onClick={this.handleClick.bind(this)}>
                                     <FolderOpen />
                                     &nbsp;Δεδομένα
                                     <ArrowDropDown />

@@ -1,4 +1,6 @@
 import { GridColDef, GridRowData, GridRowsProp } from "@material-ui/data-grid";
+import { ApiConsumer } from "../ApiConsumer";
+import { CancelTokenSource } from "axios";
 import App from "../App";
 import { Borrower } from "./Borrower";
 import { MaterialTab } from "./MaterialTab";
@@ -35,16 +37,18 @@ export class DirectMaterialBorrower {
     }
 
 
-    static async listFromApi(): Promise<DirectMaterialBorrower[]> {
+    static async listFromApi(cancelTokenSource: CancelTokenSource): Promise<DirectMaterialBorrower[]> {
         try {
             const response = await App.app.apiconsumer.axios.request({
                 method: "get",
-                url: "/directmaterialborrower"
+                url: "/directmaterialborrower",
+                cancelToken: cancelTokenSource.token
             });
             const dmbs: DirectMaterialBorrower[] = DirectMaterialBorrower.listFromObjectList(response.data);
             return dmbs;
         } catch (error) {
-            return error;
+            console.log(error);
+            throw error;
         }
     }
 
