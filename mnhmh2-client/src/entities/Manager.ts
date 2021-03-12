@@ -1,4 +1,5 @@
 import { GridColDef, GridRowData, GridRowsProp } from "@material-ui/data-grid";
+import { CancelTokenSource } from "axios";
 import App from "../App";
 
 export class Manager {
@@ -32,16 +33,18 @@ export class Manager {
         return managers;
     }
 
-    static async listFromApi(): Promise<Manager[]> {
+    static async listFromApi(cancelTokenSource: CancelTokenSource): Promise<Manager[]> {
         try {
             const response = await App.app.apiconsumer.axios.request({
                 method: "get",
-                url: "/manager"
+                url: "/manager",
+                cancelToken: cancelTokenSource.token
             });
             const managers: Manager[] = Manager.listFromObjectList(response.data);
             return managers;
         } catch (error) {
-            return error;
+            console.log(error);
+            throw error;
         }
     }
 
