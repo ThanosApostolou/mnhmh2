@@ -1,4 +1,5 @@
 import { GridColDef, GridRowData, GridRowsProp } from "@material-ui/data-grid";
+import { CancelTokenSource } from "axios";
 import App from "../App";
 
 export class Group {
@@ -32,11 +33,12 @@ export class Group {
         return groups;
     }
 
-    static async listFromApi(): Promise<Group[]> {
+    static async listFromApi(cancelTokenSource: CancelTokenSource): Promise<Group[]> {
         try {
             const response = await App.app.apiconsumer.axios.request({
                 method: "get",
-                url: "/group"
+                url: "/group",
+                cancelToken: cancelTokenSource.token
             });
             const groups: Group[] = Group.listFromObjectList(response.data);
             return groups;

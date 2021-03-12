@@ -11,19 +11,12 @@ export class GroupsPage extends React.Component<any, any> {
             data: null
         };
     }
-    componentDidMount() {
-        Group.listFromApi().then((groups) => {
-            this.setState({data: groups});
-        }).catch((error) => {
-            this.setState({data: null});
-        });
-    }
 
     render(): ReactNode {
-        let resultdom = null;
+        const resultdom = null;
 
-        if (this.state.data === null) {
-            resultdom =                 
+        /*if (this.state.data === null) {
+            resultdom =
                 <Grid container direction="column" alignContent="center" alignItems="center" justify="center" style={{height: "100%"}}>
                     <CircularProgress />
                 </Grid>
@@ -35,6 +28,11 @@ export class GroupsPage extends React.Component<any, any> {
             </Grid>
             ;
         }
-        return (resultdom);
+        */
+        return (
+            <Grid container direction="column" style={{height: "100%"}}>
+                <DataComp getData={Group.listFromApi} getRows={Group.getRows} columns={Group.getColumns()} />
+            </Grid>
+        );
     }
 }
