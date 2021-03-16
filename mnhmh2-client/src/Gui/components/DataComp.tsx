@@ -73,9 +73,13 @@ export class DataComp extends React.Component<DataCompProps, DataCompState> {
                         Footer: MyGridFooter,
                         Toolbar: MyGridToolbar
                     }}
+                    componentsProps={{
+                        toolbar: {
+                            onRefreshClick: this.refreshClicked.bind(this)
+                        }
+                    }}
                     onPageSizeChange={this.pageSizeChanged.bind(this)}
                     onRowSelected={this.rowSelected.bind(this)}
-                    onRefreshClick={this.refreshClicked.bind(this)}
                     loading={this.state.loading}
                 />
             </Card>

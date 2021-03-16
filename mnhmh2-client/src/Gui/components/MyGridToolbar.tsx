@@ -1,12 +1,12 @@
 import React, { ReactNode } from "react";
 
-import { Tooltip, Button, Grid } from "@material-ui/core";
-import { Refresh } from "@material-ui/icons";
+import { Tooltip, Button, IconButton, Grid, TextField } from "@material-ui/core";
+import { Refresh, Search, Print, Add, Edit } from "@material-ui/icons";
 
-import { GridColDef, DataGrid, GridFooter, GridToolbar, GridToolbarContainer, GridColumnsToolbarButton, GridFilterToolbarButton, GridDensitySelector, GridPagination, GridBaseComponentProps } from "@material-ui/data-grid";
+import { GridToolbarContainer, GridColumnsToolbarButton, GridFilterToolbarButton, GridDensitySelector, GridPagination, GridBaseComponentProps } from "@material-ui/data-grid";
 
-export class MyGridToolbar extends React.Component<GridBaseComponentProps, any> {
-    constructor(props: GridBaseComponentProps) {
+export class MyGridToolbar extends React.Component<MyGridToolbarProps, any> {
+    constructor(props: any) {
         super(props);
         console.log("props: ", this.props);
     }
@@ -15,19 +15,47 @@ export class MyGridToolbar extends React.Component<GridBaseComponentProps, any> 
 
         return (
             <GridToolbarContainer>
-                <Grid container direction="row" justify="flex-start" alignItems="center">
-                    <GridColumnsToolbarButton />
-                    <GridFilterToolbarButton />
-                    <GridDensitySelector />
-                    <GridPagination />
-                    <div style={{flexGrow: 1}} />
-                    <Tooltip title="Refresh Table Data" aria-label="refresh">
-                        <Button onClick={this.props.options.onRefreshClick}>
-                            <Refresh />
+                <Grid container direction="column">
+                    <Grid container direction="row" justify="center" alignContent="center" alignItems="center">
+                        <form>
+                            <TextField InputLabelProps={{ shrink: true }} label="search" />
+                            <Tooltip title="Search" aria-label="search">
+                                <IconButton size="small">
+                                    <Search />
+                                </IconButton>
+                            </Tooltip>
+                        </form>
+                        <Button variant="contained">
+                            Προσθήκη
+                            <Add />
                         </Button>
-                    </Tooltip>
+                        <Button variant="contained">
+                            Τροποποίηση
+                            <Edit />
+                        </Button>
+                    </Grid>
+                    <Grid container direction="row" justify="flex-start" alignContent="center" alignItems="center">
+                        <GridColumnsToolbarButton />
+                        <GridFilterToolbarButton />
+                        <GridDensitySelector />
+                        <div style={{flexGrow: 1}} />
+                        <Tooltip title="Refresh Table Data" aria-label="refresh">
+                            <IconButton size="small" onClick={this.props.onRefreshClick}>
+                                <Refresh />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Print" aria-label="print">
+                            <IconButton size="small">
+                                <Print />
+                            </IconButton>
+                        </Tooltip>
+                    </Grid>
                 </Grid>
             </GridToolbarContainer>
         );
     }
+}
+
+export interface MyGridToolbarProps extends GridBaseComponentProps {
+    onRefreshClick: () => void;
 }
