@@ -6,7 +6,7 @@ import { Manager } from "../entities/Manager";
 export class ManagerController {
     req: Request = null;
     res: Response = null;
-    
+
     constructor(req: Request, res: Response) {
         this.req = req;
         this.res = res;
@@ -14,7 +14,8 @@ export class ManagerController {
 
     async GET(): Promise<void> {
         try {
-            const managers = await Manager.listSelectFromDB(null);
+            const search = this.req.query["search"].toString().trim();
+            const managers = await Manager.listSelectFromDB(search);
             this.res.setHeader("Content-Type", "application/json");
             this.res.send(Manager.listToJson(managers));
         } catch(err) {

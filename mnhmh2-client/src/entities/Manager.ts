@@ -33,12 +33,15 @@ export class Manager {
         return managers;
     }
 
-    static async listFromApi(cancelTokenSource: CancelTokenSource): Promise<Manager[]> {
+    static async listFromApi(cancelTokenSource: CancelTokenSource, search: string): Promise<Manager[]> {
         try {
             const response = await App.app.apiconsumer.axios.request({
                 method: "get",
                 url: "/manager",
-                cancelToken: cancelTokenSource.token
+                cancelToken: cancelTokenSource.token,
+                params: {
+                    search: search
+                }
             });
             console.log("response", response);
             const managers: Manager[] = Manager.listFromObjectList(response.data);

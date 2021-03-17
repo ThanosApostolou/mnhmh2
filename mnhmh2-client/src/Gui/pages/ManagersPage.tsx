@@ -11,6 +11,7 @@ import { GridRowsProp } from "@material-ui/data-grid";
 export class ManagersPage extends React.Component<null, ManagersPageState> {
     state: Readonly<ManagersPageState>;
     cancelTokenSource: CancelTokenSource;
+    search: string;
 
     constructor(props: null) {
         super(props);
@@ -22,15 +23,16 @@ export class ManagersPage extends React.Component<null, ManagersPageState> {
             error: null
         };
         this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
+        this.search = "";
     }
 
     fetchData(): void {
-        console.log("fetch data");
+        console.log("fetch data", this.search);
         this.cancelFetchData();
         this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
         this.setState({rows: []});
         this.setState({loading : true});
-        Manager.listFromApi(this.cancelTokenSource).then((data: any) => {
+        Manager.listFromApi(this.cancelTokenSource, this.search).then((data: any) => {
             this.setState({data: data});
             this.setState({rows: Manager.getRows(this.state.data)});
         }).catch((error) => {
@@ -58,7 +60,7 @@ export class ManagersPage extends React.Component<null, ManagersPageState> {
                     <CardContent>
                         <form onSubmit={this.handleSubmit.bind(this)}>
                             <Grid container direction="row" justify="flex-start" alignContent="center" alignItems="center">
-                                <TextField size="small" InputLabelProps={{ shrink: true }} label="search" />
+                                <TextField size="small" InputLabelProps={{ shrink: true }} label="search" onChange={(event) => this.search = event.target.value} />
                                 <Tooltip title="Search" aria-label="search">
                                     <IconButton size="small" type="submit" value="Submit">
                                         <Search />

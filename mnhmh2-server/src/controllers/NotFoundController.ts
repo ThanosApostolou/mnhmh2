@@ -1,8 +1,5 @@
 import { Request, Response } from "express";
 
-import { App } from "../App";
-import { Manager } from "../entities/Manager";
-
 export class NotFoundController {
     req: Request = null;
     res: Response = null;
@@ -14,7 +11,6 @@ export class NotFoundController {
 
     async GET(): Promise<void> {
         try {
-            const managers = await Manager.listSelectFromDB(null);
             this.res.status(404);
             this.res.setHeader("Content-Type", "application/json");
             this.res.send({

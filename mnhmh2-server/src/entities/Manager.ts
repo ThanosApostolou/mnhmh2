@@ -66,10 +66,18 @@ export class Manager {
         return query;
     }
 
-    static async listSelectFromDB(whereclause: string): Promise<Manager[]> {
+    static searchWhereclause(search: string, prefix: string): string {
+        let whereclause = null;
+        if (search !== "") {
+            whereclause = `${prefix}Id LIKE '%${search}%' OR ${prefix}Name LIKE '%${search}%' OR ${prefix}Rank LIKE '%${search}%' OR ${prefix}Position LIKE '%${search}%'`;
+        }
+        return whereclause;
+    }
+
+    static async listSelectFromDB(search: string): Promise<Manager[]> {
         let managers: Manager[] = [];
         try {
-            const result = await App.app.dbmanager.execute(Manager.selectQuery(whereclause, ""));
+            const result = await App.app.dbmanager.execute(Manager.selectQuery(Manager.searchWhereclause(search, ""), ""));
             const recordset: ManagerObj[] = result.recordset;
             managers = Manager.listFromDBObjectList(recordset, "");
             return managers;
