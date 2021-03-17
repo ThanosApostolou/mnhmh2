@@ -14,6 +14,7 @@ import { CategoryController } from "./controllers/CategoryController";
 import { SubcategoryController } from "./controllers/SubcategoryController";
 import { DirectMaterialBorrowerController } from "./controllers/DirectMaterialBorrowerController";
 import { ImportsExportsTblController } from "./controllers/ImportsExportsTblController";
+import { NotFoundController } from "./controllers/NotFoundController";
 
 export class Webserver {
     expressapp: any = null;
@@ -69,6 +70,10 @@ export class Webserver {
 
         this.expressapp.get("/api/manager", (req: Request, res: Response) => {
             new ManagerController(req, res).GET();
+        });
+
+        this.expressapp.all("/api/*", (req: Request, res: Response) => {
+            new NotFoundController(req, res).GET();
         });
 
         this.expressapp.use(redirectUnmatched);

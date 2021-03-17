@@ -40,6 +40,7 @@ export class Manager {
                 url: "/manager",
                 cancelToken: cancelTokenSource.token
             });
+            console.log("response", response);
             const managers: Manager[] = Manager.listFromObjectList(response.data);
             return managers;
         } catch (error) {
