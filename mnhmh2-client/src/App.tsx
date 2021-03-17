@@ -13,7 +13,7 @@ import { AmmunitionPortionsPage } from "./Gui/pages/AmmunitionPortionsPage";
 import { GroupsPage } from "./Gui/pages/GroupsPage";
 import { CategoriesPage } from "./Gui/pages/CategoriesPage";
 import { SubcategoriesPage } from "./Gui/pages/SubcategoriesPage";
-import { ManagersPage } from "./Gui/pages/ManagersPage";
+import { ManagersPage } from "./Gui/pages/Managers/ManagersPage";
 import { BorrowersPage } from "./Gui/pages/BorrowersPage";
 import { Warehouses } from "./Gui/pages/Warehouses";
 import { ThemeProvider } from "@material-ui/core/styles";

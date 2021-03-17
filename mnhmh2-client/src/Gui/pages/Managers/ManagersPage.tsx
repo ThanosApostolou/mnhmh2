@@ -1,11 +1,11 @@
 import React, { ReactNode } from "react";
-import { Card, CardContent, AccordionSummary, TextField, Tooltip, IconButton, Grid } from "@material-ui/core";
+import { Card, CardContent, Button, TextField, Tooltip, IconButton, Grid, Drawer, CardHeader, CardActions } from "@material-ui/core";
 import { ExpandMore, Search } from "@material-ui/icons";
 
-import { DataComp } from "../components/DataComp";
-import { Manager } from "../../entities/Manager";
+import { DataComp } from "../../components/DataComp";
+import { Manager } from "../../../entities/Manager";
 import { CancelTokenSource } from "axios";
-import { ApiConsumer } from "../../ApiConsumer";
+import { ApiConsumer } from "../../../ApiConsumer";
 import { GridRowsProp } from "@material-ui/data-grid";
 
 export class ManagersPage extends React.Component<null, ManagersPageState> {
@@ -20,7 +20,8 @@ export class ManagersPage extends React.Component<null, ManagersPageState> {
             rows: [],
             loading: true,
             search: null,
-            error: null
+            error: null,
+            openAddDrawer: false
         };
         this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
         this.search = "";
@@ -48,6 +49,10 @@ export class ManagersPage extends React.Component<null, ManagersPageState> {
         this.cancelTokenSource.cancel("cancel fetching data");
     }
 
+    onAddClick(): void {
+        this.setState({openAddDrawer: true});
+    }
+
     handleSubmit(event: React.FormEvent<HTMLFormElement>): void {
         event.preventDefault();
         this.fetchData();
@@ -70,7 +75,28 @@ export class ManagersPage extends React.Component<null, ManagersPageState> {
                         </form>
                     </CardContent>
                 </Card>
-                <DataComp fetchData={this.fetchData.bind(this)} cancelFetchData={this.cancelFetchData.bind(this)} error={this.state.error} rows={this.state.rows} loading={this.state.loading} columns={Manager.getColumns()} storagePrefix="manager" />
+                <DataComp  error={this.state.error} rows={this.state.rows} loading={this.state.loading} columns={Manager.getColumns()} storagePrefix="manager"
+                    fetchData={this.fetchData.bind(this)}
+                    cancelFetchData={this.cancelFetchData.bind(this)}
+                    onAddClick={this.onAddClick.bind(this)}
+                />
+                <Drawer anchor="right" open={this.state.openAddDrawer} >
+                    <Card style={{minHeight: "100%", minWidth: "50vw"}}>
+                        <CardHeader title="Προσθήκη Μέλους Επιτροπής" />
+                        <CardContent>
+                            adfasdfa
+                        </CardContent>
+                        <CardActions>
+
+                            <Button autoFocus>
+                            Cancel
+                            </Button>
+                            <Button>
+                            Save
+                            </Button>
+                        </CardActions>
+                    </Card>
+                </Drawer>
             </Grid>
         );
     }
@@ -82,4 +108,5 @@ export interface ManagersPageState {
     loading: boolean;
     search: string;
     error: any;
+    openAddDrawer: boolean;
 }
