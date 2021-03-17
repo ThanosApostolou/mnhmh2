@@ -13,13 +13,29 @@ export class DataComp extends React.Component<DataCompProps, DataCompState> {
     constructor(props: DataCompProps) {
         super(props);
         this.state = {
-            selectedRow: null
+            selectedRow: null,
+            pageSize: 10
         };
         console.log("error: ", this.props.error);
+        console.log("storage", JSON.parse(window.localStorage.getItem(this.props.storagePrefix)));
     }
 
-    pageSizeChanged(params: GridPageChangeParams): void {
+    readStorage(): void {
+        const storage: Storage = JSON.parse(window.localStorage.getItem(this.props.storagePrefix));
+        this.setState({pageSize: storage.pageSize});
+    }
+
+    saveStorage(pageSize: number): void {
+        const storage: Storage = {
+            pageSize: pageSize
+        };
+        window.localStorage.setItem(this.props.storagePrefix, JSON.stringify(storage));
+    }
+
+    onPageSizeChange(params: GridPageChangeParams): void {
         console.log(params);
+        this.saveStorage(params.pageSize);
+        this.readStorage();
     }
 
     rowSelected(params: GridRowSelectedParams): void {
@@ -55,6 +71,10 @@ export class DataComp extends React.Component<DataCompProps, DataCompState> {
     }
 
     componentDidMount(): void {
+        if (!window.localStorage.getItem(this.props.storagePrefix)) {
+            this.saveStorage(this.state.pageSize);
+        }
+        this.readStorage();
         this.props.fetchData();
     }
 
@@ -67,6 +87,7 @@ export class DataComp extends React.Component<DataCompProps, DataCompState> {
             <div style={{flexGrow: 1}}>
                 <Card elevation={6} style={{height: "100%", width: "100%"}}>
                     <DataGrid rows={this.props.rows} columns={this.props.columns} rowsPerPageOptions={[5, 10, 15, 20, 25, 50, 100]} pagination showColumnRightBorder={true} showCellRightBorder={true}
+                        pageSize={this.state.pageSize}
                         components={{
                             Footer: MyGridFooter,
                             Toolbar: MyGridToolbar,
@@ -81,7 +102,7 @@ export class DataComp extends React.Component<DataCompProps, DataCompState> {
                                 onPrintClick: this.onPrintClick.bind(this),
                             }
                         }}
-                        onPageSizeChange={this.pageSizeChanged.bind(this)}
+                        onPageSizeChange={this.onPageSizeChange.bind(this)}
                         onRowSelected={this.rowSelected.bind(this)}
                         loading={this.props.loading}
                         error={this.props.error}
@@ -92,8 +113,13 @@ export class DataComp extends React.Component<DataCompProps, DataCompState> {
     }
 }
 
+interface Storage {
+    pageSize: number;
+}
+
 export interface DataCompState {
     selectedRow: any;
+    pageSize: number;
 }
 
 export interface DataCompProps {
@@ -101,6 +127,7 @@ export interface DataCompProps {
     rows: GridRowsProp;
     loading: boolean;
     error: any;
+    storagePrefix: string;
     fetchData: () => void;
     cancelFetchData: () => void;
     onAddClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;

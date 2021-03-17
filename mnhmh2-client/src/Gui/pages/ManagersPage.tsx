@@ -68,7 +68,7 @@ export class ManagersPage extends React.Component<null, ManagersPageState> {
                         </form>
                     </CardContent>
                 </Card>
-                <DataComp fetchData={this.fetchData.bind(this)} cancelFetchData={this.cancelFetchData.bind(this)} error={this.state.error} rows={this.state.rows} loading={this.state.loading} columns={Manager.getColumns()} />
+                <DataComp fetchData={this.fetchData.bind(this)} cancelFetchData={this.cancelFetchData.bind(this)} error={this.state.error} rows={this.state.rows} loading={this.state.loading} columns={Manager.getColumns()} storagePrefix="manager" />
             </Grid>
         );
     }
