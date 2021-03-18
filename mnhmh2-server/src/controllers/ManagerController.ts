@@ -14,7 +14,10 @@ export class ManagerController {
 
     async GET(): Promise<void> {
         try {
-            const search = this.req.query["search"].toString().trim();
+            let search = "";
+            if (this.req.query["search"]) {
+                search = this.req.query["search"].toString().trim();
+            }
             const managers = await Manager.listSelectFromDB(search);
             this.res.setHeader("Content-Type", "application/json");
             this.res.send(Manager.listToJson(managers));
@@ -28,13 +31,45 @@ export class ManagerController {
     async POST(): Promise<void> {
         try {
             const body = this.req.body;
-            const managerobj = Manager.fromObject(body.manager);
-            if (!managerobj.Name || managerobj.Name === null || managerobj.Name === "") {
+            const manager = Manager.fromObject(body.manager);
+            if (!manager.Name || manager.Name === null || manager.Name === "") {
                 this.res.status(422);
                 this.res.setHeader("Content-Type", "application/json");
                 this.res.send({error: "Name cannot be empty!"});
             } else {
-                await Manager.toDB(managerobj);
+                await Manager.insertToDB(manager);
+                this.res.setHeader("Content-Type", "application/json");
+                this.res.send({message: "OK"});
+            }
+        } catch(err) {
+            console.log(err);
+            this.res.status(500);
+            this.res.send(err);
+        }
+    }
+    async DELETE(): Promise<void> {
+        try {
+            const body = this.req.body;
+            const manager = Manager.fromObject(body.manager);
+            await Manager.deleteInDB(manager);
+            this.res.setHeader("Content-Type", "application/json");
+            this.res.send({message: "OK"});
+        } catch(err) {
+            console.log(err);
+            this.res.status(500);
+            this.res.send(err);
+        }
+    }
+    async PUT(): Promise<void> {
+        try {
+            const body = this.req.body;
+            const manager = Manager.fromObject(body.manager);
+            if (!manager.Name || manager.Name === null || manager.Name === "") {
+                this.res.status(422);
+                this.res.setHeader("Content-Type", "application/json");
+                this.res.send({error: "Name cannot be empty!"});
+            } else {
+                await Manager.updateInDB(manager);
                 this.res.setHeader("Content-Type", "application/json");
                 this.res.send({message: "OK"});
             }

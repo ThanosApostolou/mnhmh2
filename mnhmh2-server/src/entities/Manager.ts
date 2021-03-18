@@ -78,7 +78,21 @@ export class Manager {
             INSERT INTO Managers (Id, Name, Rank, Position)
             VALUES ('${manager.Id}', '${manager.Name}', '${manager.Rank}', '${manager.Position}')
         `;
-        console.log("query", query);
+        return query;
+    }
+    static deleteQuery(manager: Manager): string {
+        const query = `
+            DELETE FROM Managers
+            WHERE Id='${manager.Id}'
+        `;
+        return query;
+    }
+    static updateQuery(manager: Manager): string {
+        const query = `
+            UPDATE Managers
+            SET Name='${manager.Name}', Rank='${manager.Rank}', Position='${manager.Position}'
+            WHERE Id='${manager.Id}'
+        `;
         return query;
     }
 
@@ -94,7 +108,7 @@ export class Manager {
             throw err;
         }
     }
-    static async toDB(manager: Manager): Promise<Manager> {
+    static async insertToDB(manager: Manager): Promise<Manager> {
         try {
             const result1 = await App.app.dbmanager.execute("SELECT MAX(Id) FROM Managers");
             let maxId = 0;
@@ -104,6 +118,24 @@ export class Manager {
             manager.Id = 1 + maxId;
             console.log("maxId:", maxId);
             const result = await App.app.dbmanager.execute(Manager.insertQuery(manager));
+            return manager;
+        } catch(err) {
+            console.log(err);
+            throw err;
+        }
+    }
+    static async deleteInDB(manager: Manager): Promise<Manager> {
+        try {
+            const result = await App.app.dbmanager.execute(Manager.deleteQuery(manager));
+            return manager;
+        } catch(err) {
+            console.log(err);
+            throw err;
+        }
+    }
+    static async updateInDB(manager: Manager): Promise<Manager> {
+        try {
+            const result = await App.app.dbmanager.execute(Manager.updateQuery(manager));
             return manager;
         } catch(err) {
             console.log(err);

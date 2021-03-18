@@ -75,6 +75,12 @@ export class Webserver {
         this.expressapp.post("/api/manager", (req: Request, res: Response) => {
             new ManagerController(req, res).POST();
         });
+        this.expressapp.delete("/api/manager", (req: Request, res: Response) => {
+            new ManagerController(req, res).DELETE();
+        });
+        this.expressapp.put("/api/manager", (req: Request, res: Response) => {
+            new ManagerController(req, res).PUT();
+        });
 
         this.expressapp.all("/api/*", (req: Request, res: Response) => {
             new NotFoundController(req, res).GET();
