@@ -24,4 +24,24 @@ export class ManagerController {
             this.res.send(err);
         }
     }
+
+    async POST(): Promise<void> {
+        try {
+            const body = this.req.body;
+            const managerobj = Manager.fromObject(body.manager);
+            if (!managerobj.Name || managerobj.Name === null || managerobj.Name === "") {
+                this.res.status(422);
+                this.res.setHeader("Content-Type", "application/json");
+                this.res.send({error: "Name cannot be empty!"});
+            } else {
+                await Manager.toDB(managerobj);
+                this.res.setHeader("Content-Type", "application/json");
+                this.res.send({message: "OK"});
+            }
+        } catch(err) {
+            console.log(err);
+            this.res.status(500);
+            this.res.send(err);
+        }
+    }
 }

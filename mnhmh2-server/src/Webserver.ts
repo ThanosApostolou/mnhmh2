@@ -22,6 +22,7 @@ export class Webserver {
     init(): void {
         this.expressapp = express();
         const { PORT = 3000 } = process.env;
+        this.expressapp.use(express.json());
         this.expressapp.use(express.static(__dirname + "/public"));
 
         this.expressapp.get("/api", (req: Request, res: Response) => {
@@ -70,6 +71,9 @@ export class Webserver {
 
         this.expressapp.get("/api/manager", (req: Request, res: Response) => {
             new ManagerController(req, res).GET();
+        });
+        this.expressapp.post("/api/manager", (req: Request, res: Response) => {
+            new ManagerController(req, res).POST();
         });
 
         this.expressapp.all("/api/*", (req: Request, res: Response) => {

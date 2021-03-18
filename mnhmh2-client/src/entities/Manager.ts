@@ -33,6 +33,26 @@ export class Manager {
         return managers;
     }
 
+    static async toApi(cancelTokenSource: CancelTokenSource, manager: Manager): Promise<any> {
+        try {
+            const response = await App.app.apiconsumer.axios.request({
+                method: "post",
+                url: "/manager",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                cancelToken: cancelTokenSource.token,
+                data: {
+                    manager: manager
+                }
+            });
+            console.log("response", response);
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
     static async listFromApi(cancelTokenSource: CancelTokenSource, search: string): Promise<Manager[]> {
         try {
             const response = await App.app.apiconsumer.axios.request({

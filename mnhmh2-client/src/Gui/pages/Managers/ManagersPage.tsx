@@ -7,6 +7,7 @@ import { Manager } from "../../../entities/Manager";
 import { CancelTokenSource } from "axios";
 import { ApiConsumer } from "../../../ApiConsumer";
 import { GridRowsProp } from "@material-ui/data-grid";
+import { ManagersAdd } from "./ManagersAdd";
 
 export class ManagersPage extends React.Component<null, ManagersPageState> {
     state: Readonly<ManagersPageState>;
@@ -53,6 +54,14 @@ export class ManagersPage extends React.Component<null, ManagersPageState> {
         this.setState({openAddDrawer: true});
     }
 
+    onAddSave(): void {
+        this.setState({openAddDrawer: false});
+    }
+
+    onAddCancel(): void {
+        this.setState({openAddDrawer: false});
+    }
+
     handleSubmit(event: React.FormEvent<HTMLFormElement>): void {
         event.preventDefault();
         this.fetchData();
@@ -80,23 +89,10 @@ export class ManagersPage extends React.Component<null, ManagersPageState> {
                     cancelFetchData={this.cancelFetchData.bind(this)}
                     onAddClick={this.onAddClick.bind(this)}
                 />
-                <Drawer anchor="right" open={this.state.openAddDrawer} >
-                    <Card style={{minHeight: "100%", minWidth: "50vw"}}>
-                        <CardHeader title="Προσθήκη Μέλους Επιτροπής" />
-                        <CardContent>
-                            adfasdfa
-                        </CardContent>
-                        <CardActions>
-
-                            <Button autoFocus>
-                            Cancel
-                            </Button>
-                            <Button>
-                            Save
-                            </Button>
-                        </CardActions>
-                    </Card>
-                </Drawer>
+                <ManagersAdd openAddDrawer={this.state.openAddDrawer}
+                    onAddSave={this.onAddSave.bind(this)}
+                    onAddCancel={this.onAddCancel.bind(this)}
+                />
             </Grid>
         );
     }

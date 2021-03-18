@@ -73,6 +73,14 @@ export class Manager {
         }
         return whereclause;
     }
+    static insertQuery(manager: Manager): string {
+        const query = `
+            INSERT INTO Managers (Id, Name, Rank, Position)
+            VALUES ('${manager.Id}', '${manager.Name}', '${manager.Rank}', '${manager.Position}')
+        `;
+        console.log("query", query);
+        return query;
+    }
 
     static async listSelectFromDB(search: string): Promise<Manager[]> {
         let managers: Manager[] = [];
@@ -83,7 +91,23 @@ export class Manager {
             return managers;
         } catch(err) {
             console.log(err);
-            return (err);
+            throw err;
+        }
+    }
+    static async toDB(manager: Manager): Promise<Manager> {
+        try {
+            const result1 = await App.app.dbmanager.execute("SELECT MAX(Id) FROM Managers");
+            let maxId = 0;
+            if (result1.recordset.length > 0) {
+                maxId = result1.recordset[0][""];
+            }
+            manager.Id = 1 + maxId;
+            console.log("maxId:", maxId);
+            const result = await App.app.dbmanager.execute(Manager.insertQuery(manager));
+            return manager;
+        } catch(err) {
+            console.log(err);
+            throw err;
         }
     }
 }
