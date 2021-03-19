@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { Card, Button, TextField, Grid, Drawer, CardHeader, CardActions, Snackbar } from "@material-ui/core";
+import { Card, Button, TextField, Grid, Drawer, CardHeader, CardActions, Backdrop, CircularProgress, Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 
 import { Manager } from "../../../entities/Manager";
@@ -37,17 +37,30 @@ export class ManagersEdit extends React.Component<ManagersEditProps, ManagersEdi
             Position: this.positionInputRef.current.value
         });
         Manager.updateInApi(this.cancelTokenSource, manager).then(() => {
-
+            this.setState({loading: false});
             if (this.props.onEditSave) {
                 this.props.onEditSave();
             }
         }).catch((error) => {
             console.log(error);
-            this.setState({errorSnackbarOpen: true});
-        }).finally(() => {
-            this.setState({loading: false});
+            this.setState({loading: false, errorSnackbarOpen: true});
         });
     }
+    onEditDelete(): void {
+        this.setState({loading: true});
+        this.cancelTokenSource.cancel("cancel sending data");
+        this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
+        Manager.deleteInApi(this.cancelTokenSource, this.props.manager.Id).then(() => {
+            this.setState({loading: false});
+            if (this.props.onEditDelete) {
+                this.props.onEditDelete();
+            }
+        }).catch((error) => {
+            console.log(error);
+            this.setState({loading: false, errorSnackbarOpen: true});
+        });
+    }
+
     onEditCancel(): void {
         this.cancelTokenSource.cancel("cancel sending data");
         if (this.props.onEditCancel) {
@@ -88,7 +101,7 @@ export class ManagersEdit extends React.Component<ManagersEditProps, ManagersEdi
                                                     ΑΚΥΡΩΣΗ
                                                 </Button>
 
-                                                <Button variant="contained" style={{margin: "10px"}} disabled={this.state.loading} color="secondary" onClick={this.onEditCancel.bind(this)}>
+                                                <Button variant="contained" style={{margin: "10px"}} disabled={this.state.loading} color="secondary" onClick={this.onEditDelete.bind(this)}>
                                                     ΔΙΑΓΡΑΦΗ
                                                 </Button>
                                                 <Button variant="contained" style={{margin: "10px 20px 10px 10px"}} disabled={this.state.loading} color="primary" autoFocus type="submit" value="Submit">
@@ -100,6 +113,9 @@ export class ManagersEdit extends React.Component<ManagersEditProps, ManagersEdi
                                 </form>
                             </Grid>
                         </Grid>
+                        <Backdrop open={this.state.loading} style={{zIndex: 100}}>
+                            <CircularProgress color="inherit" />
+                        </Backdrop>
                         <Snackbar
                             anchorOrigin={{
                                 vertical: "bottom",
@@ -124,6 +140,7 @@ export interface ManagersEditProps {
     manager: Manager;
     openEditDrawer: boolean;
     onEditSave?: () => void;
+    onEditDelete?: () => void;
     onEditCancel?: () => void;
 }
 

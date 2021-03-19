@@ -86,6 +86,10 @@ export class ManagersPage extends React.Component<null, ManagersPageState> {
         this.setState({openEditDrawer: false, snackbarMessage: "Επιτυχία τροποποίησης μέλους επιτροπής!", openSnackbar: true});
         this.fetchData();
     }
+    onEditDelete(): void {
+        this.setState({openEditDrawer: false, snackbarMessage: "Επιτυχία διαγραφής μέλους επιτροπής!", openSnackbar: true});
+        this.fetchData();
+    }
     onEditCancel(): void {
         this.setState({openEditDrawer: false});
     }
@@ -126,6 +130,7 @@ export class ManagersPage extends React.Component<null, ManagersPageState> {
                 <ManagersEdit manager={this.state.selectedManager}
                     openEditDrawer={this.state.openEditDrawer}
                     onEditSave={this.onEditSave.bind(this)}
+                    onEditDelete={this.onEditDelete.bind(this)}
                     onEditCancel={this.onEditCancel.bind(this)}
                 />
                 <Snackbar

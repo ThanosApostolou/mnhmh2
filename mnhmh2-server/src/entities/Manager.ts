@@ -80,10 +80,10 @@ export class Manager {
         `;
         return query;
     }
-    static deleteQuery(manager: Manager): string {
+    static deleteQuery(Id: number): string {
         const query = `
             DELETE FROM Managers
-            WHERE Id='${manager.Id}'
+            WHERE Id='${Id}'
         `;
         return query;
     }
@@ -124,10 +124,9 @@ export class Manager {
             throw err;
         }
     }
-    static async deleteInDB(manager: Manager): Promise<Manager> {
+    static async deleteInDB(Id: number): Promise<void> {
         try {
-            const result = await App.app.dbmanager.execute(Manager.deleteQuery(manager));
-            return manager;
+            const result = await App.app.dbmanager.execute(Manager.deleteQuery(Id));
         } catch(err) {
             console.log(err);
             throw err;

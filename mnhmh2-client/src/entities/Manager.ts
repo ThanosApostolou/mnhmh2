@@ -71,7 +71,7 @@ export class Manager {
             throw error;
         }
     }
-    static async deleteInApi(cancelTokenSource: CancelTokenSource, manager: Manager): Promise<any> {
+    static async deleteInApi(cancelTokenSource: CancelTokenSource, Id: number): Promise<any> {
         try {
             const response = await App.app.apiconsumer.axios.request({
                 method: "delete",
@@ -81,7 +81,7 @@ export class Manager {
                 },
                 cancelToken: cancelTokenSource.token,
                 data: {
-                    manager: manager
+                    Id: Id
                 }
             });
             return response.data;

@@ -50,8 +50,8 @@ export class ManagerController {
     async DELETE(): Promise<void> {
         try {
             const body = this.req.body;
-            const manager = Manager.fromObject(body.manager);
-            await Manager.deleteInDB(manager);
+            const Id: number = body.Id;
+            await Manager.deleteInDB(Id);
             this.res.setHeader("Content-Type", "application/json");
             this.res.send({message: "OK"});
         } catch(err) {

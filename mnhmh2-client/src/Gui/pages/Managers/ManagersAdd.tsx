@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { Card, Button, TextField, Grid, Drawer, CardHeader, CardActions, Snackbar } from "@material-ui/core";
+import { Card, Button, TextField, Grid, Drawer, CardHeader, CardActions, Backdrop, CircularProgress, Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 
 import { Manager } from "../../../entities/Manager";
@@ -37,15 +37,13 @@ export class ManagersAdd extends React.Component<ManagersAddProps, ManagersAddSt
             Position: this.positionInputRef.current.value
         });
         Manager.insertToApi(this.cancelTokenSource, manager).then(() => {
-
+            this.setState({loading: false});
             if (this.props.onAddSave) {
                 this.props.onAddSave();
             }
         }).catch((error) => {
             console.log(error);
-            this.setState({errorSnackbarOpen: true});
-        }).finally(() => {
-            this.setState({loading: false});
+            this.setState({loading: false, errorSnackbarOpen: true});
         });
     }
     onAddCancel(): void {
@@ -96,6 +94,9 @@ export class ManagersAdd extends React.Component<ManagersAddProps, ManagersAddSt
                                 </form>
                             </Grid>
                         </Grid>
+                        <Backdrop open={this.state.loading} style={{zIndex: 100}}>
+                            <CircularProgress color="inherit" />
+                        </Backdrop>
                         <Snackbar
                             anchorOrigin={{
                                 vertical: "bottom",
