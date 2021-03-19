@@ -10,7 +10,7 @@ import { DirectMaterialBorrowersPage } from "./Gui/pages/DirectMaterialBorrowers
 import { ImportsExportsTblPage } from "./Gui/pages/ImportsExportsTblPage";
 import { AmmunitionStoresPage } from "./Gui/pages/AmmunitionStoresPage";
 import { AmmunitionPortionsPage } from "./Gui/pages/AmmunitionPortionsPage";
-import { GroupsPage } from "./Gui/pages/GroupsPage";
+import { GroupsPage } from "./Gui/pages/Groups/GroupsPage";
 import { CategoriesPage } from "./Gui/pages/CategoriesPage";
 import { SubcategoriesPage } from "./Gui/pages/SubcategoriesPage";
 import { ManagersPage } from "./Gui/pages/Managers/ManagersPage";

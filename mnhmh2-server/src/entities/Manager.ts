@@ -99,7 +99,9 @@ export class Manager {
     static async listSelectFromDB(search: string): Promise<Manager[]> {
         let managers: Manager[] = [];
         try {
-            const result = await App.app.dbmanager.execute(Manager.selectQuery(Manager.searchWhereclause(search, ""), ""));
+            const whereclause = Manager.searchWhereclause(search, "");
+            const selectquery = Manager.selectQuery(whereclause, "");
+            const result = await App.app.dbmanager.execute(selectquery);
             const recordset: ManagerObj[] = result.recordset;
             managers = Manager.listFromDBObjectList(recordset, "");
             return managers;
@@ -116,7 +118,6 @@ export class Manager {
                 maxId = result1.recordset[0][""];
             }
             manager.Id = 1 + maxId;
-            console.log("maxId:", maxId);
             const result = await App.app.dbmanager.execute(Manager.insertQuery(manager));
             return manager;
         } catch(err) {

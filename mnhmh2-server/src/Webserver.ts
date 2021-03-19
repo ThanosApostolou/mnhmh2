@@ -68,6 +68,15 @@ export class Webserver {
         this.expressapp.get("/api/group", (req: Request, res: Response) => {
             new GroupController(req, res).GET();
         });
+        this.expressapp.post("/api/group", (req: Request, res: Response) => {
+            new GroupController(req, res).POST();
+        });
+        this.expressapp.delete("/api/group", (req: Request, res: Response) => {
+            new GroupController(req, res).DELETE();
+        });
+        this.expressapp.put("/api/group", (req: Request, res: Response) => {
+            new GroupController(req, res).PUT();
+        });
 
         this.expressapp.get("/api/manager", (req: Request, res: Response) => {
             new ManagerController(req, res).GET();
