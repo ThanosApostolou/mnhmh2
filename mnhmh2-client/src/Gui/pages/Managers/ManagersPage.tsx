@@ -1,6 +1,8 @@
 import React, { ReactNode } from "react";
-import { Card, CardContent, Button, TextField, Tooltip, IconButton, Grid, Drawer, CardHeader, CardActions } from "@material-ui/core";
-import { ExpandMore, Search } from "@material-ui/icons";
+import { Card, CardContent, TextField, Tooltip, IconButton, Grid, Snackbar } from "@material-ui/core";
+import { Search } from "@material-ui/icons";
+import { Alert } from "@material-ui/lab";
+
 
 import { DataComp } from "../../components/DataComp";
 import { Manager } from "../../../entities/Manager";
@@ -22,7 +24,8 @@ export class ManagersPage extends React.Component<null, ManagersPageState> {
             loading: true,
             search: null,
             error: null,
-            openAddDrawer: false
+            openAddDrawer: false,
+            addSnackbarOpen: false
         };
         this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
         this.search = "";
@@ -55,7 +58,8 @@ export class ManagersPage extends React.Component<null, ManagersPageState> {
     }
 
     onAddSave(): void {
-        this.setState({openAddDrawer: false});
+        this.setState({openAddDrawer: false, addSnackbarOpen: true});
+        this.fetchData();
     }
 
     onAddCancel(): void {
@@ -93,6 +97,19 @@ export class ManagersPage extends React.Component<null, ManagersPageState> {
                     onAddSave={this.onAddSave.bind(this)}
                     onAddCancel={this.onAddCancel.bind(this)}
                 />
+                <Snackbar
+                    anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "left",
+                    }}
+                    open={this.state.addSnackbarOpen}
+                    autoHideDuration={2000}
+                    onClose={() => this.setState({addSnackbarOpen: false})}
+                >
+                    <Alert variant="filled" severity="success" onClose={() => this.setState({addSnackbarOpen: false})}>
+                    Επιτυχία προσθήκης μέλους επιτροπής!
+                    </Alert>
+                </Snackbar>
             </Grid>
         );
     }
@@ -105,4 +122,5 @@ export interface ManagersPageState {
     search: string;
     error: any;
     openAddDrawer: boolean;
+    addSnackbarOpen: boolean;
 }

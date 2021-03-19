@@ -14,7 +14,8 @@ export class DataComp extends React.Component<DataCompProps, DataCompState> {
         super(props);
         this.state = {
             selectedRow: null,
-            pageSize: 10
+            pageSize: 10,
+            page: 0
         };
         console.log("error: ", this.props.error);
         console.log("storage", JSON.parse(window.localStorage.getItem(this.props.storagePrefix)));
@@ -35,7 +36,7 @@ export class DataComp extends React.Component<DataCompProps, DataCompState> {
     onPageSizeChange(params: GridPageChangeParams): void {
         console.log(params);
         this.saveStorage(params.pageSize);
-        this.readStorage();
+        //this.readStorage();
     }
 
     rowSelected(params: GridRowSelectedParams): void {
@@ -59,6 +60,7 @@ export class DataComp extends React.Component<DataCompProps, DataCompState> {
         console.log("refresh clicked", event);
         this.props.cancelFetchData();
         this.props.fetchData();
+        this.setState({page: 0});
         if (this.props.onRefreshClick) {
             this.props.onRefreshClick(event);
         }
@@ -106,6 +108,7 @@ export class DataComp extends React.Component<DataCompProps, DataCompState> {
                         onRowSelected={this.rowSelected.bind(this)}
                         loading={this.props.loading}
                         error={this.props.error}
+                        page={this.state.page}
                     />
                 </Card>
             </div>
@@ -120,6 +123,7 @@ interface Storage {
 export interface DataCompState {
     selectedRow: any;
     pageSize: number;
+    page: number;
 }
 
 export interface DataCompProps {
