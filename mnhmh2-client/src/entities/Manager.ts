@@ -12,7 +12,7 @@ export class Manager {
         return JSON.stringify(this);
     }
 
-    static listToJson(manager: Manager[]) {
+    static listToJson(manager: Manager[]): string {
         return JSON.stringify(manager);
     }
 
@@ -33,7 +33,7 @@ export class Manager {
         return managers;
     }
 
-    static async toApi(cancelTokenSource: CancelTokenSource, manager: Manager): Promise<any> {
+    static async insertToApi(cancelTokenSource: CancelTokenSource, manager: Manager): Promise<any> {
         try {
             const response = await App.app.apiconsumer.axios.request({
                 method: "post",
@@ -46,7 +46,44 @@ export class Manager {
                     manager: manager
                 }
             });
-            console.log("response", response);
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+    static async updateInApi(cancelTokenSource: CancelTokenSource, manager: Manager): Promise<any> {
+        try {
+            const response = await App.app.apiconsumer.axios.request({
+                method: "put",
+                url: "/manager",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                cancelToken: cancelTokenSource.token,
+                data: {
+                    manager: manager
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+    static async deleteInApi(cancelTokenSource: CancelTokenSource, manager: Manager): Promise<any> {
+        try {
+            const response = await App.app.apiconsumer.axios.request({
+                method: "delete",
+                url: "/manager",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                cancelToken: cancelTokenSource.token,
+                data: {
+                    manager: manager
+                }
+            });
             return response.data;
         } catch (error) {
             console.log(error);

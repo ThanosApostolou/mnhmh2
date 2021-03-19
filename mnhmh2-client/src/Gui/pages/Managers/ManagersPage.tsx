@@ -8,8 +8,9 @@ import { DataComp } from "../../components/DataComp";
 import { Manager } from "../../../entities/Manager";
 import { CancelTokenSource } from "axios";
 import { ApiConsumer } from "../../../ApiConsumer";
-import { GridRowsProp } from "@material-ui/data-grid";
+import { GridRowSelectedParams, GridRowsProp } from "@material-ui/data-grid";
 import { ManagersAdd } from "./ManagersAdd";
+import { ManagersEdit } from "./ManagersEdit";
 
 export class ManagersPage extends React.Component<null, ManagersPageState> {
     state: Readonly<ManagersPageState>;
@@ -19,13 +20,16 @@ export class ManagersPage extends React.Component<null, ManagersPageState> {
     constructor(props: null) {
         super(props);
         this.state = {
-            data: null,
+            managers: null,
+            selectedManager: null,
             rows: [],
             loading: true,
             search: null,
             error: null,
             openAddDrawer: false,
-            addSnackbarOpen: false
+            openEditDrawer: false,
+            openSnackbar: false,
+            snackbarMessage: ""
         };
         this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
         this.search = "";
@@ -38,10 +42,10 @@ export class ManagersPage extends React.Component<null, ManagersPageState> {
         this.setState({rows: []});
         this.setState({loading : true});
         Manager.listFromApi(this.cancelTokenSource, this.search).then((data: any) => {
-            this.setState({data: data});
-            this.setState({rows: Manager.getRows(this.state.data)});
+            this.setState({managers: data});
+            this.setState({rows: Manager.getRows(this.state.managers)});
         }).catch((error) => {
-            this.setState({data: null});
+            this.setState({managers: null});
             this.setState({rows: []});
             this.setState({error: error});
         }).finally(() => {
@@ -53,17 +57,37 @@ export class ManagersPage extends React.Component<null, ManagersPageState> {
         this.cancelTokenSource.cancel("cancel fetching data");
     }
 
+    onRowSelected(params: GridRowSelectedParams): void {
+        console.log("index", params.data.AA - 1);
+        if (this.state.managers && this.state.managers !== null && this.state.managers.length > 0) {
+            this.setState({selectedManager: this.state.managers[params.data.AA - 1]});
+        } else {
+            this.setState({selectedManager: null});
+        }
+
+        console.log("manager", this.state.selectedManager);
+    }
+
     onAddClick(): void {
         this.setState({openAddDrawer: true});
     }
-
     onAddSave(): void {
-        this.setState({openAddDrawer: false, addSnackbarOpen: true});
+        this.setState({openAddDrawer: false, snackbarMessage: "Επιτυχία προσθήκης μέλους επιτροπής!", openSnackbar: true});
         this.fetchData();
     }
-
     onAddCancel(): void {
         this.setState({openAddDrawer: false});
+    }
+
+    onEditClick(): void {
+        this.setState({openEditDrawer: true});
+    }
+    onEditSave(): void {
+        this.setState({openEditDrawer: false, snackbarMessage: "Επιτυχία τροποποίησης μέλους επιτροπής!", openSnackbar: true});
+        this.fetchData();
+    }
+    onEditCancel(): void {
+        this.setState({openEditDrawer: false});
     }
 
     handleSubmit(event: React.FormEvent<HTMLFormElement>): void {
@@ -91,23 +115,30 @@ export class ManagersPage extends React.Component<null, ManagersPageState> {
                 <DataComp  error={this.state.error} rows={this.state.rows} loading={this.state.loading} columns={Manager.getColumns()} storagePrefix="manager"
                     fetchData={this.fetchData.bind(this)}
                     cancelFetchData={this.cancelFetchData.bind(this)}
+                    onRowSelected={this.onRowSelected.bind(this)}
                     onAddClick={this.onAddClick.bind(this)}
+                    onEditClick={this.onEditClick.bind(this)}
                 />
                 <ManagersAdd openAddDrawer={this.state.openAddDrawer}
                     onAddSave={this.onAddSave.bind(this)}
                     onAddCancel={this.onAddCancel.bind(this)}
+                />
+                <ManagersEdit manager={this.state.selectedManager}
+                    openEditDrawer={this.state.openEditDrawer}
+                    onEditSave={this.onEditSave.bind(this)}
+                    onEditCancel={this.onEditCancel.bind(this)}
                 />
                 <Snackbar
                     anchorOrigin={{
                         vertical: "bottom",
                         horizontal: "left",
                     }}
-                    open={this.state.addSnackbarOpen}
+                    open={this.state.openSnackbar}
                     autoHideDuration={2000}
-                    onClose={() => this.setState({addSnackbarOpen: false})}
+                    onClose={() => this.setState({openSnackbar: false})}
                 >
-                    <Alert variant="filled" severity="success" onClose={() => this.setState({addSnackbarOpen: false})}>
-                    Επιτυχία προσθήκης μέλους επιτροπής!
+                    <Alert variant="filled" severity="success" onClose={() => this.setState({openSnackbar: false})}>
+                        {this.state.snackbarMessage}
                     </Alert>
                 </Snackbar>
             </Grid>
@@ -116,11 +147,14 @@ export class ManagersPage extends React.Component<null, ManagersPageState> {
 }
 
 export interface ManagersPageState {
-    data: Manager[];
+    managers: Manager[];
+    selectedManager: Manager;
     rows: GridRowsProp;
     loading: boolean;
     search: string;
     error: any;
     openAddDrawer: boolean;
-    addSnackbarOpen: boolean;
+    openEditDrawer: boolean;
+    openSnackbar: boolean;
+    snackbarMessage: string;
 }

@@ -39,9 +39,12 @@ export class DataComp extends React.Component<DataCompProps, DataCompState> {
         //this.readStorage();
     }
 
-    rowSelected(params: GridRowSelectedParams): void {
+    onRowSelected(params: GridRowSelectedParams): void {
         console.log("row selected: ", params);
         this.setState({selectedRow: params.data});
+        if (this.props.onRowSelected) {
+            this.props.onRowSelected(params);
+        }
     }
 
     onAddClick(event: React.MouseEvent<HTMLButtonElement>): void {
@@ -105,7 +108,7 @@ export class DataComp extends React.Component<DataCompProps, DataCompState> {
                             }
                         }}
                         onPageSizeChange={this.onPageSizeChange.bind(this)}
-                        onRowSelected={this.rowSelected.bind(this)}
+                        onRowSelected={this.onRowSelected.bind(this)}
                         loading={this.props.loading}
                         error={this.props.error}
                         page={this.state.page}
@@ -134,6 +137,7 @@ export interface DataCompProps {
     storagePrefix: string;
     fetchData: () => void;
     cancelFetchData: () => void;
+    onRowSelected?: (params: GridRowSelectedParams) => void;
     onAddClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
     onEditClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
     onRefreshClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;

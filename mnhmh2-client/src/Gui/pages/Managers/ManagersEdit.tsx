@@ -6,14 +6,14 @@ import { Manager } from "../../../entities/Manager";
 import { ApiConsumer } from "../../../ApiConsumer";
 import { CancelTokenSource } from "axios";
 
-export class ManagersAdd extends React.Component<ManagersAddProps, ManagersAddState> {
-    state: Readonly<ManagersAddState>;
+export class ManagersEdit extends React.Component<ManagersEditProps, ManagersEditState> {
+    state: Readonly<ManagersEditState>;
     cancelTokenSource: CancelTokenSource;
     nameInputRef: React.RefObject<HTMLInputElement>;
     rankInputRef: React.RefObject<HTMLInputElement>;
     positionInputRef: React.RefObject<HTMLInputElement>;
 
-    constructor(props: ManagersAddProps) {
+    constructor(props: ManagersEditProps) {
         super(props);
         this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
         this.nameInputRef = React.createRef<HTMLInputElement>();
@@ -25,21 +25,21 @@ export class ManagersAdd extends React.Component<ManagersAddProps, ManagersAddSt
         };
     }
 
-    onAddSave(event: React.FormEvent<HTMLFormElement>): void {
+    onEditSave(event: React.FormEvent<HTMLFormElement>): void {
         event.preventDefault();
         this.setState({loading: true});
         this.cancelTokenSource.cancel("cancel sending data");
         this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
         const manager = Manager.fromObject({
-            Id: null,
+            Id: this.props.manager.Id,
             Name: this.nameInputRef.current.value,
             Rank: this.rankInputRef.current.value,
             Position: this.positionInputRef.current.value
         });
-        Manager.insertToApi(this.cancelTokenSource, manager).then(() => {
+        Manager.updateInApi(this.cancelTokenSource, manager).then(() => {
 
-            if (this.props.onAddSave) {
-                this.props.onAddSave();
+            if (this.props.onEditSave) {
+                this.props.onEditSave();
             }
         }).catch((error) => {
             console.log(error);
@@ -48,47 +48,51 @@ export class ManagersAdd extends React.Component<ManagersAddProps, ManagersAddSt
             this.setState({loading: false});
         });
     }
-    onAddCancel(): void {
+    onEditCancel(): void {
         this.cancelTokenSource.cancel("cancel sending data");
-        if (this.props.onAddCancel) {
-            this.props.onAddCancel();
+        if (this.props.onEditCancel) {
+            this.props.onEditCancel();
         }
     }
 
     render(): ReactNode {
-        if (!this.props.openAddDrawer) {
+        if (!this.props.openEditDrawer) {
             return null;
         } else {
             return (
-                <Drawer anchor="right" open={this.props.openAddDrawer} >
+                <Drawer anchor="right" open={this.props.openEditDrawer} >
                     <Card style={{minWidth: "70vw", display:"flex", flexGrow: 1}}>
                         <Grid container direction="column" style={{display:"flex", flexGrow: 1}}>
                             <Grid item>
                                 <Grid container direction="row" justify="center" alignContent="center" alignItems="center">
-                                    <CardHeader title="Προσθήκη Μέλους Επιτροπής" />
+                                    <CardHeader title="Τροποποίηση Μέλους Επιτροπής" />
                                 </Grid>
                             </Grid>
 
                             <Grid item style={{display: "flex", flexGrow: 1}}>
-                                <form onSubmit={this.onAddSave.bind(this)} style={{display: "flex", flexGrow: 1}}>
+                                <form onSubmit={this.onEditSave.bind(this)} style={{display: "flex", flexGrow: 1}}>
 
                                     <Grid container direction="column" style={{display:"flex", flexGrow: 1}}>
                                         <fieldset>
                                             <Grid container direction="column" justify="flex-start" alignContent="center" alignItems="center">
-                                                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ" inputRef={this.nameInputRef} />
-                                                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΒΑΘΜΟΣ" inputRef={this.rankInputRef} />
-                                                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΘΕΣΗ" inputRef={this.positionInputRef} />
+                                                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ" defaultValue={this.props.manager.Name} inputRef={this.nameInputRef} />
+                                                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΒΑΘΜΟΣ" defaultValue={this.props.manager.Rank} inputRef={this.rankInputRef} />
+                                                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΘΕΣΗ" defaultValue={this.props.manager.Position} inputRef={this.positionInputRef} />
                                             </Grid>
                                         </fieldset>
                                         <div style={{display: "flex", flexGrow: 1}} />
                                         <CardActions>
                                             <Grid container direction="row" justify="flex-end">
 
-                                                <Button variant="contained" style={{margin: "10px"}} disabled={this.state.loading} onClick={this.onAddCancel.bind(this)}>
-                                                Cancel
+                                                <Button variant="contained" style={{margin: "10px"}} disabled={this.state.loading} onClick={this.onEditCancel.bind(this)}>
+                                                    ΑΚΥΡΩΣΗ
+                                                </Button>
+
+                                                <Button variant="contained" style={{margin: "10px"}} disabled={this.state.loading} color="secondary" onClick={this.onEditCancel.bind(this)}>
+                                                    ΔΙΑΓΡΑΦΗ
                                                 </Button>
                                                 <Button variant="contained" style={{margin: "10px 20px 10px 10px"}} disabled={this.state.loading} color="primary" autoFocus type="submit" value="Submit">
-                                                Save
+                                                    ΑΠΟΘΗΚΕΥΣΗ
                                                 </Button>
                                             </Grid>
                                         </CardActions>
@@ -106,7 +110,7 @@ export class ManagersAdd extends React.Component<ManagersAddProps, ManagersAddSt
                             onClose={() => this.setState({errorSnackbarOpen: false})}
                         >
                             <Alert variant="filled" severity="error" onClose={() => this.setState({errorSnackbarOpen: false})}>
-                                Αποτυχία προσθήκης μέλους επιτροπής!
+                                Αποτυχία τροποποίησης!
                             </Alert>
                         </Snackbar>
                     </Card>
@@ -116,13 +120,14 @@ export class ManagersAdd extends React.Component<ManagersAddProps, ManagersAddSt
     }
 }
 
-export interface ManagersAddProps {
-    openAddDrawer: boolean;
-    onAddSave?: () => void;
-    onAddCancel?: () => void;
+export interface ManagersEditProps {
+    manager: Manager;
+    openEditDrawer: boolean;
+    onEditSave?: () => void;
+    onEditCancel?: () => void;
 }
 
-interface ManagersAddState {
+interface ManagersEditState {
     loading: boolean;
     errorSnackbarOpen: boolean;
 }
