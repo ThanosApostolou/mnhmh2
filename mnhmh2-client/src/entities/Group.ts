@@ -109,11 +109,11 @@ export class Group {
 
     static getColumns(): GridColDef[] {
         const columns: GridColDef[] = [
-            { field: "AA", headerName: "AA" },
-            { field: "Id", headerName: "Id" },
-            { field: "Name", headerName: "Name" },
-            { field: "LastRegistryCode", headerName: "LastRegistryCode" },
-            { field: "SerialNumber", headerName: "SerialNumber" },
+            { field: "AA", headerName: "AA", width: 100, hide: false  },
+            { field: "Id", headerName: "Id", width: 100, hide: false  },
+            { field: "Name", headerName: "ΟΝΟΜΑ", width: 200, hide: false  },
+            { field: "LastRegistryCode", headerName: "LastRegistryCode", width: 200, hide: false  },
+            { field: "SerialNumber", headerName: "SerialNumber", width: 200, hide: false  },
         ];
         return columns;
     }

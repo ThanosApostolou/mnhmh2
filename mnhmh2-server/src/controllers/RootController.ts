@@ -12,6 +12,7 @@ export class RootController {
     }
 
     GET(): void {
+        this.res.setHeader("Content-Type", "application/json");
         this.res.send(App.app.runtimeinfo.toJson());
     }
 }

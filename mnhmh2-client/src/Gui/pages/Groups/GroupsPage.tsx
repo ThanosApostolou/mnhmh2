@@ -116,7 +116,7 @@ export class GroupsPage extends React.Component<null, GroupsPageState> {
                         </form>
                     </CardContent>
                 </Card>
-                <DataComp  error={this.state.error} rows={this.state.rows} loading={this.state.loading} columns={Group.getColumns()} storagePrefix="group"
+                <DataComp  error={this.state.error} rows={this.state.rows} loading={this.state.loading} columns={Group.getColumns()} storagePrefix="groups"
                     fetchData={this.fetchData.bind(this)}
                     cancelFetchData={this.cancelFetchData.bind(this)}
                     onRowSelected={this.onRowSelected.bind(this)}

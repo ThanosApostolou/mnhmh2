@@ -1,4 +1,4 @@
-import { GridColDef, GridRowData, GridRowsProp } from "@material-ui/data-grid";
+import { GridColDef, GridRowData, GridRowsProp, GridCellParams } from "@material-ui/data-grid";
 import { CancelTokenSource } from "axios";
 import App from "../App";
 
@@ -111,11 +111,11 @@ export class Manager {
 
     static getColumns(): GridColDef[] {
         const columns: GridColDef[] = [
-            { field: "AA", headerName: "AA" },
-            { field: "Id", headerName: "Id" },
-            { field: "Name", headerName: "ΟΝΟΜΑ" },
-            { field: "Rank", headerName: "ΒΑΘΜΟΣ" },
-            { field: "Position", headerName: "ΘΕΣΗ" },
+            { field: "AA", headerName: "AA", width: 100, hide: false },
+            { field: "Id", headerName: "Id", width: 100, hide: false },
+            { field: "Name", headerName: "ΟΝΟΜΑ", width: 100, hide: false },
+            { field: "Rank", headerName: "ΒΑΘΜΟΣ", width: 200, hide: false },
+            { field: "Position", headerName: "ΘΕΣΗ", width: 200, hide: false },
         ];
         return columns;
     }

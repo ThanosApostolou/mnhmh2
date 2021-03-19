@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 
-import { Card } from "@material-ui/core";
-import { GridColDef, DataGrid, GridRowsProp, GridPageChangeParams, GridRowSelectedParams } from "@material-ui/data-grid";
+import { Card, Grid, Tooltip } from "@material-ui/core";
+import { GridColDef, DataGrid, GridRowsProp, GridPageChangeParams, GridRowSelectedParams, GridCellParams } from "@material-ui/data-grid";
 
 import { MyGridToolbar } from "./MyGridToolbar";
 import { MyGridFooter } from "./MyGridFooter";
@@ -15,10 +15,24 @@ export class DataComp extends React.Component<DataCompProps, DataCompState> {
         this.state = {
             selectedRow: null,
             pageSize: 10,
-            page: 0
+            page: 0,
+            columns: this.props.columns
         };
-        console.log("error: ", this.props.error);
-        console.log("storage", JSON.parse(window.localStorage.getItem(this.props.storagePrefix)));
+        const columns: GridColDef[] = [];
+        for (const column of this.props.columns) {
+            column.renderCell = (params: GridCellParams) => {
+                console.log("cell params", params);
+                return (
+                    <Tooltip title={params.value}>
+                        <p style={{height: "100%", whiteSpace: "nowrap", overflowX: "auto", overflowY: "hidden"}}>
+                            {params.value}
+                        </p>
+                    </Tooltip>
+                );
+            };
+            columns.push(column);
+        }
+        this.setState({columns: columns});
     }
 
     readStorage(): void {
@@ -91,7 +105,7 @@ export class DataComp extends React.Component<DataCompProps, DataCompState> {
         return (
             <div style={{flexGrow: 1}}>
                 <Card elevation={6} style={{height: "100%", width: "100%"}}>
-                    <DataGrid rows={this.props.rows} columns={this.props.columns} rowsPerPageOptions={[5, 10, 15, 20, 25, 50, 100]} pagination showColumnRightBorder={true} showCellRightBorder={true}
+                    <DataGrid rows={this.props.rows} columns={this.state.columns} rowsPerPageOptions={[5, 10, 15, 20, 25, 50, 100]} pagination showColumnRightBorder={true} showCellRightBorder={true}
                         pageSize={this.state.pageSize}
                         components={{
                             Footer: MyGridFooter,
@@ -112,6 +126,7 @@ export class DataComp extends React.Component<DataCompProps, DataCompState> {
                         loading={this.props.loading}
                         error={this.props.error}
                         page={this.state.page}
+                        rowHeight={72}
                     />
                 </Card>
             </div>
@@ -127,6 +142,7 @@ export interface DataCompState {
     selectedRow: any;
     pageSize: number;
     page: number;
+    columns: GridColDef[];
 }
 
 export interface DataCompProps {
