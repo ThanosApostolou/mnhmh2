@@ -88,6 +88,7 @@ export class ManagersEdit extends React.Component<ManagersEditProps, ManagersEdi
                                     <Grid container direction="column" style={{display:"flex", flexGrow: 1}}>
                                         <fieldset>
                                             <Grid container direction="column" justify="flex-start" alignContent="center" alignItems="center">
+                                                <TextField size="small" InputLabelProps={{ shrink: true }} label="Id" type="number" value={this.props.manager.Id} disabled />
                                                 <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ" defaultValue={this.props.manager.Name} inputRef={this.nameInputRef} />
                                                 <TextField size="small" InputLabelProps={{ shrink: true }} label="ΒΑΘΜΟΣ" defaultValue={this.props.manager.Rank} inputRef={this.rankInputRef} />
                                                 <TextField size="small" InputLabelProps={{ shrink: true }} label="ΘΕΣΗ" defaultValue={this.props.manager.Position} inputRef={this.positionInputRef} />
@@ -113,7 +114,7 @@ export class ManagersEdit extends React.Component<ManagersEditProps, ManagersEdi
                                 </form>
                             </Grid>
                         </Grid>
-                        <Backdrop open={this.state.loading} style={{zIndex: 100}}>
+                        <Backdrop open={this.state.loading} style={{position: "fixed", left: "30vw", height: "100vh", width: "70vw", zIndex: 100}}>
                             <CircularProgress color="inherit" />
                         </Backdrop>
                         <Snackbar

@@ -94,7 +94,7 @@ export class ManagersAdd extends React.Component<ManagersAddProps, ManagersAddSt
                                 </form>
                             </Grid>
                         </Grid>
-                        <Backdrop open={this.state.loading} style={{zIndex: 100}}>
+                        <Backdrop open={this.state.loading} style={{position: "fixed", left: "30vw", height: "100vh", width: "70vw", zIndex: 100}}>
                             <CircularProgress color="inherit" />
                         </Backdrop>
                         <Snackbar

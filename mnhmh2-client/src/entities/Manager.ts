@@ -113,9 +113,9 @@ export class Manager {
         const columns: GridColDef[] = [
             { field: "AA", headerName: "AA" },
             { field: "Id", headerName: "Id" },
-            { field: "Name", headerName: "Name" },
-            { field: "Rank", headerName: "Rank" },
-            { field: "Position", headerName: "Position" },
+            { field: "Name", headerName: "ΟΝΟΜΑ" },
+            { field: "Rank", headerName: "ΒΑΘΜΟΣ" },
+            { field: "Position", headerName: "ΘΕΣΗ" },
         ];
         return columns;
     }
