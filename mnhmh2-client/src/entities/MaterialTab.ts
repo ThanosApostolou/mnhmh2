@@ -1,5 +1,9 @@
 import { GridColDef, GridRowData, GridRowsProp } from "@material-ui/data-grid";
+import { CancelTokenSource } from "axios";
+
 import App from "../App";
+import { Category } from "./Category";
+import { Group } from "./Group";
 
 export class MaterialTab {
     Id: number;
@@ -25,8 +29,8 @@ export class MaterialTab {
     MaterialWithoutTab: boolean;
     CurrentMaterialTab: boolean;
     FEEFCode: string;
-    Group: number;
-    Category: number;
+    Group: Group;
+    Category: Category;
     ComparativesPrintPage_MaterialTabs: number;
 
     toJson(): string {
@@ -62,8 +66,8 @@ export class MaterialTab {
         materialtab.MaterialWithoutTab = obj.MaterialWithoutTab;
         materialtab.CurrentMaterialTab = obj.CurrentMaterialTab;
         materialtab.FEEFCode = obj.FEEFCode;
-        materialtab.Group = obj.Group;
-        materialtab.Category = obj.Category;
+        materialtab.Group = Group.fromObject(obj.Group);
+        materialtab.Category = Category.fromObject(obj.Category);
         materialtab.ComparativesPrintPage_MaterialTabs = obj.ComparativesPrintPage_MaterialTabs;
         return materialtab;
     }
@@ -76,11 +80,12 @@ export class MaterialTab {
         return materialtabs;
     }
 
-    static async listFromApi(): Promise<MaterialTab[]> {
+    static async listFromApi(cancelTokenSource: CancelTokenSource): Promise<MaterialTab[]> {
         try {
             const response = await App.app.apiconsumer.axios.request({
                 method: "get",
-                url: "/materialtab"
+                url: "/materialtab",
+                cancelToken: cancelTokenSource.token
             });
             const materialtabs: MaterialTab[] = MaterialTab.listFromObjectList(response.data);
             return materialtabs;
@@ -91,33 +96,33 @@ export class MaterialTab {
 
     static getColumns(): GridColDef[] {
         const columns: GridColDef[] = [
-            { field: "AA", headerName: "AA" },
-            { field: "Id", headerName: "Id" },
-            { field: "PartialRegistryCode", headerName: "PartialRegistryCode" },
-            { field: "PartialRegistryCodeNumber", headerName: "PartialRegistryCodeNumber" },
-            { field: "AOEF", headerName: "AOEF" },
-            { field: "Name", headerName: "Name" },
-            { field: "MeasurementUnit", headerName: "MeasurementUnit" },
-            { field: "TabRemainder", headerName: "TabRemainder" },
-            { field: "Sum", headerName: "Sum" },
-            { field: "Difference", headerName: "Difference" },
-            { field: "Comments", headerName: "Comments" },
-            { field: "ImportSum", headerName: "ImportSum" },
-            { field: "ExportSum", headerName: "ExportSum" },
-            { field: "Found", headerName: "Found" },
-            { field: "PendingCrediting", headerName: "PendingCrediting" },
-            { field: "Surplus", headerName: "Surplus" },
-            { field: "Deficit", headerName: "Deficit" },
-            { field: "Image", headerName: "Image" },
-            { field: "GeneralRegistryCode", headerName: "GeneralRegistryCode" },
-            { field: "Archived", headerName: "Archived" },
-            { field: "SerialNumber", headerName: "SerialNumber" },
-            { field: "MaterialWithoutTab", headerName: "MaterialWithoutTab" },
-            { field: "CurrentMaterialTab", headerName: "CurrentMaterialTab" },
-            { field: "FEEFCode", headerName: "FEEFCode" },
-            { field: "Group", headerName: "Group" },
-            { field: "Category", headerName: "Category" },
-            { field: "ComparativesPrintPage_MaterialTabs", headerName: "ComparativesPrintPage_MaterialTabs" },
+            { field: "AA", headerName: "AA", width: 100, hide: false },
+            { field: "Id", headerName: "Id", width: 100, hide: false },
+            { field: "PartialRegistryCode", headerName: "ΜΕΡΙΚΟΣ ΚΩΔΙΚΟΣ ΕΓΓΡΑΦΗΣ", width: 200, hide: false },
+            { field: "PartialRegistryCodeNumber", headerName: "ΑΡΙΘΜΟΣ ΜΕΡΙΚΟΥ ΚΩΔΙΚΟΥ ΕΓΓΡΑΦΗΣ", width: 100, hide: false },
+            { field: "AOEF", headerName: "AOEF", width: 200, hide: false },
+            { field: "Name", headerName: "ΟΝΟΜΑ", width: 200, hide: false },
+            { field: "MeasurementUnit", headerName: "ΜΟΝΑΔΑ ΜΕΤΡΗΣΗΣ", width: 200, hide: false },
+            { field: "TabRemainder", headerName: "TabRemainder", width: 200, hide: false },
+            { field: "Sum", headerName: "Sum", width: 200, hide: false },
+            { field: "Difference", headerName: "Difference, width: 200, hide: false" },
+            { field: "Comments", headerName: "Comments", width: 200, hide: false },
+            { field: "ImportSum", headerName: "ImportSum", width: 200, hide: false },
+            { field: "ExportSum", headerName: "ExportSum", width: 200, hide: false },
+            { field: "Found", headerName: "Found", width: 200, hide: false },
+            { field: "PendingCrediting", headerName: "PendingCrediting", width: 200, hide: false },
+            { field: "Surplus", headerName: "Surplus", width: 200, hide: false },
+            { field: "Deficit", headerName: "Deficit", width: 200, hide: false },
+            { field: "Image", headerName: "Image", width: 200, hide: false },
+            { field: "GeneralRegistryCode", headerName: "GeneralRegistryCode", width: 200, hide: false },
+            { field: "Archived", headerName: "Archived", width: 200, hide: false },
+            { field: "SerialNumber", headerName: "SerialNumber", width: 200, hide: false },
+            { field: "MaterialWithoutTab", headerName: "MaterialWithoutTab", width: 200, hide: false },
+            { field: "CurrentMaterialTab", headerName: "CurrentMaterialTab", width: 200, hide: false },
+            { field: "FEEFCode", headerName: "FEEFCode", width: 200, hide: false },
+            { field: "Group", headerName: "ΟΜΑΔΑ", width: 200, hide: false },
+            { field: "Category", headerName: "ΣΥΓΚΡΟΤΗΜΑ", width: 200, hide: false },
+            { field: "ComparativesPrintPage_MaterialTabs", headerName: "ComparativesPrintPage_MaterialTabs", width: 200, hide: false },
         ];
         return columns;
     }
@@ -152,8 +157,8 @@ export class MaterialTab {
                 MaterialWithoutTab: mt.MaterialWithoutTab,
                 CurrentMaterialTab: mt.CurrentMaterialTab,
                 FEEFCode: mt.FEEFCode,
-                Group: mt.Group,
-                Category: mt.Category,
+                Group: mt.Group.Name,
+                Category: mt.Category.Name,
                 ComparativesPrintPage_MaterialTabs: mt.ComparativesPrintPage_MaterialTabs
             };
             count++;

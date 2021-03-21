@@ -1,5 +1,4 @@
 import { GridColDef, GridRowData, GridRowsProp } from "@material-ui/data-grid";
-import { ApiConsumer } from "../ApiConsumer";
 import { CancelTokenSource } from "axios";
 import App from "../App";
 import { Borrower } from "./Borrower";
@@ -15,7 +14,7 @@ export class DirectMaterialBorrower {
         return JSON.stringify(this);
     }
 
-    static listToJson(dmb: DirectMaterialBorrower[]) {
+    static listToJson(dmb: DirectMaterialBorrower[]): string {
         return JSON.stringify(dmb);
     }
 

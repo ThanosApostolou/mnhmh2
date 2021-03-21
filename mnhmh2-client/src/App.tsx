@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Header from "./Gui/components/Header";
 import NotFoundPage from "./Gui/pages/NotFoundPage";
 import { HomePage } from "./Gui/pages/HomePage";
-import { MaterialTabsPage } from "./Gui/pages/MaterialTabsPage";
+import { MaterialTabsPage } from "./Gui/pages/MaterialTabs/MaterialTabsPage";
 import { DirectMaterialBorrowersPage } from "./Gui/pages/DirectMaterialBorrowers/DirectMaterialBorrowersPage";
 import { ImportsExportsTblPage } from "./Gui/pages/ImportsExportsTbl/ImportsExportsTblPage";
 import { AmmunitionStoresPage } from "./Gui/pages/AmmunitionStores/AmmunitionStoresPage";
