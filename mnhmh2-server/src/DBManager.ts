@@ -4,7 +4,9 @@ const config = {
     user: "retsi17",
     password: "1821",
     server: "DESKTOP-RO1RABI\\SQLEXPRESS",
-    database: "MNHMH"
+    database: "MNHMH",
+    connectionTimeout: 30000,
+    requestTimeout: 40000
 };
 
 export class DBManager {

@@ -1,4 +1,6 @@
 import { GridColDef, GridRowData, GridRowsProp } from "@material-ui/data-grid";
+import { CancelTokenSource } from "axios";
+
 import App from "../App";
 import { MaterialTab } from "./MaterialTab";
 
@@ -43,11 +45,12 @@ export class ImportsExportsTbl {
         return borrowers;
     }
 
-    static async listFromApi(): Promise<ImportsExportsTbl[]> {
+    static async listFromApi(cancelTokenSource: CancelTokenSource): Promise<ImportsExportsTbl[]> {
         try {
             const response = await App.app.apiconsumer.axios.request({
                 method: "get",
-                url: "/importsexportstbl"
+                url: "/importsexportstbl",
+                cancelToken: cancelTokenSource.token,
             });
             const materialtabs: ImportsExportsTbl[] = ImportsExportsTbl.listFromObjectList(response.data);
             return materialtabs;
@@ -58,16 +61,16 @@ export class ImportsExportsTbl {
 
     static getColumns(): GridColDef[] {
         const columns: GridColDef[] = [
-            { field: "AA", headerName: "AA" },
-            { field: "Id", headerName: "Id" },
-            { field: "Date", headerName: "Date" },
-            { field: "Unit", headerName: "Unit" },
-            { field: "JustificationFileNumber", headerName: "JustificationFileNumber" },
-            { field: "Imported", headerName: "Imported" },
-            { field: "Exported", headerName: "Exported" },
-            { field: "Remaining", headerName: "Remaining" },
-            { field: "Comments", headerName: "Comments" },
-            { field: "MaterialTab", headerName: "MaterialTab" },
+            { field: "AA", headerName: "AA", width: 100, hide: false },
+            { field: "Id", headerName: "Id", width: 100, hide: false },
+            { field: "Date", headerName: "ΗΜΕΡΟΜΗΝΙΑ", width: 200, hide: false },
+            { field: "Unit", headerName: "ΜΟΝΑΔΑ", width: 200, hide: false },
+            { field: "JustificationFileNumber", headerName: "ΑΡΙΘΜΟΣ ΔΙΚΑΙΟΛΟΓΗΣΗΣ ΑΡΧΕΙΟΥ", width: 200, hide: false },
+            { field: "Imported", headerName: "ΕΙΣΑΧΘΗΚΕ", width: 200, hide: false },
+            { field: "Exported", headerName: "ΕΞΑΧΘΗΚΕ", width: 200, hide: false },
+            { field: "Remaining", headerName: "ΥΠΟΛΟΙΠΟ", width: 200, hide: false },
+            { field: "Comments", headerName: "ΣΧΟΛΙΑ", width: 200, hide: false },
+            { field: "MaterialTab", headerName: "ΟΝΟΜΑ ΚΑΡΤΕΛΑΣ ΥΛΙΚΟΥ", width: 200, hide: false },
         ];
         return columns;
     }

@@ -111,6 +111,7 @@ export class DataComp extends React.Component<DataCompProps, DataCompState> {
                 <Card elevation={6} style={{height: "100%", width: "100%"}}>
                     <DataGrid rows={this.props.rows} columns={this.state.columns} rowsPerPageOptions={[5, 10, 15, 20, 25, 50, 100]} pagination showColumnRightBorder={true} showCellRightBorder={true}
                         pageSize={this.state.pageSize}
+                        rowHeight={64}
                         components={{
                             Footer: MyGridFooter,
                             Toolbar: MyGridToolbar,
@@ -130,7 +131,6 @@ export class DataComp extends React.Component<DataCompProps, DataCompState> {
                         loading={this.props.loading}
                         error={this.props.error}
                         page={this.state.page}
-                        rowHeight={68}
                     />
                 </Card>
             </div>
