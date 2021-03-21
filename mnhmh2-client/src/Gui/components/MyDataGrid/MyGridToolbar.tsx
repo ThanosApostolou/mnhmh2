@@ -3,7 +3,7 @@ import React, { ReactNode } from "react";
 import { Tooltip, Button, Grid } from "@material-ui/core";
 import { Refresh, Print, Add, Edit, Restore } from "@material-ui/icons";
 
-import { GridToolbarContainer, GridColumnsToolbarButton, GridFilterToolbarButton, GridDensitySelector, GridToolbarExport, GridBaseComponentProps, GridDensity } from "@material-ui/data-grid";
+import { GridToolbarContainer, GridColumnsToolbarButton, GridFilterToolbarButton, GridToolbarExport, GridBaseComponentProps, GridDensity } from "@material-ui/data-grid";
 
 import { MyGridDensityComp } from "./MyGridDensityComp";
 
@@ -36,7 +36,7 @@ export class MyGridToolbar extends React.Component<MyGridToolbarProps, any> {
                             <Grid container direction="row" justify="flex-start" alignContent="center" alignItems="center">
                                 <GridColumnsToolbarButton />
                                 <GridFilterToolbarButton />
-                                <MyGridDensityComp onDensityChange={this.props.onDensityChange.bind(this)} />
+                                <MyGridDensityComp density={this.props.density} onDensityChange={this.props.onDensityChange.bind(this)} />
                             </Grid>
                         </Grid>
                         <Grid item>
@@ -71,6 +71,7 @@ export class MyGridToolbar extends React.Component<MyGridToolbarProps, any> {
 
 export interface MyGridToolbarProps extends GridBaseComponentProps {
     selectedRow?: any;
+    density?: GridDensity;
     onAddClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
     onEditClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
     onDensityChange?: (density: GridDensity) => void;

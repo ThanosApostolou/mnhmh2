@@ -46,7 +46,9 @@ export class MyDataGrid extends React.Component<DataCompProps, DataCompState> {
     }
 
     initStorage(): void {
-        this.saveStorage(this.defaultPageSize, this.defaultDensity);
+        if (!window.localStorage.getItem(this.props.storagePrefix)) {
+            this.saveStorage(this.defaultPageSize, this.defaultDensity);
+        }
     }
 
     readStorage(): void {
@@ -136,6 +138,7 @@ export class MyDataGrid extends React.Component<DataCompProps, DataCompState> {
                         componentsProps={{
                             toolbar: {
                                 selectedRow: this.state.selectedRow,
+                                density: this.state.density,
                                 onAddClick: this.onAddClick.bind(this),
                                 onEditClick: this.onEditClick.bind(this),
                                 onDensityChange: this.onDensityChange.bind(this),

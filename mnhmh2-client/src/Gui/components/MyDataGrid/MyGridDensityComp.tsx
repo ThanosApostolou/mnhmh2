@@ -11,7 +11,7 @@ export class MyGridDensityComp extends React.Component<MyGridDensityCompProps, M
         super(props);
         this.state = {
             anchorMenuEl: null,
-            density: "standard",
+            density: this.props.density,
         };
     }
 
@@ -59,6 +59,7 @@ export class MyGridDensityComp extends React.Component<MyGridDensityCompProps, M
 }
 
 export interface MyGridDensityCompProps {
+    density: string;
     onDensityChange?: (density: GridDensity) => void;
 }
 export interface MyGridDensityCompState {
