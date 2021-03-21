@@ -1,11 +1,11 @@
 import React, { ReactNode } from "react";
 
-import { Tooltip, Button, Grid } from "@material-ui/core";
-import { Refresh, Print, Add, Edit } from "@material-ui/icons";
+import { Grid } from "@material-ui/core";
+import { GridBaseComponentProps } from "@material-ui/data-grid";
 
-export class MyGridErrorOverlay extends React.Component<any, any> {
+export class MyGridErrorOverlay extends React.Component<GridBaseComponentProps & any, any> {
 
-    constructor(props: any) {
+    constructor(props: GridBaseComponentProps & any) {
         super(props);
         console.log("props: ", this.props);
     }

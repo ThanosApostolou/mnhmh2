@@ -4,7 +4,7 @@ import { Search } from "@material-ui/icons";
 import { Alert } from "@material-ui/lab";
 
 
-import { DataComp } from "../../components/DataComp";
+import { MyDataGrid } from "../../components/MyDataGrid/MyDataGrid";
 import { DirectMaterialBorrower } from "../../../entities/DirectMaterialBorrower";
 import { CancelTokenSource } from "axios";
 import { ApiConsumer } from "../../../ApiConsumer";
@@ -115,7 +115,7 @@ export class DirectMaterialBorrowersPage extends React.Component<Record<string, 
                         </form>
                     </CardContent>
                 </Card>
-                <DataComp  error={this.state.error} rows={this.state.rows} loading={this.state.loading} columns={DirectMaterialBorrower.getColumns()} storagePrefix="directmaterialborrowers"
+                <MyDataGrid  error={this.state.error} rows={this.state.rows} loading={this.state.loading} columns={DirectMaterialBorrower.getColumns()} storagePrefix="directmaterialborrowers"
                     fetchData={this.fetchData.bind(this)}
                     cancelFetchData={this.cancelFetchData.bind(this)}
                     onRowSelected={this.onRowSelected.bind(this)}

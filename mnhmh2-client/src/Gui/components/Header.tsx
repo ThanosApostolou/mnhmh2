@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 
-import { Grid, AppBar, Toolbar, Menu, MenuItem, } from "@material-ui/core";
+import { Grid, AppBar, Toolbar, MenuItem, Popover } from "@material-ui/core";
 import { ArrowDropDown, ListAlt, MenuBook, CompareArrows, Whatshot, FolderOpen, Settings, AccountCircle, Group, GroupWork, GroupWorkTwoTone, RecentActors, Store, SupervisorAccount } from "@material-ui/icons";
 import { NavLink, withRouter } from "react-router-dom";
 
@@ -100,7 +100,11 @@ class Header extends React.Component<any, any> {
                         </Grid>
                     </Grid>
                 </Toolbar>
-                <Menu id="menu1" anchorEl={this.state.anchorMenuEl} keepMounted open={Boolean(this.state.anchorMenuEl)} onClose={this.handleClose.bind(this)}
+                <Popover anchorEl={this.state.anchorMenuEl} open={Boolean(this.state.anchorMenuEl)} onClose={this.handleClose.bind(this)}
+                    anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "center",
+                    }}
                     transformOrigin={{
                         vertical: "top",
                         horizontal: "center",
@@ -108,19 +112,18 @@ class Header extends React.Component<any, any> {
                 >
                     <MenuItem component={NavLink} to="/borrowers" selected={path === "/borrowers" ? true : false} onClick={this.handleClose.bind(this)}>
                         <RecentActors />
-                                        &nbsp;Μερικοί Διαχειριστές
+                                            &nbsp;Μερικοί Διαχειριστές
                     </MenuItem>
                     <MenuItem component={NavLink} to="/groups" selected={path === "/groups" ? true : false} onClick={this.handleClose.bind(this)}>
                         <Group />
-                                        &nbsp;Ομάδες
+                                            &nbsp;Ομάδες
                     </MenuItem>
                     <MenuItem component={NavLink} to="/managers" selected={path === "/managers" ? true : false} onClick={this.handleClose.bind(this)}>
                         <SupervisorAccount />
-                                        &nbsp;Επιτροπή
+                                            &nbsp;Επιτροπή
                     </MenuItem>
-                </Menu>
+                </Popover>
                 {settingsdialog}
-
             </AppBar>
         );
     }

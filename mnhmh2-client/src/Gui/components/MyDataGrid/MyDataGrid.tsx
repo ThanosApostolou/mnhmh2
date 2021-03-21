@@ -1,22 +1,28 @@
 import React, { ReactNode } from "react";
 
 import { Card, Tooltip } from "@material-ui/core";
-import { GridColDef, DataGrid, GridRowsProp, GridPageChangeParams, GridRowSelectedParams, GridCellParams } from "@material-ui/data-grid";
+import { GridColDef, DataGrid, GridRowsProp, GridPageChangeParams, GridRowSelectedParams, GridCellParams, GridDensity } from "@material-ui/data-grid";
 
-import App from "../../App";
+import App from "../../../App";
 import { MyGridToolbar } from "./MyGridToolbar";
 import { MyGridFooter } from "./MyGridFooter";
 import { MyGridErrorOverlay } from "./MyGridErrorOverlay";
 
-export class DataComp extends React.Component<DataCompProps, DataCompState> {
+export class MyDataGrid extends React.Component<DataCompProps, DataCompState> {
     state: Readonly<DataCompState>;
+    defaultPageSize: number;
+    defaultDensity: GridDensity;
 
     constructor(props: DataCompProps) {
         super(props);
+        this.defaultPageSize = 10;
+        this.defaultDensity = "standard";
+
         this.state = {
             selectedRow: null,
-            pageSize: 10,
+            pageSize: this.defaultPageSize,
             page: 0,
+            density: this.defaultDensity,
             columns: this.props.columns,
             textOverflowEllipsis: App.app.state.settingsmanager.textOverflowEllipsis
         };
@@ -39,22 +45,27 @@ export class DataComp extends React.Component<DataCompProps, DataCompState> {
         this.setState({columns: columns});
     }
 
-    readStorage(): void {
-        const storage: Storage = JSON.parse(window.localStorage.getItem(this.props.storagePrefix));
-        this.setState({pageSize: storage.pageSize});
+    initStorage(): void {
+        this.saveStorage(this.defaultPageSize, this.defaultDensity);
     }
 
-    saveStorage(pageSize: number): void {
+    readStorage(): void {
+        const storage: Storage = JSON.parse(window.localStorage.getItem(this.props.storagePrefix));
+        this.setState({pageSize: storage.pageSize, density: storage.density});
+    }
+
+    saveStorage(pageSize: number, density: GridDensity): void {
         const storage: Storage = {
-            pageSize: pageSize
+            pageSize: pageSize,
+            density: density
         };
         window.localStorage.setItem(this.props.storagePrefix, JSON.stringify(storage));
     }
 
     onPageSizeChange(params: GridPageChangeParams): void {
         console.log(params);
-        this.saveStorage(params.pageSize);
-        //this.readStorage();
+        this.saveStorage(params.pageSize, this.state.density);
+        this.readStorage();
     }
 
     onRowSelected(params: GridRowSelectedParams): void {
@@ -77,8 +88,16 @@ export class DataComp extends React.Component<DataCompProps, DataCompState> {
             this.props.onEditClick(event);
         }
     }
+    onDensityChange(density: GridDensity): void {
+        this.saveStorage(this.state.pageSize, density);
+        this.readStorage();
+    }
+    onRestoreClick(event: React.MouseEvent<HTMLButtonElement>): void {
+        window.localStorage.removeItem(this.props.storagePrefix);
+        this.initStorage();
+        this.readStorage();
+    }
     onRefreshClick(event: React.MouseEvent<HTMLButtonElement>): void {
-        console.log("refresh clicked", event);
         this.props.cancelFetchData();
         this.props.fetchData();
         this.setState({page: 0});
@@ -87,16 +106,13 @@ export class DataComp extends React.Component<DataCompProps, DataCompState> {
         }
     }
     onPrintClick(event: React.MouseEvent<HTMLButtonElement>): void {
-        console.log("print clicked", event);
         if (this.props.onPrintClick) {
             this.props.onPrintClick(event);
         }
     }
 
     componentDidMount(): void {
-        if (!window.localStorage.getItem(this.props.storagePrefix)) {
-            this.saveStorage(this.state.pageSize);
-        }
+        this.initStorage();
         this.readStorage();
         this.props.fetchData();
     }
@@ -111,7 +127,7 @@ export class DataComp extends React.Component<DataCompProps, DataCompState> {
                 <Card elevation={6} style={{height: "100%", width: "100%"}}>
                     <DataGrid rows={this.props.rows} columns={this.state.columns} rowsPerPageOptions={[5, 10, 15, 20, 25, 50, 100]} pagination showColumnRightBorder={true} showCellRightBorder={true}
                         pageSize={this.state.pageSize}
-                        rowHeight={64}
+                        columnBuffer={10} rowHeight={64}
                         components={{
                             Footer: MyGridFooter,
                             Toolbar: MyGridToolbar,
@@ -122,6 +138,8 @@ export class DataComp extends React.Component<DataCompProps, DataCompState> {
                                 selectedRow: this.state.selectedRow,
                                 onAddClick: this.onAddClick.bind(this),
                                 onEditClick: this.onEditClick.bind(this),
+                                onDensityChange: this.onDensityChange.bind(this),
+                                onRestoreClick: this.onRestoreClick.bind(this),
                                 onRefreshClick: this.onRefreshClick.bind(this),
                                 onPrintClick: this.onPrintClick.bind(this),
                             }
@@ -131,7 +149,7 @@ export class DataComp extends React.Component<DataCompProps, DataCompState> {
                         loading={this.props.loading}
                         error={this.props.error}
                         page={this.state.page}
-                    />
+                        density={this.state.density}                    />
                 </Card>
             </div>
         );
@@ -140,12 +158,14 @@ export class DataComp extends React.Component<DataCompProps, DataCompState> {
 
 interface Storage {
     pageSize: number;
+    density: GridDensity;
 }
 
 export interface DataCompState {
     selectedRow: any;
     pageSize: number;
     page: number;
+    density: GridDensity;
     columns: GridColDef[];
     textOverflowEllipsis: boolean;
 }

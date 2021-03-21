@@ -4,7 +4,7 @@ import { Search } from "@material-ui/icons";
 import { Alert } from "@material-ui/lab";
 
 
-import { DataComp } from "../../components/DataComp";
+import { MyDataGrid } from "../../components/MyDataGrid/MyDataGrid";
 import { Category } from "../../../entities/Category";
 import { CancelTokenSource } from "axios";
 import { ApiConsumer } from "../../../ApiConsumer";
@@ -115,7 +115,7 @@ export class CategoriesPage extends React.Component<Record<string, never>, Categ
                         </form>
                     </CardContent>
                 </Card>
-                <DataComp  error={this.state.error} rows={this.state.rows} loading={this.state.loading} columns={Category.getColumns()} storagePrefix="categories"
+                <MyDataGrid  error={this.state.error} rows={this.state.rows} loading={this.state.loading} columns={Category.getColumns()} storagePrefix="categories"
                     fetchData={this.fetchData.bind(this)}
                     cancelFetchData={this.cancelFetchData.bind(this)}
                     onRowSelected={this.onRowSelected.bind(this)}

@@ -4,7 +4,7 @@ import { Search } from "@material-ui/icons";
 import { Alert } from "@material-ui/lab";
 
 
-import { DataComp } from "../../components/DataComp";
+import { MyDataGrid } from "../../components/MyDataGrid/MyDataGrid";
 import { Borrower } from "../../../entities/Borrower";
 import { CancelTokenSource } from "axios";
 import { ApiConsumer } from "../../../ApiConsumer";
@@ -115,7 +115,7 @@ export class BorrowersPage extends React.Component<Record<string, never>, Borrow
                         </form>
                     </CardContent>
                 </Card>
-                <DataComp  error={this.state.error} rows={this.state.rows} loading={this.state.loading} columns={Borrower.getColumns()} storagePrefix="borrowers"
+                <MyDataGrid  error={this.state.error} rows={this.state.rows} loading={this.state.loading} columns={Borrower.getColumns()} storagePrefix="borrowers"
                     fetchData={this.fetchData.bind(this)}
                     cancelFetchData={this.cancelFetchData.bind(this)}
                     onRowSelected={this.onRowSelected.bind(this)}
