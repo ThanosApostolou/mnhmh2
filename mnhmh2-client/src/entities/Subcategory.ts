@@ -1,4 +1,5 @@
 import { GridColDef, GridRowData, GridRowsProp } from "@material-ui/data-grid";
+import { CancelTokenSource } from "axios";
 import App from "../App";
 import { Borrower } from "./Borrower";
 import { MaterialTab } from "./MaterialTab";
@@ -13,7 +14,7 @@ export class Subcategory {
         return JSON.stringify(this);
     }
 
-    static listToJson(subcategory: Subcategory[]) {
+    static listToJson(subcategory: Subcategory[]): string {
         return JSON.stringify(subcategory);
     }
 
@@ -34,11 +35,12 @@ export class Subcategory {
         return subcategories;
     }
 
-    static async listFromApi(): Promise<Subcategory[]> {
+    static async listFromApi(cancelTokenSource: CancelTokenSource): Promise<Subcategory[]> {
         try {
             const response = await App.app.apiconsumer.axios.request({
                 method: "get",
-                url: "/subcategory"
+                url: "/subcategory",
+                cancelToken: cancelTokenSource.token,
             });
             const subcategories: Subcategory[] = Subcategory.listFromObjectList(response.data);
             return subcategories;
@@ -49,13 +51,13 @@ export class Subcategory {
 
     static getColumns(): GridColDef[] {
         const columns: GridColDef[] = [
-            { field: "AA", headerName: "AA" },
-            { field: "Id", headerName: "Id" },
-            { field: "Name", headerName: "Name" },
-            { field: "MaterialTabId", headerName: "MaterialTabId" },
-            { field: "MaterialTabPartialRegistryCode", headerName: "MaterialTabPartialRegistryCode" },
-            { field: "BorrowerId", headerName: "BorrowerId" },
-            { field: "BorrowerName", headerName: "BorrowerName" },
+            { field: "AA", headerName: "AA", width: 100, hide: false },
+            { field: "Id", headerName: "Id", width: 100, hide: false },
+            { field: "Name", headerName: "ΟΝΟΜΑ", width: 200, hide: false },
+            { field: "MaterialTabId", headerName: "Id ΚΑΡΤΕΛΑΣ ΥΛΙΚΟΥ", width: 200, hide: false },
+            { field: "MaterialTabPartialRegistryCode", headerName: "ΜΕΡΙΚΟΣ ΚΩΔΙΚΑΣ ΕΓΓΡΑΦΗΣ ΚΑΡΤΕΛΑΣ ΥΛΙΚΟΥ", width: 200, hide: false },
+            { field: "BorrowerId", headerName: "Id ΜΕΡΙΚΟΥ ΔΙΑΧΕΙΡΙΣΤΗ", width: 200, hide: false },
+            { field: "BorrowerName", headerName: "ΟΝΟΜΑ ΜΕΡΙΚΟΥ ΔΙΑΧΕΙΡΙΣΤΗ", width: 200, hide: false },
         ];
         return columns;
     }

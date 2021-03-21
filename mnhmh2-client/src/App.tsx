@@ -11,7 +11,7 @@ import { AmmunitionStoresPage } from "./Gui/pages/AmmunitionStores/AmmunitionSto
 import { AmmunitionPortionsPage } from "./Gui/pages/AmmunitionPortions/AmmunitionPortionsPage";
 import { GroupsPage } from "./Gui/pages/Groups/GroupsPage";
 import { CategoriesPage } from "./Gui/pages/CategoriesPage";
-import { SubcategoriesPage } from "./Gui/pages/SubcategoriesPage";
+import { SubcategoriesPage } from "./Gui/pages/Subcategories/SubcategoriesPage";
 import { ManagersPage } from "./Gui/pages/Managers/ManagersPage";
 import { BorrowersPage } from "./Gui/pages/Borrowers/BorrowersPage";
 import { ThemeProvider } from "@material-ui/core/styles";
