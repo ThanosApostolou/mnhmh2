@@ -130,7 +130,7 @@ export class DataComp extends React.Component<DataCompProps, DataCompState> {
                         loading={this.props.loading}
                         error={this.props.error}
                         page={this.state.page}
-                        rowHeight={72}
+                        rowHeight={68}
                     />
                 </Card>
             </div>

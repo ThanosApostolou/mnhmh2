@@ -36,7 +36,7 @@ export class AmmunitionStore {
             const response = await App.app.apiconsumer.axios.request({
                 method: "get",
                 url: "/ammunitionstore",
-                cancelToken: cancelTokenSource.token,
+                cancelToken: cancelTokenSource.token
             });
             const stores: AmmunitionStore[] = AmmunitionStore.listFromObjectList(response.data);
             return stores;
