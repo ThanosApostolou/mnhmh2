@@ -5,7 +5,7 @@ import Header from "./Gui/components/Header";
 import NotFoundPage from "./Gui/pages/NotFoundPage";
 import { HomePage } from "./Gui/pages/HomePage";
 import { MaterialTabsPage } from "./Gui/pages/MaterialTabsPage";
-import { DirectMaterialBorrowersPage } from "./Gui/pages/DirectMaterialBorrowersPage";
+import { DirectMaterialBorrowersPage } from "./Gui/pages/DirectMaterialBorrowers/DirectMaterialBorrowersPage";
 import { ImportsExportsTblPage } from "./Gui/pages/ImportsExportsTbl/ImportsExportsTblPage";
 import { AmmunitionStoresPage } from "./Gui/pages/AmmunitionStores/AmmunitionStoresPage";
 import { AmmunitionPortionsPage } from "./Gui/pages/AmmunitionPortions/AmmunitionPortionsPage";

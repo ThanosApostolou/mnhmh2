@@ -54,13 +54,13 @@ export class DirectMaterialBorrower {
 
     static getColumns(): GridColDef[] {
         const columns: GridColDef[] = [
-            { field: "AA", headerName: "AA" },
-            { field: "Id", headerName: "Id" },
-            { field: "Quantity", headerName: "Quantity" },
-            { field: "MaterialTabId", headerName: "MaterialTabId" },
-            { field: "MaterialTabPartialRegistryCode", headerName: "MaterialTabPartialRegistryCode" },
-            { field: "BorrowerId", headerName: "BorrowerId" },
-            { field: "BorrowerName", headerName: "BorrowerName" },
+            { field: "AA", headerName: "AA", width: 100, hide: false },
+            { field: "Id", headerName: "Id", width: 100, hide: false },
+            { field: "Quantity", headerName: "ΠΟΣΟΤΗΤΑ", width: 200, hide: false },
+            { field: "MaterialTabId", headerName: "ID ΚΑΡΤΕΛΑΣ ΥΛΙΚΟΥ", width: 200, hide: false },
+            { field: "MaterialTabPartialRegistryCode", headerName: "ΜΕΡΙΚΟΣ ΚΩΔΙΚΑΣ ΕΓΓΡΑΦΗΣ ΚΑΡΤΕΛΑΣ ΥΛΙΚΟΥ", width: 200, hide: false },
+            { field: "BorrowerId", headerName: "ID ΜΕΡΙΚΟΥ ΔΙΑΧΕΙΡΙΣΤΗ", width: 200, hide: false },
+            { field: "BorrowerName", headerName: "ΟΝΟΜΑ ΜΕΡΙΚΟΥ ΔΙΑΧΕΙΡΙΣΤΗ", width: 200, hide: false },
         ];
         return columns;
     }
