@@ -17,29 +17,35 @@ export class SettingsDialog extends React.Component<any, any> {
             server: App.app.settingsmanager.server,
             isServerDefault: App.app.settingsmanager.isServerDefault,
             theme: App.app.settingsmanager.theme,
-            isThemeDefault: App.app.settingsmanager.isThemeDefault
+            isThemeDefault: App.app.settingsmanager.isThemeDefault,
+            textOverflowEllipsis: App.app.settingsmanager.textOverflowEllipsis,
+            isTextOverflowEllipsisDefault: App.app.state.settingsmanager.isTextOverflowEllipsisDefault
         };
     }
     /**
      * Cancels settings changes and calls parent's handleCloseSettingsDialog()
      */
-    handleCancel() {
+    handleCancel(): void {
         this.props.handleCloseSettingsDialog();
     }
     /**
      * Saves settings changes and calls parent's handleCloseSettingsDialog()
      */
-    handleSave() {
+    handleSave(): void {
         let server = null;
         if (!this.state.isServerDefault) {
-            server = this.state.server; 
+            server = this.state.server;
         }
         let theme = null;
         if (!this.state.isThemeDefault) {
-            theme = this.state.theme; 
+            theme = this.state.theme;
         }
-        console.log(this.state.server, this.state.isServerDefault, this.state.theme, this.state.isThemeDefault);
-        App.app.settingsmanager.setSettings(server, theme);
+        let textOverflowEllipsis = null;
+        if (!this.state.isTextOverflowEllipsisDefault) {
+            textOverflowEllipsis = this.state.textOverflowEllipsis;
+        }
+        console.log("settings dialog:", this.state.server, this.state.isServerDefault, this.state.theme, this.state.isThemeDefault, this.state.textOverflowEllipsis, this.state.isTextOverflowEllipsisDefault);
+        App.app.settingsmanager.setSettings(server, theme, textOverflowEllipsis);
         this.props.handleCloseSettingsDialog();
     }
 
@@ -66,6 +72,14 @@ export class SettingsDialog extends React.Component<any, any> {
                     </Select>
                     <FormControlLabel
                         control={<Switch name="default" checked={this.state.isThemeDefault} onChange={() => this.setState({isThemeDefault: !this.state.isThemeDefault})} />}
+                        label="default"
+                    />
+                </DialogContent>
+                <DialogContent>
+                    <InputLabel shrink id="textOverflowSwitch" disabled={this.state.isTextOverflowEllipsisDefault}>Text Overflow Ellipsis:</InputLabel>
+                    <Switch name="Text Overflow" checked={this.state.textOverflowEllipsis} disabled={this.state.isTextOverflowEllipsisDefault} onChange={() => this.setState({textOverflowEllipsis: !this.state.textOverflowEllipsis})} />
+                    <FormControlLabel
+                        control={<Switch name="default" checked={this.state.isTextOverflowEllipsisDefault} onChange={() => this.setState({isTextOverflowEllipsisDefault: !this.state.isTextOverflowEllipsisDefault})} />}
                         label="default"
                     />
                 </DialogContent>

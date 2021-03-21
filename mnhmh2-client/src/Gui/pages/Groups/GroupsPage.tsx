@@ -12,12 +12,12 @@ import { GridRowSelectedParams, GridRowsProp } from "@material-ui/data-grid";
 //import { ManagersAdd } from "./ManagersAdd";
 //import { ManagersEdit } from "./ManagersEdit";
 
-export class GroupsPage extends React.Component<null, GroupsPageState> {
+export class GroupsPage extends React.Component<Record<string, never>, GroupsPageState> {
     state: Readonly<GroupsPageState>;
     cancelTokenSource: CancelTokenSource;
     search: string;
 
-    constructor(props: null) {
+    constructor(props: Record<string, never>) {
         super(props);
         this.state = {
             groups: null,

@@ -1,8 +1,9 @@
 import React, { ReactNode } from "react";
 
-import { Card, Grid, Tooltip } from "@material-ui/core";
+import { Card, Tooltip } from "@material-ui/core";
 import { GridColDef, DataGrid, GridRowsProp, GridPageChangeParams, GridRowSelectedParams, GridCellParams } from "@material-ui/data-grid";
 
+import App from "../../App";
 import { MyGridToolbar } from "./MyGridToolbar";
 import { MyGridFooter } from "./MyGridFooter";
 import { MyGridErrorOverlay } from "./MyGridErrorOverlay";
@@ -16,15 +17,18 @@ export class DataComp extends React.Component<DataCompProps, DataCompState> {
             selectedRow: null,
             pageSize: 10,
             page: 0,
-            columns: this.props.columns
+            columns: this.props.columns,
+            textOverflowEllipsis: App.app.state.settingsmanager.textOverflowEllipsis
         };
         const columns: GridColDef[] = [];
         for (const column of this.props.columns) {
             column.renderCell = (params: GridCellParams) => {
-                console.log("cell params", params);
                 return (
                     <Tooltip title={params.value}>
-                        <p style={{height: "100%", whiteSpace: "nowrap", overflowX: "auto", overflowY: "hidden"}}>
+                        <p style={{height: "100%", whiteSpace: "nowrap", overflowY: "hidden",
+                            overflowX: this.state.textOverflowEllipsis ? "hidden" : "auto",
+                            textOverflow: this.state.textOverflowEllipsis ? "ellipsis" : "clip"}}
+                        >
                             {params.value}
                         </p>
                     </Tooltip>
@@ -143,6 +147,7 @@ export interface DataCompState {
     pageSize: number;
     page: number;
     columns: GridColDef[];
+    textOverflowEllipsis: boolean;
 }
 
 export interface DataCompProps {

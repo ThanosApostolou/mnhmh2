@@ -12,12 +12,12 @@ import { GridCellParams, GridColDef, GridRowSelectedParams, GridRowsProp } from 
 import { ManagersAdd } from "./ManagersAdd";
 import { ManagersEdit } from "./ManagersEdit";
 
-export class ManagersPage extends React.Component<null, ManagersPageState> {
+export class ManagersPage extends React.Component<Record<string, never>, ManagersPageState> {
     state: Readonly<ManagersPageState>;
     cancelTokenSource: CancelTokenSource;
     search: string;
 
-    constructor(props: null) {
+    constructor(props: Record<string, never>) {
         super(props);
         this.state = {
             managers: null,
@@ -100,13 +100,6 @@ export class ManagersPage extends React.Component<null, ManagersPageState> {
     }
 
     render(): ReactNode {
-        const columns: GridColDef[] = [
-            { field: "AA", headerName: "AA", width: 100, hide: false },
-            { field: "Id", headerName: "Id", width: 100, hide: false },
-            { field: "Name", headerName: "ΟΝΟΜΑ", width: 100, hide: false },
-            { field: "Rank", headerName: "ΒΑΘΜΟΣ", width: 200, hide: false },
-            { field: "Position", headerName: "ΘΕΣΗ", width: 200, hide: false },
-        ];
         return (
             <Grid container direction="column" style={{height: "100%"}}>
                 <Card elevation={6} style={{width: "100%"}}>
@@ -123,7 +116,7 @@ export class ManagersPage extends React.Component<null, ManagersPageState> {
                         </form>
                     </CardContent>
                 </Card>
-                <DataComp  error={this.state.error} rows={this.state.rows} loading={this.state.loading} columns={columns} storagePrefix="managers"
+                <DataComp  error={this.state.error} rows={this.state.rows} loading={this.state.loading} columns={Manager.getColumns()} storagePrefix="managers"
                     fetchData={this.fetchData.bind(this)}
                     cancelFetchData={this.cancelFetchData.bind(this)}
                     onRowSelected={this.onRowSelected.bind(this)}

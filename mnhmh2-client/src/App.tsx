@@ -1,8 +1,7 @@
 import React, { ReactNode } from "react";
-import { BrowserRouter as Router, Switch, Route, Link, useRouteMatch, useParams, withRouter } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import Header from "./Gui/components/Header";
-import { Footer } from "./Gui/components/Footer";
 import NotFoundPage from "./Gui/pages/NotFoundPage";
 import { HomePage } from "./Gui/pages/HomePage";
 import { MaterialTabsPage } from "./Gui/pages/MaterialTabsPage";
@@ -15,22 +14,20 @@ import { CategoriesPage } from "./Gui/pages/CategoriesPage";
 import { SubcategoriesPage } from "./Gui/pages/SubcategoriesPage";
 import { ManagersPage } from "./Gui/pages/Managers/ManagersPage";
 import { BorrowersPage } from "./Gui/pages/BorrowersPage";
-import { Warehouses } from "./Gui/pages/Warehouses";
 import { ThemeProvider } from "@material-ui/core/styles";
-import { Paper, Box } from "@material-ui/core";
 
 import "./index.css";
 import { SettingsManager } from "./SettingsManager";
 import { ThemeManager } from "./Gui/ThemeManager";
 import { ApiConsumer } from "./ApiConsumer";
 
-class App extends React.Component<any, any> {
+class App extends React.Component<Record<string, never>, any> {
     static app: App;
     thememanager: ThemeManager;
     settingsmanager: SettingsManager;
     apiconsumer: ApiConsumer;
 
-    constructor(props: any) {
+    constructor(props: Record<string, never>) {
         super(props);
         App.app = this;
         (window as any).app = App.app;
@@ -41,7 +38,8 @@ class App extends React.Component<any, any> {
         this.settingsmanager.init();
         console.log((window as any).settings);
         this.state = {
-            thememanager: this.thememanager
+            thememanager: this.thememanager,
+            settingsmanager: this.settingsmanager
         };
 
         this.apiconsumer.axios.get("/").then((res) => {
