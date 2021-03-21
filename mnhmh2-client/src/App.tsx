@@ -10,7 +10,7 @@ import { ImportsExportsTblPage } from "./Gui/pages/ImportsExportsTblPage";
 import { AmmunitionStoresPage } from "./Gui/pages/AmmunitionStores/AmmunitionStoresPage";
 import { AmmunitionPortionsPage } from "./Gui/pages/AmmunitionPortions/AmmunitionPortionsPage";
 import { GroupsPage } from "./Gui/pages/Groups/GroupsPage";
-import { CategoriesPage } from "./Gui/pages/CategoriesPage";
+import { CategoriesPage } from "./Gui/pages/Categories/CategoriesPage";
 import { SubcategoriesPage } from "./Gui/pages/Subcategories/SubcategoriesPage";
 import { ManagersPage } from "./Gui/pages/Managers/ManagersPage";
 import { BorrowersPage } from "./Gui/pages/Borrowers/BorrowersPage";

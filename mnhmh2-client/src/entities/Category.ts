@@ -1,4 +1,5 @@
 import { GridColDef, GridRowData, GridRowsProp } from "@material-ui/data-grid";
+import { CancelTokenSource } from "axios";
 import App from "../App";
 
 export class Category {
@@ -30,11 +31,12 @@ export class Category {
         return categories;
     }
 
-    static async listFromApi(): Promise<Category[]> {
+    static async listFromApi(cancelTokenSource: CancelTokenSource): Promise<Category[]> {
         try {
             const response = await App.app.apiconsumer.axios.request({
                 method: "get",
-                url: "/category"
+                url: "/category",
+                cancelToken: cancelTokenSource.token,
             });
             const categories: Category[] = Category.listFromObjectList(response.data);
             return categories;
@@ -45,10 +47,10 @@ export class Category {
 
     static getColumns(): GridColDef[] {
         const columns: GridColDef[] = [
-            { field: "AA", headerName: "AA" },
-            { field: "Id", headerName: "Id" },
-            { field: "Name", headerName: "Name" },
-            { field: "SerialNumber", headerName: "SerialNumber" }
+            { field: "AA", headerName: "AA", width: 100, hide: false },
+            { field: "Id", headerName: "Id", width: 100, hide: false },
+            { field: "Name", headerName: "ΟΝΟΜΑ", width: 200, hide: false },
+            { field: "SerialNumber", headerName: "ΣΕΙΡΙΑΚΟΣ ΑΡΙΘΜΟΣ", width: 200, hide: false }
         ];
         return columns;
     }
