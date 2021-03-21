@@ -1,4 +1,4 @@
-import { GridColDef, GridRowData, GridRowsProp, GridCellParams } from "@material-ui/data-grid";
+import { GridColDef, GridRowData, GridRowsProp } from "@material-ui/data-grid";
 import { CancelTokenSource } from "axios";
 import App from "../App";
 

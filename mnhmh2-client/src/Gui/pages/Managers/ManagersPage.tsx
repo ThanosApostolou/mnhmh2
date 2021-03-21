@@ -58,7 +58,6 @@ export class ManagersPage extends React.Component<Record<string, never>, Manager
     }
 
     onRowSelected(params: GridRowSelectedParams): void {
-        console.log("index", params.data.AA - 1);
         if (this.state.managers && this.state.managers !== null && this.state.managers.length > 0) {
             this.setState({selectedManager: this.state.managers[params.data.AA - 1]});
         } else {

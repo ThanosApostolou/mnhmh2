@@ -5,23 +5,23 @@ import { Alert } from "@material-ui/lab";
 
 
 import { DataComp } from "../../components/DataComp";
-import { Group } from "../../../entities/Group";
+import { AmmunitionStore } from "../../../entities/AmmunitionStore";
 import { CancelTokenSource } from "axios";
 import { ApiConsumer } from "../../../ApiConsumer";
 import { GridRowSelectedParams, GridRowsProp } from "@material-ui/data-grid";
 //import { ManagersAdd } from "./ManagersAdd";
 //import { ManagersEdit } from "./ManagersEdit";
 
-export class GroupsPage extends React.Component<Record<string, never>, GroupsPageState> {
-    state: Readonly<GroupsPageState>;
+export class AmmunitionStoresPage extends React.Component<Record<string, never>, AmmunitionStoresPageState> {
+    state: Readonly<AmmunitionStoresPageState>;
     cancelTokenSource: CancelTokenSource;
     search: string;
 
     constructor(props: Record<string, never>) {
         super(props);
         this.state = {
-            groups: null,
-            selectedGroup: null,
+            stores: null,
+            selectedStore: null,
             rows: [],
             loading: true,
             search: null,
@@ -41,11 +41,11 @@ export class GroupsPage extends React.Component<Record<string, never>, GroupsPag
         this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
         this.setState({rows: []});
         this.setState({loading : true});
-        Group.listFromApi(this.cancelTokenSource, this.search).then((data: any) => {
-            this.setState({groups: data});
-            this.setState({rows: Group.getRows(this.state.groups)});
+        AmmunitionStore.listFromApi(this.cancelTokenSource).then((data: any) => {
+            this.setState({stores: data});
+            this.setState({rows: AmmunitionStore.getRows(this.state.stores)});
         }).catch((error) => {
-            this.setState({groups: null});
+            this.setState({stores: null});
             this.setState({rows: []});
             this.setState({error: error});
         }).finally(() => {
@@ -58,13 +58,13 @@ export class GroupsPage extends React.Component<Record<string, never>, GroupsPag
     }
 
     onRowSelected(params: GridRowSelectedParams): void {
-        if (this.state.groups && this.state.groups !== null && this.state.groups.length > 0) {
-            this.setState({selectedGroup: this.state.groups[params.data.AA - 1]});
+        if (this.state.stores && this.state.stores !== null && this.state.stores.length > 0) {
+            this.setState({selectedStore: this.state.stores[params.data.AA - 1]});
         } else {
-            this.setState({selectedGroup: null});
+            this.setState({selectedStore: null});
         }
 
-        console.log("manager", this.state.selectedGroup);
+        console.log("manager", this.state.selectedStore);
     }
 
     onAddClick(): void {
@@ -115,7 +115,7 @@ export class GroupsPage extends React.Component<Record<string, never>, GroupsPag
                         </form>
                     </CardContent>
                 </Card>
-                <DataComp  error={this.state.error} rows={this.state.rows} loading={this.state.loading} columns={Group.getColumns()} storagePrefix="groups"
+                <DataComp  error={this.state.error} rows={this.state.rows} loading={this.state.loading} columns={AmmunitionStore.getColumns()} storagePrefix="ammunitionstores"
                     fetchData={this.fetchData.bind(this)}
                     cancelFetchData={this.cancelFetchData.bind(this)}
                     onRowSelected={this.onRowSelected.bind(this)}
@@ -150,9 +150,9 @@ export class GroupsPage extends React.Component<Record<string, never>, GroupsPag
     }
 }
 
-export interface GroupsPageState {
-    groups: Group[];
-    selectedGroup: Group;
+export interface AmmunitionStoresPageState {
+    stores: AmmunitionStore[];
+    selectedStore: AmmunitionStore;
     rows: GridRowsProp;
     loading: boolean;
     search: string;

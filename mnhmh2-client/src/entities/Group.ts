@@ -12,7 +12,7 @@ export class Group {
         return JSON.stringify(this);
     }
 
-    static listToJson(groups: Group[]) {
+    static listToJson(groups: Group[]): string {
         return JSON.stringify(groups);
     }
 
@@ -109,11 +109,11 @@ export class Group {
 
     static getColumns(): GridColDef[] {
         const columns: GridColDef[] = [
-            { field: "AA", headerName: "AA", width: 100, hide: false  },
-            { field: "Id", headerName: "Id", width: 100, hide: false  },
-            { field: "Name", headerName: "ΟΝΟΜΑ", width: 200, hide: false  },
-            { field: "LastRegistryCode", headerName: "LastRegistryCode", width: 200, hide: false  },
-            { field: "SerialNumber", headerName: "SerialNumber", width: 200, hide: false  },
+            { field: "AA", headerName: "AA", width: 100, hide: false },
+            { field: "Id", headerName: "Id", width: 100, hide: false },
+            { field: "Name", headerName: "ΟΝΟΜΑ", width: 200, hide: false },
+            { field: "LastRegistryCode", headerName: "ΤΕΛΕΥΤΑΙΟΣ ΚΩΔΙΚΟΣ ΕΓΓΡΑΦΗΣ", width: 200, hide: false },
+            { field: "SerialNumber", headerName: "ΣΕΙΡΙΑΚΟΣ ΑΡΙΘΜΟΣ", width: 200, hide: false },
         ];
         return columns;
     }

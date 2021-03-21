@@ -1,4 +1,5 @@
 import { GridColDef, GridRowData, GridRowsProp } from "@material-ui/data-grid";
+import { CancelTokenSource } from "axios";
 import App from "../App";
 
 export class AmmunitionStore {
@@ -30,14 +31,15 @@ export class AmmunitionStore {
         return stores;
     }
 
-    static async listFromApi(): Promise<AmmunitionStore[]> {
+    static async listFromApi(cancelTokenSource: CancelTokenSource): Promise<AmmunitionStore[]> {
         try {
             const response = await App.app.apiconsumer.axios.request({
                 method: "get",
-                url: "/ammunitionstore"
+                url: "/ammunitionstore",
+                cancelToken: cancelTokenSource.token,
             });
-            const managers: AmmunitionStore[] = AmmunitionStore.listFromObjectList(response.data);
-            return managers;
+            const stores: AmmunitionStore[] = AmmunitionStore.listFromObjectList(response.data);
+            return stores;
         } catch (error) {
             return error;
         }
@@ -45,10 +47,10 @@ export class AmmunitionStore {
 
     static getColumns(): GridColDef[] {
         const columns: GridColDef[] = [
-            { field: "AA", headerName: "AA" },
-            { field: "Id", headerName: "Id" },
-            { field: "Name", headerName: "Name" },
-            { field: "SerialNumber", headerName: "SerialNumber" }
+            { field: "AA", headerName: "AA", width: 100, hide: false },
+            { field: "Id", headerName: "Id", width: 100, hide: false },
+            { field: "Name", headerName: "ΟΝΟΜΑ", width: 200, hide: false },
+            { field: "SerialNumber", headerName: "ΣΕΙΡΙΑΚΟΣ ΑΡΙΘΜΟΣ", width: 200, hide: false }
         ];
         return columns;
     }
