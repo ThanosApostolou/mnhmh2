@@ -58,7 +58,7 @@ export class SettingsDialog extends React.Component<any, any> {
                 <DialogContent>
                     <TextField label="Server Address:" defaultValue={this.state.server} disabled={this.state.isServerDefault} onChange={(e) => this.setState({server: e.target.value})} />
                     <FormControlLabel
-                        control={<Switch name="default" checked={this.state.isServerDefault} onChange={() => this.setState({isServerDefault: !this.state.isServerDefault})} />}
+                        control={<Switch name="default" color="primary" checked={this.state.isServerDefault} onChange={() => this.setState({isServerDefault: !this.state.isServerDefault})} />}
                         label="default"
                     />
                 </DialogContent>
@@ -71,15 +71,15 @@ export class SettingsDialog extends React.Component<any, any> {
                         <MenuItem value="light">Light</MenuItem>
                     </Select>
                     <FormControlLabel
-                        control={<Switch name="default" checked={this.state.isThemeDefault} onChange={() => this.setState({isThemeDefault: !this.state.isThemeDefault})} />}
+                        control={<Switch name="default" color="primary" checked={this.state.isThemeDefault} onChange={() => this.setState({isThemeDefault: !this.state.isThemeDefault})} />}
                         label="default"
                     />
                 </DialogContent>
                 <DialogContent>
                     <InputLabel shrink id="textOverflowSwitch" disabled={this.state.isTextOverflowEllipsisDefault}>Text Overflow Ellipsis:</InputLabel>
-                    <Switch name="Text Overflow" checked={this.state.textOverflowEllipsis} disabled={this.state.isTextOverflowEllipsisDefault} onChange={() => this.setState({textOverflowEllipsis: !this.state.textOverflowEllipsis})} />
+                    <Switch name="Text Overflow" color="primary" checked={this.state.textOverflowEllipsis} disabled={this.state.isTextOverflowEllipsisDefault} onChange={() => this.setState({textOverflowEllipsis: !this.state.textOverflowEllipsis})} />
                     <FormControlLabel
-                        control={<Switch name="default" checked={this.state.isTextOverflowEllipsisDefault} onChange={() => this.setState({isTextOverflowEllipsisDefault: !this.state.isTextOverflowEllipsisDefault})} />}
+                        control={<Switch name="default" color="primary" checked={this.state.isTextOverflowEllipsisDefault} onChange={() => this.setState({isTextOverflowEllipsisDefault: !this.state.isTextOverflowEllipsisDefault})} />}
                         label="default"
                     />
                 </DialogContent>

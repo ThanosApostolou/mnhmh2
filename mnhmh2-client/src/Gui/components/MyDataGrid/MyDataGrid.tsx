@@ -139,6 +139,7 @@ export class MyDataGrid extends React.Component<DataCompProps, DataCompState> {
                             toolbar: {
                                 selectedRow: this.state.selectedRow,
                                 density: this.state.density,
+                                columns: this.state.columns,
                                 onAddClick: this.onAddClick.bind(this),
                                 onEditClick: this.onEditClick.bind(this),
                                 onDensityChange: this.onDensityChange.bind(this),
