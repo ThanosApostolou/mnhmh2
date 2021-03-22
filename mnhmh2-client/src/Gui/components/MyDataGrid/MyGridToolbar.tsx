@@ -35,7 +35,7 @@ export class MyGridToolbar extends React.Component<MyGridToolbarProps, any> {
                         </Grid>
                         <Grid item>
                             <Grid container direction="row" justify="flex-start" alignContent="center" alignItems="center">
-                                <MyGridColumnsComp columns={this.props.columns} />
+                                <MyGridColumnsComp columns={this.props.columns} onColumnsChange={this.props.onColumnsChange.bind(this)} />
                                 <GridColumnsToolbarButton />
                                 <GridFilterToolbarButton />
                                 <MyGridDensityComp density={this.props.density} onDensityChange={this.props.onDensityChange.bind(this)} />
@@ -73,10 +73,11 @@ export class MyGridToolbar extends React.Component<MyGridToolbarProps, any> {
 
 export interface MyGridToolbarProps extends GridBaseComponentProps {
     selectedRow?: any;
-    density: GridDensity;
+    density?: GridDensity;
     columns: GridColDef[];
     onAddClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
     onEditClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+    onColumnsChange?: (columns: GridColDef[]) => void;
     onDensityChange?: (density: GridDensity) => void;
     onRestoreClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
     onRefreshClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;

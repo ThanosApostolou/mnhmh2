@@ -105,7 +105,7 @@ export class MaterialTab {
             { field: "MeasurementUnit", headerName: "ΜΟΝΑΔΑ ΜΕΤΡΗΣΗΣ", width: 200, hide: false },
             { field: "TabRemainder", headerName: "TabRemainder", width: 200, hide: false },
             { field: "Sum", headerName: "Sum", width: 200, hide: false },
-            { field: "Difference", headerName: "Difference, width: 200, hide: false" },
+            { field: "Difference", headerName: "Difference", width: 200, hide: false },
             { field: "Comments", headerName: "Comments", width: 200, hide: false },
             { field: "ImportSum", headerName: "ImportSum", width: 200, hide: false },
             { field: "ExportSum", headerName: "ExportSum", width: 200, hide: false },

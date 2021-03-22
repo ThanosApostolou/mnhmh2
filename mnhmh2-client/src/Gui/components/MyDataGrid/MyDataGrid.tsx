@@ -90,6 +90,12 @@ export class MyDataGrid extends React.Component<DataCompProps, DataCompState> {
             this.props.onEditClick(event);
         }
     }
+    onColumnsChange(columns: GridColDef[]): void {
+        this.setState({columns: []});
+        setTimeout(() => {
+            this.setState({columns: columns});
+        }, 0);
+    }
     onDensityChange(density: GridDensity): void {
         this.saveStorage(this.state.pageSize, density);
         this.readStorage();
@@ -142,6 +148,7 @@ export class MyDataGrid extends React.Component<DataCompProps, DataCompState> {
                                 columns: this.state.columns,
                                 onAddClick: this.onAddClick.bind(this),
                                 onEditClick: this.onEditClick.bind(this),
+                                onColumnsChange: this.onColumnsChange.bind(this),
                                 onDensityChange: this.onDensityChange.bind(this),
                                 onRestoreClick: this.onRestoreClick.bind(this),
                                 onRefreshClick: this.onRefreshClick.bind(this),

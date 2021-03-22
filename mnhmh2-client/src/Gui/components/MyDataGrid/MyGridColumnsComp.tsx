@@ -23,12 +23,12 @@ export class MyGridColumnsComp extends React.Component<MyGridColumnsCompProps, M
         const columns = this.state.columns;
         columns[index].hide = !columns[index].hide;
         this.setState({columns: columns});
+        this.props.onColumnsChange(columns);
     }
 
     render(): ReactNode {
         const rowItems = [];
         for (const [index, column] of this.state.columns.entries()) {
-            console.log("column", column);
             rowItems.push(
                 <Grid container direction="row" justify="space-between" alignContent="center" alignItems="center">
                     <Grid item>
@@ -71,13 +71,20 @@ export class MyGridColumnsComp extends React.Component<MyGridColumnsCompProps, M
                     }}
                 >
                     <Card>
-                        <CardContent>
+                        <CardContent style={{maxHeight: "600px", overflow: "auto"}}>
                             <Grid container direction="column">
                                 {rowItems}
                             </Grid>
                         </CardContent>
                         <CardActions>
-
+                            <Grid container direction="row" justify="flex-end" alignContent="center" alignItems="center">
+                                <Button>
+                                    Cancel
+                                </Button>
+                                <Button>
+                                    Apply
+                                </Button>
+                            </Grid>
                         </CardActions>
 
                     </Card>
@@ -91,6 +98,7 @@ export interface MyGridColumnsCompProps {
     columns: GridColDef[];
     onColumnsSave?: (columns: GridColDef[]) => void;
     onColumnsCancel?: () => void;
+    onColumnsChange: (columns: GridColDef[]) => void;
 }
 export interface MyGridColumnsCompState {
     anchorMenuEl: HTMLButtonElement;
