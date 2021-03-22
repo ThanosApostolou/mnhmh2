@@ -43,26 +43,102 @@
 			"response": []
 		},
 		{
-			"name": "/api/distributioncharge",
+			"name": "/api/directmaterialborrower",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3000/api/distributioncharge",
+					"raw": "localhost:3000/api/directmaterialborrower",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
 						"api",
-						"distributioncharge"
+						"directmaterialborrower"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "/api/ammunitionstores",
+			"name": "/api/importsexportstbl",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/importsexportstbl",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"importsexportstbl"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/category",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/category",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"category"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/subcategory",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/subcategory",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"subcategory"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/ammunitionportion",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/ammunitionportion",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"ammunitionportion"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/ammunitionstore",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -119,10 +195,178 @@
 			"response": []
 		},
 		{
+			"name": "/api/group",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"group\": {\r\n        \"Name\": \"ad\",\r\n        \"LastRegistryCode\": 2341,\r\n        \"SerialNumber\": 12\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/group",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"group"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/group",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Id\": 815\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/group",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"group"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/group",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"group\": {\r\n        \"Id\": 815,\r\n        \"Name\": \"adddd\",\r\n        \"LastRegistryCode\": 2341,\r\n        \"SerialNumber\": 123\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/group",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"group"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "/api/manager",
 			"request": {
 				"method": "GET",
 				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/manager",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"manager"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/manager",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"manager\": {\r\n        \"Name\": \"ad\",\r\n        \"Rank\": \"test\",\r\n        \"Position\": \"test\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/manager",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"manager"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/manager",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Id\": 608\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/manager",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"manager"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/manager",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"manager\": {\r\n        \"Id\": 608,\r\n        \"Name\": \"NOT A TEST\",\r\n        \"Rank\": \"test\",\r\n        \"Position\": \"test\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
 					"raw": "localhost:3000/api/manager",
 					"host": [
