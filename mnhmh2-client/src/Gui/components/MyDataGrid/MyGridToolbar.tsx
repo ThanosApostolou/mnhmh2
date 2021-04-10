@@ -3,7 +3,7 @@ import React, { ReactNode } from "react";
 import { Tooltip, Button, Grid } from "@material-ui/core";
 import { Refresh, Print, Add, Edit, Restore } from "@material-ui/icons";
 
-import { GridToolbarContainer, GridColumnsToolbarButton, GridFilterToolbarButton, GridToolbarExport, GridBaseComponentProps, GridDensity, GridColDef } from "@material-ui/data-grid";
+import { GridToolbarContainer, GridColumnsToolbarButton, GridFilterToolbarButton, GridToolbarExport, GridToolbarContainerProps, GridDensity, GridColDef } from "@material-ui/data-grid";
 
 import { MyGridDensityComp } from "./MyGridDensityComp";
 import { MyGridColumnsComp } from "./MyGridColumnsComp";
@@ -71,10 +71,10 @@ export class MyGridToolbar extends React.Component<MyGridToolbarProps, any> {
     }
 }
 
-export interface MyGridToolbarProps extends GridBaseComponentProps {
+export interface MyGridToolbarProps extends GridToolbarContainerProps {
     selectedRow?: any;
     density?: GridDensity;
-    columns: GridColDef[];
+    columns?: GridColDef[];
     onAddClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
     onEditClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
     onColumnsChange?: (columns: GridColDef[]) => void;
