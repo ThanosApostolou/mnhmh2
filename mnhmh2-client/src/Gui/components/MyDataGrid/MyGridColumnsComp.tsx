@@ -75,7 +75,7 @@ export class MyGridColumnsComp extends React.Component<MyGridColumnsCompProps, M
         const rowItems = [];
         for (const [index, column] of this.state.columns.entries()) {
             rowItems.push(
-                <Grid container direction="row" justify="space-between" alignContent="center" alignItems="center">
+                <Grid container direction="row" justify="space-between" alignContent="center" alignItems="center" key={index}>
                     <Grid item>
                         <Grid container direction="row" alignContent="center" alignItems="center">
                             <IconButton edge="start" size="small" aria-label="up" disabled={index <= 0} onClick={() => this.onPositionMoveStart(index)}>
@@ -92,7 +92,7 @@ export class MyGridColumnsComp extends React.Component<MyGridColumnsCompProps, M
                     </Grid>
                     <Grid item>
                         <Grid container direction="row" justify="flex-end" alignContent="center" alignItems="center">
-                            <TextField type="number" defaultValue={column.width} value={column.width} onChange={(event) => this.onWidthChange(event, index)} />
+                            <TextField type="number" value={column.width} onChange={(event) => this.onWidthChange(event, index)} />
                         </Grid>
                     </Grid>
                 </Grid>

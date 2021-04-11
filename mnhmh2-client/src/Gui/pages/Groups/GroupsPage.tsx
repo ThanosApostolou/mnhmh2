@@ -9,8 +9,8 @@ import { Group } from "../../../entities/Group";
 import { CancelTokenSource } from "axios";
 import { ApiConsumer } from "../../../ApiConsumer";
 import { GridRowSelectedParams, GridRowsProp } from "@material-ui/data-grid";
-//import { ManagersAdd } from "./ManagersAdd";
-//import { ManagersEdit } from "./ManagersEdit";
+import { GroupsAdd } from "./GroupsAdd";
+import { GroupsEdit } from "./GroupsEdit";
 
 export class GroupsPage extends React.Component<Record<string, never>, GroupsPageState> {
     state: Readonly<GroupsPageState>;
@@ -122,16 +122,16 @@ export class GroupsPage extends React.Component<Record<string, never>, GroupsPag
                     onAddClick={this.onAddClick.bind(this)}
                     onEditClick={this.onEditClick.bind(this)}
                 />
-                {/*<ManagersAdd openAddDrawer={this.state.openAddDrawer}
+                <GroupsAdd openAddDrawer={this.state.openAddDrawer}
                     onAddSave={this.onAddSave.bind(this)}
                     onAddCancel={this.onAddCancel.bind(this)}
                 />
-                <ManagersEdit manager={this.state.selectedGroup}
+                <GroupsEdit group={this.state.selectedGroup}
                     openEditDrawer={this.state.openEditDrawer}
                     onEditSave={this.onEditSave.bind(this)}
                     onEditDelete={this.onEditDelete.bind(this)}
                     onEditCancel={this.onEditCancel.bind(this)}
-                />*/}
+                />
                 <Snackbar
                     anchorOrigin={{
                         vertical: "bottom",
