@@ -12,11 +12,13 @@ export class MyDataGrid extends React.Component<DataCompProps, DataCompState> {
     state: Readonly<DataCompState>;
     defaultPageSize: number;
     defaultDensity: GridDensity;
+    defaultColumns: GridColDef[];
 
     constructor(props: DataCompProps) {
         super(props);
         this.defaultPageSize = 10;
         this.defaultDensity = "standard";
+        this.defaultColumns = this.props.columns;
 
         this.state = {
             selectedRow: null,
@@ -47,26 +49,27 @@ export class MyDataGrid extends React.Component<DataCompProps, DataCompState> {
 
     initStorage(): void {
         if (!window.localStorage.getItem(this.props.storagePrefix)) {
-            this.saveStorage(this.defaultPageSize, this.defaultDensity);
+            this.saveStorage(this.defaultPageSize, this.defaultDensity, this.defaultColumns);
         }
     }
 
     readStorage(): void {
         const storage: Storage = JSON.parse(window.localStorage.getItem(this.props.storagePrefix));
-        this.setState({pageSize: storage.pageSize, density: storage.density});
+        this.setState({pageSize: storage.pageSize, density: storage.density, columns: storage.columns});
     }
 
-    saveStorage(pageSize: number, density: GridDensity): void {
+    saveStorage(pageSize: number, density: GridDensity, columns: GridColDef[]): void {
         const storage: Storage = {
             pageSize: pageSize,
-            density: density
+            density: density,
+            columns: columns
         };
         window.localStorage.setItem(this.props.storagePrefix, JSON.stringify(storage));
     }
 
     onPageSizeChange(params: GridPageChangeParams): void {
         console.log(params);
-        this.saveStorage(params.pageSize, this.state.density);
+        this.saveStorage(params.pageSize, this.state.density, this.state.columns);
         this.readStorage();
     }
 
@@ -90,17 +93,19 @@ export class MyDataGrid extends React.Component<DataCompProps, DataCompState> {
             this.props.onEditClick(event);
         }
     }
-    onColumnsChange(columns: GridColDef[]): void {
+    onColumnsSave(columns: GridColDef[]): void {
         this.setState({columns: []});
         setTimeout(() => {
             this.setState({columns: columns});
         }, 0);
-    }
-    onDensityChange(density: GridDensity): void {
-        this.saveStorage(this.state.pageSize, density);
+        this.saveStorage(this.state.pageSize, this.state.density, columns);
         this.readStorage();
     }
-    onRestoreClick(event: React.MouseEvent<HTMLButtonElement>): void {
+    onDensityChange(density: GridDensity): void {
+        this.saveStorage(this.state.pageSize, density, this.state.columns);
+        this.readStorage();
+    }
+    onRestoreClick(): void {
         window.localStorage.removeItem(this.props.storagePrefix);
         this.initStorage();
         this.readStorage();
@@ -148,7 +153,7 @@ export class MyDataGrid extends React.Component<DataCompProps, DataCompState> {
                                 columns: this.state.columns,
                                 onAddClick: this.onAddClick.bind(this),
                                 onEditClick: this.onEditClick.bind(this),
-                                onColumnsChange: this.onColumnsChange.bind(this),
+                                onColumnsSave: this.onColumnsSave.bind(this),
                                 onDensityChange: this.onDensityChange.bind(this),
                                 onRestoreClick: this.onRestoreClick.bind(this),
                                 onRefreshClick: this.onRefreshClick.bind(this),
@@ -170,6 +175,7 @@ export class MyDataGrid extends React.Component<DataCompProps, DataCompState> {
 interface Storage {
     pageSize: number;
     density: GridDensity;
+    columns: GridColDef[];
 }
 
 export interface DataCompState {

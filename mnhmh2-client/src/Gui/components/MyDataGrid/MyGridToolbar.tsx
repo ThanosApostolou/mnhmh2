@@ -3,7 +3,7 @@ import React, { ReactNode } from "react";
 import { Tooltip, Button, Grid } from "@material-ui/core";
 import { Refresh, Print, Add, Edit, Restore } from "@material-ui/icons";
 
-import { GridToolbarContainer, GridColumnsToolbarButton, GridFilterToolbarButton, GridToolbarExport, GridToolbarContainerProps, GridDensity, GridColDef } from "@material-ui/data-grid";
+import { GridToolbarContainer, GridFilterToolbarButton, GridToolbarExport, GridToolbarContainerProps, GridDensity, GridColDef } from "@material-ui/data-grid";
 
 import { MyGridDensityComp } from "./MyGridDensityComp";
 import { MyGridColumnsComp } from "./MyGridColumnsComp";
@@ -35,8 +35,7 @@ export class MyGridToolbar extends React.Component<MyGridToolbarProps, any> {
                         </Grid>
                         <Grid item>
                             <Grid container direction="row" justify="flex-start" alignContent="center" alignItems="center">
-                                <MyGridColumnsComp columns={this.props.columns} onColumnsChange={this.props.onColumnsChange.bind(this)} />
-                                <GridColumnsToolbarButton />
+                                <MyGridColumnsComp columns={this.props.columns} onColumnsSave={this.props.onColumnsSave.bind(this)} />
                                 <GridFilterToolbarButton />
                                 <MyGridDensityComp density={this.props.density} onDensityChange={this.props.onDensityChange.bind(this)} />
                             </Grid>
@@ -77,7 +76,7 @@ export interface MyGridToolbarProps extends GridToolbarContainerProps {
     columns?: GridColDef[];
     onAddClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
     onEditClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
-    onColumnsChange?: (columns: GridColDef[]) => void;
+    onColumnsSave?: (columns: GridColDef[]) => void;
     onDensityChange?: (density: GridDensity) => void;
     onRestoreClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
     onRefreshClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;

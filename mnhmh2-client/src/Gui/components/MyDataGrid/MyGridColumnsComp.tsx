@@ -6,31 +6,28 @@ import { GridColDef } from "@material-ui/data-grid";
 
 export class MyGridColumnsComp extends React.Component<MyGridColumnsCompProps, MyGridColumnsCompState> {
     state: Readonly<MyGridColumnsCompState>;
-    initialColumns: GridColDef[];
 
     constructor(props: MyGridColumnsCompProps) {
         super(props);
-        this.initialColumns = JSON.parse(JSON.stringify(this.props.columns));
         this.state = {
             anchorMenuEl: null,
-            columns: this.initialColumns,
+            columns: JSON.parse(JSON.stringify(this.props.columns)),
         };
     }
 
     onColumnsCancel(): void {
-        this.setState((state) => ({
-            columns: this.initialColumns,
+        console.log("state", this.state.columns);
+        console.log("props", this.props.columns);
+        this.setState(() => ({
+            columns: JSON.parse(JSON.stringify(this.props.columns)),
             anchorMenuEl: null
         }));
-        if (this.props.onColumnsCancel) {
-            this.props.onColumnsCancel();
-        }
     }
 
     onColumnsSave(): void {
-        this.setState({anchorMenuEl: null, columns: this.initialColumns});
+        this.setState({anchorMenuEl: null});
 
-        this.props.onColumnsChange(this.state.columns);
+        this.props.onColumnsSave(this.state.columns);
         console.log(this.state.columns);
     }
 
@@ -57,7 +54,7 @@ export class MyGridColumnsComp extends React.Component<MyGridColumnsCompProps, M
         columns[index].hide = !columns[index].hide;
         this.setState({columns: columns});
     }
-    onWidthChange(event, index: number): void {
+    onWidthChange(event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>, index: number): void {
         const columns = this.state.columns;
         columns[index].width = parseInt(event.target.value);
         this.setState({columns: columns});
@@ -67,8 +64,13 @@ export class MyGridColumnsComp extends React.Component<MyGridColumnsCompProps, M
     }
 
     componentDidMount(): void {
-        this.initialColumns = JSON.parse(JSON.stringify(this.props.columns));
-        this.setState({columns: this.initialColumns});
+        this.setState({ columns: JSON.parse(JSON.stringify(this.props.columns)) });
+    }
+
+    componentDidUpdate(prevProps: MyGridColumnsCompProps): void {
+        if (JSON.stringify(this.props.columns) !== JSON.stringify(prevProps.columns)) {
+            this.setState({ columns: JSON.parse(JSON.stringify(this.props.columns)) });
+        }
     }
 
     render(): ReactNode {
@@ -123,13 +125,13 @@ export class MyGridColumnsComp extends React.Component<MyGridColumnsCompProps, M
                         </CardContent>
                         <CardActions>
                             <Grid container direction="row" justify="flex-end" alignContent="center" alignItems="center">
-                                <Button onClick={this.onColumnsCancel.bind(this)}>
+                                <Button variant="contained" style={{margin: "4px"}} onClick={this.onColumnsCancel.bind(this)}>
                                     Ακύρωση
                                 </Button>
-                                <Button onClick={this.onColumnsReset.bind(this)}>
+                                <Button variant="contained" style={{margin: "4px"}} onClick={this.onColumnsReset.bind(this)}>
                                     Επαναφορά
                                 </Button>
-                                <Button onClick={this.onColumnsSave.bind(this)}>
+                                <Button variant="contained" style={{margin: "4px"}} color="primary" onClick={this.onColumnsSave.bind(this)}>
                                     Εφαρμογή
                                 </Button>
                             </Grid>
@@ -144,9 +146,7 @@ export class MyGridColumnsComp extends React.Component<MyGridColumnsCompProps, M
 
 export interface MyGridColumnsCompProps {
     columns: GridColDef[];
-    onColumnsSave?: (columns: GridColDef[]) => void;
-    onColumnsCancel?: () => void;
-    onColumnsChange: (columns: GridColDef[]) => void;
+    onColumnsSave: (columns: GridColDef[]) => void;
 }
 export interface MyGridColumnsCompState {
     anchorMenuEl: HTMLButtonElement;
