@@ -24,7 +24,8 @@ export class MyGridColumnsComp extends React.Component<MyGridColumnsCompProps, M
         }));
     }
 
-    onColumnsSave(): void {
+    onColumnsSave(event: React.FormEvent<HTMLFormElement>): void {
+        event.preventDefault();
         this.setState({anchorMenuEl: null});
 
         this.props.onColumnsSave(this.state.columns);
@@ -115,21 +116,23 @@ export class MyGridColumnsComp extends React.Component<MyGridColumnsCompProps, M
                     }}
                 >
                     <Card>
-                        <CardContent style={{maxHeight: "600px", overflow: "auto"}}>
-                            <Grid container direction="column">
-                                {rowItems}
-                            </Grid>
-                        </CardContent>
-                        <CardActions>
-                            <Grid container direction="row" justify="flex-end" alignContent="center" alignItems="center">
-                                <Button variant="contained" style={{margin: "4px"}} onClick={this.onColumnsCancel.bind(this)}>
-                                    Ακύρωση
-                                </Button>
-                                <Button variant="contained" style={{margin: "4px"}} color="primary" onClick={this.onColumnsSave.bind(this)}>
-                                    Εφαρμογή
-                                </Button>
-                            </Grid>
-                        </CardActions>
+                        <form onSubmit={this.onColumnsSave.bind(this)}>
+                            <CardContent style={{maxHeight: "600px", overflow: "auto"}}>
+                                <Grid container direction="column">
+                                    {rowItems}
+                                </Grid>
+                            </CardContent>
+                            <CardActions>
+                                <Grid container direction="row" justify="flex-end" alignContent="center" alignItems="center">
+                                    <Button variant="contained" style={{margin: "4px"}} onClick={this.onColumnsCancel.bind(this)}>
+                                        Ακύρωση
+                                    </Button>
+                                    <Button variant="contained" style={{margin: "4px"}} color="primary" autoFocus type="submit">
+                                        Εφαρμογή
+                                    </Button>
+                                </Grid>
+                            </CardActions>
+                        </form>
 
                     </Card>
                 </Popover>
