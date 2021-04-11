@@ -1,15 +1,13 @@
 import React, { ReactNode } from "react";
 
-import { AppBar, Toolbar, IconButton, Menu, MenuItem, Popper, Typography, Button, Card } from "@material-ui/core";
+import { GridFooterContainer, GridFooterContainerProps, GridPagination } from "@material-ui/data-grid";
 
-import { GridColDef, DataGrid, GridFooter, GridFooterContainer, GridColumnsToolbarButton, GridFilterToolbarButton, GridDensitySelector, GridPagination, GridBaseComponentProps } from "@material-ui/data-grid";
-
-export class MyGridFooter extends React.Component<GridBaseComponentProps, any> {
-    constructor(props: any) {
+export class MyGridFooter extends React.Component<GridFooterContainerProps, any> {
+    constructor(props: GridFooterContainerProps) {
         super(props);
     }
 
-    render() {
+    render(): ReactNode {
 
         return (
             <GridFooterContainer>

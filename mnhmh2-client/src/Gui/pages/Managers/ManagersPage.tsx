@@ -8,7 +8,7 @@ import { MyDataGrid } from "../../components/MyDataGrid/MyDataGrid";
 import { Manager } from "../../../entities/Manager";
 import { CancelTokenSource } from "axios";
 import { ApiConsumer } from "../../../ApiConsumer";
-import { GridCellParams, GridColDef, GridRowSelectedParams, GridRowsProp } from "@material-ui/data-grid";
+import { GridRowSelectedParams, GridRowsProp } from "@material-ui/data-grid";
 import { ManagersAdd } from "./ManagersAdd";
 import { ManagersEdit } from "./ManagersEdit";
 

@@ -4,13 +4,13 @@ import { Button, Dialog, DialogContent, DialogActions, TextField, Switch, Select
 import App from "../../App";
 
 
-export class SettingsDialog extends React.Component<any, any> {
+export class SettingsDialog extends React.Component<SettingsDialogProps, any> {
     serverInputRef: React.RefObject<HTMLDivElement>;
     serverSwitchRef: React.RefObject<HTMLDivElement>;
     themeInputRef: React.RefObject<HTMLDivElement>
     themeSwitchRef: React.RefObject<HTMLDivElement>;
 
-    constructor(props) {
+    constructor(props: SettingsDialogProps) {
         super(props);
         this.state = {
             settingsChanged: false,
@@ -94,4 +94,9 @@ export class SettingsDialog extends React.Component<any, any> {
             </Dialog>
         );
     }
+}
+
+export interface SettingsDialogProps {
+    handleCloseSettingsDialog: () => void;
+    openSettingsDialog: boolean;
 }

@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 
-import { AppBar, Toolbar, IconButton, Menu, MenuItem, Popper, Typography, Button , Theme } from "@material-ui/core";
+import { AppBar, Toolbar, Theme } from "@material-ui/core";
 
 import { createStyles, makeStyles } from "@material-ui/styles";
 
@@ -36,11 +36,11 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export class Footer extends React.Component<any, any> {
-    constructor(props: any) {
+export class Footer extends React.Component<Record<string, never>, any> {
+    constructor(props: Record<string, never>) {
         super(props);
     }
-    
+
     render(): ReactNode {
         const classes = useStyles();
         return (

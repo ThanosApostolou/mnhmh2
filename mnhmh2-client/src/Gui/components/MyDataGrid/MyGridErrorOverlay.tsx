@@ -1,11 +1,11 @@
 import React, { ReactNode } from "react";
 
 import { Grid } from "@material-ui/core";
-import { GridBaseComponentProps } from "@material-ui/data-grid";
+import { GridSlotComponentProps } from "@material-ui/data-grid";
 
-export class MyGridErrorOverlay extends React.Component<GridBaseComponentProps & any, any> {
+export class MyGridErrorOverlay extends React.Component<GridSlotComponentProps & any, any> {
 
-    constructor(props: GridBaseComponentProps & any) {
+    constructor(props: GridSlotComponentProps & any) {
         super(props);
         console.log("props: ", this.props);
     }

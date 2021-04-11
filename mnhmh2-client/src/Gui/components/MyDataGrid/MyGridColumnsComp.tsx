@@ -59,9 +59,6 @@ export class MyGridColumnsComp extends React.Component<MyGridColumnsCompProps, M
         columns[index].width = parseInt(event.target.value);
         this.setState({columns: columns});
     }
-    onColumnsReset(): void {
-        //TODO
-    }
 
     componentDidMount(): void {
         this.setState({ columns: JSON.parse(JSON.stringify(this.props.columns)) });
@@ -127,9 +124,6 @@ export class MyGridColumnsComp extends React.Component<MyGridColumnsCompProps, M
                             <Grid container direction="row" justify="flex-end" alignContent="center" alignItems="center">
                                 <Button variant="contained" style={{margin: "4px"}} onClick={this.onColumnsCancel.bind(this)}>
                                     Ακύρωση
-                                </Button>
-                                <Button variant="contained" style={{margin: "4px"}} onClick={this.onColumnsReset.bind(this)}>
-                                    Επαναφορά
                                 </Button>
                                 <Button variant="contained" style={{margin: "4px"}} color="primary" onClick={this.onColumnsSave.bind(this)}>
                                     Εφαρμογή
