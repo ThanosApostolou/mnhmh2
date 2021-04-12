@@ -69,16 +69,80 @@ export class Borrower {
         return query;
     }
 
-    static async listSelectFromDB(whereclause: string): Promise<Borrower[]> {
+    static searchWhereclause(search: string, prefix: string): string {
+        let whereclause = null;
+        if (search !== "") {
+            whereclause = `${prefix}Id LIKE '%${search}%' OR ${prefix}Name LIKE '%${search}%' OR ${prefix}SerialNumber LIKE '%${search}%' OR '${prefix}Managers.Name' LIKE '%${search}%'`;
+        }
+        return whereclause;
+    }
+    static insertQuery(borrower: Borrower): string {
+        const query = `
+            INSERT INTO Borrowers (Id, Name, SerialNumber, Manager)
+            VALUES ('${borrower.Id}', '${borrower.Name}', '${borrower.SerialNumber}', '${borrower.Manager.Id}')
+        `;
+        return query;
+    }
+    static deleteQuery(Id: number): string {
+        const query = `
+            DELETE FROM Borrowers
+            WHERE Id='${Id}'
+        `;
+        return query;
+    }
+    static updateQuery(borrower: Borrower): string {
+        const query = `
+            UPDATE Borrowers
+            SET Name='${borrower.Name}', SerialNumber='${borrower.SerialNumber}', Manager='${borrower.Manager.Id}'
+            WHERE Id='${borrower.Id}'
+        `;
+        return query;
+    }
+
+    static async listSelectFromDB(search: string): Promise<Borrower[]> {
         let borrowers: Borrower[] = [];
         try {
-            const result = await App.app.dbmanager.execute(Borrower.selectQuery(whereclause, ""));
+            const whereclause = Borrower.searchWhereclause(search, "");
+            const selectquery = Borrower.selectQuery(whereclause, "");
+            const result = await App.app.dbmanager.execute(selectquery);
             const recordset: BorrowerDBObj[] = result.recordset;
             borrowers = Borrower.listFromDBObjectList(recordset, "");
             return borrowers;
         } catch(err) {
             console.log(err);
             return (err);
+        }
+    }
+    static async insertToDB(borrower: Borrower): Promise<Borrower> {
+        try {
+            const result1 = await App.app.dbmanager.execute("SELECT MAX(Id) FROM Borrowers");
+            let maxId = 0;
+            if (result1.recordset.length > 0) {
+                maxId = result1.recordset[0][""];
+            }
+            borrower.Id = 1 + maxId;
+            const result = await App.app.dbmanager.execute(Borrower.insertQuery(borrower));
+            return borrower;
+        } catch(err) {
+            console.log(err);
+            throw err;
+        }
+    }
+    static async deleteInDB(Id: number): Promise<void> {
+        try {
+            const result = await App.app.dbmanager.execute(Borrower.deleteQuery(Id));
+        } catch(err) {
+            console.log(err);
+            throw err;
+        }
+    }
+    static async updateInDB(borrower: Borrower): Promise<Borrower> {
+        try {
+            const result = await App.app.dbmanager.execute(Borrower.updateQuery(borrower));
+            return borrower;
+        } catch(err) {
+            console.log(err);
+            throw err;
         }
     }
 }

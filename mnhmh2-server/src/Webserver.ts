@@ -64,6 +64,15 @@ export class Webserver {
         this.expressapp.get("/api/borrower", (req: Request, res: Response) => {
             new BorrowerController(req, res).GET();
         });
+        this.expressapp.post("/api/borrower", (req: Request, res: Response) => {
+            new BorrowerController(req, res).POST();
+        });
+        this.expressapp.delete("/api/borrower", (req: Request, res: Response) => {
+            new BorrowerController(req, res).DELETE();
+        });
+        this.expressapp.put("/api/borrower", (req: Request, res: Response) => {
+            new BorrowerController(req, res).PUT();
+        });
 
         this.expressapp.get("/api/group", (req: Request, res: Response) => {
             new GroupController(req, res).GET();
