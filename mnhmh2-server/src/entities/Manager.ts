@@ -1,6 +1,6 @@
 import { App } from "../App";
 import { DBManager } from "../DBManager";
-import {Entity, PrimaryColumn, Column } from "typeorm";
+import {Entity, PrimaryColumn, Column, Like } from "typeorm";
 
 @Entity({name: "Managers"})
 export class Manager {
@@ -112,7 +112,20 @@ export class Manager {
                 managers = await App.app.dbmanager.managerRepo.find();
             } else {
                 managers = await App.app.dbmanager.managerRepo.find({
-                    where: `Manager.Id LIKE '%${search}%' OR Manager.Name LIKE '%${search}%' OR Manager.Rank LIKE '%${search}%' OR Manager.Position LIKE '%${search}%'`
+                    where: [
+                        {
+                            Id: Like(`%${search}%`)
+                        },
+                        {
+                            Name: Like(`%${search}%`)
+                        },
+                        {
+                            Rank: Like(`%${search}%`)
+                        },
+                        {
+                            Position: Like(`%${search}%`)
+                        }
+                    ]
                 });
             }
             return managers;
@@ -123,13 +136,10 @@ export class Manager {
     }
     static async insertToDB(manager: Manager): Promise<Manager> {
         try {
-            const result1 = await App.app.dbmanager.execute("SELECT MAX(Id) FROM Managers");
-            let maxId = 0;
-            if (result1.recordset.length > 0) {
-                maxId = result1.recordset[0][""];
-            }
+            const result = await App.app.dbmanager.managerRepo.createQueryBuilder().select("MAX(Manager.Id)", "max").getRawOne();
+            const maxId = result.max;
             manager.Id = 1 + maxId;
-            const result = await App.app.dbmanager.execute(Manager.insertQuery(manager));
+            await App.app.dbmanager.managerRepo.insert(manager);
             return manager;
         } catch(err) {
             console.log(err);
@@ -138,7 +148,7 @@ export class Manager {
     }
     static async deleteInDB(Id: number): Promise<void> {
         try {
-            const result = await App.app.dbmanager.execute(Manager.deleteQuery(Id));
+            await App.app.dbmanager.managerRepo.delete(Id);
         } catch(err) {
             console.log(err);
             throw err;
@@ -146,7 +156,7 @@ export class Manager {
     }
     static async updateInDB(manager: Manager): Promise<Manager> {
         try {
-            const result = await App.app.dbmanager.execute(Manager.updateQuery(manager));
+            await App.app.dbmanager.managerRepo.update(manager.Id, manager);
             return manager;
         } catch(err) {
             console.log(err);
