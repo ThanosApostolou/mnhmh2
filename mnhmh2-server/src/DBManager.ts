@@ -1,4 +1,7 @@
 const mssql = require("mssql");
+import {createConnection, Connection, Repository } from "typeorm";
+
+import {Manager} from "./entities/Manager";
 
 const config = {
     user: "retsi17",
@@ -10,15 +13,32 @@ const config = {
 };
 
 export class DBManager {
+    connection: Connection = null;
+    managerRepo: Repository<Manager> = null;
+
     pool: any = null;
     error: any = null;
 
     async init(): Promise<void> {
         try {
-            this.pool = await mssql.connect(config);
+            this.connection = await createConnection({
+                type: "mssql",
+                host: "DESKTOP-RO1RABI\\SQLEXPRESS",
+                username: "retsi17",
+                password: "1821",
+                database: "MNHMH",
+                synchronize: false,
+                logging: false,
+                entities: [
+                    Manager
+                ]
+            });
+            //this.pool = await mssql.connect(config);
             console.log("DBManager: Successfully connected to DB!");
+            this.managerRepo = this.connection.getRepository(Manager);
         } catch(err) {
             this.pool = null;
+            this.connection = null;
             this.error = err;
             console.log("DBManager: ", err);
         }

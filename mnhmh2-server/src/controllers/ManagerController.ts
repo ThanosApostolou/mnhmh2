@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import {Like} from "typeorm";
 
 import { App } from "../App";
 import { Manager } from "../entities/Manager";

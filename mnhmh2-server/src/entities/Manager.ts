@@ -1,10 +1,19 @@
 import { App } from "../App";
 import { DBManager } from "../DBManager";
+import {Entity, PrimaryColumn, Column } from "typeorm";
 
+@Entity({name: "Managers"})
 export class Manager {
+    @PrimaryColumn()
     Id: number;
+
+    @Column()
     Name: string;
+
+    @Column()
     Rank: string;
+
+    @Column()
     Position: string;
 
     toJson(): string {
@@ -99,11 +108,13 @@ export class Manager {
     static async listSelectFromDB(search: string): Promise<Manager[]> {
         let managers: Manager[] = [];
         try {
-            const whereclause = Manager.searchWhereclause(search, "");
-            const selectquery = Manager.selectQuery(whereclause, "");
-            const result = await App.app.dbmanager.execute(selectquery);
-            const recordset: ManagerObj[] = result.recordset;
-            managers = Manager.listFromDBObjectList(recordset, "");
+            if (search === "") {
+                managers = await App.app.dbmanager.managerRepo.find();
+            } else {
+                managers = await App.app.dbmanager.managerRepo.find({
+                    where: `Manager.Id LIKE '%${search}%' OR Manager.Name LIKE '%${search}%' OR Manager.Rank LIKE '%${search}%' OR Manager.Position LIKE '%${search}%'`
+                });
+            }
             return managers;
         } catch(err) {
             console.log(err);
