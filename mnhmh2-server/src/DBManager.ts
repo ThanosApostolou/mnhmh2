@@ -1,5 +1,6 @@
 const mssql = require("mssql");
 import {createConnection, Connection, Repository } from "typeorm";
+import { Group } from "./entities/Group";
 
 import {Manager} from "./entities/Manager";
 
@@ -14,6 +15,7 @@ const config = {
 
 export class DBManager {
     connection: Connection = null;
+    groupRepo: Repository<Group> = null;
     managerRepo: Repository<Manager> = null;
 
     pool: any = null;
@@ -30,11 +32,13 @@ export class DBManager {
                 synchronize: false,
                 logging: false,
                 entities: [
-                    Manager
+                    Group,
+                    Manager,
                 ]
             });
             //this.pool = await mssql.connect(config);
             console.log("DBManager: Successfully connected to DB!");
+            this.groupRepo = this.connection.getRepository(Group);
             this.managerRepo = this.connection.getRepository(Manager);
         } catch(err) {
             this.pool = null;

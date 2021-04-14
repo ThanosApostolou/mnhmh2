@@ -41,68 +41,11 @@ export class Manager {
         return managers;
     }
 
-    static fromDBObject(dbobj: any, prefix: string): Manager {
-        const manager: Manager = new Manager();
-        manager.Id = dbobj[prefix+"Id"];
-        manager.Name = dbobj[prefix+"Name"];
-        manager.Rank = dbobj[prefix+"Rank"];
-        manager.Position = dbobj[prefix+"Position"];
-        return manager;
-    }
-
-    static listFromDBObjectList(objlist: any[], prefix: string): Manager[] {
-        const managers: Manager[] = [];
-        for (const obj of objlist) {
-            managers.push(Manager.fromDBObject(obj, prefix));
-        }
-        return managers;
-    }
-
     /**
      * Returns a list with table's own (non foreign) fields
      */
     private static _getOwnFieldsList(): string[] {
         return ["Id", "Name", "Rank", "Position"];
-    }
-
-    static selectQuery(whereclause: string, prefix: string): string {
-        const wherestring = whereclause === null ? "" : ` WHERE ${whereclause}`;
-        const query = `
-            (SELECT ${DBManager.columnsStringFromList(Manager._getOwnFieldsList(), prefix)}
-            FROM Managers
-            ${wherestring})
-        `;
-        return query;
-    }
-
-    static searchWhereclause(search: string, prefix: string): string {
-        let whereclause = null;
-        if (search !== "") {
-            whereclause = `${prefix}Id LIKE '%${search}%' OR ${prefix}Name LIKE '%${search}%' OR ${prefix}Rank LIKE '%${search}%' OR ${prefix}Position LIKE '%${search}%'`;
-        }
-        return whereclause;
-    }
-    static insertQuery(manager: Manager): string {
-        const query = `
-            INSERT INTO Managers (Id, Name, Rank, Position)
-            VALUES ('${manager.Id}', '${manager.Name}', '${manager.Rank}', '${manager.Position}')
-        `;
-        return query;
-    }
-    static deleteQuery(Id: number): string {
-        const query = `
-            DELETE FROM Managers
-            WHERE Id='${Id}'
-        `;
-        return query;
-    }
-    static updateQuery(manager: Manager): string {
-        const query = `
-            UPDATE Managers
-            SET Name='${manager.Name}', Rank='${manager.Rank}', Position='${manager.Position}'
-            WHERE Id='${manager.Id}'
-        `;
-        return query;
     }
 
     static async listSelectFromDB(search: string): Promise<Manager[]> {
