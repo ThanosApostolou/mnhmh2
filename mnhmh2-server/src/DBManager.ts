@@ -1,5 +1,6 @@
 const mssql = require("mssql");
 import {createConnection, Connection, Repository } from "typeorm";
+import { AmmunitionPortion } from "./entities/AmmunitionPortion";
 import { AmmunitionStore } from "./entities/AmmunitionStore";
 import { Borrower } from "./entities/Borrower";
 import { Category } from "./entities/Category";
@@ -21,6 +22,7 @@ export class DBManager {
     connection: Connection = null;
     materialTabRepo: Repository<MaterialTab> = null;
     categoryRepo: Repository<Category> = null;
+    ammunitionPortionRepo: Repository<AmmunitionPortion> = null;
     ammunitionStoreRepo: Repository<AmmunitionStore> = null;
     borrowerRepo: Repository<Borrower> = null;
     groupRepo: Repository<Group> = null;
@@ -42,6 +44,7 @@ export class DBManager {
                 entities: [
                     MaterialTab,
                     Category,
+                    AmmunitionPortion,
                     AmmunitionStore,
                     Manager,
                     Borrower,
@@ -52,6 +55,7 @@ export class DBManager {
             console.log("DBManager: Successfully connected to DB!");
             this.materialTabRepo = this.connection.getRepository(MaterialTab);
             this.categoryRepo = this.connection.getRepository(Category);
+            this.ammunitionPortionRepo = this.connection.getRepository(AmmunitionPortion);
             this.ammunitionStoreRepo = this.connection.getRepository(AmmunitionStore);
             this.borrowerRepo = this.connection.getRepository(Borrower);
             this.groupRepo = this.connection.getRepository(Group);
