@@ -1,9 +1,14 @@
-import { App } from "../App";
-import { DBManager } from "../DBManager";
+import {Entity, PrimaryColumn, Column, Like, OneToMany, OneToOne, JoinColumn, JoinTable } from "typeorm";
 
+import { App } from "../App";
+
+@Entity({name: "AmmunitionStores"})
 export class AmmunitionStore {
+    @PrimaryColumn()
     Id: number;
+    @Column()
     Name: string;
+    @Column()
     SerialNumber: number;
 
     toJson(): string {
@@ -30,21 +35,6 @@ export class AmmunitionStore {
         return stores;
     }
 
-    static fromDBObject(obj: any, prefix: string): AmmunitionStore {
-        const store = new AmmunitionStore();
-        store.Id = obj[`${prefix}Id`];
-        store.Name = obj[`${prefix}Name`];
-        store.SerialNumber = obj[`${prefix}SerialNumber`];
-        return store;
-    }
-    static listFromDBObjectList(objlist: any[], prefix: string): AmmunitionStore[] {
-        const stores: AmmunitionStore[] = [];
-        for (const obj of objlist) {
-            stores.push(AmmunitionStore.fromDBObject(obj, prefix));
-        }
-        return stores;
-    }
-
     /**
      * Returns a list with table's own (non foreign) fields
      */
@@ -52,25 +42,59 @@ export class AmmunitionStore {
         return ["Id", "Name", "SerialNumber"];
     }
 
-    static selectQuery(whereclause: string, prefix: string): string {
-        const wherestring = whereclause === null ? "" : ` WHERE ${whereclause}`;
-        const query = `
-            (SELECT ${DBManager.columnsStringFromList(AmmunitionStore._getOwnFieldsList(), prefix)}
-            FROM AmmunitionStores
-            ${wherestring})
-        `;
-        return query;
-    }
-
-    static async listSelectFromDB(whereclause: string): Promise<AmmunitionStore[]> {
+    static async listSelectFromDB(search: string): Promise<AmmunitionStore[]> {
         let stores: AmmunitionStore[] = [];
         try {
-            const result = await App.app.dbmanager.execute(AmmunitionStore.selectQuery(whereclause, ""));
-            stores = AmmunitionStore.listFromDBObjectList(result.recordset, "");
+            if (search === "") {
+                stores = await App.app.dbmanager.ammunitionStoreRepo.find();
+            } else {
+                stores = await App.app.dbmanager.ammunitionStoreRepo.find({
+                    where: [
+                        {
+                            Id: Like(`%${search}%`)
+                        },
+                        {
+                            Name: Like(`%${search}%`)
+                        },
+                        {
+                            SerialNumber: Like(`%${search}%`)
+                        }
+                    ]
+                });
+            }
             return stores;
         } catch(err) {
             console.log(err);
             return (err);
+        }
+    }
+    static async insertToDB(store: AmmunitionStore): Promise<AmmunitionStore> {
+        try {
+            const result = await App.app.dbmanager.ammunitionStoreRepo.createQueryBuilder().select("MAX(Group.Id)", "max").getRawOne();
+            const maxId = result.max;
+            store.Id = 1 + maxId;
+            await App.app.dbmanager.ammunitionStoreRepo.insert(store);
+            return store;
+        } catch(err) {
+            console.log(err);
+            throw err;
+        }
+    }
+    static async deleteInDB(Id: number): Promise<void> {
+        try {
+            await App.app.dbmanager.ammunitionStoreRepo.delete(Id);
+        } catch(err) {
+            console.log(err);
+            throw err;
+        }
+    }
+    static async updateInDB(store: AmmunitionStore): Promise<AmmunitionStore> {
+        try {
+            await App.app.dbmanager.ammunitionStoreRepo.update(store.Id, store);
+            return store;
+        } catch(err) {
+            console.log(err);
+            throw err;
         }
     }
 }
@@ -79,9 +103,4 @@ export interface AmmunitionStoreObj {
     Id: number;
     Name: string;
     SerialNumber: number;
-}
-export interface AmmunitionStoreDBObj {
-    "AmmunitionStores.Id": number;
-    "AmmunitionStores.Name": string;
-    "AmmunitionStores.SerialNumber": number;
 }

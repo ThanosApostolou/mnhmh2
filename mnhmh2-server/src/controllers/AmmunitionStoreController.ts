@@ -14,9 +14,65 @@ export class AmmunitionStoreController {
 
     async GET(): Promise<void> {
         try {
-            const stores = await AmmunitionStore.listSelectFromDB(null);
+            let search = "";
+            if (this.req.query["search"]) {
+                search = this.req.query["search"].toString().trim();
+            }
+            const stores = await AmmunitionStore.listSelectFromDB(search);
             this.res.setHeader("Content-Type", "application/json");
             this.res.send(AmmunitionStore.listToJson(stores));
+        } catch(err) {
+            console.log(err);
+            this.res.status(500);
+            this.res.send(err);
+        }
+    }
+
+    async POST(): Promise<void> {
+        try {
+            const body = this.req.body;
+            const store = AmmunitionStore.fromObject(body.group);
+            if (!store.Name || store.Name === null || store.Name === "") {
+                this.res.status(422);
+                this.res.setHeader("Content-Type", "application/json");
+                this.res.send({error: "Name cannot be empty!"});
+            } else {
+                await AmmunitionStore.insertToDB(store);
+                this.res.setHeader("Content-Type", "application/json");
+                this.res.send({message: "OK"});
+            }
+        } catch(err) {
+            console.log(err);
+            this.res.status(500);
+            this.res.send(err);
+        }
+    }
+    async DELETE(): Promise<void> {
+        try {
+            const body = this.req.body;
+            const Id: number = body.Id;
+            await AmmunitionStore.deleteInDB(Id);
+            this.res.setHeader("Content-Type", "application/json");
+            this.res.send({message: "OK"});
+        } catch(err) {
+            console.log(err);
+            this.res.status(500);
+            this.res.send(err);
+        }
+    }
+    async PUT(): Promise<void> {
+        try {
+            const body = this.req.body;
+            const store = AmmunitionStore.fromObject(body.group);
+            if (!store.Name || store.Name === null || store.Name === "") {
+                this.res.status(422);
+                this.res.setHeader("Content-Type", "application/json");
+                this.res.send({error: "Name cannot be empty!"});
+            } else {
+                await AmmunitionStore.updateInDB(store);
+                this.res.setHeader("Content-Type", "application/json");
+                this.res.send({message: "OK"});
+            }
         } catch(err) {
             console.log(err);
             this.res.status(500);
