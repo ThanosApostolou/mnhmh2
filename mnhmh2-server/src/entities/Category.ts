@@ -1,9 +1,15 @@
+import {Entity, PrimaryColumn, Column, Like, JoinColumn } from "typeorm";
+
 import { App } from "../App";
 import { DBManager } from "../DBManager";
 
+@Entity({name: "Categories"})
 export class Category {
+    @PrimaryColumn()
     Id: number;
+    @Column()
     Name: string;
+    @Column()
     SerialNumber: number;
 
     toJson(): string {
@@ -52,26 +58,59 @@ export class Category {
         return ["Id", "Name", "SerialNumber"];
     }
 
-    static selectQuery(whereclause: string, prefix: string): string {
-        const wherestring = whereclause === null ? "" : ` WHERE ${whereclause}`;
-        const query = `
-            (SELECT ${DBManager.columnsStringFromList(Category._getOwnFieldsList(), prefix)}
-            FROM Categories
-            ${wherestring})
-        `;
-        return query;
-    }
-
-    static async listSelectFromDB(whereclause: string): Promise<Category[]> {
+    static async listSelectFromDB(search: string): Promise<Category[]> {
         let categories: Category[] = [];
         try {
-            const result = await App.app.dbmanager.execute(Category.selectQuery(whereclause, ""));
-            const recordset: CategoryObj[] = result.recordset;
-            categories = Category.listFromDBObjectList(recordset, "");
+            if (search === "") {
+                categories = await App.app.dbmanager.categoryRepo.find();
+            } else {
+                categories = await App.app.dbmanager.categoryRepo.find({
+                    where: [
+                        {
+                            Id: Like(`%${search}%`)
+                        },
+                        {
+                            Name: Like(`%${search}%`)
+                        },
+                        {
+                            SerialNumber: Like(`%${search}%`)
+                        }
+                    ]
+                });
+            }
             return categories;
         } catch(err) {
             console.log(err);
             return (err);
+        }
+    }
+    static async insertToDB(category: Category): Promise<Category> {
+        try {
+            const result = await App.app.dbmanager.categoryRepo.createQueryBuilder().select("MAX(Group.Id)", "max").getRawOne();
+            const maxId = result.max;
+            category.Id = 1 + maxId;
+            await App.app.dbmanager.categoryRepo.insert(category);
+            return category;
+        } catch(err) {
+            console.log(err);
+            throw err;
+        }
+    }
+    static async deleteInDB(Id: number): Promise<void> {
+        try {
+            await App.app.dbmanager.categoryRepo.delete(Id);
+        } catch(err) {
+            console.log(err);
+            throw err;
+        }
+    }
+    static async updateInDB(category: Category): Promise<Category> {
+        try {
+            await App.app.dbmanager.categoryRepo.update(category.Id, category);
+            return category;
+        } catch(err) {
+            console.log(err);
+            throw err;
         }
     }
 }
