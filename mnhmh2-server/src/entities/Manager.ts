@@ -1,6 +1,7 @@
 import { App } from "../App";
 import { DBManager } from "../DBManager";
-import {Entity, PrimaryColumn, Column, Like } from "typeorm";
+import {Entity, PrimaryColumn, Column, Like, OneToMany, OneToOne, JoinColumn, JoinTable } from "typeorm";
+import { Borrower } from "./Borrower";
 
 @Entity({name: "Managers"})
 export class Manager {
