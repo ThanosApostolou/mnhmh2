@@ -1,12 +1,22 @@
+import {Entity, PrimaryColumn, Column, ManyToOne, JoinColumn, Like } from "typeorm";
+
 import { App } from "../App";
-import { DBManager } from "../DBManager";
 import { Borrower } from "./Borrower";
 import { MaterialTab } from "./MaterialTab";
 
+@Entity({name: "Subcategories"})
 export class Subcategory {
+    @PrimaryColumn()
     Id: number;
+    @Column()
     Name: string;
+
+    @ManyToOne(() => MaterialTab)
+    @JoinColumn({name: "MaterialTab"})
     MaterialTab: MaterialTab;
+
+    @ManyToOne(() => Borrower)
+    @JoinColumn({name: "Borrower"})
     Borrower: Borrower;
 
     toJson(): string {
@@ -34,23 +44,6 @@ export class Subcategory {
         return subcategories;
     }
 
-    static fromDBObject(obj: any, prefix: string): Subcategory {
-        const subcategory = new Subcategory();
-        subcategory.Id = obj[`${prefix}Id`];
-        subcategory.Name = obj[`${prefix}Name`];
-        subcategory.MaterialTab = MaterialTab.fromDBObject(obj, `${prefix}MaterialTabs.`);
-        subcategory.Borrower = Borrower.fromDBObject(obj, `${prefix}Borrowers.`);
-        return subcategory;
-    }
-
-    static listFromDBObjectList(objlist: any[], prefix: string): Subcategory[] {
-        const subcategories: Subcategory[] = [];
-        for (const obj of objlist) {
-            subcategories.push(Subcategory.fromDBObject(obj, prefix));
-        }
-        return subcategories;
-    }
-
     /**
      * Returns a list with table's own (non foreign) fields
      */
@@ -58,29 +51,62 @@ export class Subcategory {
         return ["Id", "Name"];
     }
 
-    static selectQuery(whereclause: string, prefix: string): string {
-        const wherestring = whereclause === null ? "" : ` WHERE ${whereclause}`;
-        const query = `
-            (SELECT ${DBManager.columnsStringFromList(Subcategory._getOwnFieldsList(), prefix)}, MaterialTabs.*, Borrowers.*
-            FROM Subcategories
-            LEFT JOIN ${MaterialTab.selectQuery(null, `${prefix}MaterialTabs.`)} as MaterialTabs
-            ON Subcategories.[MaterialTab] = MaterialTabs.[${prefix}MaterialTabs.Id]
-            LEFT JOIN ${Borrower.selectQuery(null, `${prefix}Borrowers.`)} as Borrowers
-            ON Subcategories.[Borrower] = Borrowers.[${prefix}Borrowers.Id]
-            ${wherestring})
-        `;
-        return query;
-    }
-
-    static async listSelectFromDB(whereclause: string): Promise<Subcategory[]> {
+    static async listSelectFromDB(search: string): Promise<Subcategory[]> {
         let subcategories: Subcategory[] = [];
         try {
-            const result = await App.app.dbmanager.execute(Subcategory.selectQuery(whereclause, ""));
-            subcategories = Subcategory.listFromDBObjectList(result.recordset, "");
+            if (search === "") {
+                subcategories = await App.app.dbmanager.subcategoryRepo.find({
+                    relations: ["MaterialTab", "Borrower"]
+                });
+            } else {
+                subcategories = await App.app.dbmanager.subcategoryRepo.createQueryBuilder("Subcategory")
+                    .leftJoinAndSelect("Subcategory.MaterialTab", "MaterialTab")
+                    .leftJoinAndSelect("Subcategory.Borrower", "Borrower")
+                    .where([
+                        {
+                            Id: Like(`%${search}%`)
+                        },
+                        {
+                            Name: Like(`%${search}%`)
+                        },
+                    ])
+                    .orWhere(`MaterialTab.PartialRegistryCode LIKE '%${search}%' OR MaterialTab.Name LIKE '%${search}%'`)
+                    .orWhere(`Borrower.Name LIKE '%${search}%' OR Borrower.SerialNumber LIKE '%${search}%'`)
+                    .getMany();
+            }
             return subcategories;
         } catch(err) {
             console.log(err);
             return (err);
+        }
+    }
+    static async insertToDB(subcategories: Subcategory): Promise<Subcategory> {
+        try {
+            const result = await App.app.dbmanager.subcategoryRepo.createQueryBuilder().select("MAX(Subcategory.Id)", "max").getRawOne();
+            const maxId = result.max;
+            subcategories.Id = 1 + maxId;
+            await App.app.dbmanager.subcategoryRepo.insert(subcategories);
+            return subcategories;
+        } catch(err) {
+            console.log(err);
+            throw err;
+        }
+    }
+    static async deleteInDB(Id: number): Promise<void> {
+        try {
+            await App.app.dbmanager.subcategoryRepo.delete(Id);
+        } catch(err) {
+            console.log(err);
+            throw err;
+        }
+    }
+    static async updateInDB(subcategories: Subcategory): Promise<Subcategory> {
+        try {
+            await App.app.dbmanager.subcategoryRepo.update(subcategories.Id, subcategories);
+            return subcategories;
+        } catch(err) {
+            console.log(err);
+            throw err;
         }
     }
 }

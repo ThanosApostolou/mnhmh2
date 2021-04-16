@@ -8,6 +8,7 @@ import { Group } from "./entities/Group";
 
 import {Manager} from "./entities/Manager";
 import { MaterialTab } from "./entities/MaterialTab";
+import { Subcategory } from "./entities/Subcategory";
 
 const config = {
     user: "retsi17",
@@ -21,6 +22,7 @@ const config = {
 export class DBManager {
     connection: Connection = null;
     materialTabRepo: Repository<MaterialTab> = null;
+    subcategoryRepo: Repository<Subcategory> = null;
     categoryRepo: Repository<Category> = null;
     ammunitionPortionRepo: Repository<AmmunitionPortion> = null;
     ammunitionStoreRepo: Repository<AmmunitionStore> = null;
@@ -44,6 +46,7 @@ export class DBManager {
                 entities: [
                     MaterialTab,
                     Category,
+                    Subcategory,
                     AmmunitionPortion,
                     AmmunitionStore,
                     Manager,
@@ -54,6 +57,7 @@ export class DBManager {
             //this.pool = await mssql.connect(config);
             console.log("DBManager: Successfully connected to DB!");
             this.materialTabRepo = this.connection.getRepository(MaterialTab);
+            this.subcategoryRepo = this.connection.getRepository(Subcategory);
             this.categoryRepo = this.connection.getRepository(Category);
             this.ammunitionPortionRepo = this.connection.getRepository(AmmunitionPortion);
             this.ammunitionStoreRepo = this.connection.getRepository(AmmunitionStore);
