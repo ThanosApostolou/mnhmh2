@@ -1,16 +1,30 @@
+import {Entity, PrimaryColumn, Column, ManyToOne, JoinColumn, Like } from "typeorm";
+
 import { App } from "../App";
 import { DBManager } from "../DBManager";
 import { MaterialTab, MaterialTabObj } from "./MaterialTab";
 
+@Entity({name: "ImportsExportsTbl"})
 export class ImportsExportsTbl {
+    @PrimaryColumn()
     Id: number;
+    @Column()
     Date: Date;
+    @Column()
     Unit: string;
+    @Column()
     JustificationFileNumber: string;
+    @Column()
     Imported: number;
+    @Column()
     Exported: number;
+    @Column()
     Remaining: number;
+    @Column()
     Comments: string;
+
+    @ManyToOne(() => MaterialTab)
+    @JoinColumn({name: "MaterialTab"})
     MaterialTab: MaterialTab;
 
     toJson(): string {
@@ -36,33 +50,11 @@ export class ImportsExportsTbl {
     }
 
     static listFromObjectList(objlist: any[]): ImportsExportsTbl[] {
-        const borrowers: ImportsExportsTbl[] = [];
+        const importsexportstbls: ImportsExportsTbl[] = [];
         for (const obj of objlist) {
-            borrowers.push(ImportsExportsTbl.fromObject(obj));
+            importsexportstbls.push(ImportsExportsTbl.fromObject(obj));
         }
-        return borrowers;
-    }
-
-    static fromDBObject(dbobj: any, prefix: string): ImportsExportsTbl {
-        const ietbl = new ImportsExportsTbl();
-        ietbl.Id = dbobj[`${prefix}Id`];
-        ietbl.Date = dbobj[`${prefix}Date`];
-        ietbl.Unit = dbobj[`${prefix}Unit`];
-        ietbl.JustificationFileNumber = dbobj[`${prefix}JustificationFileNumber`];
-        ietbl.Imported = dbobj[`${prefix}Imported`];
-        ietbl.Exported = dbobj[`${prefix}Exported`];
-        ietbl.Remaining = dbobj[`${prefix}Remaining`];
-        ietbl.Comments = dbobj[`${prefix}Comments`];
-        ietbl.MaterialTab = MaterialTab.fromDBObject(dbobj, `${prefix}MaterialTabs.`);
-        return ietbl;
-    }
-
-    static listFromDBObjectList(objlist: any[], prefix: string): ImportsExportsTbl[] {
-        const borrowers: ImportsExportsTbl[] = [];
-        for (const dbobj of objlist) {
-            borrowers.push(ImportsExportsTbl.fromDBObject(dbobj, prefix));
-        }
-        return borrowers;
+        return importsexportstbls;
     }
 
     /**
@@ -72,28 +64,79 @@ export class ImportsExportsTbl {
         return ["Id", "Date", "Unit", "JustificationFileNumber", "Imported", "Exported", "Remaining", "Comments"];
     }
 
-    static selectQuery(whereclause: string, prefix: string): string {
-        const wherestring = whereclause === null ? "" : ` WHERE ${whereclause}`;
-        const query = `
-            (SELECT ${DBManager.columnsStringFromList(ImportsExportsTbl._getOwnFieldsList(), prefix)}, MaterialTabs.*
-            FROM ImportsExportsTbl
-            LEFT JOIN ${MaterialTab.selectQuery(null, `${prefix}MaterialTabs.`)} as MaterialTabs
-            ON ImportsExportsTbl.[MaterialTab] = MaterialTabs.[${prefix}MaterialTabs.Id]
-            ${wherestring})
-        `;
-        return query;
-    }
-
-    static async listSelectFromDB(whereclause: string): Promise<ImportsExportsTbl[]> {
-        let ietbls: ImportsExportsTbl[] = [];
+    static async listSelectFromDB(search: string): Promise<ImportsExportsTbl[]> {
+        let importsexportstbls: ImportsExportsTbl[] = [];
         try {
-            const result = await App.app.dbmanager.execute(ImportsExportsTbl.selectQuery(whereclause, ""));
-            const recordset: BorrowerDBObj[] = result.recordset;
-            ietbls = ImportsExportsTbl.listFromDBObjectList(recordset, "");
-            return ietbls;
+            if (search === "") {
+                importsexportstbls = await App.app.dbmanager.importsexportstblRepo.find({
+                    relations: ["MaterialTab"]
+                });
+            } else {
+                importsexportstbls = await App.app.dbmanager.importsexportstblRepo.createQueryBuilder("ImportsExportsTbl")
+                    .leftJoinAndSelect("ImportsExportsTbl.MaterialTab", "MaterialTab")
+                    .leftJoinAndSelect("MaterialTab.Category", "Category")
+                    .where([
+                        {
+                            Id: Like(`%${search}%`)
+                        },
+                        {
+                            Date: Like(`%${search}%`)
+                        },
+                        {
+                            Unit: Like(`%${search}%`)
+                        },
+                        {
+                            JustificationFileNumber: Like(`%${search}%`)
+                        },
+                        {
+                            Imported: Like(`%${search}%`)
+                        },
+                        {
+                            Exported: Like(`%${search}%`)
+                        },
+                        {
+                            Remaining: Like(`%${search}%`)
+                        },
+                        {
+                            Comments: Like(`%${search}%`)
+                        }
+                    ])
+                    .orWhere(`MaterialTab.PartialRegistryCode LIKE '%${search}%' OR MaterialTab.Name LIKE '%${search}%'`)
+                    .getMany();
+            }
+            return importsexportstbls;
         } catch(err) {
             console.log(err);
             return (err);
+        }
+    }
+    static async insertToDB(importsexportstbl: ImportsExportsTbl): Promise<ImportsExportsTbl> {
+        try {
+            const result = await App.app.dbmanager.importsexportstblRepo.createQueryBuilder().select("MAX(Borrower.Id)", "max").getRawOne();
+            const maxId = result.max;
+            importsexportstbl.Id = 1 + maxId;
+            await App.app.dbmanager.importsexportstblRepo.insert(importsexportstbl);
+            return importsexportstbl;
+        } catch(err) {
+            console.log(err);
+            throw err;
+        }
+    }
+    static async deleteInDB(Id: number): Promise<void> {
+        try {
+            await App.app.dbmanager.importsexportstblRepo.delete(Id);
+        } catch(err) {
+            console.log(err);
+            throw err;
+        }
+    }
+    static async updateInDB(importsexportstbl: ImportsExportsTbl): Promise<ImportsExportsTbl> {
+        try {
+            await App.app.dbmanager.importsexportstblRepo.update(importsexportstbl.Id, importsexportstbl);
+            return importsexportstbl;
+        } catch(err) {
+            console.log(err);
+            throw err;
         }
     }
 }

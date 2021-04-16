@@ -5,6 +5,7 @@ import { AmmunitionStore } from "./entities/AmmunitionStore";
 import { Borrower } from "./entities/Borrower";
 import { Category } from "./entities/Category";
 import { Group } from "./entities/Group";
+import { ImportsExportsTbl } from "./entities/ImportsExportsTbl";
 
 import {Manager} from "./entities/Manager";
 import { MaterialTab } from "./entities/MaterialTab";
@@ -22,6 +23,7 @@ const config = {
 export class DBManager {
     connection: Connection = null;
     materialTabRepo: Repository<MaterialTab> = null;
+    importsexportstblRepo: Repository<ImportsExportsTbl> = null;
     subcategoryRepo: Repository<Subcategory> = null;
     categoryRepo: Repository<Category> = null;
     ammunitionPortionRepo: Repository<AmmunitionPortion> = null;
@@ -45,6 +47,7 @@ export class DBManager {
                 logging: false,
                 entities: [
                     MaterialTab,
+                    ImportsExportsTbl,
                     Category,
                     Subcategory,
                     AmmunitionPortion,
@@ -57,6 +60,7 @@ export class DBManager {
             //this.pool = await mssql.connect(config);
             console.log("DBManager: Successfully connected to DB!");
             this.materialTabRepo = this.connection.getRepository(MaterialTab);
+            this.importsexportstblRepo = this.connection.getRepository(ImportsExportsTbl);
             this.subcategoryRepo = this.connection.getRepository(Subcategory);
             this.categoryRepo = this.connection.getRepository(Category);
             this.ammunitionPortionRepo = this.connection.getRepository(AmmunitionPortion);

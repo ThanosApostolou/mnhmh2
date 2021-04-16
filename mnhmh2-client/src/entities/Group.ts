@@ -17,6 +17,9 @@ export class Group {
     }
 
     static fromObject(obj: any): Group {
+        if (!obj) {
+            return null;
+        }
         const group = new Group();
         group.Id = obj.Id;
         group.Name = obj.Name;

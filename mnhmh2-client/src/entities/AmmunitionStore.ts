@@ -16,6 +16,9 @@ export class AmmunitionStore {
     }
 
     static fromObject(obj: any): AmmunitionStore {
+        if (!obj) {
+            return null;
+        }
         const store = new AmmunitionStore();
         store.Id = obj.Id;
         store.Name = obj.Name;

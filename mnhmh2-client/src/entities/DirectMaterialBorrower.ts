@@ -19,6 +19,9 @@ export class DirectMaterialBorrower {
     }
 
     static fromObject(obj: any): DirectMaterialBorrower {
+        if (!obj) {
+            return null;
+        }
         const dmb = new DirectMaterialBorrower();
         dmb.Id = obj.Id;
         dmb.Quantity = obj.Quantity;

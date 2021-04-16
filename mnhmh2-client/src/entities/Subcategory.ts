@@ -19,6 +19,9 @@ export class Subcategory {
     }
 
     static fromObject(obj: any): Subcategory {
+        if (!obj) {
+            return null;
+        }
         const subcategory = new Subcategory();
         subcategory.Id = obj.Id;
         subcategory.Name = obj.Name;

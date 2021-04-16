@@ -18,6 +18,9 @@ export class Borrower {
     }
 
     static fromObject(obj: any): Borrower {
+        if (!obj) {
+            return null;
+        }
         const borrower = new Borrower();
         borrower.Id = obj.Id;
         borrower.Name = obj.Name;

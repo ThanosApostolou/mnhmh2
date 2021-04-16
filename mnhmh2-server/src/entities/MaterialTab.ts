@@ -58,7 +58,7 @@ export class MaterialTab {
     @JoinColumn({name: "Group"})
     Group: Group;
 
-    @ManyToOne(() => Category)
+    @ManyToOne(() => Category, { eager: true})
     @JoinColumn({name: "Category"})
     Category: Category;
 

@@ -22,6 +22,9 @@ export class DistributionCharge {
     }
 
     static fromObject(obj: any): DistributionCharge {
+        if (!obj) {
+            return null;
+        }
         const distributioncharges = new DistributionCharge();
         distributioncharges.Id = obj.Id;
         distributioncharges.PartialRegistryCode = obj.PartialRegistryCode;
