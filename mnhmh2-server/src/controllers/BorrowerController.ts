@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 
-import { App } from "../App";
 import { Borrower } from "../entities/Borrower";
 
 export class BorrowerController {

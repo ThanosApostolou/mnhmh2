@@ -1,12 +1,22 @@
+import {Entity, PrimaryColumn, Column, ManyToOne, JoinColumn, Like } from "typeorm";
 import { App } from "../App";
 import { DBManager } from "../DBManager";
 import { Borrower, BorrowerObj } from "./Borrower";
 import { MaterialTab, MaterialTabObj } from "./MaterialTab";
 
+@Entity({name: "DirectMaterialBorrowers"})
 export class DirectMaterialBorrower {
+    @PrimaryColumn()
     Id: number;
+    @Column()
     Quantity: number;
+
+    @ManyToOne(() => Borrower)
+    @JoinColumn({name: "Borrower"})
     Borrower: Borrower;
+
+    @ManyToOne(() => MaterialTab)
+    @JoinColumn({name: "MaterialTab"})
     MaterialTab: MaterialTab;
 
     toJson(): string {
@@ -34,23 +44,6 @@ export class DirectMaterialBorrower {
         return dmbs;
     }
 
-    static fromDBObject(obj: any, prefix: string): DirectMaterialBorrower {
-        const dmb: DirectMaterialBorrower = new DirectMaterialBorrower();
-        dmb.Id = obj[`${prefix}Id`];
-        dmb.Quantity = obj[`${prefix}Quantity`];
-        dmb.Borrower = Borrower.fromDBObject(obj, `${prefix}Borrowers.`);
-        dmb.MaterialTab = MaterialTab.fromDBObject(obj, `${prefix}MaterialTabs.`);
-        return dmb;
-    }
-
-    static listFromDBObjectList(objlist: any[], prefix: string): DirectMaterialBorrower[] {
-        const dmbs: DirectMaterialBorrower[] = [];
-        for (const obj of objlist) {
-            dmbs.push(DirectMaterialBorrower.fromDBObject(obj, prefix));
-        }
-        return dmbs;
-    }
-
     /**
      * Returns a list with table's own (non foreign) fields
      */
@@ -58,34 +51,62 @@ export class DirectMaterialBorrower {
         return ["Id", "Quantity"];
     }
 
-    private static _selectColumns(): string {
-        const columns = "DirectMaterialBorrowers.Id as [DirectMaterialBorrowers.Id], DirectMaterialBorrowers.Quantity as [DirectMaterialBorrowers.Quantity]";
-        return columns;
-    }
-
-    static selectQuery(whereclause: string, prefix: string): string {
-        const wherestring = whereclause === null ? "" : ` WHERE ${whereclause}`;
-        const query = `
-            (SELECT ${DBManager.columnsStringFromList(DirectMaterialBorrower._getOwnFieldsList(), prefix)} , Borrowers.*, MaterialTabs.*
-            FROM DirectMaterialBorrowers
-            LEFT JOIN ${Borrower.selectQuery(null, `${prefix}Borrowers.`)} as Borrowers
-            ON DirectMaterialBorrowers.[Borrower] = Borrowers.[${prefix}Borrowers.Id]
-            LEFT JOIN ${MaterialTab.selectQuery(null, `${prefix}MaterialTabs.`)} as MaterialTabs
-            ON DirectMaterialBorrowers.[MaterialTab] = MaterialTabs.[${prefix}MaterialTabs.Id]
-            ${wherestring})
-        `;
-        return query;
-    }
-
-    static async listSelectFromDB(whereclause: string): Promise<DirectMaterialBorrower[]> {
+    static async listSelectFromDB(search: string): Promise<DirectMaterialBorrower[]> {
         let dmbs: DirectMaterialBorrower[] = [];
         try {
-            const result = await App.app.dbmanager.execute(DirectMaterialBorrower.selectQuery(whereclause, ""));
-            dmbs = DirectMaterialBorrower.listFromDBObjectList(result.recordset, "");
+            if (search === "") {
+                dmbs = await App.app.dbmanager.directMaterialBorrowerRepo.find({
+                    relations: ["Borrower", "MaterialTab"]
+                });
+            } else {
+                dmbs = await App.app.dbmanager.directMaterialBorrowerRepo.createQueryBuilder("DirectMaterialBorrower")
+                    .leftJoinAndSelect("DirectMaterialBorrower.Borrower", "Borrower")
+                    .leftJoinAndSelect("DirectMaterialBorrower.MaterialTab", "MaterialTab")
+                    .where([
+                        {
+                            Id: Like(`%${search}%`)
+                        },
+                        {
+                            Quantity: Like(`%${search}%`)
+                        },
+                    ])
+                    .orWhere(`Borrower.id LIKE '%${search}%' OR Borrower.Name LIKE '%${search}%' OR Borrower.SerialNumber LIKE '%${search}%'`)
+                    .orWhere(`MaterialTab.PartialRegistryCode LIKE '%${search}%' OR MaterialTab.Name LIKE '%${search}%'`)
+                    .getMany();
+            }
             return dmbs;
         } catch(err) {
             console.log(err);
             return (err);
+        }
+    }
+    static async insertToDB(dmb: DirectMaterialBorrower): Promise<DirectMaterialBorrower> {
+        try {
+            const result = await App.app.dbmanager.directMaterialBorrowerRepo.createQueryBuilder().select("MAX(DirectMaterialBorrower.Id)", "max").getRawOne();
+            const maxId = result.max;
+            dmb.Id = 1 + maxId;
+            await App.app.dbmanager.directMaterialBorrowerRepo.insert(dmb);
+            return dmb;
+        } catch(err) {
+            console.log(err);
+            throw err;
+        }
+    }
+    static async deleteInDB(Id: number): Promise<void> {
+        try {
+            await App.app.dbmanager.directMaterialBorrowerRepo.delete(Id);
+        } catch(err) {
+            console.log(err);
+            throw err;
+        }
+    }
+    static async updateInDB(dmb: DirectMaterialBorrower): Promise<DirectMaterialBorrower> {
+        try {
+            await App.app.dbmanager.directMaterialBorrowerRepo.update(dmb.Id, dmb);
+            return dmb;
+        } catch(err) {
+            console.log(err);
+            throw err;
         }
     }
 }
@@ -95,47 +116,4 @@ export interface DirectMaterialBorrowerObj {
     Quantity: number;
     Borrower: BorrowerObj;
     MaterialTab: MaterialTabObj;
-}
-
-export interface DirectMaterialBorrowerDBObj {
-    "DirectMaterialBorrowers.Id": number;
-    "DirectMaterialBorrowers.Quantity": number;
-    "Borrowers.Id": number;
-    "Borrowers.Name": string;
-    "Borrowers.SerialNumber": number;
-    "Managers.Id": number;
-    "Managers.Name": string;
-    "Managers.Rank": string;
-    "Managers.Position": string;
-    "MaterialTabs.Id": number;
-    "MaterialTabs.PartialRegistryCode": string;
-    "MaterialTabs.PartialRegistryCodeNumber": number;
-    "MaterialTabs.AOEF": string;
-    "MaterialTabs.Name": string;
-    "MaterialTabs.MeasurementUnit": string;
-    "MaterialTabs.TabRemainder": number;
-    "MaterialTabs.Sum": number;
-    "MaterialTabs.Difference": number;
-    "MaterialTabs.Comments": string;
-    "MaterialTabs.ImportSum": number;
-    "MaterialTabs.ExportSum": number;
-    "MaterialTabs.Found": number;
-    "MaterialTabs.PendingCrediting": number;
-    "MaterialTabs.Surplus": number;
-    "MaterialTabs.Deficit": number;
-    "MaterialTabs.Image": string;
-    "MaterialTabs.GeneralRegistryCode": number;
-    "MaterialTabs.Archived": boolean;
-    "MaterialTabs.SerialNumber": number;
-    "MaterialTabs.MaterialWithoutTab": boolean;
-    "MaterialTabs.CurrentMaterialTab": boolean;
-    "MaterialTabs.GEEFCode": string;
-    "MaterialTabs.ComparativesPrintPage_MaterialTabs": number;
-    "Groups.Id": number;
-    "Groups.Name": string;
-    "Groups.LastRegistryCode": number;
-    "Groups.SerialNumber": number;
-    "Categories.Id": number;
-    "Categories.Name": string;
-    "Categories.SerialNumber": number;
 }
