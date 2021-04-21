@@ -4,7 +4,6 @@ import path from "path";
 
 import { RootController } from "./controllers/RootController";
 import { MaterialTabController } from "./controllers/MaterialTabController";
-import { DistributionChargeController } from "./controllers/DistributionChargeController";
 import { GroupController } from "./controllers/GroupController";
 import { ManagerController } from "./controllers/ManagerController";
 import { BorrowerController } from "./controllers/BorrowerController";
@@ -31,10 +30,6 @@ export class Webserver {
 
         this.expressapp.get("/api/materialtab", (req: Request, res: Response) => {
             new MaterialTabController(req, res).GET();
-        });
-
-        this.expressapp.get("/api/distributioncharge", (req: Request, res: Response) => {
-            new DistributionChargeController(req, res).GET();
         });
 
         this.expressapp.get("/api/directmaterialborrower", (req: Request, res: Response) => {

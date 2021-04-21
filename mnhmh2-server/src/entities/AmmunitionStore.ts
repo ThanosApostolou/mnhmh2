@@ -70,7 +70,7 @@ export class AmmunitionStore {
     }
     static async insertToDB(store: AmmunitionStore): Promise<AmmunitionStore> {
         try {
-            const result = await App.app.dbmanager.ammunitionStoreRepo.createQueryBuilder().select("MAX(Group.Id)", "max").getRawOne();
+            const result = await App.app.dbmanager.ammunitionStoreRepo.createQueryBuilder().select("MAX(AmmunitionStore.Id)", "max").getRawOne();
             const maxId = result.max;
             store.Id = 1 + maxId;
             await App.app.dbmanager.ammunitionStoreRepo.insert(store);

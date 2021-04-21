@@ -89,7 +89,7 @@ export class AmmunitionPortion {
     }
     static async insertToDB(portions: AmmunitionPortion): Promise<AmmunitionPortion> {
         try {
-            const result = await App.app.dbmanager.ammunitionPortionRepo.createQueryBuilder().select("MAX(Borrower.Id)", "max").getRawOne();
+            const result = await App.app.dbmanager.ammunitionPortionRepo.createQueryBuilder().select("MAX(AmmunitionPortion.Id)", "max").getRawOne();
             const maxId = result.max;
             portions.Id = 1 + maxId;
             await App.app.dbmanager.ammunitionPortionRepo.insert(portions);

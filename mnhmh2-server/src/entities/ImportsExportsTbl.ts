@@ -112,7 +112,7 @@ export class ImportsExportsTbl {
     }
     static async insertToDB(importsexportstbl: ImportsExportsTbl): Promise<ImportsExportsTbl> {
         try {
-            const result = await App.app.dbmanager.importsexportstblRepo.createQueryBuilder().select("MAX(Borrower.Id)", "max").getRawOne();
+            const result = await App.app.dbmanager.importsexportstblRepo.createQueryBuilder().select("MAX(ImportsExportsTbl.Id)", "max").getRawOne();
             const maxId = result.max;
             importsexportstbl.Id = 1 + maxId;
             await App.app.dbmanager.importsexportstblRepo.insert(importsexportstbl);
