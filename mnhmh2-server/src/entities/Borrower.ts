@@ -12,7 +12,7 @@ export class Borrower {
     @Column()
     SerialNumber: number;
 
-    @ManyToOne(() => Manager)
+    @ManyToOne(() => Manager, (manager) => manager.borrowers)
     @JoinColumn({name: "Manager"})
     Manager: Manager;
 

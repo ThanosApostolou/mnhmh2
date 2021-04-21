@@ -17,6 +17,9 @@ export class Manager {
     @Column()
     Position: string;
 
+    @OneToMany(() => Borrower, (borrower) => borrower.Manager)
+    borrowers: Borrower[];
+
     toJson(): string {
         return JSON.stringify(this);
     }
@@ -73,6 +76,17 @@ export class Manager {
                 });
             }
             return managers;
+        } catch(err) {
+            console.log(err);
+            throw err;
+        }
+    }
+    static async selectById(id: number): Promise<Manager> {
+        try {
+            const manager = await App.app.dbmanager.managerRepo.findOne(id, {
+                relations: ["borrowers"]
+            });
+            return manager;
         } catch(err) {
             console.log(err);
             throw err;

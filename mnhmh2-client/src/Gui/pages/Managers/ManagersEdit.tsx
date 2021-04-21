@@ -5,6 +5,7 @@ import { Alert } from "@material-ui/lab";
 import { Manager } from "../../../entities/Manager";
 import { ApiConsumer } from "../../../ApiConsumer";
 import { CancelTokenSource } from "axios";
+import { Borrower } from "../../../entities/Borrower";
 
 export class ManagersEdit extends React.Component<ManagersEditProps, ManagersEditState> {
     state: Readonly<ManagersEditState>;
@@ -21,6 +22,7 @@ export class ManagersEdit extends React.Component<ManagersEditProps, ManagersEdi
         this.positionInputRef = React.createRef<HTMLInputElement>();
         this.state = {
             loading: false,
+            borrowers: [],
             errorSnackbarOpen: false
         };
     }
@@ -68,6 +70,18 @@ export class ManagersEdit extends React.Component<ManagersEditProps, ManagersEdi
         }
     }
 
+
+    componentDidUpdate(props: ManagersEditProps): void {
+        if (props.openEditDrawer != this.props.openEditDrawer && this.props.openEditDrawer) {
+            this.cancelTokenSource.cancel("cancel sending data");
+            this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
+            Manager.fromApiWithBorrowers(this.cancelTokenSource, this.props.manager.Id).then(([manager, borrowers] ) => {
+                console.log("borrowers:", borrowers);
+                this.setState({borrowers: borrowers});
+            });
+        }
+    }
+
     render(): ReactNode {
         if (!this.props.openEditDrawer) {
             return null;
@@ -93,6 +107,10 @@ export class ManagersEdit extends React.Component<ManagersEditProps, ManagersEdi
                                                 <TextField size="small" InputLabelProps={{ shrink: true }} label="ΒΑΘΜΟΣ" defaultValue={this.props.manager.Rank} inputRef={this.rankInputRef} />
                                                 <TextField size="small" InputLabelProps={{ shrink: true }} label="ΘΕΣΗ" defaultValue={this.props.manager.Position} inputRef={this.positionInputRef} />
                                             </Grid>
+                                        </fieldset>
+                                        <fieldset>
+                                            <p>Μερικοί Διαχειριστές που είναι υπεύθυνος</p>
+                                            {JSON.stringify(this.state.borrowers)}
                                         </fieldset>
                                         <div style={{display: "flex", flexGrow: 1}} />
                                         <CardActions>
@@ -147,5 +165,6 @@ export interface ManagersEditProps {
 
 interface ManagersEditState {
     loading: boolean;
+    borrowers: Borrower[];
     errorSnackbarOpen: boolean;
 }
