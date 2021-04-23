@@ -63,6 +63,16 @@ export class Borrower {
         return columns;
     }
 
+    static getColumnsNomanager(): GridColDef[] {
+        const columns: GridColDef[] = [
+            { field: "AA", headerName: "AA", width: 100, hide: false },
+            { field: "Id", headerName: "Id", width: 100, hide: false },
+            { field: "Name", headerName: "ΟΝΟΜΑ", width: 200, hide: false },
+            { field: "SerialNumber", headerName: "ΣΕΙΡΙΑΚΟΣ ΑΡΙΘΜΟΣ", width: 200, hide: false }
+        ];
+        return columns;
+    }
+
     static getRows(borrowers: Borrower[]): GridRowsProp {
         const rows: GridRowsProp = [];
         let count = 1;
@@ -73,14 +83,30 @@ export class Borrower {
                 Id: borrower.Id,
                 Name: borrower.Name,
                 SerialNumber: borrower.SerialNumber,
-                ManagerId: borrower.Manager.Id,
-                ManagerName: borrower.Manager.Name
+                ManagerId: borrower.Manager ? borrower.Manager.Id : null,
+                ManagerName: borrower.Manager ? borrower.Manager.Name : null
             };
             count++;
             rows.push(row);
         }
         return rows;
+    }
 
+    static getRowsNomanager(borrowers: Borrower[]): GridRowsProp {
+        const rows: GridRowsProp = [];
+        let count = 1;
+        for (const borrower of borrowers) {
+            const row: GridRowData = {
+                id: count,
+                AA: count,
+                Id: borrower.Id,
+                Name: borrower.Name,
+                SerialNumber: borrower.SerialNumber
+            };
+            count++;
+            rows.push(row);
+        }
+        return rows;
     }
 
 }

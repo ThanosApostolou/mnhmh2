@@ -11,6 +11,7 @@ import { ApiConsumer } from "../../../ApiConsumer";
 import { GridRowSelectedParams, GridRowsProp } from "@material-ui/data-grid";
 import { ManagersAdd } from "./ManagersAdd";
 import { ManagersEdit } from "./ManagersEdit";
+import { AddEditActions } from "../../components/AddEditActions";
 
 export class ManagersPage extends React.Component<Record<string, never>, ManagersPageState> {
     state: Readonly<ManagersPageState>;
@@ -99,6 +100,7 @@ export class ManagersPage extends React.Component<Record<string, never>, Manager
     }
 
     render(): ReactNode {
+        const actions = <AddEditActions disabledEdit={this.state.selectedManager === null} onAddClick={this.onAddClick.bind(this)} onEditClick={this.onEditClick.bind(this)} />;
         return (
             <Grid container direction="column" style={{height: "100%"}}>
                 <Card elevation={6} style={{width: "100%"}}>
@@ -116,11 +118,10 @@ export class ManagersPage extends React.Component<Record<string, never>, Manager
                     </CardContent>
                 </Card>
                 <MyDataGrid  error={this.state.error} rows={this.state.rows} loading={this.state.loading} columns={Manager.getColumns()} storagePrefix="managers"
+                    actions={actions}
                     fetchData={this.fetchData.bind(this)}
                     cancelFetchData={this.cancelFetchData.bind(this)}
                     onRowSelected={this.onRowSelected.bind(this)}
-                    onAddClick={this.onAddClick.bind(this)}
-                    onEditClick={this.onEditClick.bind(this)}
                 />
                 <ManagersAdd openAddDrawer={this.state.openAddDrawer}
                     onAddSave={this.onAddSave.bind(this)}
