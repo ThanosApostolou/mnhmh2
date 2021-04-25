@@ -29,6 +29,9 @@ export class Manager {
     }
 
     static fromObject(obj: ManagerObj): Manager {
+        if (obj === null) {
+            return null;
+        }
         const manager = new Manager();
         manager.Id = obj.Id;
         manager.Name = obj.Name;

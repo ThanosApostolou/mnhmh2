@@ -8,7 +8,6 @@ import { CancelTokenSource } from "axios";
 import { Borrower } from "../../../entities/Borrower";
 import { ManagerBorrowers } from "./ManagerBorrowers";
 
-
 export class ManagersEdit extends React.Component<ManagersEditProps, ManagersEditState> {
     state: Readonly<ManagersEditState>;
     cancelTokenSource: CancelTokenSource;

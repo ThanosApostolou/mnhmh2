@@ -6,8 +6,10 @@ import { Manager } from "../../../entities/Manager";
 import { Borrower } from "../../../entities/Borrower";
 import { ApiConsumer } from "../../../ApiConsumer";
 import { CancelTokenSource } from "axios";
-import { GridRowsProp } from "@material-ui/data-grid";
+import { GridRowSelectedParams, GridRowsProp } from "@material-ui/data-grid";
 import { MyDataGrid } from "../../components/MyDataGrid/MyDataGrid";
+
+import { AddRemoveActions } from "../../components/AddRemoveActions";
 
 export class ManagerBorrowers extends React.Component<ManagerBorrowersProps, ManagerBorrowersState> {
     cancelTokenSource: CancelTokenSource;
@@ -56,11 +58,42 @@ export class ManagerBorrowers extends React.Component<ManagerBorrowersProps, Man
         this.cancelTokenSource.cancel("cancel fetching data");
     }
 
+    onRowSelected(params: GridRowSelectedParams): void {
+        if (this.state.borrowers && this.state.borrowers !== null && this.state.borrowers.length > 0) {
+            this.setState({selectedBorrower: this.state.borrowers[params.data.AA - 1]});
+        } else {
+            this.setState({selectedBorrower: null});
+        }
+
+        console.log("manager", this.state.selectedBorrower);
+    }
+
+    onAddClick(): void {
+        null;
+    }
+    onRemoveClick(): void {
+        const selectedBorrower = this.state.selectedBorrower;
+        selectedBorrower.Manager = null;
+        this.setState({loading: true});
+        this.cancelTokenSource.cancel("cancel sending data");
+        this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
+        Borrower.updateInApi(this.cancelTokenSource, selectedBorrower).then(() => {
+            this.setState({loading: false});
+            this.fetchData();
+        }).catch((error) => {
+            console.log(error);
+            this.setState({loading: false});
+        });
+    }
+
     render(): ReactNode {
+        const actions = <AddRemoveActions disabledRemove={this.state.selectedBorrower === null} onAddClick={this.onAddClick.bind(this)} onRemoveClick={this.onRemoveClick.bind(this)} />;
         return (
             <MyDataGrid  error={this.state.error} rows={this.state.rows} loading={this.state.loading} columns={Borrower.getColumnsNomanager()} storagePrefix="manager_borrowers"
+                actions={actions}
                 fetchData={this.fetchData.bind(this)}
                 cancelFetchData={this.cancelFetchData.bind(this)}
+                onRowSelected={this.onRowSelected.bind(this)}
             />
         );
     }

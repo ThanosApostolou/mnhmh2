@@ -25,6 +25,9 @@ export class Borrower {
     }
 
     static fromObject(obj: BorrowerObj): Borrower {
+        if (obj === null) {
+            return null;
+        }
         const borrower = new Borrower();
         borrower.Id = obj.Id;
         borrower.Name = obj.Name;
@@ -89,7 +92,7 @@ export class Borrower {
     }
     static async updateInDB(borrower: Borrower): Promise<Borrower> {
         try {
-            await App.app.dbmanager.groupRepo.update(borrower.Id, borrower);
+            await App.app.dbmanager.borrowerRepo.update(borrower.Id, borrower);
             return borrower;
         } catch(err) {
             console.log(err);

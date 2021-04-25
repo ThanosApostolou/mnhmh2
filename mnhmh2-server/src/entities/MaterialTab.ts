@@ -74,6 +74,9 @@ export class MaterialTab {
     }
 
     static fromObject(obj: MaterialTabObj): MaterialTab {
+        if (obj === null) {
+            return null;
+        }
         const materialtab = new MaterialTab();
         materialtab.Id = obj.Id;
         materialtab.PartialRegistryCode = obj.PartialRegistryCode;

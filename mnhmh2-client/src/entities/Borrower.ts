@@ -51,6 +51,26 @@ export class Borrower {
         }
     }
 
+    static async updateInApi(cancelTokenSource: CancelTokenSource, borrower: Borrower): Promise<any> {
+        try {
+            const response = await App.app.apiconsumer.axios.request({
+                method: "put",
+                url: "/borrower",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                cancelToken: cancelTokenSource.token,
+                data: {
+                    borrower: borrower
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+
     static getColumns(): GridColDef[] {
         const columns: GridColDef[] = [
             { field: "AA", headerName: "AA", width: 100, hide: false },

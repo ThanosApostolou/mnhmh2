@@ -21,6 +21,9 @@ export class Category {
     }
 
     static fromObject(obj: CategoryObj): Category {
+        if (obj === null) {
+            return null;
+        }
         const category = new Category();
         category.Id = obj.Id;
         category.Name = obj.Name;

@@ -36,6 +36,9 @@ export class ImportsExportsTbl {
     }
 
     static fromObject(obj: ImportsExportsTblObj): ImportsExportsTbl {
+        if (obj === null) {
+            return null;
+        }
         const ietbl = new ImportsExportsTbl();
         ietbl.Id = obj.Id;
         ietbl.Date = obj.Date;

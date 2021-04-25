@@ -20,6 +20,9 @@ export class AmmunitionStore {
     }
 
     static fromObject(obj: AmmunitionStoreObj): AmmunitionStore {
+        if (obj === null) {
+            return null;
+        }
         const store = new AmmunitionStore();
         store.Id = obj.Id;
         store.Name = obj.Name;
