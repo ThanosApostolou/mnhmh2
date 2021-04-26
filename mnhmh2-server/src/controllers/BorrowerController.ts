@@ -13,11 +13,23 @@ export class BorrowerController {
 
     async GET(): Promise<void> {
         try {
-            let search = "";
+            let search = null;
             if (this.req.query["search"]) {
                 search = this.req.query["search"].toString().trim();
             }
-            const borrowers = await Borrower.listSelectFromDB(search);
+            let withManager = true;
+            if (this.req.query["withManager"]) {
+                withManager = (this.req.query["withManager"].toString().trim() === "true");
+            }
+            let managerId = null;
+            if (this.req.query["managerId"]) {
+                managerId = parseInt(this.req.query["managerId"].toString().trim());
+            }
+            let notManagerId = null;
+            if (this.req.query["notManagerId"]) {
+                notManagerId = parseInt(this.req.query["notManagerId"].toString().trim());
+            }
+            const borrowers = await Borrower.listSelectFromDB(search, withManager, managerId, notManagerId);
             this.res.setHeader("Content-Type", "application/json");
             this.res.send(Borrower.listToJson(borrowers));
         } catch(err) {

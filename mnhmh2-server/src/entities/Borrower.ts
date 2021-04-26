@@ -51,19 +51,35 @@ export class Borrower {
         return ["Id", "Name", "SerialNumber"];
     }
 
-    static async listSelectFromDB(search: string): Promise<Borrower[]> {
-        let borrowers: Borrower[] = [];
+    static async listSelectFromDB(search: string, withManager: boolean, managerId: number, notManagerId: number): Promise<Borrower[]> {
+        //let borrowers: Borrower[] = [];
         try {
-            if (search === "") {
-                borrowers = await App.app.dbmanager.borrowerRepo.find({
-                    relations: ["Manager"]
-                });
-            } else {
-                borrowers = await App.app.dbmanager.borrowerRepo.createQueryBuilder("Borrower")
-                    .leftJoinAndSelect("Borrower.Manager", "Manager")
-                    .where(`Borrower.id LIKE '%${search}%' OR Borrower.Name LIKE '%${search}%' OR Borrower.SerialNumber LIKE '%${search}%' OR Manager.Id LIKE '%${search}%' OR Manager.Name LIKE '%${search}%' OR Manager.Rank LIKE '%${search}%' OR Manager.Position LIKE '%${search}%'`)
-                    .getMany();
+            //if (search === "") {
+            //    borrowers = await App.app.dbmanager.borrowerRepo.find({
+            //        relations: ["Manager"]
+            //    });
+            //} else {
+            const borrowers_query = App.app.dbmanager.borrowerRepo.createQueryBuilder("Borrower").leftJoinAndSelect("Borrower.Manager", "Manager");
+
+            if (search !== null) {
+                if (withManager) {
+                    borrowers_query.andWhere(`Borrower.Id LIKE '%${search}%' OR Borrower.Name LIKE '%${search}%' OR Borrower.SerialNumber LIKE '%${search}%' OR Manager.Id LIKE '%${search}%' OR Manager.Name LIKE '%${search}%' OR Manager.Rank LIKE '%${search}%' OR Manager.Position LIKE '%${search}%'`);
+                } else {
+                    borrowers_query.andWhere(`Borrower.Id LIKE '%${search}%' OR Borrower.Name LIKE '%${search}%' OR Borrower.SerialNumber LIKE '%${search}%'`);
+                }
             }
+            if (managerId !== null) {
+                borrowers_query.andWhere(`Manager.Id = '${managerId}'`);
+            }
+            if (notManagerId !== null) {
+                borrowers_query.andWhere(`Manager.Id <> '${notManagerId}'`);
+            }
+            borrowers_query.select(["Borrower.Id", "Borrower.Name", "Borrower.SerialNumber"]);
+            if (withManager) {
+                borrowers_query.addSelect(["Manager.Id", "Manager.Name", "Manager.Rank", "Manager.Position"]);
+            }
+            const borrowers: Borrower[] = await borrowers_query.getMany();
+            //}
             return borrowers;
         } catch(err) {
             console.log(err);

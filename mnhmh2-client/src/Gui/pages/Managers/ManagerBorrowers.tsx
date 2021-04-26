@@ -8,6 +8,7 @@ import { ApiConsumer } from "../../../ApiConsumer";
 import { CancelTokenSource } from "axios";
 import { GridRowSelectedParams, GridRowsProp } from "@material-ui/data-grid";
 import { MyDataGrid } from "../../components/MyDataGrid/MyDataGrid";
+import { BorrowerDataGrid } from "../Borrowers/BorrowerDataGrid";
 
 import { AddRemoveActions } from "../../components/AddRemoveActions";
 
@@ -22,7 +23,8 @@ export class ManagerBorrowers extends React.Component<ManagerBorrowersProps, Man
             rows: [],
             loading: true,
             search: null,
-            error: null
+            error: null,
+            fetchData: false
         };
         this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
     }
@@ -38,7 +40,7 @@ export class ManagerBorrowers extends React.Component<ManagerBorrowersProps, Man
         }
     }*/
 
-    fetchData(): void {
+    /*fetchData(): void {
         this.cancelTokenSource.cancel("cancel sending data");
         this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
         Manager.fromApiWithBorrowers(this.cancelTokenSource, this.props.manager.Id).then(([manager, borrowers] ) => {
@@ -52,20 +54,13 @@ export class ManagerBorrowers extends React.Component<ManagerBorrowersProps, Man
         }).finally(() => {
             this.setState({loading: false});
         });
+    }*/
+    fetchData(): void {
+        this.setState({fetchData: !this.state.fetchData});
     }
 
-    cancelFetchData(): void {
-        this.cancelTokenSource.cancel("cancel fetching data");
-    }
-
-    onRowSelected(params: GridRowSelectedParams): void {
-        if (this.state.borrowers && this.state.borrowers !== null && this.state.borrowers.length > 0) {
-            this.setState({selectedBorrower: this.state.borrowers[params.data.AA - 1]});
-        } else {
-            this.setState({selectedBorrower: null});
-        }
-
-        console.log("manager", this.state.selectedBorrower);
+    onRowSelected(borrower: Borrower): void {
+        this.setState({selectedBorrower: borrower});
     }
 
     onAddClick(): void {
@@ -89,11 +84,10 @@ export class ManagerBorrowers extends React.Component<ManagerBorrowersProps, Man
     render(): ReactNode {
         const actions = <AddRemoveActions disabledRemove={this.state.selectedBorrower === null} onAddClick={this.onAddClick.bind(this)} onRemoveClick={this.onRemoveClick.bind(this)} />;
         return (
-            <MyDataGrid  error={this.state.error} rows={this.state.rows} loading={this.state.loading} columns={Borrower.getColumnsNomanager()} storagePrefix="manager_borrowers"
-                actions={actions}
-                fetchData={this.fetchData.bind(this)}
-                cancelFetchData={this.cancelFetchData.bind(this)}
-                onRowSelected={this.onRowSelected.bind(this)}
+            <BorrowerDataGrid actions={actions} onRowSelected={this.onRowSelected.bind(this)} storagePrefix="manager_borrowers" fetchData={this.state.fetchData}
+                search={this.state.search}
+                withManager={false}
+                managerId={this.props.manager.Id}
             />
         );
     }
@@ -110,4 +104,5 @@ export interface ManagerBorrowersState {
     loading: boolean;
     search: string;
     error: any;
+    fetchData: boolean;
 }
