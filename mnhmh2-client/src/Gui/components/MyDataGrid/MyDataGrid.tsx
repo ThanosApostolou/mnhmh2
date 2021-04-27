@@ -139,12 +139,14 @@ export class MyDataGrid extends React.Component<DataCompProps, DataCompState> {
                                 selectedRow: this.state.selectedRow,
                                 density: this.state.density,
                                 columns: this.state.columns,
-                                actions: this.props.actions,
                                 onColumnsSave: this.onColumnsSave.bind(this),
                                 onDensityChange: this.onDensityChange.bind(this),
                                 onRestoreClick: this.onRestoreClick.bind(this),
                                 onRefreshClick: this.onRefreshClick.bind(this),
                                 onPrintClick: this.onPrintClick.bind(this),
+                            },
+                            footer: {
+                                actions: this.props.actions
                             }
                         }}
                         onPageSizeChange={this.onPageSizeChange.bind(this)}

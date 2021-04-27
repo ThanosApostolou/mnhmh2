@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { Dialog } from "@material-ui/core";
+import { Dialog, DialogContent } from "@material-ui/core";
 
 import { Manager } from "../../../entities/Manager";
 import { Borrower } from "../../../entities/Borrower";
@@ -9,19 +9,17 @@ import {  GridRowsProp } from "@material-ui/data-grid";
 import { BorrowerDataGrid } from "../Borrowers/BorrowerDataGrid";
 
 import { AddRemoveActions } from "../../components/AddRemoveActions";
-import { ManagerBorrowersAdd } from "./ManagerBorrowersAdd";
 
-export class ManagerBorrowers extends React.Component<ManagerBorrowersProps, ManagerBorrowersState> {
+export class ManagerBorrowersAdd extends React.Component<ManagerBorrowersAddProps, ManagerBorrowersAddState> {
     cancelTokenSource: CancelTokenSource;
 
-    constructor(props: ManagerBorrowersProps) {
+    constructor(props: ManagerBorrowersAddProps) {
         super(props);
         this.state = {
             borrowers: null,
             selectedBorrower: null,
             loading: true,
-            fetchData: false,
-            openDialog: false
+            fetchData: false
         };
         this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
     }
@@ -35,7 +33,7 @@ export class ManagerBorrowers extends React.Component<ManagerBorrowersProps, Man
     }
 
     onAddClick(): void {
-        this.setState({openDialog: true});
+        null;
     }
     onRemoveClick(): void {
         const selectedBorrower = this.state.selectedBorrower;
@@ -52,32 +50,34 @@ export class ManagerBorrowers extends React.Component<ManagerBorrowersProps, Man
         });
     }
 
-    handleDialogClose(): void {
-        this.setState({openDialog: false});
-    }
-
     render(): ReactNode {
         const actions = <AddRemoveActions disabledRemove={this.state.selectedBorrower === null} onAddClick={this.onAddClick.bind(this)} onRemoveClick={this.onRemoveClick.bind(this)} />;
-        return (
-            <React.Fragment>
-                <BorrowerDataGrid actions={actions} onRowSelected={this.onRowSelected.bind(this)} storagePrefix="manager_borrowers_dialog" fetchData={this.state.fetchData}
-                    withManager={false}
-                    managerId={this.props.manager.Id}
-                />
-                <ManagerBorrowersAdd manager={this.props.manager} openDialog={this.state.openDialog} handleDialogClose={this.handleDialogClose.bind(this)} />
-            </React.Fragment>
-        );
+        if (!this.props.openDialog) {
+            return null;
+        } else {
+            return (
+                <Dialog open={this.props.openDialog} maxWidth={false} fullWidth={true} style={{height: "100vh"}}>
+                    <DialogContent style={{height: "100vh", display: "flex", flexGrow: 1}}>
+                        <BorrowerDataGrid actions={actions} onRowSelected={this.onRowSelected.bind(this)} storagePrefix="manager_borrowers_add" fetchData={this.state.fetchData}
+                            withManager={true}
+                            notManagerId={this.props.manager.Id}
+                        />
+                    </DialogContent>
+                </Dialog>
+            );
+        }
     }
 }
 
-export interface ManagerBorrowersProps {
+export interface ManagerBorrowersAddProps {
     manager: Manager;
+    openDialog: boolean;
+    handleDialogClose(): void;
 }
 
-export interface ManagerBorrowersState {
+export interface ManagerBorrowersAddState {
     borrowers: Borrower[]
     selectedBorrower: Borrower;
     loading: boolean;
     fetchData: boolean;
-    openDialog: boolean;
 }

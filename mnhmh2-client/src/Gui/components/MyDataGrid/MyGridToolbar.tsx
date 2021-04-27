@@ -23,11 +23,6 @@ export class MyGridToolbar extends React.Component<MyGridToolbarProps, any> {
                     <Grid container direction="row" justify="space-between" alignContent="center" alignItems="center">
                         <Grid item>
                             <Grid container direction="row" justify="flex-start" alignContent="center" alignItems="center">
-                                {this.props.actions}
-                            </Grid>
-                        </Grid>
-                        <Grid item>
-                            <Grid container direction="row" justify="flex-start" alignContent="center" alignItems="center">
                                 <MyGridColumnsComp columns={this.props.columns} onColumnsSave={this.props.onColumnsSave.bind(this)} />
                                 <GridFilterToolbarButton />
                                 <MyGridDensityComp density={this.props.density} onDensityChange={this.props.onDensityChange.bind(this)} />
@@ -67,7 +62,6 @@ export interface MyGridToolbarProps extends GridToolbarContainerProps {
     selectedRow?: any;
     density?: GridDensity;
     columns?: GridColDef[];
-    actions?: ReactNode;
     onColumnsSave?: (columns: GridColDef[]) => void;
     onDensityChange?: (density: GridDensity) => void;
     onRestoreClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;

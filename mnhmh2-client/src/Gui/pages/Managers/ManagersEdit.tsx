@@ -90,6 +90,7 @@ export class ManagersEdit extends React.Component<ManagersEditProps, ManagersEdi
 
                                     <Grid container direction="column" style={{display:"flex", flexGrow: 1}}>
                                         <fieldset>
+                                            <legend>Στοιχεία Μέλους Επιτροπής:</legend>
                                             <Grid container direction="column" justify="flex-start" alignContent="center" alignItems="center">
                                                 <TextField size="small" InputLabelProps={{ shrink: true }} label="Id" type="number" value={this.props.manager.Id} disabled />
                                                 <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ" defaultValue={this.props.manager.Name} inputRef={this.nameInputRef} />
@@ -97,9 +98,10 @@ export class ManagersEdit extends React.Component<ManagersEditProps, ManagersEdi
                                                 <TextField size="small" InputLabelProps={{ shrink: true }} label="ΘΕΣΗ" defaultValue={this.props.manager.Position} inputRef={this.positionInputRef} />
                                             </Grid>
                                         </fieldset>
-                                        <div style={{display: "flex", flexGrow: 1}}>
+                                        <fieldset style={{display: "flex", flexGrow: 1}}>
+                                            <legend>Μερικοί Διαχειριστές που είναι υπεύθυνος:</legend>
                                             <ManagerBorrowers manager={this.props.manager} />
-                                        </div>
+                                        </fieldset>
                                         <CardActions>
                                             <Grid container direction="row" justify="flex-end">
 
