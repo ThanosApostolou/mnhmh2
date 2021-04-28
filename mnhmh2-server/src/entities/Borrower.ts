@@ -72,7 +72,7 @@ export class Borrower {
                 borrowers_query.andWhere(`Manager.Id = '${managerId}'`);
             }
             if (notManagerId !== null) {
-                borrowers_query.andWhere(`Manager.Id <> '${notManagerId}'`);
+                borrowers_query.andWhere(`Manager IS NULL OR Manager.Id != '${notManagerId}'`);
             }
             borrowers_query.select(["Borrower.Id", "Borrower.Name", "Borrower.SerialNumber"]);
             if (withManager) {

@@ -28,8 +28,7 @@ export class BorrowerDataGrid extends React.Component<BorrowerDataGridProps, Bor
         console.log("fetch data", this.props.search);
         this.cancelFetchData();
         this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
-        this.setState({rows: []});
-        this.setState({loading : true});
+        this.setState({rows: [], loading : true, selectedBorrower: null});
         Borrower.listFromApi(this.cancelTokenSource, this.props.search, this.props.withManager, this.props.managerId, this.props.notManagerId).then((data: any) => {
             this.setState({borrowers: data});
             this.setState({rows: Borrower.getRows(this.state.borrowers, this.props.withManager)});
@@ -40,6 +39,9 @@ export class BorrowerDataGrid extends React.Component<BorrowerDataGridProps, Bor
         }).finally(() => {
             this.setState({loading: false});
         });
+        if (this.props.onFetchData) {
+            this.props.onFetchData();
+        }
     }
 
     cancelFetchData(): void {
@@ -76,6 +78,7 @@ export class BorrowerDataGrid extends React.Component<BorrowerDataGridProps, Bor
 export interface BorrowerDataGridProps {
     actions: ReactNode;
     onRowSelected(borrower: Borrower): void;
+    onFetchData?: () => void;
     storagePrefix: string;
     fetchData: boolean;
     search?: string;

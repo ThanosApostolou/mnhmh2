@@ -87,7 +87,8 @@ export class Borrower {
         if (withManager) {
             columns.push(
                 { field: "ManagerId", headerName: "Id ΥΠΕΘΥΝΟΥ", width: 200, hide: false },
-                { field: "ManagerName", headerName: "ΥΠΕΘΥΝΟΣ", width: 200, hide: false }
+                { field: "ManagerName", headerName: "ΥΠΕΘΥΝΟΣ", width: 200, hide: false },
+                { field: "ManagerPosition", headerName: "ΘΕΣΗ ΥΠΕΘΥΝΟΥ", width: 200, hide: false }
             );
         }
         return columns;
@@ -107,6 +108,7 @@ export class Borrower {
             if (withManager) {
                 row.ManagerId = borrower.Manager ? borrower.Manager.Id : null;
                 row.ManagerName = borrower.Manager ? borrower.Manager.Name : null;
+                row.ManagerPosition = borrower.Manager ? borrower.Manager.Position : null;
             }
             count++;
             rows.push(row);

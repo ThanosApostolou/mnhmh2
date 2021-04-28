@@ -4,7 +4,6 @@ import { Search } from "@material-ui/icons";
 import { Alert } from "@material-ui/lab";
 
 import { Manager } from "../../../entities/Manager";
-import { ApiConsumer } from "../../../ApiConsumer";
 import { GridRowsProp } from "@material-ui/data-grid";
 import { ManagersAdd } from "./ManagersAdd";
 import { ManagersEdit } from "./ManagersEdit";
@@ -34,6 +33,10 @@ export class ManagersPage extends React.Component<Record<string, never>, Manager
 
     fetchData(): void {
         this.setState({fetchData: !this.state.fetchData});
+    }
+
+    onFetchData(): void {
+        this.setState({selectedManager: null});
     }
 
     onRowSelected(manager: Manager): void {
@@ -91,6 +94,7 @@ export class ManagersPage extends React.Component<Record<string, never>, Manager
                 </Card>
                 <ManagerDataGrid actions={actions} onRowSelected={this.onRowSelected.bind(this)} storagePrefix="managers" fetchData={this.state.fetchData}
                     search={this.state.search}
+                    onFetchData={this.onFetchData.bind(this)}
                 />
                 <ManagersAdd openAddDrawer={this.state.openAddDrawer}
                     onAddSave={this.onAddSave.bind(this)}

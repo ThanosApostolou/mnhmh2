@@ -30,6 +30,10 @@ export class ManagerBorrowers extends React.Component<ManagerBorrowersProps, Man
         this.setState({fetchData: !this.state.fetchData});
     }
 
+    onFetchData(): void {
+        this.setState({selectedBorrower: null});
+    }
+
     onRowSelected(borrower: Borrower): void {
         this.setState({selectedBorrower: borrower});
     }
@@ -52,7 +56,12 @@ export class ManagerBorrowers extends React.Component<ManagerBorrowersProps, Man
         });
     }
 
-    handleDialogClose(): void {
+    onAddSelect(): void {
+        this.setState({openDialog: false});
+        this.fetchData();
+    }
+
+    onAddCancel(): void {
         this.setState({openDialog: false});
     }
 
@@ -63,8 +72,9 @@ export class ManagerBorrowers extends React.Component<ManagerBorrowersProps, Man
                 <BorrowerDataGrid actions={actions} onRowSelected={this.onRowSelected.bind(this)} storagePrefix="manager_borrowers_dialog" fetchData={this.state.fetchData}
                     withManager={false}
                     managerId={this.props.manager.Id}
+                    onFetchData={this.onFetchData.bind(this)}
                 />
-                <ManagerBorrowersAdd manager={this.props.manager} openDialog={this.state.openDialog} handleDialogClose={this.handleDialogClose.bind(this)} />
+                <ManagerBorrowersAdd manager={this.props.manager} openDialog={this.state.openDialog} onSelect={this.onAddSelect.bind(this)} onCancel={this.onAddCancel.bind(this)} />
             </React.Fragment>
         );
     }

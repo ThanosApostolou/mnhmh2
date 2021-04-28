@@ -1,14 +1,13 @@
 import React, { ReactNode } from "react";
-import { Dialog, DialogContent } from "@material-ui/core";
+import { Dialog, DialogTitle, DialogContent, DialogActions, Grid, Button } from "@material-ui/core";
 
 import { Manager } from "../../../entities/Manager";
 import { Borrower } from "../../../entities/Borrower";
 import { ApiConsumer } from "../../../ApiConsumer";
 import { CancelTokenSource } from "axios";
-import {  GridRowsProp } from "@material-ui/data-grid";
 import { BorrowerDataGrid } from "../Borrowers/BorrowerDataGrid";
 
-import { AddRemoveActions } from "../../components/AddRemoveActions";
+import { SelectActions } from "../../components/SelectActions";
 
 export class ManagerBorrowersAdd extends React.Component<ManagerBorrowersAddProps, ManagerBorrowersAddState> {
     cancelTokenSource: CancelTokenSource;
@@ -18,7 +17,7 @@ export class ManagerBorrowersAdd extends React.Component<ManagerBorrowersAddProp
         this.state = {
             borrowers: null,
             selectedBorrower: null,
-            loading: true,
+            loading: false,
             fetchData: false
         };
         this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
@@ -28,22 +27,23 @@ export class ManagerBorrowersAdd extends React.Component<ManagerBorrowersAddProp
         this.setState({fetchData: !this.state.fetchData});
     }
 
+    onFetchData(): void {
+        this.setState({selectedBorrower: null});
+    }
+
     onRowSelected(borrower: Borrower): void {
         this.setState({selectedBorrower: borrower});
     }
 
-    onAddClick(): void {
-        null;
-    }
-    onRemoveClick(): void {
+    onSelectClick(): void {
         const selectedBorrower = this.state.selectedBorrower;
-        selectedBorrower.Manager = null;
+        selectedBorrower.Manager = this.props.manager;
         this.setState({loading: true});
         this.cancelTokenSource.cancel("cancel sending data");
         this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
         Borrower.updateInApi(this.cancelTokenSource, selectedBorrower).then(() => {
             this.setState({loading: false});
-            this.fetchData();
+            this.props.onSelect();
         }).catch((error) => {
             console.log(error);
             this.setState({loading: false});
@@ -51,18 +51,33 @@ export class ManagerBorrowersAdd extends React.Component<ManagerBorrowersAddProp
     }
 
     render(): ReactNode {
-        const actions = <AddRemoveActions disabledRemove={this.state.selectedBorrower === null} onAddClick={this.onAddClick.bind(this)} onRemoveClick={this.onRemoveClick.bind(this)} />;
+        const actions = <SelectActions disabledSelect={this.state.selectedBorrower === null} onSelectClick={this.onSelectClick.bind(this)} />;
         if (!this.props.openDialog) {
             return null;
         } else {
             return (
                 <Dialog open={this.props.openDialog} maxWidth={false} fullWidth={true} style={{height: "100vh"}}>
+                    <DialogTitle>
+                        <Grid container direction="row" justify="center">
+                            Λοιποί Μερικοί Διαχειριστές
+                        </Grid>
+                    </DialogTitle>
                     <DialogContent style={{height: "100vh", display: "flex", flexGrow: 1}}>
                         <BorrowerDataGrid actions={actions} onRowSelected={this.onRowSelected.bind(this)} storagePrefix="manager_borrowers_add" fetchData={this.state.fetchData}
                             withManager={true}
                             notManagerId={this.props.manager.Id}
+                            onFetchData={this.onFetchData.bind(this)}
                         />
                     </DialogContent>
+                    <DialogActions>
+                        <Grid container direction="row" justify="flex-end">
+
+                            <Button variant="contained" style={{margin: "10px"}} disabled={this.state.loading} onClick={this.props.onCancel}>
+                                ΑΚΥΡΩΣΗ
+                            </Button>
+                        </Grid>
+
+                    </DialogActions>
                 </Dialog>
             );
         }
@@ -72,7 +87,8 @@ export class ManagerBorrowersAdd extends React.Component<ManagerBorrowersAddProp
 export interface ManagerBorrowersAddProps {
     manager: Manager;
     openDialog: boolean;
-    handleDialogClose(): void;
+    onSelect(): void;
+    onCancel(): void;
 }
 
 export interface ManagerBorrowersAddState {

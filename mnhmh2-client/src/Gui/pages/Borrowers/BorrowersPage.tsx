@@ -33,7 +33,11 @@ export class BorrowersPage extends React.Component<Record<string, never>, Borrow
     }
 
     fetchData(): void {
-        this.setState({fetchData: !this.state.fetchData});
+        this.setState({selectedBorrower: null, fetchData: !this.state.fetchData});
+    }
+
+    onFetchData(): void {
+        this.setState({selectedBorrower: null});
     }
 
     onRowSelected(borrower: Borrower): void {
@@ -91,6 +95,7 @@ export class BorrowersPage extends React.Component<Record<string, never>, Borrow
                 </Card>
                 <BorrowerDataGrid actions={null} onRowSelected={this.onRowSelected.bind(this)} storagePrefix="borrowers" fetchData={this.state.fetchData}
                     search={this.state.search}
+                    onFetchData={this.onFetchData.bind(this)}
                 />
 
                 {/*<ManagersAdd openAddDrawer={this.state.openAddDrawer}

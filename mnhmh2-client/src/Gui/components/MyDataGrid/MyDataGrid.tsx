@@ -100,8 +100,8 @@ export class MyDataGrid extends React.Component<DataCompProps, DataCompState> {
     }
     onRefreshClick(event: React.MouseEvent<HTMLButtonElement>): void {
         this.props.cancelFetchData();
+        this.setState({page: 0, selectedRow: null});
         this.props.fetchData();
-        this.setState({page: 0});
         if (this.props.onRefreshClick) {
             this.props.onRefreshClick(event);
         }
