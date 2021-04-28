@@ -51,14 +51,8 @@ export class Borrower {
         return ["Id", "Name", "SerialNumber"];
     }
 
-    static async listSelectFromDB(search: string, withManager: boolean, managerId: number, notManagerId: number): Promise<Borrower[]> {
-        //let borrowers: Borrower[] = [];
+    static async listSelectFromDB(Id: number, notId: number, search: string, withManager: boolean, managerId: number, notManagerId: number): Promise<Borrower[]> {
         try {
-            //if (search === "") {
-            //    borrowers = await App.app.dbmanager.borrowerRepo.find({
-            //        relations: ["Manager"]
-            //    });
-            //} else {
             const borrowers_query = App.app.dbmanager.borrowerRepo.createQueryBuilder("Borrower").leftJoinAndSelect("Borrower.Manager", "Manager");
 
             if (search !== null) {
@@ -67,6 +61,12 @@ export class Borrower {
                 } else {
                     borrowers_query.andWhere(`Borrower.Id LIKE '%${search}%' OR Borrower.Name LIKE '%${search}%' OR Borrower.SerialNumber LIKE '%${search}%'`);
                 }
+            }
+            if (Id !== null) {
+                borrowers_query.andWhere(`Borrower.Id = '${Id}'`);
+            }
+            if (notId !== null) {
+                borrowers_query.andWhere(`Borrower.Id != '${notId}'`);
             }
             if (managerId !== null) {
                 borrowers_query.andWhere(`Manager.Id = '${managerId}'`);
@@ -79,7 +79,6 @@ export class Borrower {
                 borrowers_query.addSelect(["Manager.Id", "Manager.Name", "Manager.Rank", "Manager.Position"]);
             }
             const borrowers: Borrower[] = await borrowers_query.getMany();
-            //}
             return borrowers;
         } catch(err) {
             console.log(err);

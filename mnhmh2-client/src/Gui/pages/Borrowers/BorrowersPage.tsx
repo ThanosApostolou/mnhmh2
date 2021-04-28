@@ -6,10 +6,10 @@ import { Alert } from "@material-ui/lab";
 import { Borrower } from "../../../entities/Borrower";
 import { CancelTokenSource } from "axios";
 import { ApiConsumer } from "../../../ApiConsumer";
-import { GridRowSelectedParams } from "@material-ui/data-grid";
-//import { ManagersAdd } from "./ManagersAdd";
+import { BorrowersAdd } from "./BorrowersAdd";
 //import { ManagersEdit } from "./ManagersEdit";
 import { BorrowerDataGrid } from "./BorrowerDataGrid";
+import { AddEditActions } from "../../components/AddEditActions";
 
 export class BorrowersPage extends React.Component<Record<string, never>, BorrowersPageState> {
     state: Readonly<BorrowersPageState>;
@@ -77,6 +77,7 @@ export class BorrowersPage extends React.Component<Record<string, never>, Borrow
     }
 
     render(): ReactNode {
+        const actions = <AddEditActions disabledEdit={this.state.selectedBorrower === null} onAddClick={this.onAddClick.bind(this)} onEditClick={this.onEditClick.bind(this)} />;
         return (
             <Grid container direction="column" style={{height: "100%"}}>
                 <Card elevation={6} style={{width: "100%"}}>
@@ -93,16 +94,16 @@ export class BorrowersPage extends React.Component<Record<string, never>, Borrow
                         </form>
                     </CardContent>
                 </Card>
-                <BorrowerDataGrid actions={null} onRowSelected={this.onRowSelected.bind(this)} storagePrefix="borrowers" fetchData={this.state.fetchData}
+                <BorrowerDataGrid actions={actions} onRowSelected={this.onRowSelected.bind(this)} storagePrefix="borrowers" fetchData={this.state.fetchData}
                     search={this.state.search}
                     onFetchData={this.onFetchData.bind(this)}
                 />
 
-                {/*<ManagersAdd openAddDrawer={this.state.openAddDrawer}
+                <BorrowersAdd openAddDrawer={this.state.openAddDrawer}
                     onAddSave={this.onAddSave.bind(this)}
                     onAddCancel={this.onAddCancel.bind(this)}
                 />
-                <ManagersEdit manager={this.state.selectedGroup}
+                {/*<ManagersEdit manager={this.state.selectedGroup}
                     openEditDrawer={this.state.openEditDrawer}
                     onEditSave={this.onEditSave.bind(this)}
                     onEditDelete={this.onEditDelete.bind(this)}

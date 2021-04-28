@@ -56,6 +56,25 @@ export class Borrower {
             return error;
         }
     }
+    static async insertToApi(cancelTokenSource: CancelTokenSource, borrower: Borrower): Promise<any> {
+        try {
+            const response = await App.app.apiconsumer.axios.request({
+                method: "post",
+                url: "/borrower",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                cancelToken: cancelTokenSource.token,
+                data: {
+                    borrower: borrower
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
 
     static async updateInApi(cancelTokenSource: CancelTokenSource, borrower: Borrower): Promise<any> {
         try {
