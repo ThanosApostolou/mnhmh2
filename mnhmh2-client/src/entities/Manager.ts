@@ -94,13 +94,15 @@ export class Manager {
             throw error;
         }
     }
-    static async listFromApi(cancelTokenSource: CancelTokenSource, search: string): Promise<Manager[]> {
+    static async listFromApi(cancelTokenSource: CancelTokenSource, Id: number, notId: number, search: string): Promise<Manager[]> {
         try {
             const response = await App.app.apiconsumer.axios.request({
                 method: "get",
                 url: "/manager",
                 cancelToken: cancelTokenSource.token,
                 params: {
+                    Id: Id,
+                    notId: notId,
                     search: search
                 }
             });

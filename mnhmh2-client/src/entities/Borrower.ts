@@ -96,6 +96,26 @@ export class Borrower {
         }
     }
 
+    static async deleteInApi(cancelTokenSource: CancelTokenSource, Id: number): Promise<any> {
+        try {
+            const response = await App.app.apiconsumer.axios.request({
+                method: "delete",
+                url: "/borrower",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                cancelToken: cancelTokenSource.token,
+                data: {
+                    Id: Id
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+
     static getColumns(withManager: boolean): GridColDef[] {
         const columns: GridColDef[] = [
             { field: "AA", headerName: "AA", width: 100, hide: false },

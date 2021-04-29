@@ -29,7 +29,7 @@ export class ManagerDataGrid extends React.Component<ManagerDataGridProps, Manag
         this.cancelFetchData();
         this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
         this.setState({rows: [], loading : true, selectedManager: null});
-        Manager.listFromApi(this.cancelTokenSource, this.props.search).then((data: any) => {
+        Manager.listFromApi(this.cancelTokenSource, this.props.Id, this.props.notId, this.props.search).then((data: any) => {
             this.setState({managers: data});
             this.setState({rows: Manager.getRows(this.state.managers)});
         }).catch((error) => {
@@ -81,6 +81,8 @@ export interface ManagerDataGridProps {
     onFetchData?: () => void;
     storagePrefix: string;
     fetchData: boolean;
+    Id?: number;
+    notId?: number;
     search?: string;
 }
 
@@ -97,5 +99,7 @@ ManagerDataGrid.defaultProps = {
     onRowSelected: null,
     storagePrefix: null,
     fetchData: false,
+    Id: null,
+    notId: null,
     search: null,
 };

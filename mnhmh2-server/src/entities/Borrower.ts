@@ -55,18 +55,18 @@ export class Borrower {
         try {
             const borrowers_query = App.app.dbmanager.borrowerRepo.createQueryBuilder("Borrower").leftJoinAndSelect("Borrower.Manager", "Manager");
 
-            if (search !== null) {
-                if (withManager) {
-                    borrowers_query.andWhere(`Borrower.Id LIKE '%${search}%' OR Borrower.Name LIKE '%${search}%' OR Borrower.SerialNumber LIKE '%${search}%' OR Manager.Id LIKE '%${search}%' OR Manager.Name LIKE '%${search}%' OR Manager.Rank LIKE '%${search}%' OR Manager.Position LIKE '%${search}%'`);
-                } else {
-                    borrowers_query.andWhere(`Borrower.Id LIKE '%${search}%' OR Borrower.Name LIKE '%${search}%' OR Borrower.SerialNumber LIKE '%${search}%'`);
-                }
-            }
             if (Id !== null) {
                 borrowers_query.andWhere(`Borrower.Id = '${Id}'`);
             }
             if (notId !== null) {
                 borrowers_query.andWhere(`Borrower.Id != '${notId}'`);
+            }
+            if (search !== null) {
+                if (withManager) {
+                    borrowers_query.andWhere(`(Borrower.Id LIKE '%${search}%' OR Borrower.Name LIKE '%${search}%' OR Borrower.SerialNumber LIKE '%${search}%' OR Manager.Id LIKE '%${search}%' OR Manager.Name LIKE '%${search}%' OR Manager.Rank LIKE '%${search}%' OR Manager.Position LIKE '%${search}%')`);
+                } else {
+                    borrowers_query.andWhere(`(Borrower.Id LIKE '%${search}%' OR Borrower.Name LIKE '%${search}%' OR Borrower.SerialNumber LIKE '%${search}%')`);
+                }
             }
             if (managerId !== null) {
                 borrowers_query.andWhere(`Manager.Id = '${managerId}'`);

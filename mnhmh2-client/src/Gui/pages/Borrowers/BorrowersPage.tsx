@@ -7,7 +7,7 @@ import { Borrower } from "../../../entities/Borrower";
 import { CancelTokenSource } from "axios";
 import { ApiConsumer } from "../../../ApiConsumer";
 import { BorrowersAdd } from "./BorrowersAdd";
-//import { ManagersEdit } from "./ManagersEdit";
+import { BorrowersEdit } from "./BorrowersEdit";
 import { BorrowerDataGrid } from "./BorrowerDataGrid";
 import { AddEditActions } from "../../components/AddEditActions";
 
@@ -103,12 +103,12 @@ export class BorrowersPage extends React.Component<Record<string, never>, Borrow
                     onAddSave={this.onAddSave.bind(this)}
                     onAddCancel={this.onAddCancel.bind(this)}
                 />
-                {/*<ManagersEdit manager={this.state.selectedGroup}
+                <BorrowersEdit borrower={this.state.selectedBorrower}
                     openEditDrawer={this.state.openEditDrawer}
                     onEditSave={this.onEditSave.bind(this)}
                     onEditDelete={this.onEditDelete.bind(this)}
                     onEditCancel={this.onEditCancel.bind(this)}
-                />*/}
+                />
                 <Snackbar
                     anchorOrigin={{
                         vertical: "bottom",

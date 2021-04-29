@@ -55,29 +55,20 @@ export class Manager {
         return ["Id", "Name", "Rank", "Position"];
     }
 
-    static async listSelectFromDB(search: string): Promise<Manager[]> {
-        let managers: Manager[] = [];
+    static async listSelectFromDB(Id: number, notId: number, search: string): Promise<Manager[]> {
         try {
-            if (search === "") {
-                managers = await App.app.dbmanager.managerRepo.find();
-            } else {
-                managers = await App.app.dbmanager.managerRepo.find({
-                    where: [
-                        {
-                            Id: Like(`%${search}%`)
-                        },
-                        {
-                            Name: Like(`%${search}%`)
-                        },
-                        {
-                            Rank: Like(`%${search}%`)
-                        },
-                        {
-                            Position: Like(`%${search}%`)
-                        }
-                    ]
-                });
+            const managers_query = App.app.dbmanager.managerRepo.createQueryBuilder("Manager");
+            if (Id !== null) {
+                managers_query.andWhere(`Manager.Id = '${Id}'`);
             }
+            if (notId !== null) {
+                managers_query.andWhere(`Manager.Id != '${notId}'`);
+            }
+            if (search != null) {
+                managers_query.andWhere(`(Manager.Id LIKE '%${search}%' OR Manager.Name LIKE '%${search}%' OR Manager.Rank LIKE '%${search}%' OR Manager.Position LIKE '%${search}%')`);
+
+            }
+            const managers: Manager[] = await managers_query.getMany();
             return managers;
         } catch(err) {
             console.log(err);

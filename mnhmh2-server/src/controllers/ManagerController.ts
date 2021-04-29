@@ -16,17 +16,19 @@ export class ManagerController {
     async GET(): Promise<void> {
         try {
             this.res.setHeader("Content-Type", "application/json");
-            let search = "";
+            let search = null;
             if (this.req.query["search"]) {
                 search = this.req.query["search"].toString().trim();
             }
-            if (this.req.query["id"]) {
-                const id = parseInt(this.req.query["id"].toString().trim());
-                const manager = await Manager.selectById(id);
-                this.res.send(manager.toJson());
-                return;
+            let Id = null;
+            if (this.req.query["Id"]) {
+                Id = parseInt(this.req.query["Id"].toString().trim());
             }
-            const managers = await Manager.listSelectFromDB(search);
+            let notId = null;
+            if (this.req.query["notId"]) {
+                notId = parseInt(this.req.query["notId"].toString().trim());
+            }
+            const managers = await Manager.listSelectFromDB(Id, notId, search);
             this.res.send(Manager.listToJson(managers));
         } catch(err) {
             console.log(err);
