@@ -14,11 +14,19 @@ export class GroupController {
 
     async GET(): Promise<void> {
         try {
-            let search = "";
+            let Id = null;
+            if (this.req.query["Id"]) {
+                Id = parseInt(this.req.query["Id"].toString().trim());
+            }
+            let notId = null;
+            if (this.req.query["notId"]) {
+                notId = parseInt(this.req.query["notId"].toString().trim());
+            }
+            let search = null;
             if (this.req.query["search"]) {
                 search = this.req.query["search"].toString().trim();
             }
-            const groups = await Group.listSelectFromDB(search);
+            const groups = await Group.listSelectFromDB(Id, notId, search);
             this.res.setHeader("Content-Type", "application/json");
             this.res.send(Group.listToJson(groups));
         } catch(err) {

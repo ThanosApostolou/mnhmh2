@@ -48,10 +48,10 @@ export class Group {
         return ["Id", "Name", "LastRegistryCode", "SerialNumber"];
     }
 
-    static async listSelectFromDB(search: string): Promise<Group[]> {
-        let groups: Group[] = [];
+    static async listSelectFromDB(Id: number, notId: number, search: string): Promise<Group[]> {
+        //*const groups: Group[] = [];
         try {
-            if (search === "") {
+            /*if (search === null) {
                 groups = await App.app.dbmanager.groupRepo.find();
             } else {
                 groups = await App.app.dbmanager.groupRepo.find({
@@ -70,7 +70,19 @@ export class Group {
                         }
                     ]
                 });
+            }*/
+            const groups_query = App.app.dbmanager.groupRepo.createQueryBuilder("Group");
+            if (Id !== null) {
+                groups_query.andWhere(`Group.Id = '${Id}'`);
             }
+            if (notId !== null) {
+                groups_query.andWhere(`Group.Id != '${notId}'`);
+            }
+            if (search != null) {
+                groups_query.andWhere(`(Group.Id LIKE '%${search}%' OR Group.Name LIKE '%${search}%' OR Group.LastRegistryCode LIKE '%${search}%' OR Group.SerialNumber LIKE '%${search}%')`);
+
+            }
+            const groups: Group[] = await groups_query.getMany();
             return groups;
         } catch(err) {
             console.log(err);

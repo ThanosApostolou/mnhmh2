@@ -4,17 +4,15 @@ import { Search } from "@material-ui/icons";
 import { Alert } from "@material-ui/lab";
 
 
-import { MyDataGrid } from "../../components/MyDataGrid/MyDataGrid";
+import { GroupDataGrid } from "./GroupDataGrid";
 import { Group } from "../../../entities/Group";
-import { CancelTokenSource } from "axios";
-import { ApiConsumer } from "../../../ApiConsumer";
-import { GridRowSelectedParams, GridRowsProp } from "@material-ui/data-grid";
+import { GridRowsProp } from "@material-ui/data-grid";
+import { AddEditActions } from "../../components/AddEditActions";
 import { GroupsAdd } from "./GroupsAdd";
 import { GroupsEdit } from "./GroupsEdit";
 
 export class GroupsPage extends React.Component<Record<string, never>, GroupsPageState> {
     state: Readonly<GroupsPageState>;
-    cancelTokenSource: CancelTokenSource;
     search: string;
 
     constructor(props: Record<string, never>) {
@@ -29,42 +27,21 @@ export class GroupsPage extends React.Component<Record<string, never>, GroupsPag
             openAddDrawer: false,
             openEditDrawer: false,
             openSnackbar: false,
-            snackbarMessage: ""
+            snackbarMessage: "",
+            fetchData: false
         };
-        this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
         this.search = "";
     }
 
     fetchData(): void {
-        console.log("fetch data", this.search);
-        this.cancelFetchData();
-        this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
-        this.setState({rows: []});
-        this.setState({loading : true});
-        Group.listFromApi(this.cancelTokenSource, this.search).then((data: any) => {
-            this.setState({groups: data});
-            this.setState({rows: Group.getRows(this.state.groups)});
-        }).catch((error) => {
-            this.setState({groups: null});
-            this.setState({rows: []});
-            this.setState({error: error});
-        }).finally(() => {
-            this.setState({loading: false});
-        });
+        this.setState({fetchData: !this.state.fetchData});
+    }
+    onFetchData(): void {
+        this.setState({selectedGroup: null});
     }
 
-    cancelFetchData(): void {
-        this.cancelTokenSource.cancel("cancel fetching data");
-    }
-
-    onRowSelected(params: GridRowSelectedParams): void {
-        if (this.state.groups && this.state.groups !== null && this.state.groups.length > 0) {
-            this.setState({selectedGroup: this.state.groups[params.data.AA - 1]});
-        } else {
-            this.setState({selectedGroup: null});
-        }
-
-        console.log("manager", this.state.selectedGroup);
+    onRowSelected(group: Group): void {
+        this.setState({selectedGroup: group});
     }
 
     onAddClick(): void {
@@ -99,6 +76,7 @@ export class GroupsPage extends React.Component<Record<string, never>, GroupsPag
     }
 
     render(): ReactNode {
+        const actions = <AddEditActions disabledEdit={this.state.selectedGroup === null} onAddClick={this.onAddClick.bind(this)} onEditClick={this.onEditClick.bind(this)} />;
         return (
             <Grid container direction="column" style={{height: "100%"}}>
                 <Card elevation={6} style={{width: "100%"}}>
@@ -115,12 +93,9 @@ export class GroupsPage extends React.Component<Record<string, never>, GroupsPag
                         </form>
                     </CardContent>
                 </Card>
-                <MyDataGrid  error={this.state.error} rows={this.state.rows} loading={this.state.loading} columns={Group.getColumns()} storagePrefix="groups"
-                    fetchData={this.fetchData.bind(this)}
-                    cancelFetchData={this.cancelFetchData.bind(this)}
-                    onRowSelected={this.onRowSelected.bind(this)}
-                    onAddClick={this.onAddClick.bind(this)}
-                    onEditClick={this.onEditClick.bind(this)}
+                <GroupDataGrid actions={actions} onRowSelected={this.onRowSelected.bind(this)} storagePrefix="groups" fetchData={this.state.fetchData}
+                    search={this.state.search}
+                    onFetchData={this.onFetchData.bind(this)}
                 />
                 <GroupsAdd openAddDrawer={this.state.openAddDrawer}
                     onAddSave={this.onAddSave.bind(this)}
@@ -161,4 +136,5 @@ export interface GroupsPageState {
     openEditDrawer: boolean;
     openSnackbar: boolean;
     snackbarMessage: string;
+    fetchData: boolean;
 }
