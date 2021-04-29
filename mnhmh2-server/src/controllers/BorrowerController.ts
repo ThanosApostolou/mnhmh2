@@ -83,7 +83,6 @@ export class BorrowerController {
         try {
             const body = this.req.body;
             const borrower = Borrower.fromObject(body.borrower);
-            console.log("borrower", borrower);
             if (!borrower.Name || borrower.Name === null || borrower.Name === "") {
                 this.res.status(422);
                 this.res.setHeader("Content-Type", "application/json");

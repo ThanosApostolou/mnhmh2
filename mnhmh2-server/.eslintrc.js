@@ -30,7 +30,6 @@ module.exports = {
         "init-declarations":        "warn",
         "no-label-var":             "error",
         "no-undef-init":            "error",
-        "no-undefined":             "error",
         "class-methods-use-this":   "warn",
         "indent":                   [1, 4],
         "quotes":                   [1, "double"],

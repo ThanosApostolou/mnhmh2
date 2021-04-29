@@ -60,7 +60,7 @@ export class BorrowersAdd extends React.Component<BorrowersAddProps, BorrowersAd
                         <Grid container direction="column" style={{display:"flex", flexGrow: 1}}>
                             <Grid item>
                                 <Grid container direction="row" justify="center" alignContent="center" alignItems="center">
-                                    <CardHeader title="Προσθήκη Μέλους Επιτροπής" />
+                                    <CardHeader title="Προσθήκη Μερικού Διαχειριστή" />
                                 </Grid>
                             </Grid>
 

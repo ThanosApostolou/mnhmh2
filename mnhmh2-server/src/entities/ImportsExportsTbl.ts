@@ -48,7 +48,10 @@ export class ImportsExportsTbl {
         ietbl.Exported = obj.Exported;
         ietbl.Remaining = obj.Remaining;
         ietbl.Comments = obj.Comments;
-        ietbl.MaterialTab = MaterialTab.fromObject(obj.MaterialTab);
+
+        if (obj.MaterialTab !== undefined) {
+            ietbl.MaterialTab = MaterialTab.fromObject(obj.MaterialTab);
+        }
         return ietbl;
     }
 

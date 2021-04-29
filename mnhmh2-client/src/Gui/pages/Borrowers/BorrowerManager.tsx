@@ -9,7 +9,7 @@ import {  GridRowsProp } from "@material-ui/data-grid";
 import { ManagerDataGrid } from "../Managers/ManagerDataGrid";
 
 import { AddRemoveActions } from "../../components/AddRemoveActions";
-//import { ManagerBorrowersAdd } from "./ManagerBorrowersAdd";
+import { BorrowerManagerAdd } from "./BorrowerManagerAdd";
 
 export class BorrowerManager extends React.Component<BorrowerManagerProps, BorrowerManagerState> {
     cancelTokenSource: CancelTokenSource;
@@ -74,7 +74,7 @@ export class BorrowerManager extends React.Component<BorrowerManagerProps, Borro
                     notId={this.props.borrower.Manager ? null : -1000}
                     onFetchData={this.onFetchData.bind(this)}
                 />
-                {/*<ManagerBorrowersAdd manager={this.props.manager} openDialog={this.state.openDialog} onSelect={this.onAddSelect.bind(this)} onCancel={this.onAddCancel.bind(this)} />*/}
+                <BorrowerManagerAdd borrower={this.props.borrower} openDialog={this.state.openDialog} onSelect={this.onAddSelect.bind(this)} onCancel={this.onAddCancel.bind(this)} />
             </React.Fragment>
         );
     }

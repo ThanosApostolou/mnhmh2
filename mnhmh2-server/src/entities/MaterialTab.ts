@@ -101,8 +101,13 @@ export class MaterialTab {
         materialtab.MaterialWithoutTab = obj.MaterialWithoutTab;
         materialtab.CurrentMaterialTab = obj.CurrentMaterialTab;
         materialtab.GEEFCode = obj.GEEFCode;
-        materialtab.Group = Group.fromObject(obj.Group);
-        materialtab.Category = Category.fromObject(obj.Category);
+
+        if (obj.Group !== undefined) {
+            materialtab.Group = Group.fromObject(obj.Group);
+        }
+        if (obj.Category !== undefined) {
+            materialtab.Category = Category.fromObject(obj.Category);
+        }
         materialtab.ComparativesPrintPage_MaterialTabs = obj.ComparativesPrintPage_MaterialTabs;
         return materialtab;
     }

@@ -34,8 +34,12 @@ export class DirectMaterialBorrower {
         const dmb: DirectMaterialBorrower = new DirectMaterialBorrower();
         dmb.Id = obj.Id;
         dmb.Quantity = obj.Quantity;
-        dmb.Borrower = Borrower.fromObject(obj.Borrower);
-        dmb.MaterialTab = MaterialTab.fromObject(obj.MaterialTab);
+        if (obj.Borrower !== undefined) {
+            dmb.Borrower = Borrower.fromObject(obj.Borrower);
+        }
+        if (obj.MaterialTab !== undefined) {
+            dmb.MaterialTab = MaterialTab.fromObject(obj.MaterialTab);
+        }
         return dmb;
     }
 

@@ -32,7 +32,9 @@ export class Borrower {
         borrower.Id = obj.Id;
         borrower.Name = obj.Name;
         borrower.SerialNumber = obj.SerialNumber;
-        borrower.Manager = Manager.fromObject(obj.Manager);
+        if (obj.Manager !== undefined) {
+            borrower.Manager = Manager.fromObject(obj.Manager);
+        }
         return borrower;
     }
 

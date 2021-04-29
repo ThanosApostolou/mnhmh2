@@ -34,8 +34,13 @@ export class Subcategory {
         const subcategory = new Subcategory();
         subcategory.Id = obj.Id;
         subcategory.Name = obj.Name;
-        subcategory.MaterialTab = obj.MaterialTab;
-        subcategory.Borrower = obj.Borrower;
+
+        if (obj.MaterialTab !== undefined) {
+            subcategory.MaterialTab = MaterialTab.fromObject(obj.MaterialTab);
+        }
+        if (obj.Borrower !== undefined) {
+            subcategory.Borrower = Borrower.fromObject(obj.Borrower);
+        }
         return subcategory;
     }
 

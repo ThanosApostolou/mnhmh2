@@ -38,8 +38,14 @@ export class AmmunitionPortion {
         portion.Id = obj.Id;
         portion.Name = obj.Name;
         portion.Quantity = obj.Quantity;
-        portion.MaterialTab = obj.MaterialTab;
-        portion.AmmunitionStore = obj.AmmunitionStore;
+
+        if (obj.MaterialTab !== undefined) {
+            portion.MaterialTab = obj.MaterialTab;
+        }
+
+        if (obj.AmmunitionStore !== undefined) {
+            portion.AmmunitionStore = AmmunitionStore.fromObject(obj.AmmunitionStore);
+        }
         return portion;
     }
 
