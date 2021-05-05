@@ -24,6 +24,9 @@ export class ImportsExportsTbl {
     }
 
     static fromObject(obj: any): ImportsExportsTbl {
+        if (!obj) {
+            return null;
+        }
         const ietbl = new ImportsExportsTbl();
         ietbl.Id = obj.Id;
         ietbl.Date = obj.Date;
@@ -38,11 +41,11 @@ export class ImportsExportsTbl {
     }
 
     static listFromObjectList(objlist: any[]): ImportsExportsTbl[] {
-        const borrowers: ImportsExportsTbl[] = [];
+        const ietbls: ImportsExportsTbl[] = [];
         for (const obj of objlist) {
-            borrowers.push(ImportsExportsTbl.fromObject(obj));
+            ietbls.push(ImportsExportsTbl.fromObject(obj));
         }
-        return borrowers;
+        return ietbls;
     }
 
     static async listFromApi(cancelTokenSource: CancelTokenSource): Promise<ImportsExportsTbl[]> {
@@ -52,9 +55,12 @@ export class ImportsExportsTbl {
                 url: "/importsexportstbl",
                 cancelToken: cancelTokenSource.token,
             });
-            const materialtabs: ImportsExportsTbl[] = ImportsExportsTbl.listFromObjectList(response.data);
-            return materialtabs;
+            const importsexportstbls: ImportsExportsTbl[] = ImportsExportsTbl.listFromObjectList(response.data);
+
+            console.log("DATA", importsexportstbls);
+            return importsexportstbls;
         } catch (error) {
+            console.log("ERROR", error);
             return error;
         }
     }
@@ -90,7 +96,7 @@ export class ImportsExportsTbl {
                 Exported: ietbl.Exported,
                 Remaining: ietbl.Remaining,
                 Comments: ietbl.Comments,
-                MaterialTab: ietbl.MaterialTab.Name,
+                MaterialTab: ietbl.MaterialTab ? ietbl.MaterialTab.Name : null,
             };
             count++;
             rows.push(row);

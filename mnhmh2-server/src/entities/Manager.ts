@@ -1,11 +1,24 @@
 import { App } from "../App";
 import { DBManager } from "../DBManager";
+import {Entity, PrimaryColumn, Column, Like, OneToMany, OneToOne, JoinColumn, JoinTable } from "typeorm";
+import { Borrower } from "./Borrower";
 
+@Entity({name: "Managers"})
 export class Manager {
+    @PrimaryColumn()
     Id: number;
+
+    @Column()
     Name: string;
+
+    @Column()
     Rank: string;
+
+    @Column()
     Position: string;
+
+    @OneToMany(() => Borrower, (borrower) => borrower.Manager)
+    borrowers: Borrower[];
 
     toJson(): string {
         return JSON.stringify(this);
@@ -16,6 +29,9 @@ export class Manager {
     }
 
     static fromObject(obj: ManagerObj): Manager {
+        if (obj === null) {
+            return null;
+        }
         const manager = new Manager();
         manager.Id = obj.Id;
         manager.Name = obj.Name;
@@ -32,23 +48,6 @@ export class Manager {
         return managers;
     }
 
-    static fromDBObject(dbobj: any, prefix: string): Manager {
-        const manager: Manager = new Manager();
-        manager.Id = dbobj[prefix+"Id"];
-        manager.Name = dbobj[prefix+"Name"];
-        manager.Rank = dbobj[prefix+"Rank"];
-        manager.Position = dbobj[prefix+"Position"];
-        return manager;
-    }
-
-    static listFromDBObjectList(objlist: any[], prefix: string): Manager[] {
-        const managers: Manager[] = [];
-        for (const obj of objlist) {
-            managers.push(Manager.fromDBObject(obj, prefix));
-        }
-        return managers;
-    }
-
     /**
      * Returns a list with table's own (non foreign) fields
      */
@@ -56,55 +55,32 @@ export class Manager {
         return ["Id", "Name", "Rank", "Position"];
     }
 
-    static selectQuery(whereclause: string, prefix: string): string {
-        const wherestring = whereclause === null ? "" : ` WHERE ${whereclause}`;
-        const query = `
-            (SELECT ${DBManager.columnsStringFromList(Manager._getOwnFieldsList(), prefix)}
-            FROM Managers
-            ${wherestring})
-        `;
-        return query;
-    }
-
-    static searchWhereclause(search: string, prefix: string): string {
-        let whereclause = null;
-        if (search !== "") {
-            whereclause = `${prefix}Id LIKE '%${search}%' OR ${prefix}Name LIKE '%${search}%' OR ${prefix}Rank LIKE '%${search}%' OR ${prefix}Position LIKE '%${search}%'`;
-        }
-        return whereclause;
-    }
-    static insertQuery(manager: Manager): string {
-        const query = `
-            INSERT INTO Managers (Id, Name, Rank, Position)
-            VALUES ('${manager.Id}', '${manager.Name}', '${manager.Rank}', '${manager.Position}')
-        `;
-        return query;
-    }
-    static deleteQuery(Id: number): string {
-        const query = `
-            DELETE FROM Managers
-            WHERE Id='${Id}'
-        `;
-        return query;
-    }
-    static updateQuery(manager: Manager): string {
-        const query = `
-            UPDATE Managers
-            SET Name='${manager.Name}', Rank='${manager.Rank}', Position='${manager.Position}'
-            WHERE Id='${manager.Id}'
-        `;
-        return query;
-    }
-
-    static async listSelectFromDB(search: string): Promise<Manager[]> {
-        let managers: Manager[] = [];
+    static async listSelectFromDB(Id: number, notId: number, search: string): Promise<Manager[]> {
         try {
-            const whereclause = Manager.searchWhereclause(search, "");
-            const selectquery = Manager.selectQuery(whereclause, "");
-            const result = await App.app.dbmanager.execute(selectquery);
-            const recordset: ManagerObj[] = result.recordset;
-            managers = Manager.listFromDBObjectList(recordset, "");
+            const managers_query = App.app.dbmanager.managerRepo.createQueryBuilder("Manager");
+            if (Id !== null) {
+                managers_query.andWhere(`Manager.Id = '${Id}'`);
+            }
+            if (notId !== null) {
+                managers_query.andWhere(`Manager.Id != '${notId}'`);
+            }
+            if (search != null) {
+                managers_query.andWhere(`(Manager.Id LIKE '%${search}%' OR Manager.Name LIKE '%${search}%' OR Manager.Rank LIKE '%${search}%' OR Manager.Position LIKE '%${search}%')`);
+
+            }
+            const managers: Manager[] = await managers_query.getMany();
             return managers;
+        } catch(err) {
+            console.log(err);
+            throw err;
+        }
+    }
+    static async selectById(id: number): Promise<Manager> {
+        try {
+            const manager = await App.app.dbmanager.managerRepo.findOne(id, {
+                relations: ["borrowers"]
+            });
+            return manager;
         } catch(err) {
             console.log(err);
             throw err;
@@ -112,13 +88,10 @@ export class Manager {
     }
     static async insertToDB(manager: Manager): Promise<Manager> {
         try {
-            const result1 = await App.app.dbmanager.execute("SELECT MAX(Id) FROM Managers");
-            let maxId = 0;
-            if (result1.recordset.length > 0) {
-                maxId = result1.recordset[0][""];
-            }
+            const result = await App.app.dbmanager.managerRepo.createQueryBuilder().select("MAX(Manager.Id)", "max").getRawOne();
+            const maxId = result.max;
             manager.Id = 1 + maxId;
-            const result = await App.app.dbmanager.execute(Manager.insertQuery(manager));
+            await App.app.dbmanager.managerRepo.insert(manager);
             return manager;
         } catch(err) {
             console.log(err);
@@ -127,7 +100,7 @@ export class Manager {
     }
     static async deleteInDB(Id: number): Promise<void> {
         try {
-            const result = await App.app.dbmanager.execute(Manager.deleteQuery(Id));
+            await App.app.dbmanager.managerRepo.delete(Id);
         } catch(err) {
             console.log(err);
             throw err;
@@ -135,7 +108,7 @@ export class Manager {
     }
     static async updateInDB(manager: Manager): Promise<Manager> {
         try {
-            const result = await App.app.dbmanager.execute(Manager.updateQuery(manager));
+            await App.app.dbmanager.managerRepo.update(manager.Id, manager);
             return manager;
         } catch(err) {
             console.log(err);

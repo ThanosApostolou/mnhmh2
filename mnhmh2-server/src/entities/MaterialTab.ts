@@ -1,34 +1,68 @@
+import {Entity, PrimaryColumn, Column, ManyToOne, JoinColumn, Like } from "typeorm";
+
 import { App } from "../App";
 import { DBManager } from "../DBManager";
 import { Category, CategoryObj } from "./Category";
 import { Group, GroupObj } from "./Group";
 
+@Entity({name: "MaterialTabs"})
 export class MaterialTab {
+    @PrimaryColumn()
     Id: number;
+    @Column()
     PartialRegistryCode: string;
+    @Column()
     PartialRegistryCodeNumber: number;
+    @Column()
     AOEF: string;
+    @Column()
     Name: string;
+    @Column()
     MeasurementUnit: string;
+    @Column()
     TabRemainder: number;
+    @Column()
     Sum: number;
+    @Column()
     Difference: number;
+    @Column()
     Comments: string;
+    @Column()
     ImportSum: number;
+    @Column()
     ExportSum: number;
+    @Column()
     Found: number;
+    @Column()
     PendingCrediting: number;
+    @Column()
     Surplus: number;
+    @Column()
     Deficit: number;
+    @Column()
     Image: string;
+    @Column()
     GeneralRegistryCode: number;
+    @Column()
     Archived: boolean;
+    @Column()
     SerialNumber: number;
+    @Column()
     MaterialWithoutTab: boolean;
+    @Column()
     CurrentMaterialTab: boolean;
+    @Column()
     GEEFCode: string;
+
+    @ManyToOne(() => Group)
+    @JoinColumn({name: "Group"})
     Group: Group;
+
+    @ManyToOne(() => Category, { eager: true})
+    @JoinColumn({name: "Category"})
     Category: Category;
+
+    @Column()
     ComparativesPrintPage_MaterialTabs: number;
 
     toJson(): string {
@@ -40,6 +74,9 @@ export class MaterialTab {
     }
 
     static fromObject(obj: MaterialTabObj): MaterialTab {
+        if (obj === null) {
+            return null;
+        }
         const materialtab = new MaterialTab();
         materialtab.Id = obj.Id;
         materialtab.PartialRegistryCode = obj.PartialRegistryCode;
@@ -64,8 +101,13 @@ export class MaterialTab {
         materialtab.MaterialWithoutTab = obj.MaterialWithoutTab;
         materialtab.CurrentMaterialTab = obj.CurrentMaterialTab;
         materialtab.GEEFCode = obj.GEEFCode;
-        materialtab.Group = Group.fromObject(obj.Group);
-        materialtab.Category = Category.fromObject(obj.Category);
+
+        if (obj.Group !== undefined) {
+            materialtab.Group = Group.fromObject(obj.Group);
+        }
+        if (obj.Category !== undefined) {
+            materialtab.Category = Category.fromObject(obj.Category);
+        }
         materialtab.ComparativesPrintPage_MaterialTabs = obj.ComparativesPrintPage_MaterialTabs;
         return materialtab;
     }
@@ -78,82 +120,116 @@ export class MaterialTab {
         return materialtabs;
     }
 
-    static fromDBObject(obj: any, prefix: string): MaterialTab {
-        const materialtab = new MaterialTab();
-        materialtab.Id = obj[`${prefix}Id`];
-        materialtab.PartialRegistryCode = obj[`${prefix}PartialRegistryCode`];
-        materialtab.PartialRegistryCodeNumber = obj[`${prefix}PartialRegistryCodeNumber`];
-        materialtab.AOEF = obj[`${prefix}AOEF`];
-        materialtab.Name = obj[`${prefix}Name`];
-        materialtab.MeasurementUnit = obj[`${prefix}MeasurementUnit`];
-        materialtab.TabRemainder = obj[`${prefix}TabRemainder`];
-        materialtab.Sum = obj[`${prefix}Sum`];
-        materialtab.Difference = obj[`${prefix}Difference`];
-        materialtab.Comments = obj[`${prefix}Comments`];
-        materialtab.ImportSum = obj[`${prefix}ImportSum`];
-        materialtab.ExportSum = obj[`${prefix}ExportSum`];
-        materialtab.Found = obj[`${prefix}Found`];
-        materialtab.PendingCrediting = obj[`${prefix}PendingCrediting`];
-        materialtab.Surplus = obj[`${prefix}Surplus`];
-        materialtab.Deficit = obj[`${prefix}Deficit`];
-        materialtab.Image = obj[`${prefix}Image`];
-        materialtab.GeneralRegistryCode = obj[`${prefix}GeneralRegistryCode`];
-        materialtab.Archived = obj[`${prefix}Archived`];
-        materialtab.SerialNumber = obj[`${prefix}SerialNumber`];
-        materialtab.MaterialWithoutTab = obj[`${prefix}MaterialWithoutTab`];
-        materialtab.CurrentMaterialTab = obj[`${prefix}CurrentMaterialTab`];
-        materialtab.GEEFCode = obj[`${prefix}GEEFCode`];
-        materialtab.Group = Group.fromDBObject(obj, `${prefix}Groups.`);
-        materialtab.Category = Category.fromDBObject(obj, `${prefix}Categories.`);
-        materialtab.ComparativesPrintPage_MaterialTabs = obj[`${prefix}ComparativesPrintPage_MaterialTabs`];
-        return materialtab;
-    }
-
-
-    static listFromDBObjectList(objlist: any[], prefix: string): MaterialTab[] {
-        const materialtabs: MaterialTab[] = [];
-        for (const dbobj of objlist) {
-            materialtabs.push(MaterialTab.fromDBObject(dbobj, prefix));
-        }
-        return materialtabs;
-    }
-
-    /**
-     * Returns a list with table's own (non foreign) fields
-     */
-    private static _getOwnFieldsList(): string[] {
-        return ["Id", "PartialRegistryCode", "PartialRegistryCodeNumber",
-            "AOEF", "Name", "MeasurementUnit", "TabRemainder", "Sum", "Difference", "Comments", "ImportSum", "ExportSum", "Found",
-            "PendingCrediting", "Surplus", "Deficit", "Image", "GeneralRegistryCode", "Archived", "SerialNumber", "MaterialWithoutTab",
-            "CurrentMaterialTab", "GEEFCode", "ComparativesPrintPage_MaterialTabs"];
-    }
-
-    static selectQuery(whereclause: string, prefix: string): string {
-        const wherestring = whereclause === null ? "" : ` WHERE ${whereclause}`;
-        const query = `
-            (SELECT ${DBManager.columnsStringFromList(MaterialTab._getOwnFieldsList(), prefix)} , Groups.* , Categories.*
-            FROM MaterialTabs
-            LEFT JOIN ${Group.selectQuery(null, `${prefix}Groups.`)} as Groups
-            ON MaterialTabs.[Group] = Groups.[${prefix}Groups.Id]
-            LEFT JOIN ${Category.selectQuery(null, `${prefix}Categories.`)} as Categories
-            ON MaterialTabs.[Category] = Categories.[${prefix}Categories.Id]
-            ${wherestring})
-        `;
-        return query;
-    }
-
-    static async listSelectFromDB(whereclause: string): Promise<MaterialTab[]> {
-        let materialtabs: MaterialTab[] = [];
+    static async listSelectFromDB(search: string): Promise<MaterialTab[]> {
+        let mtbs: MaterialTab[] = [];
         try {
-            const result = await App.app.dbmanager.execute(MaterialTab.selectQuery(whereclause, ""));
-            const recordset: MaterialTabDBObj[] = result.recordset;
-            materialtabs = MaterialTab.listFromDBObjectList(recordset, "");
-            return materialtabs;
+            if (search === "") {
+                mtbs = await App.app.dbmanager.materialTabRepo.find({
+                    relations: ["Group", "Category"]
+                });
+            } else {
+                mtbs = await App.app.dbmanager.materialTabRepo.createQueryBuilder("MaterialTab")
+                    .leftJoinAndSelect("MaterialTab.Group", "Group")
+                    .leftJoinAndSelect("MaterialTab.Category", "Category")
+                    .where([
+                        {
+                            Id: Like(`%${search}%`)
+                        },
+                        {
+                            PartialRegistryCode: Like(`%${search}%`)
+                        },
+                        {
+                            PartialRegistryCodeNumber: Like(`%${search}%`)
+                        },
+                        {
+                            AOEF: Like(`%${search}%`)
+                        },
+                        {
+                            Name: Like(`%${search}%`)
+                        },
+                        {
+                            AOEF: Like(`%${search}%`)
+                        },
+                        {
+                            MeasurementUnit: Like(`%${search}%`)
+                        },
+                        {
+                            TabRemainder: Like(`%${search}%`)
+                        },
+                        {
+                            Sum: Like(`%${search}%`)
+                        },
+                        {
+                            Difference: Like(`%${search}%`)
+                        },
+                        {
+                            Comments: Like(`%${search}%`)
+                        },
+                        {
+                            ImportSum: Like(`%${search}%`)
+                        },
+                        {
+                            ExportSum: Like(`%${search}%`)
+                        },
+                        {
+                            PendingCrediting: Like(`%${search}%`)
+                        },
+                        {
+                            Surplus: Like(`%${search}%`)
+                        },
+                        {
+                            Deficit: Like(`%${search}%`)
+                        },
+                        {
+                            GeneralRegistryCode: Like(`%${search}%`)
+                        },
+                        {
+                            SerialNumber: Like(`%${search}%`)
+                        },
+                        {
+                            GEEFCode: Like(`%${search}%`)
+                        },
+                    ])
+                    .orWhere(`Group.Name LIKE '%${search}%' OR Group.LastRegistryCode LIKE '%${search}%' OR Group.SerialNumber LIKE '%${search}%'`)
+                    .orWhere(`Category.Name LIKE '%${search}%' OR Category.SerialNumber LIKE '%${search}%'`)
+                    .getMany();
+            }
+            return mtbs;
         } catch(err) {
             console.log(err);
             return (err);
         }
     }
+    static async insertToDB(mtb: MaterialTab): Promise<MaterialTab> {
+        try {
+            const result = await App.app.dbmanager.materialTabRepo.createQueryBuilder().select("MAX(MaterialTab.Id)", "max").getRawOne();
+            const maxId = result.max;
+            mtb.Id = 1 + maxId;
+            await App.app.dbmanager.materialTabRepo.insert(mtb);
+            return mtb;
+        } catch(err) {
+            console.log(err);
+            throw err;
+        }
+    }
+    static async deleteInDB(Id: number): Promise<void> {
+        try {
+            await App.app.dbmanager.materialTabRepo.delete(Id);
+        } catch(err) {
+            console.log(err);
+            throw err;
+        }
+    }
+    static async updateInDB(mtb: MaterialTab): Promise<MaterialTab> {
+        try {
+            await App.app.dbmanager.materialTabRepo.update(mtb.Id, mtb);
+            return mtb;
+        } catch(err) {
+            console.log(err);
+            throw err;
+        }
+    }
+
 }
 
 export interface MaterialTabObj {
@@ -183,38 +259,4 @@ export interface MaterialTabObj {
     Group: GroupObj;
     Category: CategoryObj;
     ComparativesPrintPage_MaterialTabs: number;
-}
-
-export interface MaterialTabDBObj {
-    "MaterialTabs.Id": number;
-    "MaterialTabs.PartialRegistryCode": string;
-    "MaterialTabs.PartialRegistryCodeNumber": number;
-    "MaterialTabs.AOEF": string;
-    "MaterialTabs.Name": string;
-    "MaterialTabs.MeasurementUnit": string;
-    "MaterialTabs.TabRemainder": number;
-    "MaterialTabs.Sum": number;
-    "MaterialTabs.Difference": number;
-    "MaterialTabs.Comments": string;
-    "MaterialTabs.ImportSum": number;
-    "MaterialTabs.ExportSum": number;
-    "MaterialTabs.Found": number;
-    "MaterialTabs.PendingCrediting": number;
-    "MaterialTabs.Surplus": number;
-    "MaterialTabs.Deficit": number;
-    "MaterialTabs.Image": string;
-    "MaterialTabs.GeneralRegistryCode": number;
-    "MaterialTabs.Archived": boolean;
-    "MaterialTabs.SerialNumber": number;
-    "MaterialTabs.MaterialWithoutTab": boolean;
-    "MaterialTabs.CurrentMaterialTab": boolean;
-    "MaterialTabs.GEEFCode": string;
-    "MaterialTabs.ComparativesPrintPage_MaterialTabs": number;
-    "Groups.Id": number;
-    "Groups.Name": string;
-    "Groups.LastRegistryCode": number;
-    "Groups.SerialNumber": number;
-    "Categories.Id": number;
-    "Categories.Name": string;
-    "Categories.SerialNumber": number;
 }

@@ -20,6 +20,9 @@ export class AmmunitionPortion {
     }
 
     static fromObject(obj: any): AmmunitionPortion {
+        if (!obj) {
+            return null;
+        }
         const portion = new AmmunitionPortion();
         portion.Id = obj.Id;
         portion.Name = obj.Name;

@@ -5,6 +5,8 @@ import { Alert } from "@material-ui/lab";
 import { Manager } from "../../../entities/Manager";
 import { ApiConsumer } from "../../../ApiConsumer";
 import { CancelTokenSource } from "axios";
+import { Borrower } from "../../../entities/Borrower";
+import { ManagerBorrowers } from "./ManagerBorrowers";
 
 export class ManagersEdit extends React.Component<ManagersEditProps, ManagersEditState> {
     state: Readonly<ManagersEditState>;
@@ -21,6 +23,7 @@ export class ManagersEdit extends React.Component<ManagersEditProps, ManagersEdi
         this.positionInputRef = React.createRef<HTMLInputElement>();
         this.state = {
             loading: false,
+            borrowers: [],
             errorSnackbarOpen: false
         };
     }
@@ -74,7 +77,7 @@ export class ManagersEdit extends React.Component<ManagersEditProps, ManagersEdi
         } else {
             return (
                 <Drawer anchor="right" open={this.props.openEditDrawer} >
-                    <Card style={{minWidth: "70vw", display:"flex", flexGrow: 1}}>
+                    <Card style={{minWidth: "70vw", display:"flex", flexGrow: 1, overflowY: "auto"}}>
                         <Grid container direction="column" style={{display:"flex", flexGrow: 1}}>
                             <Grid item>
                                 <Grid container direction="row" justify="center" alignContent="center" alignItems="center">
@@ -87,6 +90,7 @@ export class ManagersEdit extends React.Component<ManagersEditProps, ManagersEdi
 
                                     <Grid container direction="column" style={{display:"flex", flexGrow: 1}}>
                                         <fieldset>
+                                            <legend>Στοιχεία Μέλους Επιτροπής:</legend>
                                             <Grid container direction="column" justify="flex-start" alignContent="center" alignItems="center">
                                                 <TextField size="small" InputLabelProps={{ shrink: true }} label="Id" type="number" value={this.props.manager.Id} disabled />
                                                 <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ" defaultValue={this.props.manager.Name} inputRef={this.nameInputRef} />
@@ -94,7 +98,10 @@ export class ManagersEdit extends React.Component<ManagersEditProps, ManagersEdi
                                                 <TextField size="small" InputLabelProps={{ shrink: true }} label="ΘΕΣΗ" defaultValue={this.props.manager.Position} inputRef={this.positionInputRef} />
                                             </Grid>
                                         </fieldset>
-                                        <div style={{display: "flex", flexGrow: 1}} />
+                                        <fieldset style={{display: "flex", flexGrow: 1}}>
+                                            <legend>Μερικοί Διαχειριστές που είναι υπεύθυνος:</legend>
+                                            <ManagerBorrowers manager={this.props.manager} />
+                                        </fieldset>
                                         <CardActions>
                                             <Grid container direction="row" justify="flex-end">
 
@@ -147,5 +154,6 @@ export interface ManagersEditProps {
 
 interface ManagersEditState {
     loading: boolean;
+    borrowers: Borrower[];
     errorSnackbarOpen: boolean;
 }

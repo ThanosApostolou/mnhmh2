@@ -13,9 +13,65 @@ export class ImportsExportsTblController {
 
     async GET(): Promise<void> {
         try {
-            const ietbls = await ImportsExportsTbl.listSelectFromDB(null);
+            let search = "";
+            if (this.req.query["search"]) {
+                search = this.req.query["search"].toString().trim();
+            }
+            const importsexportstbls = await ImportsExportsTbl.listSelectFromDB(search);
             this.res.setHeader("Content-Type", "application/json");
-            this.res.send(ImportsExportsTbl.listToJson(ietbls));
+            this.res.send(ImportsExportsTbl.listToJson(importsexportstbls));
+        } catch(err) {
+            console.log(err);
+            this.res.status(500);
+            this.res.send(err);
+        }
+    }
+
+    async POST(): Promise<void> {
+        try {
+            const body = this.req.body;
+            const importsexportstbl = ImportsExportsTbl.fromObject(body.group);
+            //if (!importsexportstbl.Name || importsexportstbl.Name === null || importsexportstbl.Name === "") {
+            //    this.res.status(422);
+            //    this.res.setHeader("Content-Type", "application/json");
+            //    this.res.send({error: "Name cannot be empty!"});
+            //} else {
+            await ImportsExportsTbl.insertToDB(importsexportstbl);
+            this.res.setHeader("Content-Type", "application/json");
+            this.res.send({message: "OK"});
+            //}
+        } catch(err) {
+            console.log(err);
+            this.res.status(500);
+            this.res.send(err);
+        }
+    }
+    async DELETE(): Promise<void> {
+        try {
+            const body = this.req.body;
+            const Id: number = body.Id;
+            await ImportsExportsTbl.deleteInDB(Id);
+            this.res.setHeader("Content-Type", "application/json");
+            this.res.send({message: "OK"});
+        } catch(err) {
+            console.log(err);
+            this.res.status(500);
+            this.res.send(err);
+        }
+    }
+    async PUT(): Promise<void> {
+        try {
+            const body = this.req.body;
+            const importsexportstbl = ImportsExportsTbl.fromObject(body.group);
+            //if (!importsexportstbl.Name || importsexportstbl.Name === null || importsexportstbl.Name === "") {
+            //    this.res.status(422);
+            //    this.res.setHeader("Content-Type", "application/json");
+            //    this.res.send({error: "Name cannot be empty!"});
+            //} else {
+            await ImportsExportsTbl.updateInDB(importsexportstbl);
+            this.res.setHeader("Content-Type", "application/json");
+            this.res.send({message: "OK"});
+            //}
         } catch(err) {
             console.log(err);
             this.res.status(500);

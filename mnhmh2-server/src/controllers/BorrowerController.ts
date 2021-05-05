@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 
-import { App } from "../App";
 import { Borrower } from "../entities/Borrower";
 
 export class BorrowerController {
@@ -14,11 +13,31 @@ export class BorrowerController {
 
     async GET(): Promise<void> {
         try {
-            let search = "";
+            let search = null;
             if (this.req.query["search"]) {
                 search = this.req.query["search"].toString().trim();
             }
-            const borrowers = await Borrower.listSelectFromDB(search);
+            let withManager = true;
+            if (this.req.query["withManager"]) {
+                withManager = (this.req.query["withManager"].toString().trim() === "true");
+            }
+            let Id = null;
+            if (this.req.query["Id"]) {
+                Id = parseInt(this.req.query["Id"].toString().trim());
+            }
+            let notId = null;
+            if (this.req.query["notId"]) {
+                notId = parseInt(this.req.query["notId"].toString().trim());
+            }
+            let managerId = null;
+            if (this.req.query["managerId"]) {
+                managerId = parseInt(this.req.query["managerId"].toString().trim());
+            }
+            let notManagerId = null;
+            if (this.req.query["notManagerId"]) {
+                notManagerId = parseInt(this.req.query["notManagerId"].toString().trim());
+            }
+            const borrowers = await Borrower.listSelectFromDB(Id, notId, search, withManager, managerId, notManagerId);
             this.res.setHeader("Content-Type", "application/json");
             this.res.send(Borrower.listToJson(borrowers));
         } catch(err) {
@@ -63,7 +82,7 @@ export class BorrowerController {
     async PUT(): Promise<void> {
         try {
             const body = this.req.body;
-            const borrower = Borrower.fromObject(body.manager);
+            const borrower = Borrower.fromObject(body.borrower);
             if (!borrower.Name || borrower.Name === null || borrower.Name === "") {
                 this.res.status(422);
                 this.res.setHeader("Content-Type", "application/json");

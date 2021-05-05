@@ -1,13 +1,25 @@
+import {Entity, PrimaryColumn, Column, ManyToOne, JoinColumn, Like } from "typeorm";
+
 import { App } from "../App";
 import { DBManager } from "../DBManager";
 import { AmmunitionStore } from "./AmmunitionStore";
 import { MaterialTab } from "./MaterialTab";
 
+@Entity({name: "AmmunitionPortions"})
 export class AmmunitionPortion {
+    @PrimaryColumn()
     Id: number;
+    @Column()
     Name: string;
+    @Column()
     Quantity: number;
+
+    @ManyToOne(() => MaterialTab)
+    @JoinColumn({name: "MaterialTab"})
     MaterialTab: MaterialTab;
+
+    @ManyToOne(() => AmmunitionStore)
+    @JoinColumn({name: "AmmunitionStore"})
     AmmunitionStore: AmmunitionStore;
 
     toJson(): string {
@@ -19,12 +31,21 @@ export class AmmunitionPortion {
     }
 
     static fromObject(obj: any): AmmunitionPortion {
+        if (obj === null) {
+            return null;
+        }
         const portion = new AmmunitionPortion();
         portion.Id = obj.Id;
         portion.Name = obj.Name;
         portion.Quantity = obj.Quantity;
-        portion.MaterialTab = obj.MaterialTab;
-        portion.AmmunitionStore = obj.AmmunitionStore;
+
+        if (obj.MaterialTab !== undefined) {
+            portion.MaterialTab = obj.MaterialTab;
+        }
+
+        if (obj.AmmunitionStore !== undefined) {
+            portion.AmmunitionStore = AmmunitionStore.fromObject(obj.AmmunitionStore);
+        }
         return portion;
     }
 
@@ -36,24 +57,6 @@ export class AmmunitionPortion {
         return portions;
     }
 
-    static fromDBObject(obj: any, prefix: string): AmmunitionPortion {
-        const portion = new AmmunitionPortion();
-        portion.Id = obj[`${prefix}Id`];
-        portion.Name = obj[`${prefix}Name`];
-        portion.Quantity = obj[`${prefix}Quantity`];
-        portion.MaterialTab = MaterialTab.fromDBObject(obj, `${prefix}MaterialTabs.`);
-        portion.AmmunitionStore = AmmunitionStore.fromDBObject(obj, `${prefix}AmmunitionStores.`);
-        return portion;
-    }
-
-    static listFromDBObjectList(objlist: any[], prefix: string): AmmunitionPortion[] {
-        const portions: AmmunitionPortion[] = [];
-        for (const obj of objlist) {
-            portions.push(AmmunitionPortion.fromDBObject(obj, prefix));
-        }
-        return portions;
-    }
-
     /**
      * Returns a list with table's own (non foreign) fields
      */
@@ -61,29 +64,65 @@ export class AmmunitionPortion {
         return ["Id", "Name", "Quantity"];
     }
 
-    static selectQuery(whereclause: string, prefix: string): string {
-        const wherestring = whereclause === null ? "" : ` WHERE ${whereclause}`;
-        const query = `
-            (SELECT ${DBManager.columnsStringFromList(AmmunitionPortion._getOwnFieldsList(), prefix)} , MaterialTabs.*, AmmunitionStores.*
-            FROM AmmunitionPortions
-            LEFT JOIN ${MaterialTab.selectQuery(null, "MaterialTabs.")} as MaterialTabs
-            ON AmmunitionPortions.[MaterialTab] = MaterialTabs.[${prefix}MaterialTabs.Id]
-            LEFT JOIN ${AmmunitionStore.selectQuery(null, "AmmunitionStores.")} as AmmunitionStores
-            ON AmmunitionPortions.[AmmunitionStore] = AmmunitionStores.[${prefix}AmmunitionStores.Id]
-            ${wherestring})
-        `;
-        return query;
-    }
-
-    static async listSelectFromDB(): Promise<AmmunitionPortion[]> {
+    static async listSelectFromDB(search: string): Promise<AmmunitionPortion[]> {
         let portions: AmmunitionPortion[] = [];
         try {
-            const result = await App.app.dbmanager.execute(AmmunitionPortion.selectQuery(null, ""));
-            portions = AmmunitionPortion.listFromDBObjectList(result.recordset, "");
+            if (search === "") {
+                portions = await App.app.dbmanager.ammunitionPortionRepo.find({
+                    relations: ["MaterialTab", "AmmunitionStore"]
+                });
+            } else {
+                portions = await App.app.dbmanager.ammunitionPortionRepo.createQueryBuilder("AmmunitionPortion")
+                    .leftJoinAndSelect("AmmunitionPortion.MaterialTab", "MaterialTab")
+                    .leftJoinAndSelect("AmmunitionPortion.AmmunitionStore", "AmmunitionStore")
+                    .where([
+                        {
+                            Id: Like(`%${search}%`)
+                        },
+                        {
+                            Name: Like(`%${search}%`)
+                        },
+                        {
+                            Quantity: Like(`%${search}%`)
+                        },
+                    ])
+                    .orWhere(`MaterialTab.PartialRegistryCode LIKE '%${search}%' OR MaterialTab.Name LIKE '%${search}%'`)
+                    .orWhere(`AmmunitionStore.Name LIKE '%${search}%' OR AmmunitionStore.SerialNumber LIKE '%${search}%'`)
+                    .getMany();
+            }
             return portions;
         } catch(err) {
             console.log(err);
             return (err);
+        }
+    }
+    static async insertToDB(portions: AmmunitionPortion): Promise<AmmunitionPortion> {
+        try {
+            const result = await App.app.dbmanager.ammunitionPortionRepo.createQueryBuilder().select("MAX(AmmunitionPortion.Id)", "max").getRawOne();
+            const maxId = result.max;
+            portions.Id = 1 + maxId;
+            await App.app.dbmanager.ammunitionPortionRepo.insert(portions);
+            return portions;
+        } catch(err) {
+            console.log(err);
+            throw err;
+        }
+    }
+    static async deleteInDB(Id: number): Promise<void> {
+        try {
+            await App.app.dbmanager.ammunitionPortionRepo.delete(Id);
+        } catch(err) {
+            console.log(err);
+            throw err;
+        }
+    }
+    static async updateInDB(portions: AmmunitionPortion): Promise<AmmunitionPortion> {
+        try {
+            await App.app.dbmanager.ammunitionPortionRepo.update(portions.Id, portions);
+            return portions;
+        } catch(err) {
+            console.log(err);
+            throw err;
         }
     }
 }

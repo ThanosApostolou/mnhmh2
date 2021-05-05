@@ -1,6 +1,7 @@
 import { GridColDef, GridRowData, GridRowsProp } from "@material-ui/data-grid";
 import { CancelTokenSource } from "axios";
 import App from "../App";
+import { Borrower } from "./Borrower";
 
 export class Manager {
     Id: number;
@@ -17,6 +18,9 @@ export class Manager {
     }
 
     static fromObject(obj: any): Manager {
+        if (!obj) {
+            return null;
+        }
         const manager = new Manager();
         manager.Id = obj.Id;
         manager.Name = obj.Name;
@@ -90,19 +94,40 @@ export class Manager {
             throw error;
         }
     }
-    static async listFromApi(cancelTokenSource: CancelTokenSource, search: string): Promise<Manager[]> {
+    static async listFromApi(cancelTokenSource: CancelTokenSource, Id: number, notId: number, search: string): Promise<Manager[]> {
         try {
             const response = await App.app.apiconsumer.axios.request({
                 method: "get",
                 url: "/manager",
                 cancelToken: cancelTokenSource.token,
                 params: {
+                    Id: Id,
+                    notId: notId,
                     search: search
                 }
             });
             console.log("response", response);
             const managers: Manager[] = Manager.listFromObjectList(response.data);
             return managers;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+    static async fromApiWithBorrowers(cancelTokenSource: CancelTokenSource, id: number): Promise<[Manager, Borrower[]]> {
+        try {
+            const response = await App.app.apiconsumer.axios.request({
+                method: "get",
+                url: "/manager",
+                cancelToken: cancelTokenSource.token,
+                params: {
+                    id: id
+                }
+            });
+            console.log("response", response);
+            const manager: Manager = Manager.fromObject(response.data);
+            const borrowers: Borrower[] = Borrower.listFromObjectList(response.data.borrowers);
+            return [manager, borrowers];
         } catch (error) {
             console.log(error);
             throw error;

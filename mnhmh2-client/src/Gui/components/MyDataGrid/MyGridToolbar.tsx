@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 
 import { Tooltip, Button, Grid } from "@material-ui/core";
-import { Refresh, Print, Add, Edit, Restore } from "@material-ui/icons";
+import { Refresh, Print, Restore } from "@material-ui/icons";
 
 import { GridToolbarContainer, GridFilterToolbarButton, GridToolbarExport, GridToolbarContainerProps, GridDensity, GridColDef } from "@material-ui/data-grid";
 
@@ -21,18 +21,6 @@ export class MyGridToolbar extends React.Component<MyGridToolbarProps, any> {
             <GridToolbarContainer>
                 <Grid container direction="column">
                     <Grid container direction="row" justify="space-between" alignContent="center" alignItems="center">
-                        <Grid item>
-                            <Grid container direction="row" justify="flex-start" alignContent="center" alignItems="center">
-                                <Button size="small" color="primary" onClick={this.props.onAddClick}>
-                                    <Add />
-                                    &nbsp;Προσθηκη
-                                </Button>
-                                <Button size="small" color="primary" onClick={this.props.onEditClick} disabled={this.props.selectedRow === null}>
-                                    <Edit />
-                                    &nbsp;Τροποποιηση
-                                </Button>
-                            </Grid>
-                        </Grid>
                         <Grid item>
                             <Grid container direction="row" justify="flex-start" alignContent="center" alignItems="center">
                                 <MyGridColumnsComp columns={this.props.columns} onColumnsSave={this.props.onColumnsSave.bind(this)} />
@@ -74,8 +62,6 @@ export interface MyGridToolbarProps extends GridToolbarContainerProps {
     selectedRow?: any;
     density?: GridDensity;
     columns?: GridColDef[];
-    onAddClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
-    onEditClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
     onColumnsSave?: (columns: GridColDef[]) => void;
     onDensityChange?: (density: GridDensity) => void;
     onRestoreClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;

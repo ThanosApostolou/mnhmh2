@@ -19,6 +19,9 @@ export class DirectMaterialBorrower {
     }
 
     static fromObject(obj: any): DirectMaterialBorrower {
+        if (!obj) {
+            return null;
+        }
         const dmb = new DirectMaterialBorrower();
         dmb.Id = obj.Id;
         dmb.Quantity = obj.Quantity;
@@ -73,10 +76,10 @@ export class DirectMaterialBorrower {
                 AA: count,
                 Id: subcategory.Id,
                 Quantity: subcategory.Quantity,
-                MaterialTabId: subcategory.MaterialTab.Id,
-                MaterialTabPartialRegistryCode: subcategory.MaterialTab.PartialRegistryCode,
-                BorrowerId: subcategory.Borrower.Id,
-                BorrowerName: subcategory.Borrower.Name,
+                MaterialTabId: subcategory.MaterialTab ? subcategory.MaterialTab.Id : null,
+                MaterialTabPartialRegistryCode: subcategory.MaterialTab ? subcategory.MaterialTab.PartialRegistryCode : null,
+                BorrowerId: subcategory.Borrower ? subcategory.Borrower.Id : null,
+                BorrowerName: subcategory.Borrower ? subcategory.Borrower.Name : null,
 
             };
             count++;

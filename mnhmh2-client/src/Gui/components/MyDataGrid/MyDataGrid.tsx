@@ -81,18 +81,6 @@ export class MyDataGrid extends React.Component<DataCompProps, DataCompState> {
         }
     }
 
-    onAddClick(event: React.MouseEvent<HTMLButtonElement>): void {
-        console.log("add clicked", event);
-        if (this.props.onAddClick) {
-            this.props.onAddClick(event);
-        }
-    }
-    onEditClick(event: React.MouseEvent<HTMLButtonElement>): void {
-        console.log("edit clicked", event);
-        if (this.props.onEditClick) {
-            this.props.onEditClick(event);
-        }
-    }
     onColumnsSave(columns: GridColDef[]): void {
         this.setState({columns: []});
         setTimeout(() => {
@@ -112,8 +100,8 @@ export class MyDataGrid extends React.Component<DataCompProps, DataCompState> {
     }
     onRefreshClick(event: React.MouseEvent<HTMLButtonElement>): void {
         this.props.cancelFetchData();
+        this.setState({page: 0, selectedRow: null});
         this.props.fetchData();
-        this.setState({page: 0});
         if (this.props.onRefreshClick) {
             this.props.onRefreshClick(event);
         }
@@ -137,7 +125,7 @@ export class MyDataGrid extends React.Component<DataCompProps, DataCompState> {
     render(): ReactNode {
         return (
             <div style={{flexGrow: 1}}>
-                <Card elevation={6} style={{height: "100%", width: "100%"}}>
+                <Card elevation={6} style={{height: "max(100%, 250px)", width: "100%"}}>
                     <DataGrid rows={this.props.rows} columns={this.state.columns} rowsPerPageOptions={[5, 10, 15, 20, 25, 50, 100]} pagination showColumnRightBorder={true} showCellRightBorder={true}
                         pageSize={this.state.pageSize}
                         columnBuffer={10} rowHeight={64}
@@ -151,13 +139,14 @@ export class MyDataGrid extends React.Component<DataCompProps, DataCompState> {
                                 selectedRow: this.state.selectedRow,
                                 density: this.state.density,
                                 columns: this.state.columns,
-                                onAddClick: this.onAddClick.bind(this),
-                                onEditClick: this.onEditClick.bind(this),
                                 onColumnsSave: this.onColumnsSave.bind(this),
                                 onDensityChange: this.onDensityChange.bind(this),
                                 onRestoreClick: this.onRestoreClick.bind(this),
                                 onRefreshClick: this.onRefreshClick.bind(this),
                                 onPrintClick: this.onPrintClick.bind(this),
+                            },
+                            footer: {
+                                actions: this.props.actions
                             }
                         }}
                         onPageSizeChange={this.onPageSizeChange.bind(this)}
@@ -193,11 +182,10 @@ export interface DataCompProps {
     loading: boolean;
     error: any;
     storagePrefix: string;
+    actions?: ReactNode;
     fetchData: () => void;
     cancelFetchData: () => void;
     onRowSelected?: (params: GridRowSelectedParams) => void;
-    onAddClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
-    onEditClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
     onRefreshClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
     onPrintClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }

@@ -1,10 +1,16 @@
-import { App } from "../App";
-import { DBManager } from "../DBManager";
+import {Entity, PrimaryColumn, Column, Like } from "typeorm";
 
+import { App } from "../App";
+
+@Entity({name: "Groups"})
 export class Group {
+    @PrimaryColumn()
     Id: number;
+    @Column()
     Name: string;
+    @Column()
     LastRegistryCode: number;
+    @Column()
     SerialNumber: number;
 
     toJson(): string {
@@ -16,6 +22,9 @@ export class Group {
     }
 
     static fromObject(obj: GroupObj): Group {
+        if (obj === null) {
+            return null;
+        }
         const group = new Group();
         group.Id = obj.Id;
         group.Name = obj.Name;
@@ -32,22 +41,6 @@ export class Group {
         return groups;
     }
 
-    static fromDBObject(obj: any, prefix: string): Group {
-        const group = new Group();
-        group.Id = obj[`${prefix}Id`];
-        group.Name = obj[`${prefix}Name`];
-        group.LastRegistryCode = obj[`${prefix}LastRegistryCode`];
-        group.SerialNumber = obj[`${prefix}SerialNumber`];
-        return group;
-    }
-    static listFromDBObjectList(objlist: any[], prefix: string): Group[] {
-        const groups: Group[] = [];
-        for (const obj of objlist) {
-            groups.push(Group.fromDBObject(obj, prefix));
-        }
-        return groups;
-    }
-
     /**
      * Returns a list with table's own (non foreign) fields
      */
@@ -55,53 +48,41 @@ export class Group {
         return ["Id", "Name", "LastRegistryCode", "SerialNumber"];
     }
 
-    static selectQuery(whereclause: string, prefix: string): string {
-        const wherestring = whereclause === null ? "" : ` WHERE ${whereclause}`;
-        const query = `
-            (SELECT ${DBManager.columnsStringFromList(Group._getOwnFieldsList(), prefix)}
-            FROM Groups
-            ${wherestring})
-        `;
-        return query;
-    }
-    static searchWhereclause(search: string, prefix: string): string {
-        let whereclause = null;
-        if (search !== "") {
-            whereclause = `${prefix}Id LIKE '%${search}%' OR ${prefix}Name LIKE '%${search}%' OR ${prefix}LastRegistryCode LIKE '%${search}%' OR ${prefix}SerialNumber LIKE '%${search}%'`;
-        }
-        return whereclause;
-    }
-    static insertQuery(group: Group): string {
-        const query = `
-            INSERT INTO Groups (Id, Name, LastRegistryCode, SerialNumber)
-            VALUES ('${group.Id}', '${group.Name}', '${group.LastRegistryCode}', '${group.SerialNumber}')
-        `;
-        return query;
-    }
-    static deleteQuery(Id: number): string {
-        const query = `
-            DELETE FROM Groups
-            WHERE Id='${Id}'
-        `;
-        return query;
-    }
-    static updateQuery(group: Group): string {
-        const query = `
-            UPDATE Groups
-            SET Name='${group.Name}', LastRegistryCode='${group.LastRegistryCode}', SerialNumber='${group.SerialNumber}'
-            WHERE Id='${group.Id}'
-        `;
-        return query;
-    }
-
-    static async listSelectFromDB(search: string): Promise<Group[]> {
-        let groups: Group[] = [];
+    static async listSelectFromDB(Id: number, notId: number, search: string): Promise<Group[]> {
+        //*const groups: Group[] = [];
         try {
-            const whereclause = Group.searchWhereclause(search, "");
-            const selectquery = Group.selectQuery(whereclause, "");
-            const result = await App.app.dbmanager.execute(selectquery);
-            const recordset: GroupObj[] = result.recordset;
-            groups = Group.listFromDBObjectList(recordset, "");
+            /*if (search === null) {
+                groups = await App.app.dbmanager.groupRepo.find();
+            } else {
+                groups = await App.app.dbmanager.groupRepo.find({
+                    where: [
+                        {
+                            Id: Like(`%${search}%`)
+                        },
+                        {
+                            Name: Like(`%${search}%`)
+                        },
+                        {
+                            LastRegistryCode: Like(`%${search}%`)
+                        },
+                        {
+                            SerialNumber: Like(`%${search}%`)
+                        }
+                    ]
+                });
+            }*/
+            const groups_query = App.app.dbmanager.groupRepo.createQueryBuilder("Group");
+            if (Id !== null) {
+                groups_query.andWhere(`Group.Id = '${Id}'`);
+            }
+            if (notId !== null) {
+                groups_query.andWhere(`Group.Id != '${notId}'`);
+            }
+            if (search != null) {
+                groups_query.andWhere(`(Group.Id LIKE '%${search}%' OR Group.Name LIKE '%${search}%' OR Group.LastRegistryCode LIKE '%${search}%' OR Group.SerialNumber LIKE '%${search}%')`);
+
+            }
+            const groups: Group[] = await groups_query.getMany();
             return groups;
         } catch(err) {
             console.log(err);
@@ -110,13 +91,10 @@ export class Group {
     }
     static async insertToDB(group: Group): Promise<Group> {
         try {
-            const result1 = await App.app.dbmanager.execute("SELECT MAX(Id) FROM Groups");
-            let maxId = 0;
-            if (result1.recordset.length > 0) {
-                maxId = result1.recordset[0][""];
-            }
+            const result = await App.app.dbmanager.groupRepo.createQueryBuilder().select("MAX(Group.Id)", "max").getRawOne();
+            const maxId = result.max;
             group.Id = 1 + maxId;
-            const result = await App.app.dbmanager.execute(Group.insertQuery(group));
+            await App.app.dbmanager.groupRepo.insert(group);
             return group;
         } catch(err) {
             console.log(err);
@@ -125,7 +103,7 @@ export class Group {
     }
     static async deleteInDB(Id: number): Promise<void> {
         try {
-            const result = await App.app.dbmanager.execute(Group.deleteQuery(Id));
+            await App.app.dbmanager.groupRepo.delete(Id);
         } catch(err) {
             console.log(err);
             throw err;
@@ -133,7 +111,7 @@ export class Group {
     }
     static async updateInDB(group: Group): Promise<Group> {
         try {
-            const result = await App.app.dbmanager.execute(Group.updateQuery(group));
+            await App.app.dbmanager.groupRepo.update(group.Id, group);
             return group;
         } catch(err) {
             console.log(err);

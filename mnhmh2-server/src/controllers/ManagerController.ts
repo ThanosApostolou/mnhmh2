@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import {Like} from "typeorm";
 
 import { App } from "../App";
 import { Manager } from "../entities/Manager";
@@ -14,12 +15,20 @@ export class ManagerController {
 
     async GET(): Promise<void> {
         try {
-            let search = "";
+            this.res.setHeader("Content-Type", "application/json");
+            let search = null;
             if (this.req.query["search"]) {
                 search = this.req.query["search"].toString().trim();
             }
-            const managers = await Manager.listSelectFromDB(search);
-            this.res.setHeader("Content-Type", "application/json");
+            let Id = null;
+            if (this.req.query["Id"]) {
+                Id = parseInt(this.req.query["Id"].toString().trim());
+            }
+            let notId = null;
+            if (this.req.query["notId"]) {
+                notId = parseInt(this.req.query["notId"].toString().trim());
+            }
+            const managers = await Manager.listSelectFromDB(Id, notId, search);
             this.res.send(Manager.listToJson(managers));
         } catch(err) {
             console.log(err);

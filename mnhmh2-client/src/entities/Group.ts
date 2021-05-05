@@ -17,6 +17,9 @@ export class Group {
     }
 
     static fromObject(obj: any): Group {
+        if (!obj) {
+            return null;
+        }
         const group = new Group();
         group.Id = obj.Id;
         group.Name = obj.Name;
@@ -90,13 +93,15 @@ export class Group {
         }
     }
 
-    static async listFromApi(cancelTokenSource: CancelTokenSource, search: string): Promise<Group[]> {
+    static async listFromApi(cancelTokenSource: CancelTokenSource, Id: number, notId: number, search: string): Promise<Group[]> {
         try {
             const response = await App.app.apiconsumer.axios.request({
                 method: "get",
                 url: "/group",
                 cancelToken: cancelTokenSource.token,
                 params: {
+                    Id: Id,
+                    notId: notId,
                     search: search
                 }
             });

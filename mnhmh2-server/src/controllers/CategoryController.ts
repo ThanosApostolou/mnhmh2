@@ -1,12 +1,11 @@
 import { Request, Response } from "express";
 
-import { App } from "../App";
 import { Category } from "../entities/Category";
 
 export class CategoryController {
     req: Request = null;
     res: Response = null;
-    
+
     constructor(req: Request, res: Response) {
         this.req = req;
         this.res = res;
@@ -14,9 +13,65 @@ export class CategoryController {
 
     async GET(): Promise<void> {
         try {
-            const categories = await Category.listSelectFromDB(null);
+            let search = "";
+            if (this.req.query["search"]) {
+                search = this.req.query["search"].toString().trim();
+            }
+            const categories = await Category.listSelectFromDB(search);
             this.res.setHeader("Content-Type", "application/json");
             this.res.send(Category.listToJson(categories));
+        } catch(err) {
+            console.log(err);
+            this.res.status(500);
+            this.res.send(err);
+        }
+    }
+
+    async POST(): Promise<void> {
+        try {
+            const body = this.req.body;
+            const category = Category.fromObject(body.group);
+            if (!category.Name || category.Name === null || category.Name === "") {
+                this.res.status(422);
+                this.res.setHeader("Content-Type", "application/json");
+                this.res.send({error: "Name cannot be empty!"});
+            } else {
+                await Category.insertToDB(category);
+                this.res.setHeader("Content-Type", "application/json");
+                this.res.send({message: "OK"});
+            }
+        } catch(err) {
+            console.log(err);
+            this.res.status(500);
+            this.res.send(err);
+        }
+    }
+    async DELETE(): Promise<void> {
+        try {
+            const body = this.req.body;
+            const Id: number = body.Id;
+            await Category.deleteInDB(Id);
+            this.res.setHeader("Content-Type", "application/json");
+            this.res.send({message: "OK"});
+        } catch(err) {
+            console.log(err);
+            this.res.status(500);
+            this.res.send(err);
+        }
+    }
+    async PUT(): Promise<void> {
+        try {
+            const body = this.req.body;
+            const category = Category.fromObject(body.group);
+            if (!category.Name || category.Name === null || category.Name === "") {
+                this.res.status(422);
+                this.res.setHeader("Content-Type", "application/json");
+                this.res.send({error: "Name cannot be empty!"});
+            } else {
+                await Category.updateInDB(category);
+                this.res.setHeader("Content-Type", "application/json");
+                this.res.send({message: "OK"});
+            }
         } catch(err) {
             console.log(err);
             this.res.status(500);

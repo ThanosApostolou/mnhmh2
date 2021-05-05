@@ -3,24 +3,20 @@ import { Card, CardContent, TextField, Tooltip, IconButton, Grid, Snackbar } fro
 import { Search } from "@material-ui/icons";
 import { Alert } from "@material-ui/lab";
 
-
-import { MyDataGrid } from "../../components/MyDataGrid/MyDataGrid";
 import { Manager } from "../../../entities/Manager";
-import { CancelTokenSource } from "axios";
-import { ApiConsumer } from "../../../ApiConsumer";
-import { GridRowSelectedParams, GridRowsProp } from "@material-ui/data-grid";
+import { GridRowsProp } from "@material-ui/data-grid";
 import { ManagersAdd } from "./ManagersAdd";
 import { ManagersEdit } from "./ManagersEdit";
+import { AddEditActions } from "../../components/AddEditActions";
+import { ManagerDataGrid } from "./ManagerDataGrid";
 
 export class ManagersPage extends React.Component<Record<string, never>, ManagersPageState> {
     state: Readonly<ManagersPageState>;
-    cancelTokenSource: CancelTokenSource;
     search: string;
 
     constructor(props: Record<string, never>) {
         super(props);
         this.state = {
-            managers: null,
             selectedManager: null,
             rows: [],
             loading: true,
@@ -29,42 +25,22 @@ export class ManagersPage extends React.Component<Record<string, never>, Manager
             openAddDrawer: false,
             openEditDrawer: false,
             openSnackbar: false,
-            snackbarMessage: ""
+            snackbarMessage: "",
+            fetchData: false
         };
-        this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
         this.search = "";
     }
 
     fetchData(): void {
-        console.log("fetch data", this.search);
-        this.cancelFetchData();
-        this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
-        this.setState({rows: []});
-        this.setState({loading : true});
-        Manager.listFromApi(this.cancelTokenSource, this.search).then((data: any) => {
-            this.setState({managers: data});
-            this.setState({rows: Manager.getRows(this.state.managers)});
-        }).catch((error) => {
-            this.setState({managers: null});
-            this.setState({rows: []});
-            this.setState({error: error});
-        }).finally(() => {
-            this.setState({loading: false});
-        });
+        this.setState({fetchData: !this.state.fetchData});
     }
 
-    cancelFetchData(): void {
-        this.cancelTokenSource.cancel("cancel fetching data");
+    onFetchData(): void {
+        this.setState({selectedManager: null});
     }
 
-    onRowSelected(params: GridRowSelectedParams): void {
-        if (this.state.managers && this.state.managers !== null && this.state.managers.length > 0) {
-            this.setState({selectedManager: this.state.managers[params.data.AA - 1]});
-        } else {
-            this.setState({selectedManager: null});
-        }
-
-        console.log("manager", this.state.selectedManager);
+    onRowSelected(manager: Manager): void {
+        this.setState({selectedManager: manager});
     }
 
     onAddClick(): void {
@@ -95,10 +71,12 @@ export class ManagersPage extends React.Component<Record<string, never>, Manager
 
     handleSubmit(event: React.FormEvent<HTMLFormElement>): void {
         event.preventDefault();
+        this.setState({search: this.search});
         this.fetchData();
     }
 
     render(): ReactNode {
+        const actions = <AddEditActions disabledEdit={this.state.selectedManager === null} onAddClick={this.onAddClick.bind(this)} onEditClick={this.onEditClick.bind(this)} />;
         return (
             <Grid container direction="column" style={{height: "100%"}}>
                 <Card elevation={6} style={{width: "100%"}}>
@@ -115,12 +93,9 @@ export class ManagersPage extends React.Component<Record<string, never>, Manager
                         </form>
                     </CardContent>
                 </Card>
-                <MyDataGrid  error={this.state.error} rows={this.state.rows} loading={this.state.loading} columns={Manager.getColumns()} storagePrefix="managers"
-                    fetchData={this.fetchData.bind(this)}
-                    cancelFetchData={this.cancelFetchData.bind(this)}
-                    onRowSelected={this.onRowSelected.bind(this)}
-                    onAddClick={this.onAddClick.bind(this)}
-                    onEditClick={this.onEditClick.bind(this)}
+                <ManagerDataGrid actions={actions} onRowSelected={this.onRowSelected.bind(this)} storagePrefix="managers" fetchData={this.state.fetchData}
+                    search={this.state.search}
+                    onFetchData={this.onFetchData.bind(this)}
                 />
                 <ManagersAdd openAddDrawer={this.state.openAddDrawer}
                     onAddSave={this.onAddSave.bind(this)}
@@ -151,7 +126,6 @@ export class ManagersPage extends React.Component<Record<string, never>, Manager
 }
 
 export interface ManagersPageState {
-    managers: Manager[];
     selectedManager: Manager;
     rows: GridRowsProp;
     loading: boolean;
@@ -161,4 +135,5 @@ export interface ManagersPageState {
     openEditDrawer: boolean;
     openSnackbar: boolean;
     snackbarMessage: string;
+    fetchData: boolean;
 }

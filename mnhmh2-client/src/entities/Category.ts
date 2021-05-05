@@ -16,6 +16,9 @@ export class Category {
     }
 
     static fromObject(obj: any): Category {
+        if (!obj) {
+            return null;
+        }
         const category = new Category();
         category.Id = obj.Id;
         category.Name = obj.Name;
