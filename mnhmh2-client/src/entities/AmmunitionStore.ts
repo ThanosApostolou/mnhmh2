@@ -53,6 +53,64 @@ export class AmmunitionStore {
         }
     }
 
+    static async insertToApi(cancelTokenSource: CancelTokenSource, store: AmmunitionStore): Promise<any> {
+        try {
+            const response = await App.app.apiconsumer.axios.request({
+                method: "post",
+                url: "/ammunitionstore",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                cancelToken: cancelTokenSource.token,
+                data: {
+                    store: store
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+    static async updateInApi(cancelTokenSource: CancelTokenSource, store: AmmunitionStore): Promise<any> {
+        try {
+            const response = await App.app.apiconsumer.axios.request({
+                method: "put",
+                url: "/ammunitionstore",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                cancelToken: cancelTokenSource.token,
+                data: {
+                    store: store
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+    static async deleteInApi(cancelTokenSource: CancelTokenSource, Id: number): Promise<any> {
+        try {
+            const response = await App.app.apiconsumer.axios.request({
+                method: "delete",
+                url: "/ammunitionstore",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                cancelToken: cancelTokenSource.token,
+                data: {
+                    Id: Id
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+
     static getColumns(): GridColDef[] {
         const columns: GridColDef[] = [
             { field: "AA", headerName: "AA", width: 100, hide: false },

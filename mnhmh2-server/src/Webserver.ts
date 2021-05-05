@@ -55,6 +55,15 @@ export class Webserver {
         this.expressapp.get("/api/ammunitionstore", (req: Request, res: Response) => {
             new AmmunitionStoreController(req, res).GET();
         });
+        this.expressapp.post("/api/ammunitionstore", (req: Request, res: Response) => {
+            new AmmunitionStoreController(req, res).POST();
+        });
+        this.expressapp.delete("/api/ammunitionstore", (req: Request, res: Response) => {
+            new AmmunitionStoreController(req, res).DELETE();
+        });
+        this.expressapp.put("/api/ammunitionstore", (req: Request, res: Response) => {
+            new AmmunitionStoreController(req, res).PUT();
+        });
 
         this.expressapp.get("/api/borrower", (req: Request, res: Response) => {
             new BorrowerController(req, res).GET();

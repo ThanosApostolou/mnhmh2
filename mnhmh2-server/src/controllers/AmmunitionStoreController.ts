@@ -39,7 +39,7 @@ export class AmmunitionStoreController {
     async POST(): Promise<void> {
         try {
             const body = this.req.body;
-            const store = AmmunitionStore.fromObject(body.group);
+            const store = AmmunitionStore.fromObject(body.store);
             if (!store.Name || store.Name === null || store.Name === "") {
                 this.res.status(422);
                 this.res.setHeader("Content-Type", "application/json");
@@ -71,7 +71,7 @@ export class AmmunitionStoreController {
     async PUT(): Promise<void> {
         try {
             const body = this.req.body;
-            const store = AmmunitionStore.fromObject(body.group);
+            const store = AmmunitionStore.fromObject(body.store);
             if (!store.Name || store.Name === null || store.Name === "") {
                 this.res.status(422);
                 this.res.setHeader("Content-Type", "application/json");

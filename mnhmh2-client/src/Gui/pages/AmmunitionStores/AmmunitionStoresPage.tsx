@@ -8,7 +8,7 @@ import { AmmunitionStoreDataGrid } from "./AmmunitionStoreDataGrid";
 import { AmmunitionStore } from "../../../entities/AmmunitionStore";
 import { GridRowsProp } from "@material-ui/data-grid";
 import { AddEditActions } from "../../components/AddEditActions";
-//import { GroupsAdd } from "./GroupsAdd";
+import { AmmunitionStoresAdd } from "./AmmunitionStoresAdd";
 //import { GroupsEdit } from "./GroupsEdit";
 
 export class AmmunitionStoresPage extends React.Component<Record<string, never>, AmmunitionStoresPageState> {
@@ -98,11 +98,11 @@ export class AmmunitionStoresPage extends React.Component<Record<string, never>,
                     search={this.state.search}
                     onFetchData={this.onFetchData.bind(this)}
                 />
-                {/*
-                <GroupsAdd openAddDrawer={this.state.openAddDrawer}
+                <AmmunitionStoresAdd openAddDrawer={this.state.openAddDrawer}
                     onAddSave={this.onAddSave.bind(this)}
                     onAddCancel={this.onAddCancel.bind(this)}
                 />
+                {/*
                 <GroupsEdit group={this.state.selectedStore}
                     openEditDrawer={this.state.openEditDrawer}
                     onEditSave={this.onEditSave.bind(this)}
