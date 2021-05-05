@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "0dc8959f-3e47-4c2e-8ebf-00a679e03be8",
+		"_postman_id": "ed4e9ebb-32a9-4ec8-b628-ef5e3b11d3c3",
 		"name": "MNHMH",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -37,6 +37,13 @@
 					"path": [
 						"api",
 						"materialtab"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "ΣΤ1",
+							"disabled": true
+						}
 					]
 				}
 			},
@@ -151,6 +158,23 @@
 					"path": [
 						"api",
 						"ammunitionstore"
+					],
+					"query": [
+						{
+							"key": "Id",
+							"value": "601",
+							"disabled": true
+						},
+						{
+							"key": "notId",
+							"value": "601",
+							"disabled": true
+						},
+						{
+							"key": "search",
+							"value": "159",
+							"disabled": true
+						}
 					]
 				}
 			},
@@ -161,6 +185,94 @@
 			"request": {
 				"method": "GET",
 				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/borrower",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"borrower"
+					],
+					"query": [
+						{
+							"key": "Id",
+							"value": "401",
+							"disabled": true
+						},
+						{
+							"key": "notId",
+							"value": "401",
+							"disabled": true
+						},
+						{
+							"key": "search",
+							"value": "νικ",
+							"disabled": true
+						},
+						{
+							"key": "withManager",
+							"value": "false",
+							"disabled": true
+						},
+						{
+							"key": "managerId",
+							"value": "6",
+							"disabled": true
+						},
+						{
+							"key": "notManagerId",
+							"value": "6",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/borrower",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"borrower\": {\r\n        \"Name\": \"test\",\r\n        \"SerialNumber\": 1234,\r\n        \"Manager\": {\r\n            \"Id\": 1\r\n        }\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/borrower",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"borrower"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/borrower",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"borrower\": {\r\n        \"Id\": 1002,\r\n        \"Name\": \"test\",\r\n        \"SerialNumber\": 1234\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
 					"raw": "localhost:3000/api/borrower",
 					"host": [
@@ -181,7 +293,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3000/api/group",
+					"raw": "localhost:3000/api/group?notId=814",
 					"host": [
 						"localhost"
 					],
@@ -189,6 +301,22 @@
 					"path": [
 						"api",
 						"group"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "Α",
+							"disabled": true
+						},
+						{
+							"key": "Id",
+							"value": "814",
+							"disabled": true
+						},
+						{
+							"key": "notId",
+							"value": "814"
+						}
 					]
 				}
 			},
@@ -284,7 +412,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3000/api/manager",
+					"raw": "localhost:3000/api/manager?search= ",
 					"host": [
 						"localhost"
 					],
@@ -292,6 +420,17 @@
 					"path": [
 						"api",
 						"manager"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": " "
+						},
+						{
+							"key": "Id",
+							"value": "1",
+							"disabled": true
+						}
 					]
 				}
 			},
@@ -332,7 +471,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"Id\": 608\r\n}",
+					"raw": "{\r\n    \"Id\": 602\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -360,7 +499,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"manager\": {\r\n        \"Id\": 608,\r\n        \"Name\": \"NOT A TEST\",\r\n        \"Rank\": \"test\",\r\n        \"Position\": \"test\"\r\n    }\r\n}",
+					"raw": "{\r\n    \"manager\": {\r\n        \"Id\": 602,\r\n        \"Name\": \"NOT A TEST\",\r\n        \"Rank\": \"test\",\r\n        \"Position\": \"test\"\r\n    }\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"

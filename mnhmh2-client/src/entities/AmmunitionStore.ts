@@ -34,12 +34,17 @@ export class AmmunitionStore {
         return stores;
     }
 
-    static async listFromApi(cancelTokenSource: CancelTokenSource): Promise<AmmunitionStore[]> {
+    static async listFromApi(cancelTokenSource: CancelTokenSource, Id: number, notId: number, search: string): Promise<AmmunitionStore[]> {
         try {
             const response = await App.app.apiconsumer.axios.request({
                 method: "get",
                 url: "/ammunitionstore",
-                cancelToken: cancelTokenSource.token
+                cancelToken: cancelTokenSource.token,
+                params: {
+                    Id: Id,
+                    notId: notId,
+                    search: search
+                }
             });
             const stores: AmmunitionStore[] = AmmunitionStore.listFromObjectList(response.data);
             return stores;

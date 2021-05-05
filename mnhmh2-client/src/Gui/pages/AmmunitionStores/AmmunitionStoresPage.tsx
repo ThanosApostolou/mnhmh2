@@ -4,17 +4,15 @@ import { Search } from "@material-ui/icons";
 import { Alert } from "@material-ui/lab";
 
 
-import { MyDataGrid } from "../../components/MyDataGrid/MyDataGrid";
+import { AmmunitionStoreDataGrid } from "./AmmunitionStoreDataGrid";
 import { AmmunitionStore } from "../../../entities/AmmunitionStore";
-import { CancelTokenSource } from "axios";
-import { ApiConsumer } from "../../../ApiConsumer";
-import { GridRowSelectedParams, GridRowsProp } from "@material-ui/data-grid";
-//import { ManagersAdd } from "./ManagersAdd";
-//import { ManagersEdit } from "./ManagersEdit";
+import { GridRowsProp } from "@material-ui/data-grid";
+import { AddEditActions } from "../../components/AddEditActions";
+//import { GroupsAdd } from "./GroupsAdd";
+//import { GroupsEdit } from "./GroupsEdit";
 
 export class AmmunitionStoresPage extends React.Component<Record<string, never>, AmmunitionStoresPageState> {
     state: Readonly<AmmunitionStoresPageState>;
-    cancelTokenSource: CancelTokenSource;
     search: string;
 
     constructor(props: Record<string, never>) {
@@ -29,49 +27,28 @@ export class AmmunitionStoresPage extends React.Component<Record<string, never>,
             openAddDrawer: false,
             openEditDrawer: false,
             openSnackbar: false,
-            snackbarMessage: ""
+            snackbarMessage: "",
+            fetchData: false
         };
-        this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
         this.search = "";
     }
 
     fetchData(): void {
-        console.log("fetch data", this.search);
-        this.cancelFetchData();
-        this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
-        this.setState({rows: []});
-        this.setState({loading : true});
-        AmmunitionStore.listFromApi(this.cancelTokenSource).then((data: any) => {
-            this.setState({stores: data});
-            this.setState({rows: AmmunitionStore.getRows(this.state.stores)});
-        }).catch((error) => {
-            this.setState({stores: null});
-            this.setState({rows: []});
-            this.setState({error: error});
-        }).finally(() => {
-            this.setState({loading: false});
-        });
+        this.setState({fetchData: !this.state.fetchData});
+    }
+    onFetchData(): void {
+        this.setState({selectedStore: null});
     }
 
-    cancelFetchData(): void {
-        this.cancelTokenSource.cancel("cancel fetching data");
-    }
-
-    onRowSelected(params: GridRowSelectedParams): void {
-        if (this.state.stores && this.state.stores !== null && this.state.stores.length > 0) {
-            this.setState({selectedStore: this.state.stores[params.data.AA - 1]});
-        } else {
-            this.setState({selectedStore: null});
-        }
-
-        console.log("manager", this.state.selectedStore);
+    onRowSelected(store: AmmunitionStore): void {
+        this.setState({selectedStore: store});
     }
 
     onAddClick(): void {
         this.setState({openAddDrawer: true});
     }
     onAddSave(): void {
-        this.setState({openAddDrawer: false, snackbarMessage: "Επιτυχία προσθήκης μέλους επιτροπής!", openSnackbar: true});
+        this.setState({openAddDrawer: false, snackbarMessage: "Επιτυχία προσθήκης αποθήκης!", openSnackbar: true});
         this.fetchData();
     }
     onAddCancel(): void {
@@ -82,11 +59,11 @@ export class AmmunitionStoresPage extends React.Component<Record<string, never>,
         this.setState({openEditDrawer: true});
     }
     onEditSave(): void {
-        this.setState({openEditDrawer: false, snackbarMessage: "Επιτυχία τροποποίησης μέλους επιτροπής!", openSnackbar: true});
+        this.setState({openEditDrawer: false, snackbarMessage: "Επιτυχία τροποποίησης αποθήκης!", openSnackbar: true});
         this.fetchData();
     }
     onEditDelete(): void {
-        this.setState({openEditDrawer: false, snackbarMessage: "Επιτυχία διαγραφής μέλους επιτροπής!", openSnackbar: true});
+        this.setState({openEditDrawer: false, snackbarMessage: "Επιτυχία διαγραφής αποθήκης!", openSnackbar: true});
         this.fetchData();
     }
     onEditCancel(): void {
@@ -95,10 +72,12 @@ export class AmmunitionStoresPage extends React.Component<Record<string, never>,
 
     handleSubmit(event: React.FormEvent<HTMLFormElement>): void {
         event.preventDefault();
+        this.setState({search: this.search});
         this.fetchData();
     }
 
     render(): ReactNode {
+        const actions = <AddEditActions disabledEdit={this.state.selectedStore === null} onAddClick={this.onAddClick.bind(this)} onEditClick={this.onEditClick.bind(this)} />;
         return (
             <Grid container direction="column" style={{height: "100%"}}>
                 <Card elevation={6} style={{width: "100%"}}>
@@ -115,23 +94,22 @@ export class AmmunitionStoresPage extends React.Component<Record<string, never>,
                         </form>
                     </CardContent>
                 </Card>
-                <MyDataGrid  error={this.state.error} rows={this.state.rows} loading={this.state.loading} columns={AmmunitionStore.getColumns()} storagePrefix="ammunitionstores"
-                    fetchData={this.fetchData.bind(this)}
-                    cancelFetchData={this.cancelFetchData.bind(this)}
-                    onRowSelected={this.onRowSelected.bind(this)}
-                    onAddClick={this.onAddClick.bind(this)}
-                    onEditClick={this.onEditClick.bind(this)}
+                <AmmunitionStoreDataGrid actions={actions} onRowSelected={this.onRowSelected.bind(this)} storagePrefix="stores" fetchData={this.state.fetchData}
+                    search={this.state.search}
+                    onFetchData={this.onFetchData.bind(this)}
                 />
-                {/*<ManagersAdd openAddDrawer={this.state.openAddDrawer}
+                {/*
+                <GroupsAdd openAddDrawer={this.state.openAddDrawer}
                     onAddSave={this.onAddSave.bind(this)}
                     onAddCancel={this.onAddCancel.bind(this)}
                 />
-                <ManagersEdit manager={this.state.selectedGroup}
+                <GroupsEdit group={this.state.selectedStore}
                     openEditDrawer={this.state.openEditDrawer}
                     onEditSave={this.onEditSave.bind(this)}
                     onEditDelete={this.onEditDelete.bind(this)}
                     onEditCancel={this.onEditCancel.bind(this)}
-                />*/}
+                />
+                */}
                 <Snackbar
                     anchorOrigin={{
                         vertical: "bottom",
@@ -161,4 +139,5 @@ export interface AmmunitionStoresPageState {
     openEditDrawer: boolean;
     openSnackbar: boolean;
     snackbarMessage: string;
+    fetchData: boolean;
 }

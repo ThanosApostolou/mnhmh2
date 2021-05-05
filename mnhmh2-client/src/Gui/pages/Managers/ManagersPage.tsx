@@ -71,6 +71,7 @@ export class ManagersPage extends React.Component<Record<string, never>, Manager
 
     handleSubmit(event: React.FormEvent<HTMLFormElement>): void {
         event.preventDefault();
+        this.setState({search: this.search});
         this.fetchData();
     }
 

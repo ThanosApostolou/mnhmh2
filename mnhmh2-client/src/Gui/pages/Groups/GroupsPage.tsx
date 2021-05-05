@@ -72,6 +72,7 @@ export class GroupsPage extends React.Component<Record<string, never>, GroupsPag
 
     handleSubmit(event: React.FormEvent<HTMLFormElement>): void {
         event.preventDefault();
+        this.setState({search: this.search});
         this.fetchData();
     }
 

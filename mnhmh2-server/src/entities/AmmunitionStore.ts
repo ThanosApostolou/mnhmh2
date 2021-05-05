@@ -45,9 +45,10 @@ export class AmmunitionStore {
         return ["Id", "Name", "SerialNumber"];
     }
 
-    static async listSelectFromDB(search: string): Promise<AmmunitionStore[]> {
-        let stores: AmmunitionStore[] = [];
+    static async listSelectFromDB(Id: number, notId: number, search: string): Promise<AmmunitionStore[]> {
+        //let stores: AmmunitionStore[] = [];
         try {
+            /*
             if (search === "") {
                 stores = await App.app.dbmanager.ammunitionStoreRepo.find();
             } else {
@@ -65,6 +66,19 @@ export class AmmunitionStore {
                     ]
                 });
             }
+            */
+            const stores_query = App.app.dbmanager.ammunitionStoreRepo.createQueryBuilder("Store");
+            if (Id !== null) {
+                stores_query.andWhere(`Store.Id = '${Id}'`);
+            }
+            if (notId !== null) {
+                stores_query.andWhere(`Store.Id != '${notId}'`);
+            }
+            if (search != null) {
+                stores_query.andWhere(`(Store.Id LIKE '%${search}%' OR Store.Name LIKE '%${search}%' OR Store.SerialNumber LIKE '%${search}%')`);
+
+            }
+            const stores: AmmunitionStore[] = await stores_query.getMany();
             return stores;
         } catch(err) {
             console.log(err);
