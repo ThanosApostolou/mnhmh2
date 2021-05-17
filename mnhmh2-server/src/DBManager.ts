@@ -61,18 +61,10 @@ export class DBManager {
             this.groupRepo = this.connection.getRepository(Group);
             this.managerRepo = this.connection.getRepository(Manager);
         } catch(err) {
-            this.pool = null;
             this.connection = null;
             this.error = err;
             console.log("DBManager: ", err);
         }
-    }
-
-    async execute(query: string): Promise<any> {
-        if (this.pool === null) {
-            return this.error;
-        }
-        return (await this.pool.query(query));
     }
 
     static columnsStringFromList(fieldsList: string[], prefix: string): string {
