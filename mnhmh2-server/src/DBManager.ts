@@ -37,14 +37,14 @@ export class DBManager {
     pool: any = null;
     error: any = null;
 
-    async init(): Promise<void> {
+    async init(username: string, password: string, host: string, database: string): Promise<void> {
         try {
             this.connection = await createConnection({
                 type: "mssql",
-                host: "DESKTOP-RO1RABI\\SQLEXPRESS",
-                username: "retsi17",
-                password: "1821",
-                database: "MNHMH",
+                host: host,
+                username: username,
+                password: password,
+                database: database,
                 synchronize: false,
                 logging: false,
                 entities: [

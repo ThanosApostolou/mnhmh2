@@ -18,9 +18,9 @@ import { NotFoundController } from "./controllers/NotFoundController";
 export class Webserver {
     expressapp: any = null;
 
-    init(): void {
+    init(port: number): void {
         this.expressapp = express();
-        const { PORT = 3000 } = process.env;
+        //const { PORT = 3000 } = process.env;
         this.expressapp.use(express.json());
         this.expressapp.use(express.static(__dirname + "/public"));
 
@@ -109,8 +109,8 @@ export class Webserver {
         });
 
         this.expressapp.use(redirectUnmatched);
-        this.expressapp.listen(PORT, () => {
-            console.log("server started at http://localhost:"+PORT);
+        this.expressapp.listen(port, () => {
+            console.log("server started at http://localhost:"+port);
         });
 
 
