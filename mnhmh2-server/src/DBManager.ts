@@ -1,4 +1,3 @@
-const mssql = require("mssql");
 import {createConnection, Connection, Repository } from "typeorm";
 import { AmmunitionPortion } from "./entities/AmmunitionPortion";
 import { AmmunitionStore } from "./entities/AmmunitionStore";
@@ -11,15 +10,6 @@ import { ImportsExportsTbl } from "./entities/ImportsExportsTbl";
 import {Manager} from "./entities/Manager";
 import { MaterialTab } from "./entities/MaterialTab";
 import { Subcategory } from "./entities/Subcategory";
-
-const config = {
-    user: "retsi17",
-    password: "1821",
-    server: "DESKTOP-RO1RABI\\SQLEXPRESS",
-    database: "MNHMH",
-    connectionTimeout: 30000,
-    requestTimeout: 40000
-};
 
 export class DBManager {
     connection: Connection = null;
@@ -34,7 +24,6 @@ export class DBManager {
     groupRepo: Repository<Group> = null;
     managerRepo: Repository<Manager> = null;
 
-    pool: any = null;
     error: any = null;
 
     async init(username: string, password: string, host: string, database: string): Promise<void> {
@@ -60,7 +49,6 @@ export class DBManager {
                     Group,
                 ]
             });
-            //this.pool = await mssql.connect(config);
             console.log("DBManager: Successfully connected to DB!");
             this.materialTabRepo = this.connection.getRepository(MaterialTab);
             this.directMaterialBorrowerRepo = this.connection.getRepository(DirectMaterialBorrower);
