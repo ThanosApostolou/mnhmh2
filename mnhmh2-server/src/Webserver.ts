@@ -22,7 +22,7 @@ export class Webserver {
         this.expressapp = express();
         //const { PORT = 3000 } = process.env;
         this.expressapp.use(express.json());
-        this.expressapp.use(express.static(__dirname + "/public"));
+        this.expressapp.use(express.static(path.resolve("./public")));
 
         this.expressapp.get("/api", (req: Request, res: Response) => {
             new RootController(req, res).GET();
@@ -118,5 +118,5 @@ export class Webserver {
 }
 
 function redirectUnmatched(req: Request, res: Response) {
-    res.sendFile(path.join(__dirname+"/public/index.html/"));
+    res.sendFile(path.resolve("./public/index.html/"));
 }

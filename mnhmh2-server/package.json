@@ -7,26 +7,22 @@
     "scripts": {
         "start": "nodemon .",
         "watch:server": "rimraf ./build && webpack --mode development --watch --color --progress",
-        "watch:client": "cd ../mnhmh2-client && npx webpack --mode development --watch --color --progress -o ../mnhmh2-server/build/public",
+        "watch:client": "cd ../mnhmh2-client && npx webpack --mode development --watch --color --progress -o ../mnhmh2-server/public",
         "watch": "concurrently npm:watch:server npm:watch:client",
         "build:server": "rimraf ./build && webpack --mode production --color --progress",
-        "build:client": "cd ../mnhmh2-client && npx webpack --mode production --color --progress -o ../mnhmh2-server/build/public",
+        "build:client": "cd ../mnhmh2-client && npx webpack --mode production --color --progress -o ../mnhmh2-server/public",
         "build": "npm run build:server && npm run build:client",
         "serve": "concurrently npm:watch npm:start",
-        "pkg:win64": "npm run build && pkg -t node16-win-x64 --out-path packages/mnhmh2-win64 . && cp config.json packages/mnhmh2-win64",
-        "pkg:win32": "npm run build && pkg -t node16-win-x86 --out-path packages/mnhmh2-win32 . && cp config.json packages/mnhmh2-win32",
-        "pkg:linux64": "npm run build && pkg -t node16-linux-x64 --out-path packages/mnhmh2-linux64 . && cp config.json packages/mnhmh2-linux64",
+        "pkg:win64": "npm run build && pkg -t node16-win-x64 --out-path packages/mnhmh2-win64 . && ncp config.json packages/mnhmh2-win64/config.json && ncp public packages/mnhmh2-win64/public",
+        "pkg:win32": "npm run build && pkg -t node16-win-x86 --out-path packages/mnhmh2-win32 . && ncp config.json packages/mnhmh2-win32/config.json && ncp public packages/mnhmh2-win32/public",
+        "pkg:linux64": "npm run build && pkg -t node16-linux-x64 --out-path packages/mnhmh2-linux64 . && ncp config.json packages/mnhmh2-linux64/config.json && ncp public packages/mnhmh2-linux64/public",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "pkg": {
-        "scripts": "build/**/*.js",
-        "assets": [
-            "build/assets/**/*",
-            "build/public/**/*"
-        ]
+        "scripts": "build/**/*.js"
     },
     "devDependencies": {
         "@typescript-eslint/eslint-plugin": "^4.15.1",
