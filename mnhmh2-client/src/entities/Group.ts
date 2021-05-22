@@ -124,7 +124,7 @@ export class Group {
     }
 
     static getRows(groups: Group[]): GridRowsProp {
-        const rows: GridRowsProp = [];
+        const rows: GridRowData[] = [];
         let count = 1;
         for (const grp of groups) {
             const row: GridRowData = {
@@ -138,7 +138,7 @@ export class Group {
             count++;
             rows.push(row);
         }
-        return rows;
+        return rows as GridRowsProp;
 
     }
 
