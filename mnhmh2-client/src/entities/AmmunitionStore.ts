@@ -122,7 +122,7 @@ export class AmmunitionStore {
     }
 
     static getRows(stores: AmmunitionStore[]): GridRowsProp {
-        const rows: GridRowsProp = [];
+        const rows: GridRowData[] = [];
         let count = 1;
         for (const store of stores) {
             const row: GridRowData = {
@@ -135,7 +135,7 @@ export class AmmunitionStore {
             count++;
             rows.push(row);
         }
-        return rows;
+        return rows as GridRowsProp;
 
     }
 

@@ -9,7 +9,7 @@ import { AmmunitionStore } from "../../../entities/AmmunitionStore";
 import { GridRowsProp } from "@material-ui/data-grid";
 import { AddEditActions } from "../../components/AddEditActions";
 import { AmmunitionStoresAdd } from "./AmmunitionStoresAdd";
-//import { GroupsEdit } from "./GroupsEdit";
+import { AmmunitionStoresEdit } from "./AmmunitionStoresEdit";
 
 export class AmmunitionStoresPage extends React.Component<Record<string, never>, AmmunitionStoresPageState> {
     state: Readonly<AmmunitionStoresPageState>;
@@ -102,14 +102,12 @@ export class AmmunitionStoresPage extends React.Component<Record<string, never>,
                     onAddSave={this.onAddSave.bind(this)}
                     onAddCancel={this.onAddCancel.bind(this)}
                 />
-                {/*
-                <GroupsEdit group={this.state.selectedStore}
+                <AmmunitionStoresEdit store={this.state.selectedStore}
                     openEditDrawer={this.state.openEditDrawer}
                     onEditSave={this.onEditSave.bind(this)}
                     onEditDelete={this.onEditDelete.bind(this)}
                     onEditCancel={this.onEditCancel.bind(this)}
                 />
-                */}
                 <Snackbar
                     anchorOrigin={{
                         vertical: "bottom",
