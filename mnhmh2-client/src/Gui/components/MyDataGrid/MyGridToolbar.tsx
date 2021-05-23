@@ -14,7 +14,6 @@ export class MyGridToolbar extends React.Component<MyGridToolbarProps, any> {
     constructor(props: MyGridToolbarProps) {
         super(props);
         console.log("props: ", this.props);
-        this.st;
     }
 
     render(): ReactNode {
@@ -50,7 +49,6 @@ export class MyGridToolbar extends React.Component<MyGridToolbarProps, any> {
                                     &nbsp;Εκτυπωση
                                     </Button>
                                 </Tooltip>
-                                <GridToolbarExport />
                                 <MyGridExportComp columns={this.props.columns} rows={this.props.rows} />
                             </Grid>
                         </Grid>

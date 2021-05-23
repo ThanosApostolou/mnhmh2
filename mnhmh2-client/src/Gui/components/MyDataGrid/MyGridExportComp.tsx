@@ -52,7 +52,7 @@ export class MyGridExportComp extends React.Component<MyGridExportCompProps, MyG
         }, 100);
     }
 
-    downloadXLSX(): void {
+    downloadExcel(type: string): void {
         this.setState({anchorMenuEl: null});
         const header = []; // header row
         const wscols = []; // columns style
@@ -81,7 +81,13 @@ export class MyGridExportComp extends React.Component<MyGridExportCompProps, MyG
         ws["!cols"] = wscols;
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "Data");
-        XLSX.writeFile(wb, "data.xlsx");
+        if (type === "csv1") {
+            XLSX.writeFile(wb, "data.csv", {FS: ","} as XLSX.WritingOptions);
+        } else if (type === "csv2") {
+            XLSX.writeFile(wb, "data.csv", {FS: ";"} as XLSX.WritingOptions);
+        } else {
+            XLSX.writeFile(wb, "data.xlsx");
+        }
     }
 
     render(): ReactNode {
@@ -103,10 +109,16 @@ export class MyGridExportComp extends React.Component<MyGridExportCompProps, MyG
                     }}
                 >
                     <MenuItem onClick={() => this.downloadJSON()}>
-                        &nbsp;Download as json
+                        &nbsp;Download as JSON
                     </MenuItem>
-                    <MenuItem onClick={() => this.downloadXLSX()}>
-                        &nbsp;Download as xlsx
+                    <MenuItem onClick={() => this.downloadExcel("csv1")}>
+                        &nbsp;Download as CSV(,)
+                    </MenuItem>
+                    <MenuItem onClick={() => this.downloadExcel("csv2")}>
+                        &nbsp;Download as CSV(;)
+                    </MenuItem>
+                    <MenuItem onClick={() => this.downloadExcel("xlsx")}>
+                        &nbsp;Download as XLSX
                     </MenuItem>
                 </Popover>
             </div>
