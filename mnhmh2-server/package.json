@@ -12,7 +12,9 @@
         "build:server": "rimraf ./build && webpack --mode production --color --progress",
         "build:client": "cd ../mnhmh2-client && npx webpack --mode production --color --progress -o ../mnhmh2-server/public",
         "build": "npm run build:server && npm run build:client",
-        "serve": "concurrently npm:watch npm:start",
+        "serve:server": "concurrently npm:watch:server npm:start",
+        "serve:client": "cd ../mnhmh2-client && npm run serve",
+        "serve": "concurrently npm:serve:server npm:serve:client",
         "pkg:win64": "npm run build && pkg -t node16-win-x64 --out-path packages/mnhmh2-win64 . && ncp config.json packages/mnhmh2-win64/config.json && ncp public packages/mnhmh2-win64/public",
         "pkg:win32": "npm run build && pkg -t node16-win-x86 --out-path packages/mnhmh2-win32 . && ncp config.json packages/mnhmh2-win32/config.json && ncp public packages/mnhmh2-win32/public",
         "pkg:linux64": "npm run build && pkg -t node16-linux-x64 --out-path packages/mnhmh2-linux64 . && ncp config.json packages/mnhmh2-linux64/config.json && ncp public packages/mnhmh2-linux64/public",
@@ -42,6 +44,7 @@
     "dependencies": {
         "@types/express": "^4.17.11",
         "@types/mssql": "^6.0.7",
+        "cors": "^2.8.5",
         "express": "^4.17.1",
         "mssql": "^6.3.1",
         "reflect-metadata": "^0.1.13",

@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 import { Request, Response } from "express";
 import path from "path";
 
@@ -20,7 +21,7 @@ export class Webserver {
 
     init(port: number): void {
         this.expressapp = express();
-        //const { PORT = 3000 } = process.env;
+        this.expressapp.use(cors());
         this.expressapp.use(express.json());
         this.expressapp.use(express.static(path.resolve("./public")));
 

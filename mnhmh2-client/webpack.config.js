@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ESLintPlugin = require("eslint-webpack-plugin");
@@ -62,6 +63,15 @@ module.exports = (env, argv) => {
         ],
         devServer: {
             historyApiFallback: true,
+            port: 3001,
+            client: {
+                overlay: {
+                    errors: true
+                }
+            },
+            proxy: {
+                "/api/**": "http://localhost:3000",
+            }
         },
         devtool: isProd ? false : "eval-cheap-module-source-map"
     };
