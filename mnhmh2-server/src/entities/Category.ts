@@ -60,6 +60,10 @@ export class Category {
     private static _getOwnFieldsList(): string[] {
         return ["Id", "Name", "SerialNumber"];
     }
+    static selectStringList: string[] = ["Category.Id", "Category.Name", "Category.SerialNumber"];
+    static searchQueryString(search: string): string {
+        return `Category.Id LIKE '%${search}%' OR Category.Name LIKE '%${search}%' OR Category.SerialNumber LIKE '%${search}%'`;
+    }
 
     static async listSelectFromDB(search: string): Promise<Category[]> {
         let categories: Category[] = [];

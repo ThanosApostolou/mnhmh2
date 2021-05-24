@@ -54,6 +54,10 @@ export class Manager {
     private static _getOwnFieldsList(): string[] {
         return ["Id", "Name", "Rank", "Position"];
     }
+    static selectStringList: string[] = ["Manager.Id", "Manager.Name", "Manager.Rank", "Manager.Position"];
+    static searchQueryString(search: string): string {
+        return `Manager.Id LIKE '%${search}%' OR Manager.Name LIKE '%${search}%' OR Manager.Rank LIKE '%${search}%' OR Manager.Position LIKE '%${search}%'`;
+    }
 
     static async listSelectFromDB(Id: number, notId: number, search: string): Promise<Manager[]> {
         try {
@@ -65,7 +69,7 @@ export class Manager {
                 managers_query.andWhere(`Manager.Id != '${notId}'`);
             }
             if (search != null) {
-                managers_query.andWhere(`(Manager.Id LIKE '%${search}%' OR Manager.Name LIKE '%${search}%' OR Manager.Rank LIKE '%${search}%' OR Manager.Position LIKE '%${search}%')`);
+                managers_query.andWhere(`(${Manager.searchQueryString(search)})`);
 
             }
             const managers: Manager[] = await managers_query.getMany();

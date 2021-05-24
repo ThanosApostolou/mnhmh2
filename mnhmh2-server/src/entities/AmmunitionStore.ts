@@ -44,38 +44,22 @@ export class AmmunitionStore {
     private static _getOwnFieldsList(): string[] {
         return ["Id", "Name", "SerialNumber"];
     }
+    static selectStringList: string[] = ["AmmunitionStore.Id", "AmmunitionStore.Name", "AmmunitionStore.SerialNumber"];
+    static searchQueryString(search: string): string {
+        return `AmmunitionStore.Id LIKE '%${search}%' OR AmmunitionStore.Name LIKE '%${search}%' OR AmmunitionStore.SerialNumber LIKE '%${search}%'`;
+    }
 
     static async listSelectFromDB(Id: number, notId: number, search: string): Promise<AmmunitionStore[]> {
-        //let stores: AmmunitionStore[] = [];
         try {
-            /*
-            if (search === "") {
-                stores = await App.app.dbmanager.ammunitionStoreRepo.find();
-            } else {
-                stores = await App.app.dbmanager.ammunitionStoreRepo.find({
-                    where: [
-                        {
-                            Id: Like(`%${search}%`)
-                        },
-                        {
-                            Name: Like(`%${search}%`)
-                        },
-                        {
-                            SerialNumber: Like(`%${search}%`)
-                        }
-                    ]
-                });
-            }
-            */
-            const stores_query = App.app.dbmanager.ammunitionStoreRepo.createQueryBuilder("Store");
+            const stores_query = App.app.dbmanager.ammunitionStoreRepo.createQueryBuilder("AmmunitionStore");
             if (Id !== null) {
-                stores_query.andWhere(`Store.Id = '${Id}'`);
+                stores_query.andWhere(`AmmunitionStore.Id = '${Id}'`);
             }
             if (notId !== null) {
-                stores_query.andWhere(`Store.Id != '${notId}'`);
+                stores_query.andWhere(`AmmunitionStore.Id != '${notId}'`);
             }
             if (search != null) {
-                stores_query.andWhere(`(Store.Id LIKE '%${search}%' OR Store.Name LIKE '%${search}%' OR Store.SerialNumber LIKE '%${search}%')`);
+                stores_query.andWhere(`(${AmmunitionStore.searchQueryString(search)})`);
 
             }
             const stores: AmmunitionStore[] = await stores_query.getMany();

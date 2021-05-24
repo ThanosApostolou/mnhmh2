@@ -58,6 +58,10 @@ export class Subcategory {
     private static _getOwnFieldsList(): string[] {
         return ["Id", "Name"];
     }
+    static selectStringList: string[] = ["Subcategory.Id", "Subcategory.Name"];
+    static searchQueryString(search: string): string {
+        return `Subcategory.Id LIKE '%${search}%' OR Subcategory.Name LIKE '%${search}%'`;
+    }
 
     static async listSelectFromDB(search: string): Promise<Subcategory[]> {
         let subcategories: Subcategory[] = [];

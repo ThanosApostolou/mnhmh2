@@ -63,11 +63,15 @@ export class AmmunitionPortion {
     private static _getOwnFieldsList(): string[] {
         return ["Id", "Name", "Quantity"];
     }
+    static selectStringList: string[] = ["AmmunitionPortion.Id", "AmmunitionPortion.Name", "AmmunitionPortion.Quantity"];
+    static searchQueryString(search: string): string {
+        return `AmmunitionPortion.Id LIKE '%${search}%' OR AmmunitionPortion.Name LIKE '%${search}%' OR AmmunitionPortion.Quantity LIKE '%${search}%'`;
+    }
 
-    static async listSelectFromDB(search: string): Promise<AmmunitionPortion[]> {
-        let portions: AmmunitionPortion[] = [];
+    static async listSelectFromDB(Id: number, notId: number, search: string, withAmmunitionStore: boolean, withMaterialTab: boolean, ammunitionStoreId: number, notAmmunitionStoreId: number, materialTabId: number, notMaterialTabId: number): Promise<AmmunitionPortion[]> {
+        const portions: AmmunitionPortion[] = [];
         try {
-            if (search === "") {
+            /*if (search === "") {
                 portions = await App.app.dbmanager.ammunitionPortionRepo.find({
                     relations: ["MaterialTab", "AmmunitionStore"]
                 });
@@ -89,7 +93,38 @@ export class AmmunitionPortion {
                     .orWhere(`MaterialTab.PartialRegistryCode LIKE '%${search}%' OR MaterialTab.Name LIKE '%${search}%'`)
                     .orWhere(`AmmunitionStore.Name LIKE '%${search}%' OR AmmunitionStore.SerialNumber LIKE '%${search}%'`)
                     .getMany();
+            }*/
+            const portions_query = App.app.dbmanager.ammunitionPortionRepo.createQueryBuilder("AmmunitionPortion")
+                .leftJoinAndSelect("AmmunitionPortion.AmmunitionStore", "AmmunitionStore")
+                .leftJoinAndSelect("AmmunitionPortion.MaterialTab", "MaterialTab");
+
+            if (Id !== null) {
+                portions_query.andWhere(`AmmunitionPortion.Id = '${Id}'`);
             }
+            if (notId !== null) {
+                portions_query.andWhere(`AmmunitionPortion.Id != '${notId}'`);
+            }
+            if (search !== null) {
+                let searchstring = AmmunitionPortion.searchQueryString(search);
+                if (withAmmunitionStore) {
+                    searchstring += ` OR ${AmmunitionStore.searchQueryString(search)}`;
+                }
+                if (withMaterialTab) {
+                    searchstring += ` OR AmmunitionStore.Name LIKE '%${search}%' OR AmmunitionStore.SerialNumber LIKE '%${search}%'`;
+                }
+                portions_query.andWhere(`(${searchstring})`);
+            }
+            if (ammunitionStoreId !== null) {
+                portions_query.andWhere(`AmmunitionStore.Id = '${ammunitionStoreId}'`);
+            }
+            if (notAmmunitionStoreId !== null) {
+                portions_query.andWhere(`(AmmunitionStore IS NULL OR AmmunitionStore.Id != '${notAmmunitionStoreId}')`);
+            }
+            portions_query.select(["AmmunitionPortion.Id", "AmmunitionPortion.Name", "AmmunitionPortion.Quantity"]);
+            if (withAmmunitionStore) {
+                portions_query.addSelect(["AmmunitionStore.Id", "AmmunitionStore.Name", "AmmunitionStore.SerialNumber"]);
+            }
+            const portions: AmmunitionPortion[] = await portions_query.getMany();
             return portions;
         } catch(err) {
             console.log(err);

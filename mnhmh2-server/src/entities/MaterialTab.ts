@@ -120,6 +120,26 @@ export class MaterialTab {
         return materialtabs;
     }
 
+    static selectStringList: string[] = ["MaterialTab.Id", "MaterialTab.PartialRegistryCode",
+        "MaterialTab.PartialRegistryCodeNumber", "MaterialTab.AOEF", "MaterialTab.Name",
+        "MaterialTab.MeasurementUnit", "MaterialTab.TabRemainder", "MaterialTab.Sum",
+        "MaterialTab.Difference", "MaterialTab.Comments", "MaterialTab.ImportSum",
+        "MaterialTab.ExportSum", "MaterialTab.Found", "MaterialTab.PendingCrediting",
+        "MaterialTab.Surplus", "MaterialTab.Deficit", "MaterialTab.GeneralRegistryCode",
+        "MaterialTab.Archived", "MaterialTab.SerialNumber", "MaterialTab.MaterialWithoutTab",
+        "MaterialTab.CurrentMaterialTab", "MaterialTab.GEEFCode"];
+    static searchQueryString(search: string): string {
+        return `MaterialTab.Id LIKE '%${search}%' OR MaterialTab.PartialRegistryCode LIKE '%${search}%'
+        OR MaterialTab.PartialRegistryCodeNumber LIKE '%${search}%' OR MaterialTab.AOEF LIKE '%${search}%'
+        OR MaterialTab.Name LIKE '%${search}%' OR MaterialTab.MeasurementUnit LIKE '%${search}%'
+        OR MaterialTab.TabRemainder LIKE '%${search}%' OR MaterialTab.Sum LIKE '%${search}%'
+        OR MaterialTab.Difference LIKE '%${search}%' OR MaterialTab.Comments LIKE '%${search}%'
+        OR MaterialTab.ImportSum LIKE '%${search}%' OR MaterialTab.ExportSum LIKE '%${search}%'
+        OR MaterialTab.PendingCrediting LIKE '%${search}%' OR MaterialTab.Surplus LIKE '%${search}%'
+        OR MaterialTab.Deficit LIKE '%${search}%' OR MaterialTab.GeneralRegistryCode LIKE '%${search}%'
+        OR MaterialTab.SerialNumber LIKE '%${search}%' OR MaterialTab.GEEFCode LIKE '%${search}%'`;
+    }
+
     static async listSelectFromDB(search: string): Promise<MaterialTab[]> {
         let mtbs: MaterialTab[] = [];
         try {

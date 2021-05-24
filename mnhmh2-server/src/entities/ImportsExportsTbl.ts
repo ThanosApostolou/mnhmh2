@@ -69,6 +69,16 @@ export class ImportsExportsTbl {
     private static _getOwnFieldsList(): string[] {
         return ["Id", "Date", "Unit", "JustificationFileNumber", "Imported", "Exported", "Remaining", "Comments"];
     }
+    static selectStringList: string[] = [
+        "ImportsExportsTbl.Id", "ImportsExportsTbl.Date", "ImportsExportsTbl.Unit",
+        "ImportsExportsTbl.JustificationFileNumber", "ImportsExportsTbl.Imported",
+        "ImportsExportsTbl.Exported", "ImportsExportsTbl.Remaining", "ImportsExportsTbl.Comments"];
+    static searchQueryString(search: string): string {
+        return `ImportsExportsTbl.Id LIKE '%${search}%' OR ImportsExportsTbl.Date LIKE '%${search}%'
+        OR ImportsExportsTbl.Unit LIKE '%${search}%' OR ImportsExportsTbl.JustificationFileNumber LIKE '%${search}%'
+        OR ImportsExportsTbl.Imported LIKE '%${search}%' OR ImportsExportsTbl.Exported LIKE '%${search}%'
+        OR ImportsExportsTbl.Remaining LIKE '%${search}%' OR ImportsExportsTbl.Comments LIKE '%${search}%'`;
+    }
 
     static async listSelectFromDB(search: string): Promise<ImportsExportsTbl[]> {
         let importsexportstbls: ImportsExportsTbl[] = [];

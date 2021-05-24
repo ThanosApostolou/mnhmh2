@@ -57,6 +57,10 @@ export class DirectMaterialBorrower {
     private static _getOwnFieldsList(): string[] {
         return ["Id", "Quantity"];
     }
+    static selectStringList: string[] = ["DirectMaterialBorrower.Id", "DirectMaterialBorrower.Quantity"];
+    static searchQueryString(search: string): string {
+        return `DirectMaterialBorrower.Id LIKE '%${search}%' OR DirectMaterialBorrower.Quantity LIKE '%${search}%'`;
+    }
 
     static async listSelectFromDB(search: string): Promise<DirectMaterialBorrower[]> {
         let dmbs: DirectMaterialBorrower[] = [];

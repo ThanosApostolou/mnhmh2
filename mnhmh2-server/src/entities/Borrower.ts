@@ -52,6 +52,10 @@ export class Borrower {
     private static _getOwnFieldsList(): string[] {
         return ["Id", "Name", "SerialNumber"];
     }
+    static selectStringList: string[] = ["Borrower.Id", "Borrower.Name", "Borrower.SerialNumber"];
+    static searchQueryString(search: string): string {
+        return `Borrower.Id LIKE '%${search}%' OR Borrower.Name LIKE '%${search}%' OR Borrower.SerialNumber LIKE '%${search}%'`;
+    }
 
     static async listSelectFromDB(Id: number, notId: number, search: string, withManager: boolean, managerId: number, notManagerId: number): Promise<Borrower[]> {
         try {
@@ -64,21 +68,21 @@ export class Borrower {
                 borrowers_query.andWhere(`Borrower.Id != '${notId}'`);
             }
             if (search !== null) {
+                let searchquery = Borrower.searchQueryString(search);
                 if (withManager) {
-                    borrowers_query.andWhere(`(Borrower.Id LIKE '%${search}%' OR Borrower.Name LIKE '%${search}%' OR Borrower.SerialNumber LIKE '%${search}%' OR Manager.Id LIKE '%${search}%' OR Manager.Name LIKE '%${search}%' OR Manager.Rank LIKE '%${search}%' OR Manager.Position LIKE '%${search}%')`);
-                } else {
-                    borrowers_query.andWhere(`(Borrower.Id LIKE '%${search}%' OR Borrower.Name LIKE '%${search}%' OR Borrower.SerialNumber LIKE '%${search}%')`);
+                    searchquery += ` OR ${Manager.searchQueryString(search)}`;
                 }
+                borrowers_query.andWhere(`(${searchquery})`);
             }
             if (managerId !== null) {
                 borrowers_query.andWhere(`Manager.Id = '${managerId}'`);
             }
             if (notManagerId !== null) {
-                borrowers_query.andWhere(`Manager IS NULL OR Manager.Id != '${notManagerId}'`);
+                borrowers_query.andWhere(`(Manager IS NULL OR Manager.Id != '${notManagerId}')`);
             }
-            borrowers_query.select(["Borrower.Id", "Borrower.Name", "Borrower.SerialNumber"]);
+            borrowers_query.select(Borrower.selectStringList);
             if (withManager) {
-                borrowers_query.addSelect(["Manager.Id", "Manager.Name", "Manager.Rank", "Manager.Position"]);
+                borrowers_query.addSelect(Manager.selectStringList);
             }
             const borrowers: Borrower[] = await borrowers_query.getMany();
             return borrowers;

@@ -14,11 +14,43 @@ export class AmmunitionPortionController {
 
     async GET(): Promise<void> {
         try {
-            let search = "";
+            let search = null;
             if (this.req.query["search"]) {
                 search = this.req.query["search"].toString().trim();
             }
-            const portions = await AmmunitionPortion.listSelectFromDB(search);
+            let withAmmunitionStore = true;
+            if (this.req.query["withAmmunitionStore"]) {
+                withAmmunitionStore = (this.req.query["withAmmunitionStore"].toString().trim() === "true");
+            }
+            let withMaterialTab = true;
+            if (this.req.query["withMaterialTab"]) {
+                withMaterialTab = (this.req.query["withMaterialTab"].toString().trim() === "true");
+            }
+            let Id = null;
+            if (this.req.query["Id"]) {
+                Id = parseInt(this.req.query["Id"].toString().trim());
+            }
+            let notId = null;
+            if (this.req.query["notId"]) {
+                notId = parseInt(this.req.query["notId"].toString().trim());
+            }
+            let ammunitionStoreId = null;
+            if (this.req.query["ammunitionStoreId"]) {
+                ammunitionStoreId = parseInt(this.req.query["ammunitionStoreId"].toString().trim());
+            }
+            let notAmmunitionStoreId = null;
+            if (this.req.query["notAmmunitionStoreId"]) {
+                notAmmunitionStoreId = parseInt(this.req.query["notAmmunitionStoreId"].toString().trim());
+            }
+            let materialTabId = null;
+            if (this.req.query["materialTabId"]) {
+                materialTabId = parseInt(this.req.query["materialTabId"].toString().trim());
+            }
+            let notMaterialTabId = null;
+            if (this.req.query["notMaterialTabId"]) {
+                notMaterialTabId = parseInt(this.req.query["notMaterialTabId"].toString().trim());
+            }
+            const portions = await AmmunitionPortion.listSelectFromDB(Id, notId, search, withAmmunitionStore, withMaterialTab, ammunitionStoreId, notAmmunitionStoreId, materialTabId, notMaterialTabId);
             this.res.setHeader("Content-Type", "application/json");
             this.res.send(AmmunitionPortion.listToJson(portions));
         } catch(err) {
