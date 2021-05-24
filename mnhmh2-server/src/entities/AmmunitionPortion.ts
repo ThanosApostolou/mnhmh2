@@ -1,7 +1,6 @@
-import {Entity, PrimaryColumn, Column, ManyToOne, JoinColumn, Like } from "typeorm";
+import {Entity, PrimaryColumn, Column, ManyToOne, JoinColumn } from "typeorm";
 
 import { App } from "../App";
-import { DBManager } from "../DBManager";
 import { AmmunitionStore } from "./AmmunitionStore";
 import { MaterialTab } from "./MaterialTab";
 
@@ -69,31 +68,7 @@ export class AmmunitionPortion {
     }
 
     static async listSelectFromDB(Id: number, notId: number, search: string, withAmmunitionStore: boolean, withMaterialTab: boolean, ammunitionStoreId: number, notAmmunitionStoreId: number, materialTabId: number, notMaterialTabId: number): Promise<AmmunitionPortion[]> {
-        const portions: AmmunitionPortion[] = [];
         try {
-            /*if (search === "") {
-                portions = await App.app.dbmanager.ammunitionPortionRepo.find({
-                    relations: ["MaterialTab", "AmmunitionStore"]
-                });
-            } else {
-                portions = await App.app.dbmanager.ammunitionPortionRepo.createQueryBuilder("AmmunitionPortion")
-                    .leftJoinAndSelect("AmmunitionPortion.MaterialTab", "MaterialTab")
-                    .leftJoinAndSelect("AmmunitionPortion.AmmunitionStore", "AmmunitionStore")
-                    .where([
-                        {
-                            Id: Like(`%${search}%`)
-                        },
-                        {
-                            Name: Like(`%${search}%`)
-                        },
-                        {
-                            Quantity: Like(`%${search}%`)
-                        },
-                    ])
-                    .orWhere(`MaterialTab.PartialRegistryCode LIKE '%${search}%' OR MaterialTab.Name LIKE '%${search}%'`)
-                    .orWhere(`AmmunitionStore.Name LIKE '%${search}%' OR AmmunitionStore.SerialNumber LIKE '%${search}%'`)
-                    .getMany();
-            }*/
             const portions_query = App.app.dbmanager.ammunitionPortionRepo.createQueryBuilder("AmmunitionPortion")
                 .leftJoinAndSelect("AmmunitionPortion.AmmunitionStore", "AmmunitionStore")
                 .leftJoinAndSelect("AmmunitionPortion.MaterialTab", "MaterialTab");
@@ -110,7 +85,7 @@ export class AmmunitionPortion {
                     searchstring += ` OR ${AmmunitionStore.searchQueryString(search)}`;
                 }
                 if (withMaterialTab) {
-                    searchstring += ` OR AmmunitionStore.Name LIKE '%${search}%' OR AmmunitionStore.SerialNumber LIKE '%${search}%'`;
+                    searchstring += ` OR ${MaterialTab.searchQueryString(search)}`;
                 }
                 portions_query.andWhere(`(${searchstring})`);
             }
@@ -120,9 +95,12 @@ export class AmmunitionPortion {
             if (notAmmunitionStoreId !== null) {
                 portions_query.andWhere(`(AmmunitionStore IS NULL OR AmmunitionStore.Id != '${notAmmunitionStoreId}')`);
             }
-            portions_query.select(["AmmunitionPortion.Id", "AmmunitionPortion.Name", "AmmunitionPortion.Quantity"]);
+            portions_query.select(AmmunitionPortion.selectStringList);
             if (withAmmunitionStore) {
-                portions_query.addSelect(["AmmunitionStore.Id", "AmmunitionStore.Name", "AmmunitionStore.SerialNumber"]);
+                portions_query.addSelect(AmmunitionStore.selectStringList);
+            }
+            if (withMaterialTab) {
+                portions_query.addSelect(MaterialTab.selectStringList);
             }
             const portions: AmmunitionPortion[] = await portions_query.getMany();
             return portions;
