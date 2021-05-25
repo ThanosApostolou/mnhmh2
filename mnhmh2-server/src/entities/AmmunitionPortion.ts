@@ -95,6 +95,12 @@ export class AmmunitionPortion {
             if (notAmmunitionStoreId !== null) {
                 portions_query.andWhere(`(AmmunitionStore IS NULL OR AmmunitionStore.Id != '${notAmmunitionStoreId}')`);
             }
+            if (materialTabId !== null) {
+                portions_query.andWhere(`MaterialTab.Id = '${materialTabId}'`);
+            }
+            if (notMaterialTabId !== null) {
+                portions_query.andWhere(`(MaterialTab IS NULL OR MaterialTab.Id != '${notMaterialTabId}')`);
+            }
             portions_query.select(AmmunitionPortion.selectStringList);
             if (withAmmunitionStore) {
                 portions_query.addSelect(AmmunitionStore.selectStringList);

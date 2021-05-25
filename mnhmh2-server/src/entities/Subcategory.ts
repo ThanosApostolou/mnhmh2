@@ -63,10 +63,9 @@ export class Subcategory {
         return `Subcategory.Id LIKE '%${search}%' OR Subcategory.Name LIKE '%${search}%'`;
     }
 
-    static async listSelectFromDB(search: string): Promise<Subcategory[]> {
-        let subcategories: Subcategory[] = [];
+    static async listSelectFromDB(Id: number, notId: number, search: string, withMaterialTab: boolean, withBorrower: boolean, materialTabId: number, notMaterialTabId: number, borrowerId: number, notBorrowerId: number): Promise<Subcategory[]> {
         try {
-            if (search === "") {
+            /*if (search === "") {
                 subcategories = await App.app.dbmanager.subcategoryRepo.find({
                     relations: ["MaterialTab", "Borrower"]
                 });
@@ -86,6 +85,47 @@ export class Subcategory {
                     .orWhere(`Borrower.Name LIKE '%${search}%' OR Borrower.SerialNumber LIKE '%${search}%'`)
                     .getMany();
             }
+            */
+            const subcategories_query = App.app.dbmanager.subcategoryRepo.createQueryBuilder("Subcategory")
+                .leftJoinAndSelect("Subcategory.MaterialTab", "MaterialTab")
+                .leftJoinAndSelect("Subcategory.Borrower", "Borrower");
+
+            if (Id !== null) {
+                subcategories_query.andWhere(`Subcategory.Id = '${Id}'`);
+            }
+            if (notId !== null) {
+                subcategories_query.andWhere(`Subcategory.Id != '${notId}'`);
+            }
+            if (search !== null) {
+                let searchstring = Subcategory.searchQueryString(search);
+                if (withMaterialTab) {
+                    searchstring += ` OR ${MaterialTab.searchQueryString(search)}`;
+                }
+                if (withBorrower) {
+                    searchstring += ` OR ${Borrower.searchQueryString(search)}`;
+                }
+                subcategories_query.andWhere(`(${searchstring})`);
+            }
+            if (materialTabId !== null) {
+                subcategories_query.andWhere(`MaterialTab.Id = '${materialTabId}'`);
+            }
+            if (notMaterialTabId !== null) {
+                subcategories_query.andWhere(`(MaterialTab IS NULL OR MaterialTab.Id != '${notMaterialTabId}')`);
+            }
+            if (borrowerId !== null) {
+                subcategories_query.andWhere(`Borrower.Id = '${borrowerId}'`);
+            }
+            if (notBorrowerId !== null) {
+                subcategories_query.andWhere(`(Borrower IS NULL OR Borrower.Id != '${notBorrowerId}')`);
+            }
+            subcategories_query.select(Subcategory.selectStringList);
+            if (withMaterialTab) {
+                subcategories_query.addSelect(MaterialTab.selectStringList);
+            }
+            if (withBorrower) {
+                subcategories_query.addSelect(Borrower.selectStringList);
+            }
+            const subcategories: Subcategory[] = await subcategories_query.getMany();
             return subcategories;
         } catch(err) {
             console.log(err);

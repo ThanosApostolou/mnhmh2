@@ -38,12 +38,23 @@ export class Subcategory {
         return subcategories;
     }
 
-    static async listFromApi(cancelTokenSource: CancelTokenSource): Promise<Subcategory[]> {
+    static async listFromApi(cancelTokenSource: CancelTokenSource, Id: number, notId: number, search: string, withMaterialTab: boolean, withBorrower: boolean, materialTabId: number, notMaterialTabId: number, borrowerId: number, notBorrowerId: number): Promise<Subcategory[]> {
         try {
             const response = await App.app.apiconsumer.axios.request({
                 method: "get",
                 url: "/subcategory",
                 cancelToken: cancelTokenSource.token,
+                params: {
+                    Id: Id,
+                    notId: notId,
+                    search: search,
+                    withMaterialTab: withMaterialTab,
+                    withBorrower: withBorrower,
+                    materialTabId: materialTabId,
+                    notMaterialTabId: notMaterialTabId,
+                    borrowerId: borrowerId,
+                    notBorrowerId: notBorrowerId
+                }
             });
             const subcategories: Subcategory[] = Subcategory.listFromObjectList(response.data);
             return subcategories;
