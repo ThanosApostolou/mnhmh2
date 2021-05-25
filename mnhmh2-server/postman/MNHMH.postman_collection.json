@@ -120,6 +120,53 @@
 					"path": [
 						"api",
 						"subcategory"
+					],
+					"query": [
+						{
+							"key": "Id",
+							"value": "203",
+							"disabled": true
+						},
+						{
+							"key": "notId",
+							"value": "203",
+							"disabled": true
+						},
+						{
+							"key": "search",
+							"value": "2320-0520-00447",
+							"disabled": true
+						},
+						{
+							"key": "withMaterialTab",
+							"value": "false",
+							"disabled": true
+						},
+						{
+							"key": "withBorrower",
+							"value": "false",
+							"disabled": true
+						},
+						{
+							"key": "materialTabId",
+							"value": "12679",
+							"disabled": true
+						},
+						{
+							"key": "notMaterialTabId",
+							"value": "12679",
+							"disabled": true
+						},
+						{
+							"key": "borrowerId",
+							"value": "401",
+							"disabled": true
+						},
+						{
+							"key": "notBorrowerId",
+							"value": "401",
+							"disabled": true
+						}
 					]
 				}
 			},
@@ -139,6 +186,43 @@
 					"path": [
 						"api",
 						"ammunitionportion"
+					],
+					"query": [
+						{
+							"key": "Id",
+							"value": "1001",
+							"disabled": true
+						},
+						{
+							"key": "notId",
+							"value": "1001",
+							"disabled": true
+						},
+						{
+							"key": "search",
+							"value": "34-77",
+							"disabled": true
+						},
+						{
+							"key": "ammunitionStoreId",
+							"value": "601",
+							"disabled": true
+						},
+						{
+							"key": "notAmmunitionStoreId",
+							"value": "601",
+							"disabled": true
+						},
+						{
+							"key": "withAmmunitionStore",
+							"value": "false",
+							"disabled": true
+						},
+						{
+							"key": "withMaterialTab",
+							"value": "false",
+							"disabled": true
+						}
 					]
 				}
 			},
@@ -181,6 +265,90 @@
 			"response": []
 		},
 		{
+			"name": "/api/ammunitionstore",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"store\": {\r\n        \"Name\": \"test\",\r\n        \"SerialNumber\": 1234\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/ammunitionstore",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"ammunitionstore"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/ammunitionstore",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Id\": 815\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/ammunitionstore",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"ammunitionstore"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/ammunitionstore",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"store\": {\r\n        \"Id\": 815,\r\n        \"Name\": \"testtttt\",\r\n        \"SerialNumber\": 1234\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/ammunitionstore",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"ammunitionstore"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "/api/borrower",
 			"request": {
 				"method": "GET",
@@ -208,7 +376,7 @@
 						},
 						{
 							"key": "search",
-							"value": "νικ",
+							"value": "ΑΠ",
 							"disabled": true
 						},
 						{
@@ -412,7 +580,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3000/api/manager?search= ",
+					"raw": "localhost:3000/api/manager",
 					"host": [
 						"localhost"
 					],
@@ -424,7 +592,8 @@
 					"query": [
 						{
 							"key": "search",
-							"value": " "
+							"value": "",
+							"disabled": true
 						},
 						{
 							"key": "Id",

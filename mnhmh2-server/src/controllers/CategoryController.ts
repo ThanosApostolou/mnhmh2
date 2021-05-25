@@ -13,11 +13,19 @@ export class CategoryController {
 
     async GET(): Promise<void> {
         try {
+            let Id = null;
+            if (this.req.query["Id"]) {
+                Id = parseInt(this.req.query["Id"].toString().trim());
+            }
+            let notId = null;
+            if (this.req.query["notId"]) {
+                notId = parseInt(this.req.query["notId"].toString().trim());
+            }
             let search = "";
             if (this.req.query["search"]) {
                 search = this.req.query["search"].toString().trim();
             }
-            const categories = await Category.listSelectFromDB(search);
+            const categories = await Category.listSelectFromDB(Id, notId, search);
             this.res.setHeader("Content-Type", "application/json");
             this.res.send(Category.listToJson(categories));
         } catch(err) {

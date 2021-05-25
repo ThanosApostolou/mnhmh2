@@ -65,27 +65,6 @@ export class Subcategory {
 
     static async listSelectFromDB(Id: number, notId: number, search: string, withMaterialTab: boolean, withBorrower: boolean, materialTabId: number, notMaterialTabId: number, borrowerId: number, notBorrowerId: number): Promise<Subcategory[]> {
         try {
-            /*if (search === "") {
-                subcategories = await App.app.dbmanager.subcategoryRepo.find({
-                    relations: ["MaterialTab", "Borrower"]
-                });
-            } else {
-                subcategories = await App.app.dbmanager.subcategoryRepo.createQueryBuilder("Subcategory")
-                    .leftJoinAndSelect("Subcategory.MaterialTab", "MaterialTab")
-                    .leftJoinAndSelect("Subcategory.Borrower", "Borrower")
-                    .where([
-                        {
-                            Id: Like(`%${search}%`)
-                        },
-                        {
-                            Name: Like(`%${search}%`)
-                        },
-                    ])
-                    .orWhere(`MaterialTab.PartialRegistryCode LIKE '%${search}%' OR MaterialTab.Name LIKE '%${search}%'`)
-                    .orWhere(`Borrower.Name LIKE '%${search}%' OR Borrower.SerialNumber LIKE '%${search}%'`)
-                    .getMany();
-            }
-            */
             const subcategories_query = App.app.dbmanager.subcategoryRepo.createQueryBuilder("Subcategory")
                 .leftJoinAndSelect("Subcategory.MaterialTab", "MaterialTab")
                 .leftJoinAndSelect("Subcategory.Borrower", "Borrower");

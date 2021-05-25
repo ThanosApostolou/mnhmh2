@@ -65,9 +65,10 @@ export class Category {
         return `Category.Id LIKE '%${search}%' OR Category.Name LIKE '%${search}%' OR Category.SerialNumber LIKE '%${search}%'`;
     }
 
-    static async listSelectFromDB(search: string): Promise<Category[]> {
-        let categories: Category[] = [];
+    static async listSelectFromDB(Id: number, notId: number, search: string): Promise<Category[]> {
+        //const categories: Category[] = [];
         try {
+            /*
             if (search === "") {
                 categories = await App.app.dbmanager.categoryRepo.find();
             } else {
@@ -85,6 +86,20 @@ export class Category {
                     ]
                 });
             }
+            */
+            const categories_query = App.app.dbmanager.categoryRepo.createQueryBuilder("Category");
+
+            if (Id !== null) {
+                categories_query.andWhere(`Category.Id = '${Id}'`);
+            }
+            if (notId !== null) {
+                categories_query.andWhere(`Category.Id != '${notId}'`);
+            }
+            if (search !== null) {
+                const searchstring = Category.searchQueryString(search);
+                categories_query.andWhere(`(${searchstring})`);
+            }
+            const categories: Category[] = await categories_query.getMany();
             return categories;
         } catch(err) {
             console.log(err);
