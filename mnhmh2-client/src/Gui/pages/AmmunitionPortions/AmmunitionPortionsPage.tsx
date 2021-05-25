@@ -4,17 +4,15 @@ import { Search } from "@material-ui/icons";
 import { Alert } from "@material-ui/lab";
 
 
-import { MyDataGrid } from "../../components/MyDataGrid/MyDataGrid";
+import { AmmunitionPortionDataGrid } from "./AmmunitionPortionDataGrid";
 import { AmmunitionPortion } from "../../../entities/AmmunitionPortion";
-import { CancelTokenSource } from "axios";
-import { ApiConsumer } from "../../../ApiConsumer";
-import { GridRowSelectedParams, GridRowsProp } from "@material-ui/data-grid";
-//import { ManagersAdd } from "./ManagersAdd";
-//import { ManagersEdit } from "./ManagersEdit";
+import { GridRowsProp } from "@material-ui/data-grid";
+import { AddEditActions } from "../../components/AddEditActions";
+//import { AmmunitionStoresAdd } from "./AmmunitionStoresAdd";
+//import { AmmunitionStoresEdit } from "./AmmunitionStoresEdit";
 
-export class AmmunitionPortionsPage extends React.Component<Record<string, never>, AmmunitionPortionsPageState> {
-    state: Readonly<AmmunitionPortionsPageState>;
-    cancelTokenSource: CancelTokenSource;
+export class AmmunitionPortionsPage extends React.Component<Record<string, never>, AmmunitionStoresPageState> {
+    state: Readonly<AmmunitionStoresPageState>;
     search: string;
 
     constructor(props: Record<string, never>) {
@@ -29,49 +27,28 @@ export class AmmunitionPortionsPage extends React.Component<Record<string, never
             openAddDrawer: false,
             openEditDrawer: false,
             openSnackbar: false,
-            snackbarMessage: ""
+            snackbarMessage: "",
+            fetchData: false
         };
-        this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
         this.search = "";
     }
 
     fetchData(): void {
-        console.log("fetch data", this.search);
-        this.cancelFetchData();
-        this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
-        this.setState({rows: []});
-        this.setState({loading : true});
-        AmmunitionPortion.listFromApi(this.cancelTokenSource).then((data: any) => {
-            this.setState({portions: data});
-            this.setState({rows: AmmunitionPortion.getRows(this.state.portions)});
-        }).catch((error) => {
-            this.setState({portions: null});
-            this.setState({rows: []});
-            this.setState({error: error});
-        }).finally(() => {
-            this.setState({loading: false});
-        });
+        this.setState({fetchData: !this.state.fetchData});
+    }
+    onFetchData(): void {
+        this.setState({selectedPortion: null});
     }
 
-    cancelFetchData(): void {
-        this.cancelTokenSource.cancel("cancel fetching data");
-    }
-
-    onRowSelected(params: GridRowSelectedParams): void {
-        if (this.state.portions && this.state.portions !== null && this.state.portions.length > 0) {
-            this.setState({selectedPortion: this.state.portions[params.data.AA - 1]});
-        } else {
-            this.setState({selectedPortion: null});
-        }
-
-        console.log("manager", this.state.selectedPortion);
+    onRowSelected(portion: AmmunitionPortion): void {
+        this.setState({selectedPortion: portion});
     }
 
     onAddClick(): void {
         this.setState({openAddDrawer: true});
     }
     onAddSave(): void {
-        this.setState({openAddDrawer: false, snackbarMessage: "Επιτυχία προσθήκης μέλους επιτροπής!", openSnackbar: true});
+        this.setState({openAddDrawer: false, snackbarMessage: "Επιτυχία προσθήκης πυρομαχικού!", openSnackbar: true});
         this.fetchData();
     }
     onAddCancel(): void {
@@ -82,11 +59,11 @@ export class AmmunitionPortionsPage extends React.Component<Record<string, never
         this.setState({openEditDrawer: true});
     }
     onEditSave(): void {
-        this.setState({openEditDrawer: false, snackbarMessage: "Επιτυχία τροποποίησης μέλους επιτροπής!", openSnackbar: true});
+        this.setState({openEditDrawer: false, snackbarMessage: "Επιτυχία τροποποίησης πυρομαχικού!", openSnackbar: true});
         this.fetchData();
     }
     onEditDelete(): void {
-        this.setState({openEditDrawer: false, snackbarMessage: "Επιτυχία διαγραφής μέλους επιτροπής!", openSnackbar: true});
+        this.setState({openEditDrawer: false, snackbarMessage: "Επιτυχία διαγραφής πυρομαχικού!", openSnackbar: true});
         this.fetchData();
     }
     onEditCancel(): void {
@@ -95,10 +72,12 @@ export class AmmunitionPortionsPage extends React.Component<Record<string, never
 
     handleSubmit(event: React.FormEvent<HTMLFormElement>): void {
         event.preventDefault();
+        this.setState({search: this.search});
         this.fetchData();
     }
 
     render(): ReactNode {
+        const actions = <AddEditActions disabledEdit={this.state.selectedPortion === null} onAddClick={this.onAddClick.bind(this)} onEditClick={this.onEditClick.bind(this)} />;
         return (
             <Grid container direction="column" style={{height: "100%"}}>
                 <Card elevation={6} style={{width: "100%"}}>
@@ -115,23 +94,22 @@ export class AmmunitionPortionsPage extends React.Component<Record<string, never
                         </form>
                     </CardContent>
                 </Card>
-                <MyDataGrid  error={this.state.error} rows={this.state.rows} loading={this.state.loading} columns={AmmunitionPortion.getColumns()} storagePrefix="ammunitionportions"
-                    fetchData={this.fetchData.bind(this)}
-                    cancelFetchData={this.cancelFetchData.bind(this)}
-                    onRowSelected={this.onRowSelected.bind(this)}
-                    onAddClick={this.onAddClick.bind(this)}
-                    onEditClick={this.onEditClick.bind(this)}
+                <AmmunitionPortionDataGrid actions={actions} onRowSelected={this.onRowSelected.bind(this)} storagePrefix="portions" fetchData={this.state.fetchData}
+                    search={this.state.search}
+                    onFetchData={this.onFetchData.bind(this)}
                 />
-                {/*<ManagersAdd openAddDrawer={this.state.openAddDrawer}
+                {/*
+                <AmmunitionStoresAdd openAddDrawer={this.state.openAddDrawer}
                     onAddSave={this.onAddSave.bind(this)}
                     onAddCancel={this.onAddCancel.bind(this)}
                 />
-                <ManagersEdit manager={this.state.selectedGroup}
+                <AmmunitionStoresEdit store={this.state.selectedPortion}
                     openEditDrawer={this.state.openEditDrawer}
                     onEditSave={this.onEditSave.bind(this)}
                     onEditDelete={this.onEditDelete.bind(this)}
                     onEditCancel={this.onEditCancel.bind(this)}
-                />*/}
+                />
+                */}
                 <Snackbar
                     anchorOrigin={{
                         vertical: "bottom",
@@ -150,7 +128,7 @@ export class AmmunitionPortionsPage extends React.Component<Record<string, never
     }
 }
 
-export interface AmmunitionPortionsPageState {
+export interface AmmunitionStoresPageState {
     portions: AmmunitionPortion[];
     selectedPortion: AmmunitionPortion;
     rows: GridRowsProp;
@@ -161,4 +139,5 @@ export interface AmmunitionPortionsPageState {
     openEditDrawer: boolean;
     openSnackbar: boolean;
     snackbarMessage: string;
+    fetchData: boolean;
 }

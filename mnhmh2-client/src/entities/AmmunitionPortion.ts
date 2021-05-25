@@ -40,12 +40,25 @@ export class AmmunitionPortion {
         return portions;
     }
 
-    static async listFromApi(cancelTokenSource: CancelTokenSource): Promise<AmmunitionPortion[]> {
+    static async listFromApi(cancelTokenSource: CancelTokenSource, Id: number, notId: number, search: string,
+        withAmmunitionStore: boolean, withMaterialTab: boolean, ammunitionStoreId: number, notAmmunitionStoreId: number,
+        materialTabId: number, notMaterialTabId: number): Promise<AmmunitionPortion[]> {
         try {
             const response = await App.app.apiconsumer.axios.request({
                 method: "get",
                 url: "/ammunitionportion",
                 cancelToken: cancelTokenSource.token,
+                params: {
+                    Id: Id,
+                    notId: notId,
+                    search: search,
+                    withAmmunitionStore: withAmmunitionStore,
+                    withMaterialTab: withMaterialTab,
+                    ammunitionStoreId: ammunitionStoreId,
+                    notAmmunitionStoreId: notAmmunitionStoreId,
+                    materialTabId: materialTabId,
+                    notMaterialTabId: notMaterialTabId
+                }
             });
             const portions: AmmunitionPortion[] = AmmunitionPortion.listFromObjectList(response.data);
             return portions;
@@ -66,7 +79,7 @@ export class AmmunitionPortion {
     }
 
     static getRows(portions: AmmunitionPortion[]): GridRowsProp {
-        const rows: GridRowsProp = [];
+        const rows: GridRowData[] = [];
         let count = 1;
         for (const portion of portions) {
             const row: GridRowData = {
@@ -80,7 +93,7 @@ export class AmmunitionPortion {
             count++;
             rows.push(row);
         }
-        return rows;
+        return rows as GridRowsProp;
 
     }
 
