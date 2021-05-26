@@ -63,7 +63,7 @@ export class AmmunitionPortionController {
     async POST(): Promise<void> {
         try {
             const body = this.req.body;
-            const portion = AmmunitionPortion.fromObject(body.group);
+            const portion = AmmunitionPortion.fromObject(body.portion);
             if (!portion.Name || portion.Name === null || portion.Name === "") {
                 this.res.status(422);
                 this.res.setHeader("Content-Type", "application/json");
@@ -95,7 +95,7 @@ export class AmmunitionPortionController {
     async PUT(): Promise<void> {
         try {
             const body = this.req.body;
-            const portion = AmmunitionPortion.fromObject(body.group);
+            const portion = AmmunitionPortion.fromObject(body.portion);
             if (!portion.Name || portion.Name === null || portion.Name === "") {
                 this.res.status(422);
                 this.res.setHeader("Content-Type", "application/json");

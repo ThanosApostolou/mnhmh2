@@ -66,6 +66,63 @@ export class AmmunitionPortion {
             return error;
         }
     }
+    static async insertToApi(cancelTokenSource: CancelTokenSource, portion: AmmunitionPortion): Promise<any> {
+        try {
+            const response = await App.app.apiconsumer.axios.request({
+                method: "post",
+                url: "/ammunitionportion",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                cancelToken: cancelTokenSource.token,
+                data: {
+                    portion: portion
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+    static async updateInApi(cancelTokenSource: CancelTokenSource, portion: AmmunitionPortion): Promise<any> {
+        try {
+            const response = await App.app.apiconsumer.axios.request({
+                method: "put",
+                url: "/ammunitionportion",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                cancelToken: cancelTokenSource.token,
+                data: {
+                    portion: portion
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+    static async deleteInApi(cancelTokenSource: CancelTokenSource, Id: number): Promise<any> {
+        try {
+            const response = await App.app.apiconsumer.axios.request({
+                method: "delete",
+                url: "/ammunitionportion",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                cancelToken: cancelTokenSource.token,
+                data: {
+                    Id: Id
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
 
     static getColumns(): GridColDef[] {
         const columns: GridColDef[] = [
@@ -87,8 +144,8 @@ export class AmmunitionPortion {
                 AA: count,
                 Id: portion.Id,
                 Name: portion.Name,
-                MaterialTab: portion.MaterialTab.PartialRegistryCode,
-                AmmunitionStore: portion.AmmunitionStore.Name
+                MaterialTab: portion.MaterialTab ? portion.MaterialTab.PartialRegistryCode : null,
+                AmmunitionStore: portion.AmmunitionStore ? portion.AmmunitionStore.Name : null
             };
             count++;
             rows.push(row);

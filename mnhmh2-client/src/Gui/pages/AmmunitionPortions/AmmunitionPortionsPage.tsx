@@ -8,7 +8,7 @@ import { AmmunitionPortionDataGrid } from "./AmmunitionPortionDataGrid";
 import { AmmunitionPortion } from "../../../entities/AmmunitionPortion";
 import { GridRowsProp } from "@material-ui/data-grid";
 import { AddEditActions } from "../../components/AddEditActions";
-//import { AmmunitionStoresAdd } from "./AmmunitionStoresAdd";
+import { AmmunitionPortionsAdd } from "./AmmunitionPortionsAdd";
 //import { AmmunitionStoresEdit } from "./AmmunitionStoresEdit";
 
 export class AmmunitionPortionsPage extends React.Component<Record<string, never>, AmmunitionStoresPageState> {
@@ -98,11 +98,12 @@ export class AmmunitionPortionsPage extends React.Component<Record<string, never
                     search={this.state.search}
                     onFetchData={this.onFetchData.bind(this)}
                 />
-                {/*
-                <AmmunitionStoresAdd openAddDrawer={this.state.openAddDrawer}
+
+                <AmmunitionPortionsAdd openAddDrawer={this.state.openAddDrawer}
                     onAddSave={this.onAddSave.bind(this)}
                     onAddCancel={this.onAddCancel.bind(this)}
                 />
+                {/*
                 <AmmunitionStoresEdit store={this.state.selectedPortion}
                     openEditDrawer={this.state.openEditDrawer}
                     onEditSave={this.onEditSave.bind(this)}
