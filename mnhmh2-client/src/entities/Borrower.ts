@@ -136,7 +136,7 @@ export class Borrower {
     }
 
     static getRows(borrowers: Borrower[], withManager: boolean): GridRowsProp {
-        const rows: GridRowsProp = [];
+        const rows: GridRowData[] = [];
         let count = 1;
         for (const borrower of borrowers) {
             const row: GridRowData = {
@@ -154,6 +154,6 @@ export class Borrower {
             count++;
             rows.push(row);
         }
-        return rows;
+        return rows as GridRowsProp;
     }
 }
