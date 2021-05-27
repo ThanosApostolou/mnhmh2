@@ -8,7 +8,7 @@ import { SubcategoryDataGrid } from "./SubcategoryDataGrid";
 import { Subcategory } from "../../../entities/Subcategory";
 import { GridRowsProp } from "@material-ui/data-grid";
 import { AddEditActions } from "../../components/AddEditActions";
-//import { AmmunitionStoresAdd } from "./AmmunitionStoresAdd";
+import { SubcategoriesAdd } from "./SubcategoriesAdd";
 //import { AmmunitionStoresEdit } from "./AmmunitionStoresEdit";
 
 export class SubcategoriesPage extends React.Component<Record<string, never>, SubcategoriesPageState> {
@@ -98,11 +98,11 @@ export class SubcategoriesPage extends React.Component<Record<string, never>, Su
                     search={this.state.search}
                     onFetchData={this.onFetchData.bind(this)}
                 />
-                {/*
-                <AmmunitionStoresAdd openAddDrawer={this.state.openAddDrawer}
+                <SubcategoriesAdd openAddDrawer={this.state.openAddDrawer}
                     onAddSave={this.onAddSave.bind(this)}
                     onAddCancel={this.onAddCancel.bind(this)}
                 />
+                {/*
                 <AmmunitionStoresEdit store={this.state.selectedPortion}
                     openEditDrawer={this.state.openEditDrawer}
                     onEditSave={this.onEditSave.bind(this)}

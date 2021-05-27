@@ -49,6 +49,18 @@ export class Webserver {
             new SubcategoryController(req, res).GET();
         });
 
+        this.expressapp.post("/api/subcategory", (req: Request, res: Response) => {
+            new SubcategoryController(req, res).POST();
+        });
+
+        this.expressapp.delete("/api/subcategory", (req: Request, res: Response) => {
+            new SubcategoryController(req, res).DELETE();
+        });
+
+        this.expressapp.put("/api/subcategory", (req: Request, res: Response) => {
+            new SubcategoryController(req, res).PUT();
+        });
+
         this.expressapp.get("/api/ammunitionportion", (req: Request, res: Response) => {
             new AmmunitionPortionController(req, res).GET();
         });

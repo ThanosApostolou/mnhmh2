@@ -63,7 +63,7 @@ export class SubcategoryController {
     async POST(): Promise<void> {
         try {
             const body = this.req.body;
-            const subcategory = Subcategory.fromObject(body.group);
+            const subcategory = Subcategory.fromObject(body.subcategory);
             if (!subcategory.Name || subcategory.Name === null || subcategory.Name === "") {
                 this.res.status(422);
                 this.res.setHeader("Content-Type", "application/json");
@@ -95,7 +95,7 @@ export class SubcategoryController {
     async PUT(): Promise<void> {
         try {
             const body = this.req.body;
-            const subcategory = Subcategory.fromObject(body.group);
+            const subcategory = Subcategory.fromObject(body.subcategory);
             if (!subcategory.Name || subcategory.Name === null || subcategory.Name === "") {
                 this.res.status(422);
                 this.res.setHeader("Content-Type", "application/json");

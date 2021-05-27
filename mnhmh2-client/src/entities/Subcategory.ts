@@ -62,6 +62,63 @@ export class Subcategory {
             return error;
         }
     }
+    static async insertToApi(cancelTokenSource: CancelTokenSource, subcategory: Subcategory): Promise<any> {
+        try {
+            const response = await App.app.apiconsumer.axios.request({
+                method: "post",
+                url: "/subcategory",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                cancelToken: cancelTokenSource.token,
+                data: {
+                    subcategory: subcategory
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+    static async updateInApi(cancelTokenSource: CancelTokenSource, subcategory: Subcategory): Promise<any> {
+        try {
+            const response = await App.app.apiconsumer.axios.request({
+                method: "put",
+                url: "/subcategory",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                cancelToken: cancelTokenSource.token,
+                data: {
+                    subcategory: subcategory
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+    static async deleteInApi(cancelTokenSource: CancelTokenSource, Id: number): Promise<any> {
+        try {
+            const response = await App.app.apiconsumer.axios.request({
+                method: "delete",
+                url: "/subcategory",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                cancelToken: cancelTokenSource.token,
+                data: {
+                    Id: Id
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
 
     static getColumns(): GridColDef[] {
         const columns: GridColDef[] = [
@@ -77,7 +134,7 @@ export class Subcategory {
     }
 
     static getRows(subcategories: Subcategory[]): GridRowsProp {
-        const rows: GridRowsProp = [];
+        const rows: GridRowData[] = [];
         let count = 1;
         for (const subcategory of subcategories) {
             const row: GridRowData = {
@@ -85,16 +142,16 @@ export class Subcategory {
                 AA: count,
                 Id: subcategory.Id,
                 Name: subcategory.Name,
-                MaterialTabId: subcategory.MaterialTab.Id,
-                MaterialTabPartialRegistryCode: subcategory.MaterialTab.PartialRegistryCode,
-                BorrowerId: subcategory.Borrower.Id,
-                BorrowerName: subcategory.Borrower.Name,
+                MaterialTabId: subcategory.MaterialTab ? subcategory.MaterialTab.Id : null,
+                MaterialTabPartialRegistryCode: subcategory.MaterialTab ? subcategory.MaterialTab.PartialRegistryCode : null,
+                BorrowerId: subcategory.Borrower ? subcategory.Borrower.Id : null,
+                BorrowerName: subcategory.Borrower ? subcategory.Borrower.Name : null,
 
             };
             count++;
             rows.push(row);
         }
-        return rows;
+        return rows as GridRowsProp;
 
     }
 
