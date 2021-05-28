@@ -2,19 +2,21 @@ import React, { ReactNode } from "react";
 import { Card, Button, TextField, Grid, Drawer, CardHeader, CardActions, Backdrop, CircularProgress, Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 
-import { Subcategory } from "../../../entities/Subcategory";
+import { Category } from "../../../entities/Category";
 import { ApiConsumer } from "../../../ApiConsumer";
 import { CancelTokenSource } from "axios";
 
-export class SubcategoriesAdd extends React.Component<SubcategoriesAddProps, SubcategoriesAddState> {
-    state: Readonly<SubcategoriesAddState>;
+export class CategoriesAdd extends React.Component<CategoriesAddProps, CategoriesAddState> {
+    state: Readonly<CategoriesAddState>;
     cancelTokenSource: CancelTokenSource;
     nameInputRef: React.RefObject<HTMLInputElement>;
+    serialNumberInputRef: React.RefObject<HTMLInputElement>;
 
-    constructor(props: SubcategoriesAddProps) {
+    constructor(props: CategoriesAddProps) {
         super(props);
         this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
         this.nameInputRef = React.createRef<HTMLInputElement>();
+        this.serialNumberInputRef = React.createRef<HTMLInputElement>();
         this.state = {
             loading: false,
             errorSnackbarOpen: false
@@ -26,11 +28,12 @@ export class SubcategoriesAdd extends React.Component<SubcategoriesAddProps, Sub
         this.setState({loading: true});
         this.cancelTokenSource.cancel("cancel sending data");
         this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
-        const store = Subcategory.fromObject({
+        const store = Category.fromObject({
             Id: null,
             Name: this.nameInputRef.current.value,
+            SerialNumber: this.serialNumberInputRef.current.value
         });
-        Subcategory.insertToApi(this.cancelTokenSource, store).then(() => {
+        Category.insertToApi(this.cancelTokenSource, store).then(() => {
             this.setState({loading: false});
             if (this.props.onAddSave) {
                 this.props.onAddSave();
@@ -68,6 +71,7 @@ export class SubcategoriesAdd extends React.Component<SubcategoriesAddProps, Sub
                                         <fieldset>
                                             <Grid container direction="column" justify="flex-start" alignContent="center" alignItems="center">
                                                 <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ" inputRef={this.nameInputRef} />
+                                                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΣΕΙΡΙΑΚΟΣ ΑΡΙΘΜΟΣ" inputRef={this.serialNumberInputRef} />
                                             </Grid>
                                         </fieldset>
                                         <div style={{display: "flex", flexGrow: 1}} />
@@ -109,13 +113,13 @@ export class SubcategoriesAdd extends React.Component<SubcategoriesAddProps, Sub
     }
 }
 
-export interface SubcategoriesAddProps {
+export interface CategoriesAddProps {
     openAddDrawer: boolean;
     onAddSave?: () => void;
     onAddCancel?: () => void;
 }
 
-interface SubcategoriesAddState {
+interface CategoriesAddState {
     loading: boolean;
     errorSnackbarOpen: boolean;
 }

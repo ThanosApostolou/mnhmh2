@@ -38,7 +38,7 @@ export class CategoryController {
     async POST(): Promise<void> {
         try {
             const body = this.req.body;
-            const category = Category.fromObject(body.group);
+            const category = Category.fromObject(body.category);
             if (!category.Name || category.Name === null || category.Name === "") {
                 this.res.status(422);
                 this.res.setHeader("Content-Type", "application/json");
@@ -70,7 +70,7 @@ export class CategoryController {
     async PUT(): Promise<void> {
         try {
             const body = this.req.body;
-            const category = Category.fromObject(body.group);
+            const category = Category.fromObject(body.category);
             if (!category.Name || category.Name === null || category.Name === "") {
                 this.res.status(422);
                 this.res.setHeader("Content-Type", "application/json");

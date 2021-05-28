@@ -4,17 +4,15 @@ import { Search } from "@material-ui/icons";
 import { Alert } from "@material-ui/lab";
 
 
-import { MyDataGrid } from "../../components/MyDataGrid/MyDataGrid";
+import { CategoryDataGrid } from "./CategoryDataGrid";
 import { Category } from "../../../entities/Category";
-import { CancelTokenSource } from "axios";
-import { ApiConsumer } from "../../../ApiConsumer";
-import { GridRowSelectedParams, GridRowsProp } from "@material-ui/data-grid";
-//import { ManagersAdd } from "./ManagersAdd";
-//import { ManagersEdit } from "./ManagersEdit";
+import { GridRowsProp } from "@material-ui/data-grid";
+import { AddEditActions } from "../../components/AddEditActions";
+import { CategoriesAdd } from "./CategoriesAdd";
+//import { AmmunitionStoresEdit } from "./AmmunitionStoresEdit";
 
 export class CategoriesPage extends React.Component<Record<string, never>, CategoriesPageState> {
     state: Readonly<CategoriesPageState>;
-    cancelTokenSource: CancelTokenSource;
     search: string;
 
     constructor(props: Record<string, never>) {
@@ -29,49 +27,28 @@ export class CategoriesPage extends React.Component<Record<string, never>, Categ
             openAddDrawer: false,
             openEditDrawer: false,
             openSnackbar: false,
-            snackbarMessage: ""
+            snackbarMessage: "",
+            fetchData: false
         };
-        this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
         this.search = "";
     }
 
     fetchData(): void {
-        console.log("fetch data", this.search);
-        this.cancelFetchData();
-        this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
-        this.setState({rows: []});
-        this.setState({loading : true});
-        Category.listFromApi(this.cancelTokenSource).then((data: any) => {
-            this.setState({categories: data});
-            this.setState({rows: Category.getRows(this.state.categories)});
-        }).catch((error) => {
-            this.setState({categories: null});
-            this.setState({rows: []});
-            this.setState({error: error});
-        }).finally(() => {
-            this.setState({loading: false});
-        });
+        this.setState({fetchData: !this.state.fetchData});
+    }
+    onFetchData(): void {
+        this.setState({selectedCategory: null});
     }
 
-    cancelFetchData(): void {
-        this.cancelTokenSource.cancel("cancel fetching data");
-    }
-
-    onRowSelected(params: GridRowSelectedParams): void {
-        if (this.state.categories && this.state.categories !== null && this.state.categories.length > 0) {
-            this.setState({selectedCategory: this.state.categories[params.data.AA - 1]});
-        } else {
-            this.setState({selectedCategory: null});
-        }
-
-        console.log("manager", this.state.selectedCategory);
+    onRowSelected(category: Category): void {
+        this.setState({selectedCategory: category});
     }
 
     onAddClick(): void {
         this.setState({openAddDrawer: true});
     }
     onAddSave(): void {
-        this.setState({openAddDrawer: false, snackbarMessage: "Επιτυχία προσθήκης μέλους επιτροπής!", openSnackbar: true});
+        this.setState({openAddDrawer: false, snackbarMessage: "Επιτυχία προσθήκης υποκατηγορίας!", openSnackbar: true});
         this.fetchData();
     }
     onAddCancel(): void {
@@ -82,11 +59,11 @@ export class CategoriesPage extends React.Component<Record<string, never>, Categ
         this.setState({openEditDrawer: true});
     }
     onEditSave(): void {
-        this.setState({openEditDrawer: false, snackbarMessage: "Επιτυχία τροποποίησης μέλους επιτροπής!", openSnackbar: true});
+        this.setState({openEditDrawer: false, snackbarMessage: "Επιτυχία τροποποίησης υποκατηγορίας!", openSnackbar: true});
         this.fetchData();
     }
     onEditDelete(): void {
-        this.setState({openEditDrawer: false, snackbarMessage: "Επιτυχία διαγραφής μέλους επιτροπής!", openSnackbar: true});
+        this.setState({openEditDrawer: false, snackbarMessage: "Επιτυχία διαγραφής υποκατηγορίας!", openSnackbar: true});
         this.fetchData();
     }
     onEditCancel(): void {
@@ -95,10 +72,12 @@ export class CategoriesPage extends React.Component<Record<string, never>, Categ
 
     handleSubmit(event: React.FormEvent<HTMLFormElement>): void {
         event.preventDefault();
+        this.setState({search: this.search});
         this.fetchData();
     }
 
     render(): ReactNode {
+        const actions = <AddEditActions disabledEdit={this.state.selectedCategory === null} onAddClick={this.onAddClick.bind(this)} onEditClick={this.onEditClick.bind(this)} />;
         return (
             <Grid container direction="column" style={{height: "100%"}}>
                 <Card elevation={6} style={{width: "100%"}}>
@@ -115,23 +94,22 @@ export class CategoriesPage extends React.Component<Record<string, never>, Categ
                         </form>
                     </CardContent>
                 </Card>
-                <MyDataGrid  error={this.state.error} rows={this.state.rows} loading={this.state.loading} columns={Category.getColumns()} storagePrefix="categories"
-                    fetchData={this.fetchData.bind(this)}
-                    cancelFetchData={this.cancelFetchData.bind(this)}
-                    onRowSelected={this.onRowSelected.bind(this)}
-                    onAddClick={this.onAddClick.bind(this)}
-                    onEditClick={this.onEditClick.bind(this)}
+                <CategoryDataGrid actions={actions} onRowSelected={this.onRowSelected.bind(this)} storagePrefix="categories" fetchData={this.state.fetchData}
+                    search={this.state.search}
+                    onFetchData={this.onFetchData.bind(this)}
                 />
-                {/*<ManagersAdd openAddDrawer={this.state.openAddDrawer}
+                <CategoriesAdd openAddDrawer={this.state.openAddDrawer}
                     onAddSave={this.onAddSave.bind(this)}
                     onAddCancel={this.onAddCancel.bind(this)}
                 />
-                <ManagersEdit manager={this.state.selectedGroup}
+                {/*
+                <AmmunitionStoresEdit store={this.state.selectedPortion}
                     openEditDrawer={this.state.openEditDrawer}
                     onEditSave={this.onEditSave.bind(this)}
                     onEditDelete={this.onEditDelete.bind(this)}
                     onEditCancel={this.onEditCancel.bind(this)}
-                />*/}
+                />
+                */}
                 <Snackbar
                     anchorOrigin={{
                         vertical: "bottom",
@@ -161,4 +139,5 @@ export interface CategoriesPageState {
     openEditDrawer: boolean;
     openSnackbar: boolean;
     snackbarMessage: string;
+    fetchData: boolean;
 }

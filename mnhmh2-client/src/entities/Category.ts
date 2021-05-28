@@ -34,17 +34,79 @@ export class Category {
         return categories;
     }
 
-    static async listFromApi(cancelTokenSource: CancelTokenSource): Promise<Category[]> {
+    static async listFromApi(cancelTokenSource: CancelTokenSource, Id: number, notId: number, search: string): Promise<Category[]> {
         try {
             const response = await App.app.apiconsumer.axios.request({
                 method: "get",
                 url: "/category",
                 cancelToken: cancelTokenSource.token,
+                params: {
+                    Id: Id,
+                    notId: notId,
+                    search: search
+                }
             });
             const categories: Category[] = Category.listFromObjectList(response.data);
             return categories;
         } catch (error) {
             return error;
+        }
+    }
+    static async insertToApi(cancelTokenSource: CancelTokenSource, category: Category): Promise<any> {
+        try {
+            const response = await App.app.apiconsumer.axios.request({
+                method: "post",
+                url: "/category",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                cancelToken: cancelTokenSource.token,
+                data: {
+                    category: category
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+    static async updateInApi(cancelTokenSource: CancelTokenSource, category: Category): Promise<any> {
+        try {
+            const response = await App.app.apiconsumer.axios.request({
+                method: "put",
+                url: "/category",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                cancelToken: cancelTokenSource.token,
+                data: {
+                    category: category
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+    static async deleteInApi(cancelTokenSource: CancelTokenSource, Id: number): Promise<any> {
+        try {
+            const response = await App.app.apiconsumer.axios.request({
+                method: "delete",
+                url: "/category",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                cancelToken: cancelTokenSource.token,
+                data: {
+                    Id: Id
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            throw error;
         }
     }
 
@@ -59,7 +121,7 @@ export class Category {
     }
 
     static getRows(categories: Category[]): GridRowsProp {
-        const rows: GridRowsProp = [];
+        const rows: GridRowData[] = [];
         let count = 1;
         for (const category of categories) {
             const row: GridRowData = {
@@ -72,7 +134,7 @@ export class Category {
             count++;
             rows.push(row);
         }
-        return rows;
+        return rows as GridRowsProp;
 
     }
 
