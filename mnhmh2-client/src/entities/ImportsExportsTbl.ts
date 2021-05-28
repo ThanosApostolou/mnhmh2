@@ -2,6 +2,8 @@ import { GridColDef, GridRowData, GridRowsProp } from "@material-ui/data-grid";
 import { CancelTokenSource } from "axios";
 
 import App from "../App";
+import { Utils } from "../Utils";
+
 import { MaterialTab } from "./MaterialTab";
 
 export class ImportsExportsTbl {
@@ -65,11 +67,14 @@ export class ImportsExportsTbl {
                     notMaterialTabId: notMaterialTabId
                 }
             });
+            if (!Utils.isIterable(response.data)) {
+                throw response.data;
+            }
             const importsexportstbls: ImportsExportsTbl[] = ImportsExportsTbl.listFromObjectList(response.data);
             return importsexportstbls;
         } catch (error) {
             console.log("ERROR", error);
-            return error;
+            throw error;
         }
     }
     static async insertToApi(cancelTokenSource: CancelTokenSource, importsexportstbl: ImportsExportsTbl): Promise<any> {

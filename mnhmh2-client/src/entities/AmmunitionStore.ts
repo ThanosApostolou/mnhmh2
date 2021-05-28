@@ -1,5 +1,6 @@
 import { GridColDef, GridRowData, GridRowsProp } from "@material-ui/data-grid";
 import { CancelTokenSource } from "axios";
+import { Utils } from "../Utils";
 import App from "../App";
 
 export class AmmunitionStore {
@@ -46,10 +47,14 @@ export class AmmunitionStore {
                     search: search
                 }
             });
+            if (!Utils.isIterable(response.data)) {
+                throw response.data;
+            }
             const stores: AmmunitionStore[] = AmmunitionStore.listFromObjectList(response.data);
             return stores;
         } catch (error) {
-            return error;
+            console.log("ERROR:", error);
+            throw error;
         }
     }
 

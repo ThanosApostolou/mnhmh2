@@ -96,7 +96,7 @@ export class MyGridExportComp extends React.Component<MyGridExportCompProps, MyG
             <div>
                 <Button color="primary" size="small" onClick={(event) => this.setState({anchorMenuEl: event.currentTarget})}>
                     <GetApp />
-                    &nbsp;EXPORT
+                    &nbsp;ΕΞΑΓΩΓΗ
                 </Button>
                 <Popover anchorEl={this.state.anchorMenuEl} open={Boolean(this.state.anchorMenuEl)} onClose={() => this.setState({anchorMenuEl: null})}
                     anchorOrigin={{

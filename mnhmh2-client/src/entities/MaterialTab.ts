@@ -1,6 +1,6 @@
 import { GridColDef, GridRowData, GridRowsProp } from "@material-ui/data-grid";
 import { CancelTokenSource } from "axios";
-
+import { Utils } from "../Utils";
 import App from "../App";
 import { Category } from "./Category";
 import { Group } from "./Group";
@@ -90,10 +90,14 @@ export class MaterialTab {
                 url: "/materialtab",
                 cancelToken: cancelTokenSource.token
             });
+            if (!Utils.isIterable(response.data)) {
+                throw response.data;
+            }
             const materialtabs: MaterialTab[] = MaterialTab.listFromObjectList(response.data);
             return materialtabs;
         } catch (error) {
-            return error;
+            console.log("ERROR:", error);
+            throw error;
         }
     }
 
@@ -131,7 +135,7 @@ export class MaterialTab {
     }
 
     static getRows(materialtabs: MaterialTab[]): GridRowsProp {
-        const rows: GridRowsProp = [];
+        const rows: GridRowData[] = [];
         let count = 1;
         for (const mt of materialtabs) {
             const row: GridRowData = {
@@ -167,7 +171,7 @@ export class MaterialTab {
             count++;
             rows.push(row);
         }
-        return rows;
+        return rows as GridRowsProp;
 
     }
 

@@ -1,6 +1,7 @@
 import { GridColDef, GridRowData, GridRowsProp } from "@material-ui/data-grid";
 import { CancelTokenSource } from "axios";
 import App from "../App";
+import { Utils } from "../Utils";
 import { Manager } from "./Manager";
 
 export class Borrower {
@@ -52,10 +53,14 @@ export class Borrower {
                     notManagerId: notManagerId
                 }
             });
+            if (!Utils.isIterable(response.data)) {
+                throw response.data;
+            }
             const managers: Borrower[] = Borrower.listFromObjectList(response.data);
             return managers;
         } catch (error) {
-            return error;
+            console.log("ERROR:", error);
+            throw error;
         }
     }
     static async insertToApi(cancelTokenSource: CancelTokenSource, borrower: Borrower): Promise<any> {

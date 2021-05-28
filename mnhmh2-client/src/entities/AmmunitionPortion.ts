@@ -1,5 +1,6 @@
 import { GridColDef, GridRowData, GridRowsProp } from "@material-ui/data-grid";
 import { CancelTokenSource } from "axios";
+import { Utils } from "../Utils";
 import App from "../App";
 import { AmmunitionStore } from "./AmmunitionStore";
 import { MaterialTab } from "./MaterialTab";
@@ -60,10 +61,14 @@ export class AmmunitionPortion {
                     notMaterialTabId: notMaterialTabId
                 }
             });
+            if (!Utils.isIterable(response.data)) {
+                throw response.data;
+            }
             const portions: AmmunitionPortion[] = AmmunitionPortion.listFromObjectList(response.data);
             return portions;
         } catch (error) {
-            return error;
+            console.log("ERROR:", error);
+            throw error;
         }
     }
     static async insertToApi(cancelTokenSource: CancelTokenSource, portion: AmmunitionPortion): Promise<any> {

@@ -148,6 +148,9 @@ export class MyDataGrid extends React.Component<DataCompProps, DataCompState> {
                             },
                             footer: {
                                 actions: this.props.actions
+                            },
+                            errorOverlay: {
+                                error: this.props.error
                             }
                         }}
                         onPageSizeChange={this.onPageSizeChange.bind(this)}

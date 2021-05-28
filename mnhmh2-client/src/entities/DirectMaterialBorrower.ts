@@ -1,5 +1,6 @@
 import { GridColDef, GridRowData, GridRowsProp } from "@material-ui/data-grid";
 import { CancelTokenSource } from "axios";
+import { Utils } from "../Utils";
 import App from "../App";
 import { Borrower } from "./Borrower";
 import { MaterialTab } from "./MaterialTab";
@@ -46,10 +47,13 @@ export class DirectMaterialBorrower {
                 url: "/directmaterialborrower",
                 cancelToken: cancelTokenSource.token
             });
+            if (!Utils.isIterable(response.data)) {
+                throw response.data;
+            }
             const dmbs: DirectMaterialBorrower[] = DirectMaterialBorrower.listFromObjectList(response.data);
             return dmbs;
         } catch (error) {
-            console.log(error);
+            console.log("ERROR:", error);
             throw error;
         }
     }
@@ -68,7 +72,7 @@ export class DirectMaterialBorrower {
     }
 
     static getRows(subcategories: DirectMaterialBorrower[]): GridRowsProp {
-        const rows: GridRowsProp = [];
+        const rows: GridRowData[] = [];
         let count = 1;
         for (const subcategory of subcategories) {
             const row: GridRowData = {
@@ -85,7 +89,7 @@ export class DirectMaterialBorrower {
             count++;
             rows.push(row);
         }
-        return rows;
+        return rows as GridRowsProp;
 
     }
 

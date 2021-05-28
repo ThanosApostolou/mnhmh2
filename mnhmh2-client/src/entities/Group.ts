@@ -1,5 +1,6 @@
 import { GridColDef, GridRowData, GridRowsProp } from "@material-ui/data-grid";
 import { CancelTokenSource } from "axios";
+import { Utils } from "../Utils";
 import App from "../App";
 
 export class Group {
@@ -88,7 +89,7 @@ export class Group {
             });
             return response.data;
         } catch (error) {
-            console.log(error);
+            console.log("ERROR:", error);
             throw error;
         }
     }
@@ -105,6 +106,9 @@ export class Group {
                     search: search
                 }
             });
+            if (!Utils.isIterable(response.data)) {
+                throw response.data;
+            }
             const groups: Group[] = Group.listFromObjectList(response.data);
             return groups;
         } catch (error) {

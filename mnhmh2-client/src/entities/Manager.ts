@@ -1,5 +1,6 @@
 import { GridColDef, GridRowData, GridRowsProp } from "@material-ui/data-grid";
 import { CancelTokenSource } from "axios";
+import { Utils } from "../Utils";
 import App from "../App";
 import { Borrower } from "./Borrower";
 
@@ -124,12 +125,14 @@ export class Manager {
                     id: id
                 }
             });
-            console.log("response", response);
+            if (!Utils.isIterable(response.data)) {
+                throw response.data;
+            }
             const manager: Manager = Manager.fromObject(response.data);
             const borrowers: Borrower[] = Borrower.listFromObjectList(response.data.borrowers);
             return [manager, borrowers];
         } catch (error) {
-            console.log(error);
+            console.log("ERROR:", error);
             throw error;
         }
     }
@@ -146,7 +149,7 @@ export class Manager {
     }
 
     static getRows(managers: Manager[]): GridRowsProp {
-        const rows: GridRowsProp = [];
+        const rows: GridRowData[] = [];
         let count = 1;
         for (const manager of managers) {
             const row: GridRowData = {
@@ -160,7 +163,7 @@ export class Manager {
             count++;
             rows.push(row);
         }
-        return rows;
+        return rows as GridRowsProp;
 
     }
 

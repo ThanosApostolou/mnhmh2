@@ -12,8 +12,8 @@ export class MyGridErrorOverlay extends React.Component<GridSlotComponentProps &
 
     render(): ReactNode {
         let error = "unknown error";
-        if (this.props.options && this.props.options.error) {
-            error = JSON.stringify(this.props.options.error, null, 2);
+        if (this.props.error) {
+            error = JSON.stringify(this.props.error, null, 2);
         }
         return (
             <Grid container direction="row" justify="flex-start" alignContent="flex-start" alignItems="flex-start">

@@ -37,6 +37,7 @@ export class ImportsExportsTblDataGrid extends React.Component<ImportsExportsTbl
             this.setState({importsExportsTbls: null});
             this.setState({rows: []});
             this.setState({error: error});
+            console.log("error", error);
         }).finally(() => {
             this.setState({loading: false});
         });

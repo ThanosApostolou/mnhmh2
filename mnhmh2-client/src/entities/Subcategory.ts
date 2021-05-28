@@ -1,5 +1,6 @@
 import { GridColDef, GridRowData, GridRowsProp } from "@material-ui/data-grid";
 import { CancelTokenSource } from "axios";
+import { Utils } from "../Utils";
 import App from "../App";
 import { Borrower } from "./Borrower";
 import { MaterialTab } from "./MaterialTab";
@@ -56,10 +57,14 @@ export class Subcategory {
                     notBorrowerId: notBorrowerId
                 }
             });
+            if (!Utils.isIterable(response.data)) {
+                throw response.data;
+            }
             const subcategories: Subcategory[] = Subcategory.listFromObjectList(response.data);
             return subcategories;
         } catch (error) {
-            return error;
+            console.log("ERROR:", error);
+            throw error;
         }
     }
     static async insertToApi(cancelTokenSource: CancelTokenSource, subcategory: Subcategory): Promise<any> {

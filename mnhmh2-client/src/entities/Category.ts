@@ -1,5 +1,6 @@
 import { GridColDef, GridRowData, GridRowsProp } from "@material-ui/data-grid";
 import { CancelTokenSource } from "axios";
+import { Utils } from "../Utils";
 import App from "../App";
 
 export class Category {
@@ -46,10 +47,14 @@ export class Category {
                     search: search
                 }
             });
+            if (!Utils.isIterable(response.data)) {
+                throw response.data;
+            }
             const categories: Category[] = Category.listFromObjectList(response.data);
             return categories;
         } catch (error) {
-            return error;
+            console.log("ERROR:", error);
+            throw error;
         }
     }
     static async insertToApi(cancelTokenSource: CancelTokenSource, category: Category): Promise<any> {
