@@ -1,77 +1,56 @@
 import React, { ReactNode } from "react";
 import { Card, CardContent, TextField, Tooltip, IconButton, Grid, Snackbar } from "@material-ui/core";
-import { Search } from "@material-ui/icons";
+import { Search, Clear } from "@material-ui/icons";
 import { Alert } from "@material-ui/lab";
 
 
-import { MyDataGrid } from "../../components/MyDataGrid/MyDataGrid";
+import { ImportsExportsTblDataGrid } from "./ImportsExportsTblDataGrid";
 import { ImportsExportsTbl } from "../../../entities/ImportsExportsTbl";
-import { CancelTokenSource } from "axios";
-import { ApiConsumer } from "../../../ApiConsumer";
-import { GridRowSelectedParams, GridRowsProp } from "@material-ui/data-grid";
-//import { ManagersAdd } from "./ManagersAdd";
-//import { ManagersEdit } from "./ManagersEdit";
+import { GridRowsProp } from "@material-ui/data-grid";
+import { AddEditActions } from "../../components/AddEditActions";
+//import { SubcategoriesAdd } from "./SubcategoriesAdd";
+//import { AmmunitionStoresEdit } from "./AmmunitionStoresEdit";
 
 export class ImportsExportsTblPage extends React.Component<Record<string, never>, ImportsExportsTblPageState> {
     state: Readonly<ImportsExportsTblPageState>;
-    cancelTokenSource: CancelTokenSource;
     search: string;
 
     constructor(props: Record<string, never>) {
         super(props);
         this.state = {
-            importsexports: null,
-            selectedImportexport: null,
+            importsExportsTbl: null,
+            selectedImportsExportsTbl: null,
             rows: [],
             loading: true,
             search: null,
+            fromDate: "",
+            toDate: "",
             error: null,
             openAddDrawer: false,
             openEditDrawer: false,
             openSnackbar: false,
-            snackbarMessage: ""
+            snackbarMessage: "",
+            fetchData: false
         };
-        this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
         this.search = "";
     }
 
     fetchData(): void {
-        console.log("fetch data", this.search);
-        this.cancelFetchData();
-        this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
-        this.setState({rows: []});
-        this.setState({loading : true});
-        ImportsExportsTbl.listFromApi(this.cancelTokenSource).then((data: any) => {
-            this.setState({importsexports: data});
-            this.setState({rows: ImportsExportsTbl.getRows(this.state.importsexports)});
-        }).catch((error) => {
-            this.setState({importsexports: null});
-            this.setState({rows: []});
-            this.setState({error: error});
-        }).finally(() => {
-            this.setState({loading: false});
-        });
+        this.setState({fetchData: !this.state.fetchData});
+    }
+    onFetchData(): void {
+        this.setState({selectedImportsExportsTbl: null});
     }
 
-    cancelFetchData(): void {
-        this.cancelTokenSource.cancel("cancel fetching data");
-    }
-
-    onRowSelected(params: GridRowSelectedParams): void {
-        if (this.state.importsexports && this.state.importsexports !== null && this.state.importsexports.length > 0) {
-            this.setState({selectedImportexport: this.state.importsexports[params.data.AA - 1]});
-        } else {
-            this.setState({selectedImportexport: null});
-        }
-
-        console.log("manager", this.state.selectedImportexport);
+    onRowSelected(importsExportsTbl: ImportsExportsTbl): void {
+        this.setState({selectedImportsExportsTbl: importsExportsTbl});
     }
 
     onAddClick(): void {
         this.setState({openAddDrawer: true});
     }
     onAddSave(): void {
-        this.setState({openAddDrawer: false, snackbarMessage: "Επιτυχία προσθήκης μέλους επιτροπής!", openSnackbar: true});
+        this.setState({openAddDrawer: false, snackbarMessage: "Επιτυχία προσθήκης συγκριτικού!", openSnackbar: true});
         this.fetchData();
     }
     onAddCancel(): void {
@@ -82,11 +61,11 @@ export class ImportsExportsTblPage extends React.Component<Record<string, never>
         this.setState({openEditDrawer: true});
     }
     onEditSave(): void {
-        this.setState({openEditDrawer: false, snackbarMessage: "Επιτυχία τροποποίησης μέλους επιτροπής!", openSnackbar: true});
+        this.setState({openEditDrawer: false, snackbarMessage: "Επιτυχία τροποποίησης συγκριτικού!", openSnackbar: true});
         this.fetchData();
     }
     onEditDelete(): void {
-        this.setState({openEditDrawer: false, snackbarMessage: "Επιτυχία διαγραφής μέλους επιτροπής!", openSnackbar: true});
+        this.setState({openEditDrawer: false, snackbarMessage: "Επιτυχία διαγραφής συγκριτικού!", openSnackbar: true});
         this.fetchData();
     }
     onEditCancel(): void {
@@ -95,43 +74,80 @@ export class ImportsExportsTblPage extends React.Component<Record<string, never>
 
     handleSubmit(event: React.FormEvent<HTMLFormElement>): void {
         event.preventDefault();
+        this.setState({search: this.search});
         this.fetchData();
     }
 
     render(): ReactNode {
+        const actions = <AddEditActions disabledEdit={this.state.selectedImportsExportsTbl === null} onAddClick={this.onAddClick.bind(this)} onEditClick={this.onEditClick.bind(this)} />;
         return (
             <Grid container direction="column" style={{height: "100%"}}>
                 <Card elevation={6} style={{width: "100%"}}>
                     <CardContent>
                         <form onSubmit={this.handleSubmit.bind(this)}>
-                            <Grid container direction="row" justify="flex-start" alignContent="center" alignItems="center">
-                                <TextField size="small" InputLabelProps={{ shrink: true }} label="search" onChange={(event) => this.search = event.target.value} />
-                                <Tooltip title="Search" aria-label="search">
-                                    <IconButton size="small" type="submit" value="Submit">
-                                        <Search />
-                                    </IconButton>
-                                </Tooltip>
+                            <Grid container direction="row" justify="flex-start" alignContent="center" alignItems="center" spacing={2}>
+                                <Grid item>
+                                    <TextField size="small" InputLabelProps={{ shrink: true }} label="search" onChange={(event) => this.search = event.target.value} />
+                                </Grid>
+                                <Grid item>
+                                    <TextField id="datetime-local" label="Από" type="datetime-local" value={this.state.fromDate}
+                                        onChange={(event) => this.setState({fromDate: event.target.value})}
+                                        InputLabelProps={{
+                                            shrink: true
+                                        }}
+                                        InputProps={{
+                                            endAdornment: (
+                                                <IconButton size="small" onClick={(e) => this.setState({fromDate: ""})}>
+                                                    <Clear />
+                                                </IconButton>
+                                            )
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid item>
+                                    <TextField id="datetime-local" label="Μέχρι" type="datetime-local" value={this.state.toDate}
+                                        onChange={(event) => this.setState({toDate: event.target.value})}
+                                        InputLabelProps={{
+                                            shrink: true
+                                        }}
+                                        InputProps={{
+                                            endAdornment: (
+                                                <IconButton size="small" onClick={(e) => this.setState({toDate: ""})}>
+                                                    <Clear />
+                                                </IconButton>
+                                            )
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid item>
+                                    <Tooltip title="Search" aria-label="search">
+                                        <IconButton size="small" type="submit" value="Submit">
+                                            <Search />
+                                        </IconButton>
+                                    </Tooltip>
+                                </Grid>
                             </Grid>
                         </form>
                     </CardContent>
                 </Card>
-                <MyDataGrid  error={this.state.error} rows={this.state.rows} loading={this.state.loading} columns={ImportsExportsTbl.getColumns()} storagePrefix="importsexportstbl"
-                    fetchData={this.fetchData.bind(this)}
-                    cancelFetchData={this.cancelFetchData.bind(this)}
-                    onRowSelected={this.onRowSelected.bind(this)}
-                    onAddClick={this.onAddClick.bind(this)}
-                    onEditClick={this.onEditClick.bind(this)}
+                <ImportsExportsTblDataGrid actions={actions} onRowSelected={this.onRowSelected.bind(this)} storagePrefix="importsexportstbls" fetchData={this.state.fetchData}
+                    fromDate={this.state.fromDate}
+                    toDate={this.state.toDate}
+                    search={this.state.search}
+                    onFetchData={this.onFetchData.bind(this)}
                 />
-                {/*<ManagersAdd openAddDrawer={this.state.openAddDrawer}
+                {/*
+                <SubcategoriesAdd openAddDrawer={this.state.openAddDrawer}
                     onAddSave={this.onAddSave.bind(this)}
                     onAddCancel={this.onAddCancel.bind(this)}
                 />
-                <ManagersEdit manager={this.state.selectedGroup}
+                <AmmunitionStoresEdit store={this.state.selectedPortion}
                     openEditDrawer={this.state.openEditDrawer}
                     onEditSave={this.onEditSave.bind(this)}
                     onEditDelete={this.onEditDelete.bind(this)}
                     onEditCancel={this.onEditCancel.bind(this)}
-                />*/}
+                />
+                */}
                 <Snackbar
                     anchorOrigin={{
                         vertical: "bottom",
@@ -151,14 +167,17 @@ export class ImportsExportsTblPage extends React.Component<Record<string, never>
 }
 
 export interface ImportsExportsTblPageState {
-    importsexports: ImportsExportsTbl[];
-    selectedImportexport: ImportsExportsTbl;
+    importsExportsTbl: ImportsExportsTbl[];
+    selectedImportsExportsTbl: ImportsExportsTbl;
     rows: GridRowsProp;
     loading: boolean;
     search: string;
+    fromDate: string;
+    toDate: string;
     error: any;
     openAddDrawer: boolean;
     openEditDrawer: boolean;
     openSnackbar: boolean;
     snackbarMessage: string;
+    fetchData: boolean;
 }

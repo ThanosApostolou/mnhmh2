@@ -80,9 +80,10 @@ export class ImportsExportsTbl {
         OR ImportsExportsTbl.Remaining LIKE '%${search}%' OR ImportsExportsTbl.Comments LIKE '%${search}%'`;
     }
 
-    static async listSelectFromDB(search: string): Promise<ImportsExportsTbl[]> {
-        let importsexportstbls: ImportsExportsTbl[] = [];
+    static async listSelectFromDB(Id: number, notId: number, fromDate: string, toDate: string, search: string, withMaterialTab: boolean, materialTabId: number, notMaterialTabId: number): Promise<ImportsExportsTbl[]> {
+        //let importsexportstbls: ImportsExportsTbl[] = [];
         try {
+            /*
             if (search === "") {
                 importsexportstbls = await App.app.dbmanager.importsexportstblRepo.find({
                     relations: ["MaterialTab"]
@@ -120,6 +121,40 @@ export class ImportsExportsTbl {
                     .orWhere(`MaterialTab.PartialRegistryCode LIKE '%${search}%' OR MaterialTab.Name LIKE '%${search}%'`)
                     .getMany();
             }
+            */
+            const importsexportstbls_query = App.app.dbmanager.importsexportstblRepo.createQueryBuilder("ImportsExportsTbl")
+                .leftJoinAndSelect("ImportsExportsTbl.MaterialTab", "MaterialTab");
+
+            if (Id !== null) {
+                importsexportstbls_query.andWhere(`ImportsExportsTbl.Id = '${Id}'`);
+            }
+            if (notId !== null) {
+                importsexportstbls_query.andWhere(`ImportsExportsTbl.Id != '${notId}'`);
+            }
+            if (fromDate !== null) {
+                importsexportstbls_query.andWhere(`ImportsExportsTbl.Date >= '${fromDate}'`);
+            }
+            if (toDate !== null) {
+                importsexportstbls_query.andWhere(`ImportsExportsTbl.Date <= '${toDate}'`);
+            }
+            if (search !== null) {
+                let searchstring = ImportsExportsTbl.searchQueryString(search);
+                if (withMaterialTab) {
+                    searchstring += ` OR ${MaterialTab.searchQueryString(search)}`;
+                }
+                importsexportstbls_query.andWhere(`(${searchstring})`);
+            }
+            if (materialTabId !== null) {
+                importsexportstbls_query.andWhere(`MaterialTab.Id = '${materialTabId}'`);
+            }
+            if (notMaterialTabId !== null) {
+                importsexportstbls_query.andWhere(`(MaterialTab IS NULL OR MaterialTab.Id != '${notMaterialTabId}')`);
+            }
+            importsexportstbls_query.select(ImportsExportsTbl.selectStringList);
+            if (withMaterialTab) {
+                importsexportstbls_query.addSelect(MaterialTab.selectStringList);
+            }
+            const importsexportstbls: ImportsExportsTbl[] = await importsexportstbls_query.getMany();
             return importsexportstbls;
         } catch(err) {
             console.log(err);

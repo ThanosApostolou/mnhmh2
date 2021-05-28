@@ -48,20 +48,85 @@ export class ImportsExportsTbl {
         return ietbls;
     }
 
-    static async listFromApi(cancelTokenSource: CancelTokenSource): Promise<ImportsExportsTbl[]> {
+    static async listFromApi(cancelTokenSource: CancelTokenSource, Id: number, notId: number, fromDate: string, toDate: string, search: string, withMaterialTab: boolean, materialTabId: number, notMaterialTabId: number): Promise<ImportsExportsTbl[]> {
         try {
             const response = await App.app.apiconsumer.axios.request({
                 method: "get",
                 url: "/importsexportstbl",
                 cancelToken: cancelTokenSource.token,
+                params: {
+                    Id: Id,
+                    notId: notId,
+                    fromDate: fromDate,
+                    toDate: toDate,
+                    search: search,
+                    withMaterialTab: withMaterialTab,
+                    materialTabId: materialTabId,
+                    notMaterialTabId: notMaterialTabId
+                }
             });
             const importsexportstbls: ImportsExportsTbl[] = ImportsExportsTbl.listFromObjectList(response.data);
-
-            console.log("DATA", importsexportstbls);
             return importsexportstbls;
         } catch (error) {
             console.log("ERROR", error);
             return error;
+        }
+    }
+    static async insertToApi(cancelTokenSource: CancelTokenSource, importsexportstbl: ImportsExportsTbl): Promise<any> {
+        try {
+            const response = await App.app.apiconsumer.axios.request({
+                method: "post",
+                url: "/importsexportstbl",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                cancelToken: cancelTokenSource.token,
+                data: {
+                    importsexportstbl: importsexportstbl
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+    static async updateInApi(cancelTokenSource: CancelTokenSource, importsexportstbl: ImportsExportsTbl): Promise<any> {
+        try {
+            const response = await App.app.apiconsumer.axios.request({
+                method: "put",
+                url: "/importsexportstbl",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                cancelToken: cancelTokenSource.token,
+                data: {
+                    importsexportstbl: importsexportstbl
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+    static async deleteInApi(cancelTokenSource: CancelTokenSource, Id: number): Promise<any> {
+        try {
+            const response = await App.app.apiconsumer.axios.request({
+                method: "delete",
+                url: "/importsexportstbl",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                cancelToken: cancelTokenSource.token,
+                data: {
+                    Id: Id
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            throw error;
         }
     }
 
@@ -82,7 +147,7 @@ export class ImportsExportsTbl {
     }
 
     static getRows(ietbls: ImportsExportsTbl[]): GridRowsProp {
-        const rows: GridRowsProp = [];
+        const rows: GridRowData[] = [];
         let count = 1;
         for (const ietbl of ietbls) {
             const row: GridRowData = {
@@ -101,7 +166,7 @@ export class ImportsExportsTbl {
             count++;
             rows.push(row);
         }
-        return rows;
+        return rows as GridRowsProp;
 
     }
 
