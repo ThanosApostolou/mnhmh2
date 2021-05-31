@@ -40,12 +40,23 @@ export class DirectMaterialBorrower {
     }
 
 
-    static async listFromApi(cancelTokenSource: CancelTokenSource): Promise<DirectMaterialBorrower[]> {
+    static async listFromApi(cancelTokenSource: CancelTokenSource, Id: number, notId: number, search: string, withMaterialTab: boolean, withBorrower: boolean, materialTabId: number, notMaterialTabId: number, borrowerId: number, notBorrowerId: number): Promise<DirectMaterialBorrower[]> {
         try {
             const response = await App.app.apiconsumer.axios.request({
                 method: "get",
                 url: "/directmaterialborrower",
-                cancelToken: cancelTokenSource.token
+                cancelToken: cancelTokenSource.token,
+                params: {
+                    Id: Id,
+                    notId: notId,
+                    search: search,
+                    withMaterialTab: withMaterialTab,
+                    withBorrower: withBorrower,
+                    materialTabId: materialTabId,
+                    notMaterialTabId: notMaterialTabId,
+                    borrowerId: borrowerId,
+                    notBorrowerId: notBorrowerId
+                }
             });
             if (!Utils.isIterable(response.data)) {
                 throw response.data;

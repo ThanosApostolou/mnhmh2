@@ -62,9 +62,10 @@ export class DirectMaterialBorrower {
         return `DirectMaterialBorrower.Id LIKE '%${search}%' OR DirectMaterialBorrower.Quantity LIKE '%${search}%'`;
     }
 
-    static async listSelectFromDB(search: string): Promise<DirectMaterialBorrower[]> {
-        let dmbs: DirectMaterialBorrower[] = [];
+    static async listSelectFromDB(Id: number, notId: number, search: string, withMaterialTab: boolean, withBorrower: boolean, materialTabId: number, notMaterialTabId: number, borrowerId: number, notBorrowerId: number): Promise<DirectMaterialBorrower[]> {
+        //let dmbs: DirectMaterialBorrower[] = [];
         try {
+            /*
             if (search === "") {
                 dmbs = await App.app.dbmanager.directMaterialBorrowerRepo.find({
                     relations: ["Borrower", "MaterialTab"]
@@ -85,6 +86,48 @@ export class DirectMaterialBorrower {
                     .orWhere(`MaterialTab.PartialRegistryCode LIKE '%${search}%' OR MaterialTab.Name LIKE '%${search}%'`)
                     .getMany();
             }
+            return dmbs;
+            */
+            const dmbs_query = App.app.dbmanager.directMaterialBorrowerRepo.createQueryBuilder("DirectMaterialBorrower")
+                .leftJoinAndSelect("DirectMaterialBorrower.MaterialTab", "MaterialTab")
+                .leftJoinAndSelect("DirectMaterialBorrower.Borrower", "Borrower");
+
+            if (Id !== null) {
+                dmbs_query.andWhere(`DirectMaterialBorrower.Id = '${Id}'`);
+            }
+            if (notId !== null) {
+                dmbs_query.andWhere(`DirectMaterialBorrower.Id != '${notId}'`);
+            }
+            if (search !== null) {
+                let searchstring = DirectMaterialBorrower.searchQueryString(search);
+                if (withMaterialTab) {
+                    searchstring += ` OR ${MaterialTab.searchQueryString(search)}`;
+                }
+                if (withBorrower) {
+                    searchstring += ` OR ${Borrower.searchQueryString(search)}`;
+                }
+                dmbs_query.andWhere(`(${searchstring})`);
+            }
+            if (materialTabId !== null) {
+                dmbs_query.andWhere(`MaterialTab.Id = '${materialTabId}'`);
+            }
+            if (notMaterialTabId !== null) {
+                dmbs_query.andWhere(`(MaterialTab IS NULL OR MaterialTab.Id != '${notMaterialTabId}')`);
+            }
+            if (borrowerId !== null) {
+                dmbs_query.andWhere(`Borrower.Id = '${borrowerId}'`);
+            }
+            if (notBorrowerId !== null) {
+                dmbs_query.andWhere(`(Borrower IS NULL OR Borrower.Id != '${notBorrowerId}')`);
+            }
+            dmbs_query.select(DirectMaterialBorrower.selectStringList);
+            if (withMaterialTab) {
+                dmbs_query.addSelect(MaterialTab.selectStringList);
+            }
+            if (withBorrower) {
+                dmbs_query.addSelect(Borrower.selectStringList);
+            }
+            const dmbs: DirectMaterialBorrower[] = await dmbs_query.getMany();
             return dmbs;
         } catch(err) {
             console.log(err);
