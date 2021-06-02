@@ -112,13 +112,13 @@ export class DirectMaterialBorrower {
                 dmbs_query.andWhere(`MaterialTab.Id = '${materialTabId}'`);
             }
             if (notMaterialTabId !== null) {
-                dmbs_query.andWhere(`(MaterialTab IS NULL OR MaterialTab.Id != '${notMaterialTabId}')`);
+                dmbs_query.andWhere(`(MaterialTab.Id IS NULL OR MaterialTab.Id != '${notMaterialTabId}')`);
             }
             if (borrowerId !== null) {
                 dmbs_query.andWhere(`Borrower.Id = '${borrowerId}'`);
             }
             if (notBorrowerId !== null) {
-                dmbs_query.andWhere(`(Borrower IS NULL OR Borrower.Id != '${notBorrowerId}')`);
+                dmbs_query.andWhere(`(Borrower.Id IS NULL OR Borrower.Id != '${notBorrowerId}')`);
             }
             dmbs_query.select(DirectMaterialBorrower.selectStringList);
             if (withMaterialTab) {
@@ -131,7 +131,7 @@ export class DirectMaterialBorrower {
             return dmbs;
         } catch(err) {
             console.log(err);
-            return (err);
+            throw err;
         }
     }
     static async insertToDB(dmb: DirectMaterialBorrower): Promise<DirectMaterialBorrower> {

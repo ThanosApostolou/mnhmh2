@@ -63,11 +63,6 @@ export class DirectMaterialBorrowerController {
         try {
             const body = this.req.body;
             const dmb = DirectMaterialBorrower.fromObject(body.directMaterialBorrower);
-            //if (!dmb.Name || dmb.Name === null || dmb.Name === "") {
-            //    this.res.status(422);
-            //    this.res.setHeader("Content-Type", "application/json");
-            //    this.res.send({error: "Name cannot be empty!"});
-            //} else {
             await DirectMaterialBorrower.insertToDB(dmb);
             this.res.setHeader("Content-Type", "application/json");
             this.res.send({message: "OK"});

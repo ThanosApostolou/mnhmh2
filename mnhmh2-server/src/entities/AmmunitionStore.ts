@@ -66,7 +66,7 @@ export class AmmunitionStore {
             return stores;
         } catch(err) {
             console.log(err);
-            return (err);
+            throw err;
         }
     }
     static async insertToDB(store: AmmunitionStore): Promise<AmmunitionStore> {

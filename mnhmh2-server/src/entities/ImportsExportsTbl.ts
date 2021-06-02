@@ -148,7 +148,7 @@ export class ImportsExportsTbl {
                 importsexportstbls_query.andWhere(`MaterialTab.Id = '${materialTabId}'`);
             }
             if (notMaterialTabId !== null) {
-                importsexportstbls_query.andWhere(`(MaterialTab IS NULL OR MaterialTab.Id != '${notMaterialTabId}')`);
+                importsexportstbls_query.andWhere(`(MaterialTab.Id IS NULL OR MaterialTab.Id != '${notMaterialTabId}')`);
             }
             importsexportstbls_query.select(ImportsExportsTbl.selectStringList);
             if (withMaterialTab) {
@@ -158,7 +158,7 @@ export class ImportsExportsTbl {
             return importsexportstbls;
         } catch(err) {
             console.log(err);
-            return (err);
+            throw err;
         }
     }
     static async insertToDB(importsexportstbl: ImportsExportsTbl): Promise<ImportsExportsTbl> {

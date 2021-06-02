@@ -14,11 +14,43 @@ export class MaterialTabController {
 
     async GET(): Promise<void> {
         try {
-            let search = "";
+            let Id = null;
+            if (this.req.query["Id"]) {
+                Id = parseInt(this.req.query["Id"].toString().trim());
+            }
+            let notId = null;
+            if (this.req.query["notId"]) {
+                notId = parseInt(this.req.query["notId"].toString().trim());
+            }
+            let search = null;
             if (this.req.query["search"]) {
                 search = this.req.query["search"].toString().trim();
             }
-            const mtbs = await MaterialTab.listSelectFromDB(search);
+            let withGroup = true;
+            if (this.req.query["withGroup"]) {
+                withGroup = (this.req.query["withGroup"].toString().trim() === "true");
+            }
+            let withCategory = true;
+            if (this.req.query["withCategory"]) {
+                withCategory = (this.req.query["withCategory"].toString().trim() === "true");
+            }
+            let groupId = null;
+            if (this.req.query["groupId"]) {
+                groupId = parseInt(this.req.query["groupId"].toString().trim());
+            }
+            let notGroupId = null;
+            if (this.req.query["notGroupId"]) {
+                notGroupId = parseInt(this.req.query["notGroupId"].toString().trim());
+            }
+            let categoryId = null;
+            if (this.req.query["categoryId"]) {
+                categoryId = parseInt(this.req.query["categoryId"].toString().trim());
+            }
+            let notCategoryId = null;
+            if (this.req.query["notCategoryId"]) {
+                notCategoryId = parseInt(this.req.query["notCategoryId"].toString().trim());
+            }
+            const mtbs = await MaterialTab.listSelectFromDB(Id, notId, search, withGroup, withCategory, groupId, notGroupId, categoryId, notCategoryId);
             this.res.setHeader("Content-Type", "application/json");
             this.res.send(MaterialTab.listToJson(mtbs));
         } catch(err) {

@@ -1,7 +1,6 @@
-import {Entity, PrimaryColumn, Column, ManyToOne, JoinColumn, Like } from "typeorm";
+import {Entity, PrimaryColumn, Column, ManyToOne, JoinColumn } from "typeorm";
 
 import { App } from "../App";
-import { DBManager } from "../DBManager";
 import { Category, CategoryObj } from "./Category";
 import { Group, GroupObj } from "./Group";
 
@@ -140,84 +139,52 @@ export class MaterialTab {
         OR MaterialTab.SerialNumber LIKE '%${search}%' OR MaterialTab.GEEFCode LIKE '%${search}%'`;
     }
 
-    static async listSelectFromDB(search: string): Promise<MaterialTab[]> {
-        let mtbs: MaterialTab[] = [];
+    static async listSelectFromDB(Id: number, notId: number, search: string, withGroup: boolean, withCategory: boolean, groupId: number, notGroupId: number, categoryId: number, notCategoryId: number): Promise<MaterialTab[]> {
         try {
-            if (search === "") {
-                mtbs = await App.app.dbmanager.materialTabRepo.find({
-                    relations: ["Group", "Category"]
-                });
-            } else {
-                mtbs = await App.app.dbmanager.materialTabRepo.createQueryBuilder("MaterialTab")
-                    .leftJoinAndSelect("MaterialTab.Group", "Group")
-                    .leftJoinAndSelect("MaterialTab.Category", "Category")
-                    .where([
-                        {
-                            Id: Like(`%${search}%`)
-                        },
-                        {
-                            PartialRegistryCode: Like(`%${search}%`)
-                        },
-                        {
-                            PartialRegistryCodeNumber: Like(`%${search}%`)
-                        },
-                        {
-                            AOEF: Like(`%${search}%`)
-                        },
-                        {
-                            Name: Like(`%${search}%`)
-                        },
-                        {
-                            AOEF: Like(`%${search}%`)
-                        },
-                        {
-                            MeasurementUnit: Like(`%${search}%`)
-                        },
-                        {
-                            TabRemainder: Like(`%${search}%`)
-                        },
-                        {
-                            Sum: Like(`%${search}%`)
-                        },
-                        {
-                            Difference: Like(`%${search}%`)
-                        },
-                        {
-                            Comments: Like(`%${search}%`)
-                        },
-                        {
-                            ImportSum: Like(`%${search}%`)
-                        },
-                        {
-                            ExportSum: Like(`%${search}%`)
-                        },
-                        {
-                            PendingCrediting: Like(`%${search}%`)
-                        },
-                        {
-                            Surplus: Like(`%${search}%`)
-                        },
-                        {
-                            Deficit: Like(`%${search}%`)
-                        },
-                        {
-                            GeneralRegistryCode: Like(`%${search}%`)
-                        },
-                        {
-                            SerialNumber: Like(`%${search}%`)
-                        },
-                        {
-                            GEEFCode: Like(`%${search}%`)
-                        },
-                    ])
-                    .orWhere(`Group.Name LIKE '%${search}%' OR Group.LastRegistryCode LIKE '%${search}%' OR Group.SerialNumber LIKE '%${search}%'`)
-                    .orWhere(`Category.Name LIKE '%${search}%' OR Category.SerialNumber LIKE '%${search}%'`)
-                    .getMany();
+            const materialtabs_query = App.app.dbmanager.materialTabRepo.createQueryBuilder("MaterialTab")
+                .leftJoinAndSelect("MaterialTab.Group", "Group")
+                .leftJoinAndSelect("MaterialTab.Category", "Category");
+
+            if (Id !== null) {
+                materialtabs_query.andWhere(`MaterialTab.Id = '${Id}'`);
             }
-            return mtbs;
+            if (notId !== null) {
+                materialtabs_query.andWhere(`MaterialTab.Id != '${notId}'`);
+            }
+            if (search !== null) {
+                let searchstring = MaterialTab.searchQueryString(search);
+                if (withGroup) {
+                    searchstring += ` OR ${Group.searchQueryString(search)}`;
+                }
+                if (withCategory) {
+                    searchstring += ` OR ${Category.searchQueryString(search)}`;
+                }
+                materialtabs_query.andWhere(`(${searchstring})`);
+            }
+            if (groupId !== null) {
+                materialtabs_query.andWhere(`Group.Id = '${groupId}'`);
+            }
+            if (notGroupId !== null) {
+                materialtabs_query.andWhere(`(Group.Id IS NULL OR Group.Id != '${notGroupId}')`);
+            }
+            if (categoryId !== null) {
+                materialtabs_query.andWhere(`Category.Id = '${categoryId}'`);
+            }
+            if (notCategoryId !== null) {
+                materialtabs_query.andWhere(`(Category.Id IS NULL OR Category.Id != '${notCategoryId}')`);
+            }
+            materialtabs_query.select(MaterialTab.selectStringList);
+            if (withGroup) {
+                materialtabs_query.addSelect(Group.selectStringList);
+            }
+            if (withCategory) {
+                materialtabs_query.addSelect(Category.selectStringList);
+            }
+            const materialtabs: MaterialTab[] = await materialtabs_query.getMany();
+            return materialtabs;
         } catch(err) {
             console.log(err);
-            return (err);
+            throw err;
         }
     }
     static async insertToDB(mtb: MaterialTab): Promise<MaterialTab> {

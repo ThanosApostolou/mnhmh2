@@ -1,4 +1,4 @@
-import {Entity, PrimaryColumn, Column, ManyToOne, JoinColumn, Like } from "typeorm";
+import {Entity, PrimaryColumn, Column, ManyToOne, JoinColumn } from "typeorm";
 
 import { App } from "../App";
 import { Borrower } from "./Borrower";
@@ -89,13 +89,13 @@ export class Subcategory {
                 subcategories_query.andWhere(`MaterialTab.Id = '${materialTabId}'`);
             }
             if (notMaterialTabId !== null) {
-                subcategories_query.andWhere(`(MaterialTab IS NULL OR MaterialTab.Id != '${notMaterialTabId}')`);
+                subcategories_query.andWhere(`(MaterialTab.Id IS NULL OR MaterialTab.Id != '${notMaterialTabId}')`);
             }
             if (borrowerId !== null) {
                 subcategories_query.andWhere(`Borrower.Id = '${borrowerId}'`);
             }
             if (notBorrowerId !== null) {
-                subcategories_query.andWhere(`(Borrower IS NULL OR Borrower.Id != '${notBorrowerId}')`);
+                subcategories_query.andWhere(`(Borrower.Id IS NULL OR Borrower.Id != '${notBorrowerId}')`);
             }
             subcategories_query.select(Subcategory.selectStringList);
             if (withMaterialTab) {
@@ -108,7 +108,7 @@ export class Subcategory {
             return subcategories;
         } catch(err) {
             console.log(err);
-            return (err);
+            throw err;
         }
     }
     static async insertToDB(subcategories: Subcategory): Promise<Subcategory> {

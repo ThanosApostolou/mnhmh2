@@ -69,7 +69,7 @@ export class Group {
             return groups;
         } catch(err) {
             console.log(err);
-            return (err);
+            throw err;
         }
     }
     static async insertToDB(group: Group): Promise<Group> {

@@ -103,7 +103,7 @@ export class Category {
             return categories;
         } catch(err) {
             console.log(err);
-            return (err);
+            throw err;
         }
     }
     static async insertToDB(category: Category): Promise<Category> {

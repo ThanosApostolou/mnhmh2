@@ -93,13 +93,13 @@ export class AmmunitionPortion {
                 portions_query.andWhere(`AmmunitionStore.Id = '${ammunitionStoreId}'`);
             }
             if (notAmmunitionStoreId !== null) {
-                portions_query.andWhere(`(AmmunitionStore IS NULL OR AmmunitionStore.Id != '${notAmmunitionStoreId}')`);
+                portions_query.andWhere(`(AmmunitionStore.Id IS NULL OR AmmunitionStore.Id != '${notAmmunitionStoreId}')`);
             }
             if (materialTabId !== null) {
                 portions_query.andWhere(`MaterialTab.Id = '${materialTabId}'`);
             }
             if (notMaterialTabId !== null) {
-                portions_query.andWhere(`(MaterialTab IS NULL OR MaterialTab.Id != '${notMaterialTabId}')`);
+                portions_query.andWhere(`(MaterialTab.Id IS NULL OR MaterialTab.Id != '${notMaterialTabId}')`);
             }
             portions_query.select(AmmunitionPortion.selectStringList);
             if (withAmmunitionStore) {
@@ -112,7 +112,7 @@ export class AmmunitionPortion {
             return portions;
         } catch(err) {
             console.log(err);
-            return (err);
+            throw err;
         }
     }
     static async insertToDB(portions: AmmunitionPortion): Promise<AmmunitionPortion> {

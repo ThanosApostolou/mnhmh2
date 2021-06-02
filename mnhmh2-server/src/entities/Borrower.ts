@@ -78,7 +78,7 @@ export class Borrower {
                 borrowers_query.andWhere(`Manager.Id = '${managerId}'`);
             }
             if (notManagerId !== null) {
-                borrowers_query.andWhere(`(Manager IS NULL OR Manager.Id != '${notManagerId}')`);
+                borrowers_query.andWhere(`(Manager.Id IS NULL OR Manager.Id != '${notManagerId}')`);
             }
             borrowers_query.select(Borrower.selectStringList);
             if (withManager) {
@@ -88,7 +88,7 @@ export class Borrower {
             return borrowers;
         } catch(err) {
             console.log(err);
-            return (err);
+            throw err;
         }
     }
     static async insertToDB(borrower: Borrower): Promise<Borrower> {
