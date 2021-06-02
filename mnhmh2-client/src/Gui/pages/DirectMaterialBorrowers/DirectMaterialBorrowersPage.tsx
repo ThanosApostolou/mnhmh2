@@ -90,7 +90,6 @@ export class DirectMaterialBorrowersPage extends React.Component<Record<string, 
             this.setState({error: error});
         }).finally(() => {
             this.setState({loading: false});
-            console.log("borrowers", this.state.borrowers);
         });
     }
 
@@ -120,7 +119,9 @@ export class DirectMaterialBorrowersPage extends React.Component<Record<string, 
                                         value={this.state.selectedBorrowerId}
                                         onChange={(event: React.ChangeEvent<{ value: any }>) => {
                                             this.setState({selectedBorrowerId: event.target.value});
-                                            console.log("selectedBorrowerId", this.state.selectedBorrowerId);
+                                            setTimeout(() => {
+                                                this.fetchData();
+                                            }, 0);
                                         }}
                                     >
                                         {borrowersMenuItems}

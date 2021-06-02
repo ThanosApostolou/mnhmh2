@@ -83,12 +83,23 @@ export class MaterialTab {
         return materialtabs;
     }
 
-    static async listFromApi(cancelTokenSource: CancelTokenSource): Promise<MaterialTab[]> {
+    static async listFromApi(cancelTokenSource: CancelTokenSource, Id: number, notId: number, search: string, withGroup: boolean, withCategory: boolean, groupId: number, notGroupId: number, categoryId: number, notCategoryId: number): Promise<MaterialTab[]> {
         try {
             const response = await App.app.apiconsumer.axios.request({
                 method: "get",
                 url: "/materialtab",
-                cancelToken: cancelTokenSource.token
+                cancelToken: cancelTokenSource.token,
+                params: {
+                    Id: Id,
+                    notId: notId,
+                    search: search,
+                    withGroup: withGroup,
+                    withCategory: withCategory,
+                    groupId: groupId,
+                    notGroupId: notGroupId,
+                    categoryId: categoryId,
+                    notCategoryId: notCategoryId
+                }
             });
             if (!Utils.isIterable(response.data)) {
                 throw response.data;

@@ -1,77 +1,63 @@
 import React, { ReactNode } from "react";
-import { Card, CardContent, TextField, Tooltip, IconButton, Grid, Snackbar } from "@material-ui/core";
-import { Search } from "@material-ui/icons";
+import { Card, CardContent, TextField, Tooltip, IconButton, Grid, Snackbar, Select, MenuItem, InputLabel } from "@material-ui/core";
+import { CategoryRounded, Search } from "@material-ui/icons";
 import { Alert } from "@material-ui/lab";
 
-
-import { MyDataGrid } from "../../components/MyDataGrid/MyDataGrid";
-import { MaterialTab } from "../../../entities/MaterialTab";
-import { CancelTokenSource } from "axios";
 import { ApiConsumer } from "../../../ApiConsumer";
-import { GridRowSelectedParams, GridRowsProp } from "@material-ui/data-grid";
-//import { ManagersAdd } from "./ManagersAdd";
-//import { ManagersEdit } from "./ManagersEdit";
+import { MaterialTabDataGrid } from "./MaterialTabDataGrid";
+import { MaterialTab } from "../../../entities/MaterialTab";
+import { Group } from "../../../entities/Group";
+import { Category } from "../../../entities/Category";
+import { GridRowsProp } from "@material-ui/data-grid";
+import { AddEditActions } from "../../components/AddEditActions";
+import { CancelTokenSource } from "axios";
+//import { SubcategoriesAdd } from "./SubcategoriesAdd";
+//import { AmmunitionStoresEdit } from "./AmmunitionStoresEdit";
 
 export class MaterialTabsPage extends React.Component<Record<string, never>, MaterialTabsPageState> {
     state: Readonly<MaterialTabsPageState>;
-    cancelTokenSource: CancelTokenSource;
     search: string;
+    cancelTokenSource: CancelTokenSource;
+    cancelTokenSource2: CancelTokenSource;
 
     constructor(props: Record<string, never>) {
         super(props);
         this.state = {
-            materialtabs: null,
-            selectedMaterialtab: null,
+            materialTabs: null,
+            selectedMaterialTab: null,
             rows: [],
             loading: true,
             search: null,
+            selectedGroupId: null,
+            groups: [null],
+            selectedCategoryId: null,
+            categories: [null],
             error: null,
             openAddDrawer: false,
             openEditDrawer: false,
             openSnackbar: false,
-            snackbarMessage: ""
+            snackbarMessage: "",
+            fetchData: false
         };
-        this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
         this.search = "";
     }
 
     fetchData(): void {
-        console.log("fetch data", this.search);
-        this.cancelFetchData();
-        this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
-        this.setState({rows: []});
-        this.setState({loading : true});
-        MaterialTab.listFromApi(this.cancelTokenSource).then((data: any) => {
-            this.setState({materialtabs: data});
-            this.setState({rows: MaterialTab.getRows(this.state.materialtabs)});
-        }).catch((error) => {
-            this.setState({materialtabs: null});
-            this.setState({rows: []});
-            this.setState({error: error});
-        }).finally(() => {
-            this.setState({loading: false});
-        });
+        this.setState({fetchData: !this.state.fetchData});
+    }
+    onFetchData(): void {
+        this.setState({selectedMaterialTab: null});
     }
 
-    cancelFetchData(): void {
-        this.cancelTokenSource.cancel("cancel fetching data");
-    }
-
-    onRowSelected(params: GridRowSelectedParams): void {
-        if (this.state.materialtabs && this.state.materialtabs !== null && this.state.materialtabs.length > 0) {
-            this.setState({selectedMaterialtab: this.state.materialtabs[params.data.AA - 1]});
-        } else {
-            this.setState({selectedMaterialtab: null});
-        }
-
-        console.log("manager", this.state.selectedMaterialtab);
+    onRowSelected(materialTab: MaterialTab): void {
+        this.setState({selectedMaterialTab: materialTab});
     }
 
     onAddClick(): void {
         this.setState({openAddDrawer: true});
     }
     onAddSave(): void {
-        this.setState({openAddDrawer: false, snackbarMessage: "Επιτυχία προσθήκης μέλους επιτροπής!", openSnackbar: true});
+        this.setState({openAddDrawer: false, snackbarMessage: "Επιτυχία προσθήκης καρτέλας υλικού!", openSnackbar: true});
         this.fetchData();
     }
     onAddCancel(): void {
@@ -82,11 +68,11 @@ export class MaterialTabsPage extends React.Component<Record<string, never>, Mat
         this.setState({openEditDrawer: true});
     }
     onEditSave(): void {
-        this.setState({openEditDrawer: false, snackbarMessage: "Επιτυχία τροποποίησης μέλους επιτροπής!", openSnackbar: true});
+        this.setState({openEditDrawer: false, snackbarMessage: "Επιτυχία τροποποίησης καρτέλας υλικού!", openSnackbar: true});
         this.fetchData();
     }
     onEditDelete(): void {
-        this.setState({openEditDrawer: false, snackbarMessage: "Επιτυχία διαγραφής μέλους επιτροπής!", openSnackbar: true});
+        this.setState({openEditDrawer: false, snackbarMessage: "Επιτυχία διαγραφής καρτέλας υλικού!", openSnackbar: true});
         this.fetchData();
     }
     onEditCancel(): void {
@@ -95,43 +81,113 @@ export class MaterialTabsPage extends React.Component<Record<string, never>, Mat
 
     handleSubmit(event: React.FormEvent<HTMLFormElement>): void {
         event.preventDefault();
+        this.setState({search: this.search});
         this.fetchData();
     }
 
+    componentDidMount(): void {
+        this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
+        Group.listFromApi(this.cancelTokenSource, null, null, null).then((data: any) => {
+            this.setState({groups: [null].concat(data)});
+        }).catch((error) => {
+            this.setState({groups: [null]});
+            this.setState({error: error});
+        }).finally(() => {
+            this.setState({loading: false});
+        });
+        this.cancelTokenSource2 = ApiConsumer.getCancelTokenSource();
+        Category.listFromApi(this.cancelTokenSource2, null, null, null).then((data: any) => {
+            this.setState({categories: [null].concat(data)});
+        }).catch((error) => {
+            this.setState({categories: [null]});
+            this.setState({error: error});
+        }).finally(() => {
+            this.setState({loading: false});
+        });
+    }
+
+    onComponentWillUnmount(): void {
+        this.cancelTokenSource.cancel("cancel fetching data");
+    }
+
     render(): ReactNode {
+        const groupsMenuItems = [];
+        for (const group of this.state.groups) {
+            const menuItem = <MenuItem value={group ? group.Id : null}>{group ? group.Name : " "}</MenuItem>;
+            groupsMenuItems.push(menuItem);
+        }
+        const categoriesMenuItems = [];
+        for (const category of this.state.categories) {
+            const menuItem = <MenuItem value={category ? category.Id : null}>{category ? category.Name : " "}</MenuItem>;
+            categoriesMenuItems.push(menuItem);
+        }
+        const actions = <AddEditActions disabledEdit={this.state.selectedMaterialTab === null} onAddClick={this.onAddClick.bind(this)} onEditClick={this.onEditClick.bind(this)} />;
         return (
             <Grid container direction="column" style={{height: "100%"}}>
                 <Card elevation={6} style={{width: "100%"}}>
                     <CardContent>
                         <form onSubmit={this.handleSubmit.bind(this)}>
-                            <Grid container direction="row" justify="flex-start" alignContent="center" alignItems="center">
-                                <TextField size="small" InputLabelProps={{ shrink: true }} label="search" onChange={(event) => this.search = event.target.value} />
-                                <Tooltip title="Search" aria-label="search">
-                                    <IconButton size="small" type="submit" value="Submit">
-                                        <Search />
-                                    </IconButton>
-                                </Tooltip>
+                            <Grid container direction="row" justify="flex-start" alignContent="center" alignItems="center" spacing={2}>
+                                <Grid item>
+                                    <TextField size="small" InputLabelProps={{ shrink: true }} label="search" onChange={(event) => this.search = event.target.value} />
+                                </Grid>
+                                <Grid item>
+                                    <InputLabel id="label">Ομάδα</InputLabel>
+                                    <Select autoWidth={false} labelId="label" id="select"
+                                        value={this.state.selectedGroupId}
+                                        onChange={(event: React.ChangeEvent<{ value: any }>) => {
+                                            this.setState({selectedGroupId: event.target.value});
+                                            setTimeout(() => {
+                                                this.fetchData();
+                                            }, 0);
+                                        }}
+                                    >
+                                        {groupsMenuItems}
+                                    </Select>
+                                </Grid>
+                                <Grid item>
+                                    <InputLabel id="label">Συγκρότημα</InputLabel>
+                                    <Select autoWidth={false} labelId="label" id="select"
+                                        value={this.state.selectedCategoryId}
+                                        onChange={(event: React.ChangeEvent<{ value: any }>) => {
+                                            this.setState({selectedCategoryId: event.target.value});
+                                            setTimeout(() => {
+                                                this.fetchData();
+                                            }, 0);
+                                        }}
+                                    >
+                                        {categoriesMenuItems}
+                                    </Select>
+                                </Grid>
+                                <Grid item>
+                                    <Tooltip title="Search" aria-label="search">
+                                        <IconButton size="small" type="submit" value="Submit">
+                                            <Search />
+                                        </IconButton>
+                                    </Tooltip>
+                                </Grid>
                             </Grid>
                         </form>
                     </CardContent>
                 </Card>
-                <MyDataGrid  error={this.state.error} rows={this.state.rows} loading={this.state.loading} columns={MaterialTab.getColumns()} storagePrefix="materialtabs"
-                    fetchData={this.fetchData.bind(this)}
-                    cancelFetchData={this.cancelFetchData.bind(this)}
-                    onRowSelected={this.onRowSelected.bind(this)}
-                    onAddClick={this.onAddClick.bind(this)}
-                    onEditClick={this.onEditClick.bind(this)}
+                <MaterialTabDataGrid actions={actions} onRowSelected={this.onRowSelected.bind(this)} storagePrefix="materialtabs" fetchData={this.state.fetchData}
+                    search={this.state.search}
+                    groupId={this.state.selectedGroupId}
+                    categoryId={this.state.selectedCategoryId}
+                    onFetchData={this.onFetchData.bind(this)}
                 />
-                {/*<ManagersAdd openAddDrawer={this.state.openAddDrawer}
+                {/*
+                <SubcategoriesAdd openAddDrawer={this.state.openAddDrawer}
                     onAddSave={this.onAddSave.bind(this)}
                     onAddCancel={this.onAddCancel.bind(this)}
                 />
-                <ManagersEdit manager={this.state.selectedGroup}
+                <AmmunitionStoresEdit store={this.state.selectedPortion}
                     openEditDrawer={this.state.openEditDrawer}
                     onEditSave={this.onEditSave.bind(this)}
                     onEditDelete={this.onEditDelete.bind(this)}
                     onEditCancel={this.onEditCancel.bind(this)}
-                />*/}
+                />
+                */}
                 <Snackbar
                     anchorOrigin={{
                         vertical: "bottom",
@@ -151,14 +207,19 @@ export class MaterialTabsPage extends React.Component<Record<string, never>, Mat
 }
 
 export interface MaterialTabsPageState {
-    materialtabs: MaterialTab[];
-    selectedMaterialtab: MaterialTab;
+    materialTabs: MaterialTab[];
+    selectedMaterialTab: MaterialTab;
     rows: GridRowsProp;
     loading: boolean;
     search: string;
+    selectedGroupId: number;
+    groups: Group[];
+    selectedCategoryId: number;
+    categories: Category[];
     error: any;
     openAddDrawer: boolean;
     openEditDrawer: boolean;
     openSnackbar: boolean;
     snackbarMessage: string;
+    fetchData: boolean;
 }
