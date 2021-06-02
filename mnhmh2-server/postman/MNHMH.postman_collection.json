@@ -40,8 +40,48 @@
 					],
 					"query": [
 						{
+							"key": "Id",
+							"value": "11601",
+							"disabled": true
+						},
+						{
+							"key": "notId",
+							"value": "11601",
+							"disabled": true
+						},
+						{
 							"key": "search",
 							"value": "ΣΤ1",
+							"disabled": true
+						},
+						{
+							"key": "withGroup",
+							"value": "false",
+							"disabled": true
+						},
+						{
+							"key": "withCategory",
+							"value": "false",
+							"disabled": true
+						},
+						{
+							"key": "groupId",
+							"value": "801",
+							"disabled": true
+						},
+						{
+							"key": "notGroupId",
+							"value": "801",
+							"disabled": true
+						},
+						{
+							"key": "categoryId",
+							"value": "601",
+							"disabled": true
+						},
+						{
+							"key": "notCategoryId",
+							"value": "601",
 							"disabled": true
 						}
 					]
@@ -63,6 +103,53 @@
 					"path": [
 						"api",
 						"directmaterialborrower"
+					],
+					"query": [
+						{
+							"key": "Id",
+							"value": "8004",
+							"disabled": true
+						},
+						{
+							"key": "notId",
+							"value": "8004",
+							"disabled": true
+						},
+						{
+							"key": "search",
+							"value": "ΣΤΟΛΗ ΑΣΚΗΣΕΩΝ ΠΑΡΑΛΛΑΓΗΣ Ν/Τ",
+							"disabled": true
+						},
+						{
+							"key": "withMaterialTab",
+							"value": "false",
+							"disabled": true
+						},
+						{
+							"key": "withBorrower",
+							"value": "false",
+							"disabled": true
+						},
+						{
+							"key": "materialTabId",
+							"value": "11601",
+							"disabled": true
+						},
+						{
+							"key": "notMaterialTabId",
+							"value": "11601",
+							"disabled": true
+						},
+						{
+							"key": "borrowerId",
+							"value": "405",
+							"disabled": true
+						},
+						{
+							"key": "notBorrwerId",
+							"value": "405",
+							"disabled": true
+						}
 					]
 				}
 			},
@@ -101,6 +188,23 @@
 					"path": [
 						"api",
 						"category"
+					],
+					"query": [
+						{
+							"key": "Id",
+							"value": "601",
+							"disabled": true
+						},
+						{
+							"key": "notId",
+							"value": "601",
+							"disabled": true
+						},
+						{
+							"key": "search",
+							"value": "ΙΜΑΤΙΣΜΟΣ",
+							"disabled": true
+						}
 					]
 				}
 			},
@@ -461,7 +565,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3000/api/group?notId=814",
+					"raw": "localhost:3000/api/group",
 					"host": [
 						"localhost"
 					],
@@ -483,7 +587,8 @@
 						},
 						{
 							"key": "notId",
-							"value": "814"
+							"value": "814",
+							"disabled": true
 						}
 					]
 				}
