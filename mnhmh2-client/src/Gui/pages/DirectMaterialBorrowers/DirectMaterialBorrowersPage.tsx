@@ -26,7 +26,7 @@ export class DirectMaterialBorrowersPage extends React.Component<Record<string, 
             rows: [],
             loading: true,
             search: null,
-            selectedBorrower: null,
+            selectedBorrowerId: null,
             borrowers: [null],
             error: null,
             openAddDrawer: false,
@@ -101,7 +101,7 @@ export class DirectMaterialBorrowersPage extends React.Component<Record<string, 
     render(): ReactNode {
         const borrowersMenuItems = [];
         for (const borrower of this.state.borrowers) {
-            const menuItem = <MenuItem value={borrower ? borrower.Id : null}>{borrower ? borrower.Name : ""}</MenuItem>;
+            const menuItem = <MenuItem value={borrower ? borrower.Id : null}>{borrower ? borrower.Name : " "}</MenuItem>;
             borrowersMenuItems.push(menuItem);
         }
         const actions = <AddEditActions disabledEdit={this.state.selectedDirectMaterialBorrower === null} onAddClick={this.onAddClick.bind(this)} onEditClick={this.onEditClick.bind(this)} />;
@@ -116,7 +116,13 @@ export class DirectMaterialBorrowersPage extends React.Component<Record<string, 
                                 </Grid>
                                 <Grid item>
                                     <InputLabel id="label">Μερικός Διαχειριστής</InputLabel>
-                                    <Select labelId="label" id="select" value={null}>
+                                    <Select autoWidth={false} labelId="label" id="select"
+                                        value={this.state.selectedBorrowerId}
+                                        onChange={(event: React.ChangeEvent<{ value: any }>) => {
+                                            this.setState({selectedBorrowerId: event.target.value});
+                                            console.log("selectedBorrowerId", this.state.selectedBorrowerId);
+                                        }}
+                                    >
                                         {borrowersMenuItems}
                                     </Select>
                                 </Grid>
@@ -133,6 +139,7 @@ export class DirectMaterialBorrowersPage extends React.Component<Record<string, 
                 </Card>
                 <DirectMaterialBorrowerDataGrid actions={actions} onRowSelected={this.onRowSelected.bind(this)} storagePrefix="directmaterialborrowers" fetchData={this.state.fetchData}
                     search={this.state.search}
+                    borrowerId={this.state.selectedBorrowerId}
                     onFetchData={this.onFetchData.bind(this)}
                 />
                 {/*
@@ -171,7 +178,7 @@ export interface DirectMaterialBorrowersPageState {
     rows: GridRowsProp;
     loading: boolean;
     search: string;
-    selectedBorrower: Borrower;
+    selectedBorrowerId: number;
     borrowers: Borrower[];
     error: any;
     openAddDrawer: boolean;
