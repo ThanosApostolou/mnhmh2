@@ -1,7 +1,8 @@
 import React, { ReactNode } from "react";
-import { Card, Button, TextField, Grid, Drawer, CardHeader, CardActions, Backdrop, CircularProgress, Snackbar } from "@material-ui/core";
+import { Card, Button, TextField, Grid, Drawer, CardHeader, CardActions, Backdrop, Tabs, Tab, CircularProgress, Snackbar, CardContent } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 
+import { TabPanel, a11yProps } from "../../components/TabPanel";
 import { Manager } from "../../../entities/Manager";
 import { ApiConsumer } from "../../../ApiConsumer";
 import { CancelTokenSource } from "axios";
@@ -24,7 +25,8 @@ export class ManagersEdit extends React.Component<ManagersEditProps, ManagersEdi
         this.state = {
             loading: false,
             borrowers: [],
-            errorSnackbarOpen: false
+            errorSnackbarOpen: false,
+            tabValue: 0
         };
     }
 
@@ -77,67 +79,73 @@ export class ManagersEdit extends React.Component<ManagersEditProps, ManagersEdi
         } else {
             return (
                 <Drawer anchor="right" open={this.props.openEditDrawer} >
-                    <Card style={{minWidth: "70vw", display:"flex", flexGrow: 1, overflowY: "auto"}}>
-                        <Grid container direction="column" style={{display:"flex", flexGrow: 1}}>
-                            <Grid item>
-                                <Grid container direction="row" justify="center" alignContent="center" alignItems="center">
-                                    <CardHeader title="Τροποποίηση Μέλους Επιτροπής" />
-                                </Grid>
-                            </Grid>
+                    <Card style={{minWidth: "70vw", height: "100%", overflowY: "auto"}}>
+                        <Grid container direction="column" style={{height: "100%"}}>
+                            <CardHeader title="Τροποποίηση Μέλους Επιτροπής" style={{textAlign: "center"}} />
+                            <Tabs value={this.state.tabValue} onChange={(event: React.ChangeEvent<any>, newValue: number) => this.setState({tabValue: newValue})} >
+                                <Tab label="Στοιχεία" value={0} {...a11yProps(0)} />
+                                <Tab label="Μερικοί Διαχειριστές" value={1} {...a11yProps(1)} />
+                            </Tabs>
+                            <CardContent style={{display: "flex", flexGrow: 1}}>
+                                <TabPanel value={this.state.tabValue} index={0} style={{display: "flex", flexGrow: 1}}>
+                                    <form onSubmit={this.onEditSave.bind(this)} style={{display: "flex", flexGrow: 1}}>
 
-                            <Grid item style={{display: "flex", flexGrow: 1}}>
-                                <form onSubmit={this.onEditSave.bind(this)} style={{display: "flex", flexGrow: 1}}>
-
-                                    <Grid container direction="column" style={{display:"flex", flexGrow: 1}}>
-                                        <fieldset>
-                                            <legend>Στοιχεία Μέλους Επιτροπής:</legend>
-                                            <Grid container direction="column" justify="flex-start" alignContent="center" alignItems="center">
-                                                <TextField size="small" InputLabelProps={{ shrink: true }} label="Id" type="number" value={this.props.manager.Id} disabled />
-                                                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ" defaultValue={this.props.manager.Name} inputRef={this.nameInputRef} />
-                                                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΒΑΘΜΟΣ" defaultValue={this.props.manager.Rank} inputRef={this.rankInputRef} />
-                                                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΘΕΣΗ" defaultValue={this.props.manager.Position} inputRef={this.positionInputRef} />
-                                            </Grid>
-                                        </fieldset>
-                                        <fieldset style={{display: "flex", flexGrow: 1}}>
-                                            <legend>Μερικοί Διαχειριστές που είναι υπεύθυνος:</legend>
-                                            <ManagerBorrowers manager={this.props.manager} />
-                                        </fieldset>
-                                        <CardActions>
+                                        <Grid container direction="column" style={{display:"flex", flexGrow: 1}}>
+                                            <fieldset>
+                                                <legend>Στοιχεία Μέλους Επιτροπής:</legend>
+                                                <Grid container direction="column" justify="flex-start" alignContent="center" alignItems="center">
+                                                    <TextField size="small" InputLabelProps={{ shrink: true }} label="Id" type="number" value={this.props.manager.Id} disabled />
+                                                    <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ" defaultValue={this.props.manager.Name} inputRef={this.nameInputRef} />
+                                                    <TextField size="small" InputLabelProps={{ shrink: true }} label="ΒΑΘΜΟΣ" defaultValue={this.props.manager.Rank} inputRef={this.rankInputRef} />
+                                                    <TextField size="small" InputLabelProps={{ shrink: true }} label="ΘΕΣΗ" defaultValue={this.props.manager.Position} inputRef={this.positionInputRef} />
+                                                </Grid>
+                                            </fieldset>
                                             <Grid container direction="row" justify="flex-end">
-
-                                                <Button variant="contained" style={{margin: "10px"}} disabled={this.state.loading} onClick={this.onEditCancel.bind(this)}>
-                                                    ΑΚΥΡΩΣΗ
-                                                </Button>
-
-                                                <Button variant="contained" style={{margin: "10px"}} disabled={this.state.loading} color="secondary" onClick={this.onEditDelete.bind(this)}>
-                                                    ΔΙΑΓΡΑΦΗ
-                                                </Button>
                                                 <Button variant="contained" style={{margin: "10px 20px 10px 10px"}} disabled={this.state.loading} color="primary" autoFocus type="submit" value="Submit">
                                                     ΑΠΟΘΗΚΕΥΣΗ
                                                 </Button>
                                             </Grid>
-                                        </CardActions>
+                                            <div style={{display:"flex", flexGrow: 1}} />
+                                        </Grid>
+                                    </form>
+                                </TabPanel >
+                                <TabPanel value={this.state.tabValue} index={1} style={{display: "flex", flexGrow: 1}}>
+                                    <Grid container direction="column" style={{display:"flex", flexGrow: 1}}>
+                                        <fieldset style={{display: "flex", flexGrow: 1}}>
+                                            <legend>Μερικοί Διαχειριστές που είναι υπεύθυνος:</legend>
+                                            <ManagerBorrowers manager={this.props.manager} />
+                                        </fieldset>
                                     </Grid>
-                                </form>
-                            </Grid>
+                                </TabPanel >
+                            </CardContent>
+                            <CardActions>
+                                <Grid container direction="row" justify="flex-end">
+                                    <Button variant="contained" style={{margin: "10px"}} disabled={this.state.loading} onClick={this.onEditCancel.bind(this)}>
+                                            ΑΚΥΡΩΣΗ
+                                    </Button>
+                                    <Button variant="contained" style={{margin: "10px"}} disabled={this.state.loading} color="secondary" onClick={this.onEditDelete.bind(this)}>
+                                            ΔΙΑΓΡΑΦΗ
+                                    </Button>
+                                </Grid>
+                            </CardActions>
                         </Grid>
-                        <Backdrop open={this.state.loading} style={{position: "fixed", left: "30vw", height: "100vh", width: "70vw", zIndex: 100}}>
-                            <CircularProgress color="inherit" />
-                        </Backdrop>
-                        <Snackbar
-                            anchorOrigin={{
-                                vertical: "bottom",
-                                horizontal: "left",
-                            }}
-                            open={this.state.errorSnackbarOpen}
-                            autoHideDuration={2000}
-                            onClose={() => this.setState({errorSnackbarOpen: false})}
-                        >
-                            <Alert variant="filled" severity="error" onClose={() => this.setState({errorSnackbarOpen: false})}>
-                                Αποτυχία τροποποίησης!
-                            </Alert>
-                        </Snackbar>
                     </Card>
+                    <Backdrop open={this.state.loading} style={{position: "fixed", left: "30vw", height: "100vh", width: "70vw", zIndex: 100}}>
+                        <CircularProgress color="inherit" />
+                    </Backdrop>
+                    <Snackbar
+                        anchorOrigin={{
+                            vertical: "bottom",
+                            horizontal: "left",
+                        }}
+                        open={this.state.errorSnackbarOpen}
+                        autoHideDuration={2000}
+                        onClose={() => this.setState({errorSnackbarOpen: false})}
+                    >
+                        <Alert variant="filled" severity="error" onClose={() => this.setState({errorSnackbarOpen: false})}>
+                                Αποτυχία τροποποίησης!
+                        </Alert>
+                    </Snackbar>
                 </Drawer>
             );
         }
@@ -156,4 +164,5 @@ interface ManagersEditState {
     loading: boolean;
     borrowers: Borrower[];
     errorSnackbarOpen: boolean;
+    tabValue: number;
 }
