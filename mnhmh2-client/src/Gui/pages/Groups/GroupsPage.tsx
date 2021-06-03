@@ -1,7 +1,6 @@
 import React, { ReactNode } from "react";
-import { Card, CardContent, TextField, Tooltip, IconButton, Grid, Snackbar } from "@material-ui/core";
+import { Card, CardContent, TextField, Tooltip, IconButton, Grid } from "@material-ui/core";
 import { Search } from "@material-ui/icons";
-import { Alert } from "@material-ui/lab";
 
 
 import { GroupDataGrid } from "./GroupDataGrid";
@@ -10,6 +9,7 @@ import { GridRowsProp } from "@material-ui/data-grid";
 import { AddEditActions } from "../../components/AddEditActions";
 import { GroupsAdd } from "./GroupsAdd";
 import { GroupsEdit } from "./GroupsEdit";
+import { MySnackbar } from "../../components/MySnackbar";
 
 export class GroupsPage extends React.Component<Record<string, never>, GroupsPageState> {
     state: Readonly<GroupsPageState>;
@@ -108,19 +108,12 @@ export class GroupsPage extends React.Component<Record<string, never>, GroupsPag
                     onEditDelete={this.onEditDelete.bind(this)}
                     onEditCancel={this.onEditCancel.bind(this)}
                 />
-                <Snackbar
-                    anchorOrigin={{
-                        vertical: "bottom",
-                        horizontal: "left",
-                    }}
+                <MySnackbar
                     open={this.state.openSnackbar}
-                    autoHideDuration={2000}
                     onClose={() => this.setState({openSnackbar: false})}
-                >
-                    <Alert variant="filled" severity="success" onClose={() => this.setState({openSnackbar: false})}>
-                        {this.state.snackbarMessage}
-                    </Alert>
-                </Snackbar>
+                    severity="success"
+                    message={this.state.snackbarMessage}
+                />
             </Grid>
         );
     }

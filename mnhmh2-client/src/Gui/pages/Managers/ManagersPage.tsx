@@ -1,7 +1,6 @@
 import React, { ReactNode } from "react";
-import { Card, CardContent, TextField, Tooltip, IconButton, Grid, Snackbar } from "@material-ui/core";
+import { Card, CardContent, TextField, Tooltip, IconButton, Grid } from "@material-ui/core";
 import { Search } from "@material-ui/icons";
-import { Alert } from "@material-ui/lab";
 
 import { Manager } from "../../../entities/Manager";
 import { GridRowsProp } from "@material-ui/data-grid";
