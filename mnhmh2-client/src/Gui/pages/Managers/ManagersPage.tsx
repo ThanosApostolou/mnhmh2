@@ -9,6 +9,7 @@ import { ManagersAdd } from "./ManagersAdd";
 import { ManagersEdit } from "./ManagersEdit";
 import { AddEditActions } from "../../components/AddEditActions";
 import { ManagerDataGrid } from "./ManagerDataGrid";
+import { MySnackbar } from "../../components/MySnackbar";
 
 export class ManagersPage extends React.Component<Record<string, never>, ManagersPageState> {
     state: Readonly<ManagersPageState>;
@@ -107,19 +108,12 @@ export class ManagersPage extends React.Component<Record<string, never>, Manager
                     onEditDelete={this.onEditDelete.bind(this)}
                     onEditCancel={this.onEditCancel.bind(this)}
                 />
-                <Snackbar
-                    anchorOrigin={{
-                        vertical: "bottom",
-                        horizontal: "left",
-                    }}
+                <MySnackbar
                     open={this.state.openSnackbar}
-                    autoHideDuration={2000}
                     onClose={() => this.setState({openSnackbar: false})}
-                >
-                    <Alert variant="filled" severity="success" onClose={() => this.setState({openSnackbar: false})}>
-                        {this.state.snackbarMessage}
-                    </Alert>
-                </Snackbar>
+                    severity="success"
+                    message={this.state.snackbarMessage}
+                />
             </Grid>
         );
     }

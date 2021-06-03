@@ -8,6 +8,7 @@ import { ApiConsumer } from "../../../ApiConsumer";
 import { CancelTokenSource } from "axios";
 import { Borrower } from "../../../entities/Borrower";
 import { ManagerBorrowers } from "./ManagerBorrowers";
+import { MySnackbar } from "../../components/MySnackbar";
 
 export class ManagersEdit extends React.Component<ManagersEditProps, ManagersEditState> {
     state: Readonly<ManagersEditState>;
@@ -133,19 +134,12 @@ export class ManagersEdit extends React.Component<ManagersEditProps, ManagersEdi
                     <Backdrop open={this.state.loading} style={{position: "fixed", left: "30vw", height: "100vh", width: "70vw", zIndex: 100}}>
                         <CircularProgress color="inherit" />
                     </Backdrop>
-                    <Snackbar
-                        anchorOrigin={{
-                            vertical: "bottom",
-                            horizontal: "left",
-                        }}
+                    <MySnackbar
                         open={this.state.errorSnackbarOpen}
-                        autoHideDuration={2000}
                         onClose={() => this.setState({errorSnackbarOpen: false})}
-                    >
-                        <Alert variant="filled" severity="error" onClose={() => this.setState({errorSnackbarOpen: false})}>
-                                Αποτυχία τροποποίησης!
-                        </Alert>
-                    </Snackbar>
+                        severity="error"
+                        message="Αποτυχία τροποποίησης!"
+                    />
                 </Drawer>
             );
         }
