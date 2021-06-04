@@ -6,7 +6,7 @@ import { Manager } from "../../../entities/Manager";
 import { ApiConsumer } from "../../../ApiConsumer";
 import { CancelTokenSource } from "axios";
 import { Borrower } from "../../../entities/Borrower";
-import { ManagerBorrowers } from "./ManagerBorrowers";
+import { ManagersEditBorrowers } from "./ManagersEditBorrowers";
 import { MySnackbar } from "../../components/MySnackbar";
 
 export class ManagersEdit extends React.Component<ManagersEditProps, ManagersEditState> {
@@ -116,7 +116,7 @@ export class ManagersEdit extends React.Component<ManagersEditProps, ManagersEdi
                                 <Grid container direction="column" style={{display:"flex", flexGrow: 1}}>
                                     <fieldset style={{display: "flex", flexGrow: 1}}>
                                         <legend>Μερικοί Διαχειριστές που είναι υπεύθυνος:</legend>
-                                        <ManagerBorrowers manager={this.props.manager} />
+                                        <ManagersEditBorrowers manager={this.props.manager} />
                                     </fieldset>
                                 </Grid>
                             </TabPanel >

@@ -79,11 +79,11 @@ export class BorrowersEdit extends React.Component<BorrowersEditProps, Borrowers
     }
 
     componentDidMount(): void {
-        this.setState({manager: this.props.borrower ? this.props.borrower.Manager : null});
+        this.setState({manager: this.props.borrower ? JSON.parse(JSON.stringify(this.props.borrower.Manager)) : null});
     }
     componentDidUpdate(prevProps: BorrowersEditProps): void {
-        if (prevProps.borrower !== this.props.borrower) {
-            this.setState({manager: this.props.borrower ? this.props.borrower.Manager : null});
+        if (JSON.stringify(prevProps.borrower) !== JSON.stringify(this.props.borrower) || prevProps.openEditDrawer !== this.props.openEditDrawer) {
+            this.setState({manager: this.props.borrower ? JSON.parse(JSON.stringify(this.props.borrower.Manager)) : null});
         }
     }
 
@@ -96,7 +96,7 @@ export class BorrowersEdit extends React.Component<BorrowersEditProps, Borrowers
             <Grid container direction="column" justify="flex-start" alignContent="center" alignItems="center">
                 <TextField size="small" InputLabelProps={{ shrink: true }} label="Id" type="number" value={this.props.borrower.Id} disabled />
                 <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ" defaultValue={this.props.borrower.Name} inputRef={this.nameInputRef} />
-                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΣΕΙΡΙΑΚΟΣ ΑΡΙΘΜΟΣ" defaultValue={this.props.borrower.SerialNumber} inputRef={this.serialNumberInputRef} />
+                <TextField size="small" type="number" InputLabelProps={{ shrink: true }} label="ΣΕΙΡΙΑΚΟΣ ΑΡΙΘΜΟΣ" defaultValue={this.props.borrower.SerialNumber} inputRef={this.serialNumberInputRef} />
             </Grid>
         ;
         return (

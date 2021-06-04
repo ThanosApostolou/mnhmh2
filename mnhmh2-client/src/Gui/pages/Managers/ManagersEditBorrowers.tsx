@@ -8,10 +8,10 @@ import { BorrowerDataGrid } from "../Borrowers/BorrowerDataGrid";
 import { AddRemoveActions } from "../../components/AddRemoveActions";
 import { BorrowerSelectDialog } from "../Borrowers/BorrowerSelectDialog";
 
-export class ManagerBorrowers extends React.Component<ManagerBorrowersProps, ManagerBorrowersState> {
+export class ManagersEditBorrowers extends React.Component<ManagersEditBorrowersProps, ManagersEditBorrowersState> {
     cancelTokenSource: CancelTokenSource;
 
-    constructor(props: ManagerBorrowersProps) {
+    constructor(props: ManagersEditBorrowersProps) {
         super(props);
         this.state = {
             selectedBorrower: null,
@@ -68,7 +68,7 @@ export class ManagerBorrowers extends React.Component<ManagerBorrowersProps, Man
         const actions = <AddRemoveActions disabledRemove={this.state.selectedBorrower === null} onAddClick={this.onAddClick.bind(this)} onRemoveClick={this.onRemoveClick.bind(this)} />;
         return (
             <React.Fragment>
-                <BorrowerDataGrid actions={actions} onRowSelected={this.onRowSelected.bind(this)} storagePrefix="manager_borrowers" fetchData={this.state.fetchData}
+                <BorrowerDataGrid actions={actions} onRowSelected={this.onRowSelected.bind(this)} storagePrefix="managers_borrowers" fetchData={this.state.fetchData}
                     withManager={false}
                     managerId={this.props.manager.Id}
                     onFetchData={this.onFetchData.bind(this)}
@@ -79,11 +79,11 @@ export class ManagerBorrowers extends React.Component<ManagerBorrowersProps, Man
     }
 }
 
-export interface ManagerBorrowersProps {
+export interface ManagersEditBorrowersProps {
     manager: Manager;
 }
 
-export interface ManagerBorrowersState {
+export interface ManagersEditBorrowersState {
     selectedBorrower: Borrower;
     fetchData: boolean;
     openDialog: boolean;
