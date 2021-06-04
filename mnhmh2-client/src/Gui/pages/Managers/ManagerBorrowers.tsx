@@ -1,15 +1,12 @@
 import React, { ReactNode } from "react";
-import { Dialog } from "@material-ui/core";
+import { CancelTokenSource } from "axios";
 
 import { Manager } from "../../../entities/Manager";
 import { Borrower } from "../../../entities/Borrower";
 import { ApiConsumer } from "../../../ApiConsumer";
-import { CancelTokenSource } from "axios";
-import {  GridRowsProp } from "@material-ui/data-grid";
 import { BorrowerDataGrid } from "../Borrowers/BorrowerDataGrid";
-
 import { AddRemoveActions } from "../../components/AddRemoveActions";
-import { ManagerBorrowersAdd } from "./ManagerBorrowersAdd";
+import { BorrowerSelectDialog } from "../Borrowers/BorrowerSelectDialog";
 
 export class ManagerBorrowers extends React.Component<ManagerBorrowersProps, ManagerBorrowersState> {
     cancelTokenSource: CancelTokenSource;
@@ -17,9 +14,7 @@ export class ManagerBorrowers extends React.Component<ManagerBorrowersProps, Man
     constructor(props: ManagerBorrowersProps) {
         super(props);
         this.state = {
-            borrowers: null,
             selectedBorrower: null,
-            loading: true,
             fetchData: false,
             openDialog: false
         };
@@ -44,21 +39,25 @@ export class ManagerBorrowers extends React.Component<ManagerBorrowersProps, Man
     onRemoveClick(): void {
         const selectedBorrower = this.state.selectedBorrower;
         selectedBorrower.Manager = null;
-        this.setState({loading: true});
         this.cancelTokenSource.cancel("cancel sending data");
         this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
         Borrower.updateInApi(this.cancelTokenSource, selectedBorrower).then(() => {
-            this.setState({loading: false});
             this.fetchData();
         }).catch((error) => {
             console.log(error);
-            this.setState({loading: false});
         });
     }
 
-    onAddSelect(): void {
-        this.setState({openDialog: false});
-        this.fetchData();
+    onAddSelect(borrower: Borrower): void {
+        borrower.Manager = this.props.manager;
+        this.cancelTokenSource.cancel("cancel sending data");
+        this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
+        Borrower.updateInApi(this.cancelTokenSource, borrower).then(() => {
+            this.setState({openDialog: false});
+            this.fetchData();
+        }).catch((error) => {
+            console.log(error);
+        });
     }
 
     onAddCancel(): void {
@@ -69,12 +68,12 @@ export class ManagerBorrowers extends React.Component<ManagerBorrowersProps, Man
         const actions = <AddRemoveActions disabledRemove={this.state.selectedBorrower === null} onAddClick={this.onAddClick.bind(this)} onRemoveClick={this.onRemoveClick.bind(this)} />;
         return (
             <React.Fragment>
-                <BorrowerDataGrid actions={actions} onRowSelected={this.onRowSelected.bind(this)} storagePrefix="manager_borrowers_dialog" fetchData={this.state.fetchData}
+                <BorrowerDataGrid actions={actions} onRowSelected={this.onRowSelected.bind(this)} storagePrefix="manager_borrowers" fetchData={this.state.fetchData}
                     withManager={false}
                     managerId={this.props.manager.Id}
                     onFetchData={this.onFetchData.bind(this)}
                 />
-                <ManagerBorrowersAdd manager={this.props.manager} openDialog={this.state.openDialog} onSelect={this.onAddSelect.bind(this)} onCancel={this.onAddCancel.bind(this)} />
+                <BorrowerSelectDialog openDialog={this.state.openDialog} onSelectClick={this.onAddSelect.bind(this)} onCancelClick={this.onAddCancel.bind(this)} />
             </React.Fragment>
         );
     }
@@ -85,9 +84,7 @@ export interface ManagerBorrowersProps {
 }
 
 export interface ManagerBorrowersState {
-    borrowers: Borrower[]
     selectedBorrower: Borrower;
-    loading: boolean;
     fetchData: boolean;
     openDialog: boolean;
 }

@@ -5,7 +5,6 @@ import { Manager } from "../../../entities/Manager";
 import { ApiConsumer } from "../../../ApiConsumer";
 import { CancelTokenSource } from "axios";
 import { ManagerDataGrid } from "./ManagerDataGrid";
-
 import { SelectActions } from "../../components/SelectActions";
 
 export class ManagerSelectDialog extends React.Component<ManagerSelectDialogProps, ManagerSelectDialogState> {
@@ -14,16 +13,9 @@ export class ManagerSelectDialog extends React.Component<ManagerSelectDialogProp
     constructor(props: ManagerSelectDialogProps) {
         super(props);
         this.state = {
-            managers: null,
-            selectedManager: null,
-            loading: false,
-            fetchData: false
+            selectedManager: null
         };
         this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
-    }
-
-    fetchData(): void {
-        this.setState({fetchData: !this.state.fetchData});
     }
 
     onFetchData(): void {
@@ -35,8 +27,6 @@ export class ManagerSelectDialog extends React.Component<ManagerSelectDialogProp
     }
 
     onSelectClick(): void {
-        //const selectedBorrower = this.state.selectedManager;
-        //selectedBorrower.Manager = this.props.borrower;
         this.props.onSelectClick(this.state.selectedManager);
     }
 
@@ -54,18 +44,16 @@ export class ManagerSelectDialog extends React.Component<ManagerSelectDialogProp
                     </DialogTitle>
                     <DialogContent style={{height: "100vh", display: "flex", flexGrow: 1}}>
                         <ManagerDataGrid actions={actions} onRowSelected={this.onRowSelected.bind(this)} storagePrefix="managers_select"
-                            fetchData={this.state.fetchData}
                             onFetchData={this.onFetchData.bind(this)}
                         />
                     </DialogContent>
                     <DialogActions>
                         <Grid container direction="row" justify="flex-end">
 
-                            <Button variant="contained" style={{margin: "10px"}} disabled={this.state.loading} onClick={this.props.onCancelClick}>
+                            <Button variant="contained" style={{margin: "10px"}} onClick={this.props.onCancelClick}>
                                 ΑΚΥΡΩΣΗ
                             </Button>
                         </Grid>
-
                     </DialogActions>
                 </Dialog>
             );
@@ -80,8 +68,5 @@ export interface ManagerSelectDialogProps {
 }
 
 export interface ManagerSelectDialogState {
-    managers: Manager[]
     selectedManager: Manager;
-    loading: boolean;
-    fetchData: boolean;
 }

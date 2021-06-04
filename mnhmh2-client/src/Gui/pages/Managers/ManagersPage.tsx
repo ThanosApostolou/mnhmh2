@@ -3,7 +3,6 @@ import { Card, CardContent, TextField, Tooltip, IconButton, Grid } from "@materi
 import { Search } from "@material-ui/icons";
 
 import { Manager } from "../../../entities/Manager";
-import { GridRowsProp } from "@material-ui/data-grid";
 import { ManagersAdd } from "./ManagersAdd";
 import { ManagersEdit } from "./ManagersEdit";
 import { AddEditActions } from "../../components/AddEditActions";
@@ -18,10 +17,7 @@ export class ManagersPage extends React.Component<Record<string, never>, Manager
         super(props);
         this.state = {
             selectedManager: null,
-            rows: [],
-            loading: true,
             search: null,
-            error: null,
             openAddDrawer: false,
             openEditDrawer: false,
             openSnackbar: false,
@@ -120,10 +116,7 @@ export class ManagersPage extends React.Component<Record<string, never>, Manager
 
 export interface ManagersPageState {
     selectedManager: Manager;
-    rows: GridRowsProp;
-    loading: boolean;
     search: string;
-    error: any;
     openAddDrawer: boolean;
     openEditDrawer: boolean;
     openSnackbar: boolean;

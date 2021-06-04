@@ -56,7 +56,6 @@ export class ManagerSingleDataGrid extends React.Component<ManagerSingleDataGrid
 }
 
 export interface ManagerSingleDataGridProps {
-    onRowSelected(manager: Manager): void;
     manager: Manager;
     storagePrefix: string;
     onRemoveClick: () => void;
@@ -69,7 +68,6 @@ export interface ManagerSingleDataGridState {
 }
 
 ManagerSingleDataGrid.defaultProps = {
-    onRowSelected: null,
     manager: null,
     storagePrefix: null,
     onRemoveClick: null,
