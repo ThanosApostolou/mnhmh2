@@ -38,7 +38,7 @@ export class MyGridToolbar extends React.Component<MyGridToolbarProps, any> {
                                     </Button>
                                 </Tooltip>
                                 <Tooltip title="Ανανέωση Δεδομένων Πίνακα" aria-label="refresh">
-                                    <Button color="primary" size="small" onClick={this.props.onRefreshClick}>
+                                    <Button color="primary" size="small" style={{display: this.props.onRefreshClick ? "initial" : "none"}} onClick={this.props.onRefreshClick}>
                                         <Refresh />
                                     &nbsp;Ανανεωση
                                     </Button>

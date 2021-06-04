@@ -8,13 +8,13 @@ import { MyGridToolbar } from "./MyGridToolbar";
 import { MyGridFooter } from "./MyGridFooter";
 import { MyGridErrorOverlay } from "./MyGridErrorOverlay";
 
-export class MyDataGrid extends React.Component<DataCompProps, DataCompState> {
-    state: Readonly<DataCompState>;
+export class MyDataGrid extends React.Component<MyDataGridProps, MyDataGridState> {
+    state: Readonly<MyDataGridState>;
     defaultPageSize: number;
     defaultDensity: GridDensity;
     defaultColumns: GridColDef[];
 
-    constructor(props: DataCompProps) {
+    constructor(props: MyDataGridProps) {
         super(props);
         this.defaultPageSize = 10;
         this.defaultDensity = "standard";
@@ -99,9 +99,13 @@ export class MyDataGrid extends React.Component<DataCompProps, DataCompState> {
         this.readStorage();
     }
     onRefreshClick(event: React.MouseEvent<HTMLButtonElement>): void {
-        this.props.cancelFetchData();
+        if (this.props.cancelFetchData) {
+            this.props.cancelFetchData();
+        }
         this.setState({page: 0, selectedRow: null});
-        this.props.fetchData();
+        if (this.props.fetchData) {
+            this.props.fetchData();
+        }
         if (this.props.onRefreshClick) {
             this.props.onRefreshClick(event);
         }
@@ -115,11 +119,15 @@ export class MyDataGrid extends React.Component<DataCompProps, DataCompState> {
     componentDidMount(): void {
         this.initStorage();
         this.readStorage();
-        this.props.fetchData();
+        if (this.props.fetchData) {
+            this.props.fetchData();
+        }
     }
 
     componentWillUnmount(): void {
-        this.props.cancelFetchData();
+        if (this.props.cancelFetchData) {
+            this.props.cancelFetchData();
+        }
     }
 
     render(): ReactNode {
@@ -143,7 +151,7 @@ export class MyDataGrid extends React.Component<DataCompProps, DataCompState> {
                                 onColumnsSave: this.onColumnsSave.bind(this),
                                 onDensityChange: this.onDensityChange.bind(this),
                                 onRestoreClick: this.onRestoreClick.bind(this),
-                                onRefreshClick: this.onRefreshClick.bind(this),
+                                onRefreshClick: this.props.fetchData ? this.onRefreshClick.bind(this) : null,
                                 onPrintClick: this.onPrintClick.bind(this),
                             },
                             footer: {
@@ -171,7 +179,7 @@ interface Storage {
     columns: GridColDef[];
 }
 
-export interface DataCompState {
+export interface MyDataGridState {
     selectedRow: any;
     pageSize: number;
     page: number;
@@ -180,15 +188,15 @@ export interface DataCompState {
     textOverflowEllipsis: boolean;
 }
 
-export interface DataCompProps {
+export interface MyDataGridProps {
     columns: GridColDef[];
     rows: GridRowsProp;
     loading: boolean;
     error: any;
     storagePrefix: string;
     actions?: ReactNode;
-    fetchData: () => void;
-    cancelFetchData: () => void;
+    fetchData?: () => void;
+    cancelFetchData?: () => void;
     onRowSelected?: (params: GridRowSelectedParams) => void;
     onRefreshClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
     onPrintClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;

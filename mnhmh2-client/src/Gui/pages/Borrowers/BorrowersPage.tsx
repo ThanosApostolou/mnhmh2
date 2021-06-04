@@ -68,7 +68,6 @@ export class BorrowersPage extends React.Component<Record<string, never>, Borrow
     }
     onEditCancel(): void {
         this.setState({openEditDrawer: false});
-        this.fetchData();
     }
 
     handleSubmit(event: React.FormEvent<HTMLFormElement>): void {
