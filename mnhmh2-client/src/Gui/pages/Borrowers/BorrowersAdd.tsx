@@ -1,10 +1,12 @@
 import React, { ReactNode } from "react";
 import { Card, Button, TextField, Grid, Drawer, CardHeader, CardActions, Backdrop, CircularProgress, Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
+import { CancelTokenSource } from "axios";
 
 import { Borrower } from "../../../entities/Borrower";
+import { Manager } from "../../../entities/Manager";
 import { ApiConsumer } from "../../../ApiConsumer";
-import { CancelTokenSource } from "axios";
+import { ManagerSingleDataGrid } from "../Managers/ManagerSingleDataGrid";
 
 export class BorrowersAdd extends React.Component<BorrowersAddProps, BorrowersAddState> {
     state: Readonly<BorrowersAddState>;
@@ -19,7 +21,8 @@ export class BorrowersAdd extends React.Component<BorrowersAddProps, BorrowersAd
         this.serialNumberInputRef = React.createRef<HTMLInputElement>();
         this.state = {
             loading: false,
-            errorSnackbarOpen: false
+            errorSnackbarOpen: false,
+            manager: null
         };
     }
 
@@ -31,7 +34,8 @@ export class BorrowersAdd extends React.Component<BorrowersAddProps, BorrowersAd
         const borrower = Borrower.fromObject({
             Id: null,
             Name: this.nameInputRef.current.value,
-            SerialNumber: this.serialNumberInputRef.current.value
+            SerialNumber: this.serialNumberInputRef.current.value,
+            Manager: this.state.manager
         });
         Borrower.insertToApi(this.cancelTokenSource, borrower).then(() => {
             this.setState({loading: false});
@@ -48,6 +52,14 @@ export class BorrowersAdd extends React.Component<BorrowersAddProps, BorrowersAd
         if (this.props.onAddCancel) {
             this.props.onAddCancel();
         }
+    }
+
+    onManagerSelect(manager: Manager): void {
+        this.setState({manager: manager});
+    }
+
+    onManagerRemove(): void {
+        this.setState({manager: null});
     }
 
     render(): ReactNode {
@@ -73,6 +85,13 @@ export class BorrowersAdd extends React.Component<BorrowersAddProps, BorrowersAd
                                                 <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ" inputRef={this.nameInputRef} />
                                                 <TextField size="small" type="number" InputLabelProps={{ shrink: true }} label="ΣΕΙΡΙΑΚΟΣ ΑΡΙΘΜΟΣ" inputRef={this.serialNumberInputRef} />
                                             </Grid>
+                                        </fieldset>
+                                        <fieldset style={{display: "flex", flexGrow: 1}}>
+                                            <legend>Υπεύθυνος:</legend>
+                                            <ManagerSingleDataGrid manager={this.state.manager}
+                                                onRemoveClick={this.onManagerRemove.bind(this)}
+                                                onSelectClick={this.onManagerSelect.bind(this)}
+                                            />
                                         </fieldset>
                                         <div style={{display: "flex", flexGrow: 1}} />
                                         <CardActions>
@@ -122,4 +141,5 @@ export interface BorrowersAddProps {
 interface BorrowersAddState {
     loading: boolean;
     errorSnackbarOpen: boolean;
+    manager: Manager;
 }
