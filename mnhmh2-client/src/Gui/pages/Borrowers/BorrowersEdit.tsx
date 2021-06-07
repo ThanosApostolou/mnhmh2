@@ -101,51 +101,46 @@ export class BorrowersEdit extends React.Component<BorrowersEditProps, Borrowers
         ;
         return (
             <Drawer anchor="right" open={this.props.openEditDrawer} >
-                <Card style={{minWidth: "70vw", height: "100%", overflowY: "auto"}}>
-                    <Grid container direction="column" style={{height: "100%"}}>
-                        <CardHeader title="Τροποποίηση Μέλους Επιτροπής" style={{textAlign: "center"}} />
-                        <Tabs value={this.state.tabValue} onChange={(event: React.ChangeEvent<any>, newValue: number) => this.setState({tabValue: newValue})} >
-                            <Tab label="Στοιχεία" value={0} {...a11yProps(0)} />
-                        </Tabs>
-                        <CardContent style={{display: "flex", flexGrow: 1}}>
-                            <TabPanel value={this.state.tabValue} index={0} style={{display: "flex", flexGrow: 1}}>
-                                <form onSubmit={this.onEditSave.bind(this)} style={{display: "flex", flexGrow: 1}}>
-
-                                    <Grid container direction="column" style={{display:"flex", flexGrow: 1}}>
-                                        <fieldset>
-                                            <legend>Στοιχεία Μέλους Επιτροπής:</legend>
-                                            {textfields}
-                                        </fieldset>
-                                        <fieldset style={{display: "flex", flexGrow: 1}}>
-                                            <legend>Υπεύθυνος:</legend>
-                                            <ManagerSingleDataGrid manager={this.state.manager}
-                                                onRemoveClick={this.onManagerRemove.bind(this)}
-                                                onSelectClick={this.onManagerSelect.bind(this)}
-                                            />
-                                        </fieldset>
-                                        <Grid container direction="row" justify="flex-end">
-                                            <Button variant="contained" style={{margin: "10px 20px 10px 10px"}} disabled={this.state.loading} color="primary" autoFocus type="submit" value="Submit">
-                                                ΑΠΟΘΗΚΕΥΣΗ
-                                            </Button>
-                                        </Grid>
-                                        <div style={{display:"flex", flexGrow: 1}} />
-                                    </Grid>
-                                </form>
-                            </TabPanel >
-                        </CardContent>
-                        <CardActions>
-                            <Grid container direction="row" justify="flex-end">
-                                <Button variant="contained" style={{margin: "10px"}} disabled={this.state.loading} onClick={this.onEditCancel.bind(this)}>
-                                        ΑΚΥΡΩΣΗ
-                                </Button>
-                                <Button variant="contained" style={{margin: "10px"}} disabled={this.state.loading} color="secondary" onClick={this.onEditDelete.bind(this)}>
-                                        ΔΙΑΓΡΑΦΗ
-                                </Button>
-                            </Grid>
-                        </CardActions>
-                    </Grid>
+                <Card className="drawer-card">
+                    <CardHeader title="Τροποποίηση Μέλους Επιτροπής" style={{textAlign: "center"}} />
+                    <Tabs value={this.state.tabValue} onChange={(event: React.ChangeEvent<any>, newValue: number) => this.setState({tabValue: newValue})} >
+                        <Tab label="Στοιχεία" value={0} {...a11yProps(0)} />
+                    </Tabs>
+                    <CardContent style={{display: "flex", flexGrow: 1}}>
+                        <TabPanel value={this.state.tabValue} index={0} style={{flexGrow: 1}}>
+                            <form onSubmit={this.onEditSave.bind(this)} style={{flexGrow: 1}}>
+                                <fieldset className="fieldset-textfields">
+                                    <legend>Στοιχεία Μέλους Επιτροπής:</legend>
+                                    {textfields}
+                                </fieldset>
+                                <fieldset className="fieldset-singledatagrid">
+                                    <legend>Υπεύθυνος:</legend>
+                                    <ManagerSingleDataGrid manager={this.state.manager}
+                                        onRemoveClick={this.onManagerRemove.bind(this)}
+                                        onSelectClick={this.onManagerSelect.bind(this)}
+                                    />
+                                </fieldset>
+                                <Grid container direction="row" justify="flex-end">
+                                    <Button variant="contained" style={{margin: "10px 20px 10px 10px"}} disabled={this.state.loading} color="primary" autoFocus type="submit" value="Submit">
+                                        ΑΠΟΘΗΚΕΥΣΗ
+                                    </Button>
+                                </Grid>
+                            </form>
+                            <div style={{display:"flex", flexGrow: 1}} />
+                        </TabPanel >
+                    </CardContent>
+                    <CardActions>
+                        <Grid container direction="row" justify="flex-end">
+                            <Button variant="contained" style={{margin: "10px"}} disabled={this.state.loading} onClick={this.onEditCancel.bind(this)}>
+                                    ΑΚΥΡΩΣΗ
+                            </Button>
+                            <Button variant="contained" style={{margin: "10px"}} disabled={this.state.loading} color="secondary" onClick={this.onEditDelete.bind(this)}>
+                                    ΔΙΑΓΡΑΦΗ
+                            </Button>
+                        </Grid>
+                    </CardActions>
                 </Card>
-                <Backdrop open={this.state.loading} style={{position: "fixed", left: "30vw", height: "100vh", width: "70vw", zIndex: 100}}>
+                <Backdrop open={this.state.loading} className="drawer-backboard">
                     <CircularProgress color="inherit" />
                 </Backdrop>
                 <MySnackbar
