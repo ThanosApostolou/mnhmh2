@@ -175,8 +175,8 @@ export class MaterialTab {
                 MaterialWithoutTab: mt.MaterialWithoutTab,
                 CurrentMaterialTab: mt.CurrentMaterialTab,
                 FEEFCode: mt.FEEFCode,
-                Group: mt.Group.Name,
-                Category: mt.Category.Name,
+                Group: mt.Group ? mt.Group.Name : null,
+                Category: mt.Category ? mt.Category.Name : null,
                 ComparativesPrintPage_MaterialTabs: mt.ComparativesPrintPage_MaterialTabs
             };
             count++;

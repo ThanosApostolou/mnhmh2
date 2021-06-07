@@ -26,6 +26,7 @@ export class MaterialTabSingleDataGrid extends React.Component<MaterialTabSingle
     }
 
     componentDidMount(): void {
+        console.log("MATERIAL_TAB:", this.props.materialTab);
         if (this.props.materialTab !== null) {
             this.setState({rows: MaterialTab.getRows([this.props.materialTab])});
         } else {
