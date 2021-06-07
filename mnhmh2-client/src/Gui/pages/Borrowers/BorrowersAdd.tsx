@@ -66,17 +66,21 @@ export class BorrowersAdd extends React.Component<BorrowersAddProps, BorrowersAd
         if (!this.props.openAddDrawer) {
             return null;
         }
+        const textfields =
+            <Grid container direction="column" justify="flex-start" alignContent="center" alignItems="center">
+                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ" inputRef={this.nameInputRef} />
+                <TextField size="small" type="number" InputLabelProps={{ shrink: true }} label="ΣΕΙΡΙΑΚΟΣ ΑΡΙΘΜΟΣ" inputRef={this.serialNumberInputRef} />
+            </Grid>
+        ;
         return (
             <Drawer anchor="right" open={this.props.openAddDrawer} >
                 <Card className="drawer-card">
                     <CardHeader title="Προσθήκη Μερικού Διαχειριστή" style={{textAlign: "center"}} />
                     <CardContent className="drawer-cardcontent">
-                        <form onSubmit={this.onAddSave.bind(this)} style={{display: "flex", flexDirection: "column", flex: 1}}>
-                            <fieldset>
-                                <Grid container direction="column" justify="flex-start" alignContent="center" alignItems="center">
-                                    <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ" inputRef={this.nameInputRef} />
-                                    <TextField size="small" type="number" InputLabelProps={{ shrink: true }} label="ΣΕΙΡΙΑΚΟΣ ΑΡΙΘΜΟΣ" inputRef={this.serialNumberInputRef} />
-                                </Grid>
+                        <form onSubmit={this.onAddSave.bind(this)} style={{flexGrow: 1}}>
+                            <fieldset className="fieldset-textfields">
+                                <legend>Στοιχεία Μερικού Διαχειριστή:</legend>
+                                {textfields}
                             </fieldset>
                             <fieldset className="fieldset-singledatagrid">
                                 <legend>Υπεύθυνος:</legend>
@@ -85,19 +89,19 @@ export class BorrowersAdd extends React.Component<BorrowersAddProps, BorrowersAd
                                     onSelectClick={this.onManagerSelect.bind(this)}
                                 />
                             </fieldset>
-                            <div style={{flex: 1}} />
-                            <CardActions>
-                                <Grid container direction="row" justify="flex-end">
-                                    <Button variant="contained" style={{margin: "10px"}} disabled={this.state.loading} onClick={this.onAddCancel.bind(this)}>
-                                        ΑΚΥΡΩΣΗ
-                                    </Button>
-                                    <Button variant="contained" style={{margin: "10px 20px 10px 10px"}} disabled={this.state.loading} color="primary" autoFocus type="submit" value="Submit">
-                                        ΑΠΟΘΗΚΕΥΣΗ
-                                    </Button>
-                                </Grid>
-                            </CardActions>
+                            <div style={{display:"flex", flexGrow: 1}} />
                         </form>
                     </CardContent>
+                    <CardActions>
+                        <Grid container direction="row" justify="flex-end">
+                            <Button variant="contained" style={{margin: "10px"}} disabled={this.state.loading} onClick={this.onAddCancel.bind(this)}>
+                                ΑΚΥΡΩΣΗ
+                            </Button>
+                            <Button variant="contained" style={{margin: "10px 20px 10px 10px"}} disabled={this.state.loading} color="primary" autoFocus type="submit" value="Submit">
+                                ΑΠΟΘΗΚΕΥΣΗ
+                            </Button>
+                        </Grid>
+                    </CardActions>
                 </Card>
                 <Backdrop open={this.state.loading} className="drawer-backboard">
                     <CircularProgress color="inherit" />

@@ -117,12 +117,12 @@ export class AmmunitionPortionsEdit extends React.Component<AmmunitionPortionsEd
         ;
         return (
             <Drawer anchor="right" open={this.props.openEditDrawer} >
-                <Card style={{minWidth: "70vw", height: "100%", overflowY: "auto"}}>
+                <Card className="drawer-card">
                     <CardHeader title="Τροποποίηση Μέλους Επιτροπής" style={{textAlign: "center"}} />
                     <Tabs value={this.state.tabValue} onChange={(event: React.ChangeEvent<any>, newValue: number) => this.setState({tabValue: newValue})} >
                         <Tab label="Στοιχεία" value={0} {...a11yProps(0)} />
                     </Tabs>
-                    <CardContent style={{flexGrow: 1}}>
+                    <CardContent className="drawer-cardcontent">
                         <TabPanel value={this.state.tabValue} index={0} style={{flexGrow: 1}}>
                             <form onSubmit={this.onEditSave.bind(this)} style={{flexGrow: 1}}>
                                 <fieldset style={{display: "flex"}}>
@@ -150,8 +150,8 @@ export class AmmunitionPortionsEdit extends React.Component<AmmunitionPortionsEd
                                         ΑΠΟΘΗΚΕΥΣΗ
                                     </Button>
                                 </Grid>
-                                <div style={{display:"flex", flexGrow: 1}} />
                             </form>
+                            <div style={{display:"flex", flexGrow: 1}} />
                         </TabPanel >
                     </CardContent>
                     <CardActions>
