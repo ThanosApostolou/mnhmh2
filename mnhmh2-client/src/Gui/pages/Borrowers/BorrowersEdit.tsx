@@ -106,7 +106,7 @@ export class BorrowersEdit extends React.Component<BorrowersEditProps, Borrowers
                     <Tabs value={this.state.tabValue} onChange={(event: React.ChangeEvent<any>, newValue: number) => this.setState({tabValue: newValue})} >
                         <Tab label="Στοιχεία" value={0} {...a11yProps(0)} />
                     </Tabs>
-                    <CardContent style={{display: "flex", flexGrow: 1}}>
+                    <CardContent className="drawer-cardcontent">
                         <TabPanel value={this.state.tabValue} index={0} style={{flexGrow: 1}}>
                             <form onSubmit={this.onEditSave.bind(this)} style={{flexGrow: 1}}>
                                 <fieldset className="fieldset-textfields">

@@ -30,6 +30,12 @@ code {
   flex-direction: column;
 }
 
+.drawer-cardcontent {
+  display: flex;
+  flex: 1;
+  overflow-y: auto;
+}
+
 .fieldset-textfields {
   flex: 1;
 }

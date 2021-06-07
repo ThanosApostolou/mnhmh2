@@ -70,7 +70,7 @@ export class BorrowersAdd extends React.Component<BorrowersAddProps, BorrowersAd
             <Drawer anchor="right" open={this.props.openAddDrawer} >
                 <Card className="drawer-card">
                     <CardHeader title="Προσθήκη Μερικού Διαχειριστή" style={{textAlign: "center"}} />
-                    <CardContent style={{display: "flex", flexGrow: 1}}>
+                    <CardContent className="drawer-cardcontent">
                         <form onSubmit={this.onAddSave.bind(this)} style={{display: "flex", flexDirection: "column", flex: 1}}>
                             <fieldset>
                                 <Grid container direction="column" justify="flex-start" alignContent="center" alignItems="center">
@@ -78,20 +78,21 @@ export class BorrowersAdd extends React.Component<BorrowersAddProps, BorrowersAd
                                     <TextField size="small" type="number" InputLabelProps={{ shrink: true }} label="ΣΕΙΡΙΑΚΟΣ ΑΡΙΘΜΟΣ" inputRef={this.serialNumberInputRef} />
                                 </Grid>
                             </fieldset>
-                            <fieldset style={{display: "flex", flex: 1, minHeight: "270px"}}>
+                            <fieldset className="fieldset-singledatagrid">
                                 <legend>Υπεύθυνος:</legend>
                                 <ManagerSingleDataGrid manager={this.state.manager}
                                     onRemoveClick={this.onManagerRemove.bind(this)}
                                     onSelectClick={this.onManagerSelect.bind(this)}
                                 />
                             </fieldset>
+                            <div style={{flex: 1}} />
                             <CardActions>
                                 <Grid container direction="row" justify="flex-end">
                                     <Button variant="contained" style={{margin: "10px"}} disabled={this.state.loading} onClick={this.onAddCancel.bind(this)}>
-                                        Cancel
+                                        ΑΚΥΡΩΣΗ
                                     </Button>
                                     <Button variant="contained" style={{margin: "10px 20px 10px 10px"}} disabled={this.state.loading} color="primary" autoFocus type="submit" value="Submit">
-                                        Save
+                                        ΑΠΟΘΗΚΕΥΣΗ
                                     </Button>
                                 </Grid>
                             </CardActions>
