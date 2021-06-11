@@ -124,7 +124,7 @@ export class AmmunitionPortionsEdit extends React.Component<AmmunitionPortionsEd
                     </Tabs>
                     <CardContent className="drawer-cardcontent">
                         <TabPanel value={this.state.tabValue} index={0} style={{flexGrow: 1}}>
-                            <form onSubmit={this.onEditSave.bind(this)} style={{flexGrow: 1}}>
+                            <form id="myform" onSubmit={this.onEditSave.bind(this)} style={{flexGrow: 1}}>
                                 <fieldset style={{display: "flex"}}>
                                     <legend>Στοιχεία Μέλους Επιτροπής:</legend>
                                     {textfields}
@@ -146,7 +146,7 @@ export class AmmunitionPortionsEdit extends React.Component<AmmunitionPortionsEd
                                     />
                                 </fieldset>
                                 <Grid container direction="row" justify="flex-end">
-                                    <Button variant="contained" style={{margin: "10px 20px 10px 10px"}} disabled={this.state.loading} color="primary" autoFocus type="submit" value="Submit">
+                                    <Button variant="contained" style={{margin: "10px 20px 10px 10px"}} disabled={this.state.loading} color="primary" autoFocus type="submit" value="Submit" form="myform">
                                         ΑΠΟΘΗΚΕΥΣΗ
                                     </Button>
                                 </Grid>
@@ -165,7 +165,7 @@ export class AmmunitionPortionsEdit extends React.Component<AmmunitionPortionsEd
                         </Grid>
                     </CardActions>
                 </Card>
-                <Backdrop open={this.state.loading} style={{position: "fixed", left: "30vw", height: "100vh", width: "70vw", zIndex: 100}}>
+                <Backdrop open={this.state.loading} style={{position: "fixed", left: "10vw", height: "100vh", width: "90vw", zIndex: 100}}>
                     <CircularProgress color="inherit" />
                 </Backdrop>
                 <MySnackbar

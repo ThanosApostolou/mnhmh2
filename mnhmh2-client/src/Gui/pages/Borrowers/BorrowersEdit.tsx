@@ -108,7 +108,7 @@ export class BorrowersEdit extends React.Component<BorrowersEditProps, Borrowers
                     </Tabs>
                     <CardContent className="drawer-cardcontent">
                         <TabPanel value={this.state.tabValue} index={0} style={{flexGrow: 1}}>
-                            <form onSubmit={this.onEditSave.bind(this)} style={{flexGrow: 1}}>
+                            <form id="myform" onSubmit={this.onEditSave.bind(this)} style={{flexGrow: 1}}>
                                 <fieldset className="fieldset-textfields">
                                     <legend>Στοιχεία Μέλους Επιτροπής:</legend>
                                     {textfields}
@@ -121,12 +121,11 @@ export class BorrowersEdit extends React.Component<BorrowersEditProps, Borrowers
                                     />
                                 </fieldset>
                                 <Grid container direction="row" justify="flex-end">
-                                    <Button variant="contained" style={{margin: "10px 20px 10px 10px"}} disabled={this.state.loading} color="primary" autoFocus type="submit" value="Submit">
+                                    <Button variant="contained" style={{margin: "10px 20px 10px 10px"}} disabled={this.state.loading} color="primary" autoFocus type="submit" value="Submit" form="myform">
                                         ΑΠΟΘΗΚΕΥΣΗ
                                     </Button>
                                 </Grid>
                             </form>
-                            <div style={{display:"flex", flexGrow: 1}} />
                         </TabPanel >
                     </CardContent>
                     <CardActions>

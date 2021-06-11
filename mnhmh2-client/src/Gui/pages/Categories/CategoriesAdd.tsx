@@ -56,7 +56,7 @@ export class CategoriesAdd extends React.Component<CategoriesAddProps, Categorie
         } else {
             return (
                 <Drawer anchor="right" open={this.props.openAddDrawer} >
-                    <Card style={{minWidth: "70vw", display:"flex", flexGrow: 1}}>
+                    <Card style={{minWidth: "90vw", display:"flex", flexGrow: 1}}>
                         <Grid container direction="column" style={{display:"flex", flexGrow: 1}}>
                             <Grid item>
                                 <Grid container direction="row" justify="center" alignContent="center" alignItems="center">
@@ -90,7 +90,7 @@ export class CategoriesAdd extends React.Component<CategoriesAddProps, Categorie
                                 </form>
                             </Grid>
                         </Grid>
-                        <Backdrop open={this.state.loading} style={{position: "fixed", left: "30vw", height: "100vh", width: "70vw", zIndex: 100}}>
+                        <Backdrop open={this.state.loading} style={{position: "fixed", left: "10vw", height: "100vh", width: "90vw", zIndex: 100}}>
                             <CircularProgress color="inherit" />
                         </Backdrop>
                         <Snackbar

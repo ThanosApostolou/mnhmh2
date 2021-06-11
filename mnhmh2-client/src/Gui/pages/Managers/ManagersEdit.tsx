@@ -87,7 +87,7 @@ export class ManagersEdit extends React.Component<ManagersEditProps, ManagersEdi
         ;
         return (
             <Drawer anchor="right" open={this.props.openEditDrawer} >
-                <Card style={{minWidth: "70vw", height: "100%", overflowY: "auto"}}>
+                <Card style={{minWidth: "90vw", height: "100%", overflowY: "auto"}}>
                     <Grid container direction="column" style={{height: "100%"}}>
                         <CardHeader title="Τροποποίηση Μέλους Επιτροπής" style={{textAlign: "center"}} />
                         <Tabs value={this.state.tabValue} onChange={(event: React.ChangeEvent<any>, newValue: number) => this.setState({tabValue: newValue})} >
@@ -133,7 +133,7 @@ export class ManagersEdit extends React.Component<ManagersEditProps, ManagersEdi
                         </CardActions>
                     </Grid>
                 </Card>
-                <Backdrop open={this.state.loading} style={{position: "fixed", left: "30vw", height: "100vh", width: "70vw", zIndex: 100}}>
+                <Backdrop open={this.state.loading} style={{position: "fixed", left: "10vw", height: "100vh", width: "90vw", zIndex: 100}}>
                     <CircularProgress color="inherit" />
                 </Backdrop>
                 <MySnackbar

@@ -74,15 +74,15 @@ export class AmmunitionPortionsAdd extends React.Component<AmmunitionPortionsAdd
 
     componentDidMount(): void {
         this.setState({
-            materialTab: this.props.ammunitionPortion ? this.props.ammunitionPortion.MaterialTab : null,
-            ammunitionStore: this.props.ammunitionPortion ? this.props.ammunitionPortion.AmmunitionStore : null
+            materialTab: null,
+            ammunitionStore: null
         });
     }
-    componentDidUpdate(prevProps: AmmunitionPortionsEditProps): void {
-        if (JSON.stringify(prevProps.ammunitionPortion) !== JSON.stringify(this.props.ammunitionPortion) || prevProps.openEditDrawer !== this.props.openEditDrawer) {
+    componentDidUpdate(prevProps: AmmunitionPortionsAddProps): void {
+        if (prevProps.openAddDrawer !== this.props.openAddDrawer) {
             this.setState({
-                materialTab: this.props.ammunitionPortion ? this.props.ammunitionPortion.MaterialTab : null,
-                ammunitionStore: this.props.ammunitionPortion ? JSON.parse(JSON.stringify(this.props.ammunitionPortion.AmmunitionStore)) : null
+                materialTab: null,
+                ammunitionStore: null
             });
         }
     }
@@ -102,7 +102,7 @@ export class AmmunitionPortionsAdd extends React.Component<AmmunitionPortionsAdd
                 <Card className="drawer-card">
                     <CardHeader title="Προσθήκη Πυρομαχικού" style={{textAlign: "center"}} />
                     <CardContent className="drawer-cardcontent">
-                        <form onSubmit={this.onAddSave.bind(this)} style={{flexGrow: 1}}>
+                        <form id="myform" onSubmit={this.onAddSave.bind(this)} style={{flexGrow: 1}}>
                             <fieldset className="fieldset-textfields">
                                 <legend>Στοιχεία Πυρομαχικού:</legend>
                                 {textfields}
@@ -123,21 +123,20 @@ export class AmmunitionPortionsAdd extends React.Component<AmmunitionPortionsAdd
                                     storagePrefix="ammunitionstores_single"
                                 />
                             </fieldset>
-                            <div style={{display:"flex", flexGrow: 1}} />
-                            <CardActions>
-                                <Grid container direction="row" justify="flex-end">
-                                    <Button variant="contained" style={{margin: "10px"}} disabled={this.state.loading} onClick={this.onAddCancel.bind(this)}>
-                                        ΑΚΥΡΩΣΗ
-                                    </Button>
-                                    <Button variant="contained" style={{margin: "10px 20px 10px 10px"}} disabled={this.state.loading} color="primary" autoFocus type="submit" value="Submit">
-                                        ΑΠΟΘΗΚΕΥΣΗ
-                                    </Button>
-                                </Grid>
-                            </CardActions>
                         </form>
                     </CardContent>
+                    <CardActions>
+                        <Grid container direction="row" justify="flex-end">
+                            <Button variant="contained" style={{margin: "10px"}} disabled={this.state.loading} onClick={this.onAddCancel.bind(this)}>
+                                ΑΚΥΡΩΣΗ
+                            </Button>
+                            <Button variant="contained" style={{margin: "10px 20px 10px 10px"}} disabled={this.state.loading} color="primary" autoFocus type="submit" value="Submit" form="myform">
+                                ΑΠΟΘΗΚΕΥΣΗ
+                            </Button>
+                        </Grid>
+                    </CardActions>
                 </Card>
-                <Backdrop open={this.state.loading} className="drawer-backboard">
+                <Backdrop open={this.state.loading} style={{position: "fixed", left: "10vw", height: "100vh", width: "90vw", zIndex: 100}}>
                     <CircularProgress color="inherit" />
                 </Backdrop>
                 <MySnackbar

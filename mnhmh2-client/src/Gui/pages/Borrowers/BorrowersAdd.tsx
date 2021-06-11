@@ -86,7 +86,7 @@ export class BorrowersAdd extends React.Component<BorrowersAddProps, BorrowersAd
                 <Card className="drawer-card">
                     <CardHeader title="Προσθήκη Μερικού Διαχειριστή" style={{textAlign: "center"}} />
                     <CardContent className="drawer-cardcontent">
-                        <form onSubmit={this.onAddSave.bind(this)} style={{flexGrow: 1}}>
+                        <form id="myform" onSubmit={this.onAddSave.bind(this)} style={{flexGrow: 1}}>
                             <fieldset className="fieldset-textfields">
                                 <legend>Στοιχεία Μερικού Διαχειριστή:</legend>
                                 {textfields}
@@ -98,21 +98,20 @@ export class BorrowersAdd extends React.Component<BorrowersAddProps, BorrowersAd
                                     onSelectClick={this.onManagerSelect.bind(this)}
                                 />
                             </fieldset>
-                            <div style={{display:"flex", flexGrow: 1}} />
-                            <CardActions>
-                                <Grid container direction="row" justify="flex-end">
-                                    <Button variant="contained" style={{margin: "10px"}} disabled={this.state.loading} onClick={this.onAddCancel.bind(this)}>
-                                        ΑΚΥΡΩΣΗ
-                                    </Button>
-                                    <Button variant="contained" style={{margin: "10px 20px 10px 10px"}} disabled={this.state.loading} color="primary" autoFocus type="submit" value="Submit">
-                                        ΑΠΟΘΗΚΕΥΣΗ
-                                    </Button>
-                                </Grid>
-                            </CardActions>
                         </form>
                     </CardContent>
+                    <CardActions>
+                        <Grid container direction="row" justify="flex-end">
+                            <Button variant="contained" style={{margin: "10px"}} disabled={this.state.loading} onClick={this.onAddCancel.bind(this)}>
+                                ΑΚΥΡΩΣΗ
+                            </Button>
+                            <Button variant="contained" style={{margin: "10px 20px 10px 10px"}} disabled={this.state.loading} color="primary" autoFocus type="submit" value="Submit" form="myform">
+                                ΑΠΟΘΗΚΕΥΣΗ
+                            </Button>
+                        </Grid>
+                    </CardActions>
                 </Card>
-                <Backdrop open={this.state.loading} className="drawer-backboard">
+                <Backdrop open={this.state.loading} style={{position: "fixed", left: "10vw", height: "100vh", width: "90vw", zIndex: 100}}>
                     <CircularProgress color="inherit" />
                 </Backdrop>
                 <MySnackbar
