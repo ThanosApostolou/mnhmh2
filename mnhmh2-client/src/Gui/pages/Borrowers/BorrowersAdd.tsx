@@ -62,6 +62,15 @@ export class BorrowersAdd extends React.Component<BorrowersAddProps, BorrowersAd
         this.setState({manager: null});
     }
 
+    componentDidMount(): void {
+        this.setState({manager: null});
+    }
+    componentDidUpdate(prevProps: BorrowersAddProps): void {
+        if (prevProps.openAddDrawer !== this.props.openAddDrawer) {
+            this.setState({manager: null});
+        }
+    }
+
     render(): ReactNode {
         if (!this.props.openAddDrawer) {
             return null;
@@ -90,18 +99,18 @@ export class BorrowersAdd extends React.Component<BorrowersAddProps, BorrowersAd
                                 />
                             </fieldset>
                             <div style={{display:"flex", flexGrow: 1}} />
+                            <CardActions>
+                                <Grid container direction="row" justify="flex-end">
+                                    <Button variant="contained" style={{margin: "10px"}} disabled={this.state.loading} onClick={this.onAddCancel.bind(this)}>
+                                        ΑΚΥΡΩΣΗ
+                                    </Button>
+                                    <Button variant="contained" style={{margin: "10px 20px 10px 10px"}} disabled={this.state.loading} color="primary" autoFocus type="submit" value="Submit">
+                                        ΑΠΟΘΗΚΕΥΣΗ
+                                    </Button>
+                                </Grid>
+                            </CardActions>
                         </form>
                     </CardContent>
-                    <CardActions>
-                        <Grid container direction="row" justify="flex-end">
-                            <Button variant="contained" style={{margin: "10px"}} disabled={this.state.loading} onClick={this.onAddCancel.bind(this)}>
-                                ΑΚΥΡΩΣΗ
-                            </Button>
-                            <Button variant="contained" style={{margin: "10px 20px 10px 10px"}} disabled={this.state.loading} color="primary" autoFocus type="submit" value="Submit">
-                                ΑΠΟΘΗΚΕΥΣΗ
-                            </Button>
-                        </Grid>
-                    </CardActions>
                 </Card>
                 <Backdrop open={this.state.loading} className="drawer-backboard">
                     <CircularProgress color="inherit" />
