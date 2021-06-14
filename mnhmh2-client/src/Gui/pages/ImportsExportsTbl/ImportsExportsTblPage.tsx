@@ -8,7 +8,7 @@ import { ImportsExportsTblDataGrid } from "./ImportsExportsTblDataGrid";
 import { ImportsExportsTbl } from "../../../entities/ImportsExportsTbl";
 import { GridRowsProp } from "@material-ui/data-grid";
 import { AddEditActions } from "../../components/AddEditActions";
-//import { SubcategoriesAdd } from "./SubcategoriesAdd";
+import { ImportsExportsTblAdd } from "./ImportsExportsTblAdd";
 //import { AmmunitionStoresEdit } from "./AmmunitionStoresEdit";
 
 export class ImportsExportsTblPage extends React.Component<Record<string, never>, ImportsExportsTblPageState> {
@@ -136,11 +136,11 @@ export class ImportsExportsTblPage extends React.Component<Record<string, never>
                     search={this.state.search}
                     onFetchData={this.onFetchData.bind(this)}
                 />
-                {/*
-                <SubcategoriesAdd openAddDrawer={this.state.openAddDrawer}
+                <ImportsExportsTblAdd openAddDrawer={this.state.openAddDrawer}
                     onAddSave={this.onAddSave.bind(this)}
                     onAddCancel={this.onAddCancel.bind(this)}
                 />
+                {/*
                 <AmmunitionStoresEdit store={this.state.selectedPortion}
                     openEditDrawer={this.state.openEditDrawer}
                     onEditSave={this.onEditSave.bind(this)}

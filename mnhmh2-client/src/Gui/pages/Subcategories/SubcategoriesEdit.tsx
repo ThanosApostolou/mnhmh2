@@ -114,7 +114,7 @@ export class SubcategoriesEdit extends React.Component<SubcategoriesEditProps, S
         return (
             <Drawer anchor="right" open={this.props.openEditDrawer} >
                 <Card className="drawer-card">
-                    <CardHeader title="Τροποποίηση Μέλους Επιτροπής" style={{textAlign: "center"}} />
+                    <CardHeader title="Τροποποίηση Υποσυγκροτήματος" style={{textAlign: "center"}} />
                     <Tabs value={this.state.tabValue} onChange={(event: React.ChangeEvent<any>, newValue: number) => this.setState({tabValue: newValue})} >
                         <Tab label="Στοιχεία" value={0} {...a11yProps(0)} />
                     </Tabs>
@@ -122,7 +122,7 @@ export class SubcategoriesEdit extends React.Component<SubcategoriesEditProps, S
                         <TabPanel value={this.state.tabValue} index={0} style={{flexGrow: 1}}>
                             <form id="myform" onSubmit={this.onEditSave.bind(this)} style={{flexGrow: 1}}>
                                 <fieldset style={{display: "flex"}}>
-                                    <legend>Στοιχεία Μέλους Επιτροπής:</legend>
+                                    <legend>Στοιχεία Υποσυγκροτήματος:</legend>
                                     {textfields}
                                 </fieldset>
                                 <fieldset style={{display: "flex", height: "270px"}}>
