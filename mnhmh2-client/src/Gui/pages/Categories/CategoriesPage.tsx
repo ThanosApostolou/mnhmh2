@@ -9,7 +9,7 @@ import { Category } from "../../../entities/Category";
 import { GridRowsProp } from "@material-ui/data-grid";
 import { AddEditActions } from "../../components/AddEditActions";
 import { CategoriesAdd } from "./CategoriesAdd";
-//import { AmmunitionStoresEdit } from "./AmmunitionStoresEdit";
+import { CategoriesEdit } from "./CategoriesEdit";
 
 export class CategoriesPage extends React.Component<Record<string, never>, CategoriesPageState> {
     state: Readonly<CategoriesPageState>;
@@ -102,14 +102,12 @@ export class CategoriesPage extends React.Component<Record<string, never>, Categ
                     onAddSave={this.onAddSave.bind(this)}
                     onAddCancel={this.onAddCancel.bind(this)}
                 />
-                {/*
-                <AmmunitionStoresEdit store={this.state.selectedPortion}
+                <CategoriesEdit category={this.state.selectedCategory}
                     openEditDrawer={this.state.openEditDrawer}
                     onEditSave={this.onEditSave.bind(this)}
                     onEditDelete={this.onEditDelete.bind(this)}
                     onEditCancel={this.onEditCancel.bind(this)}
                 />
-                */}
                 <Snackbar
                     anchorOrigin={{
                         vertical: "bottom",

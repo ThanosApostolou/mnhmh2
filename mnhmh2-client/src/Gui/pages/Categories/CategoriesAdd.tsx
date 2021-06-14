@@ -1,10 +1,10 @@
 import React, { ReactNode } from "react";
-import { Card, Button, TextField, Grid, Drawer, CardHeader, CardActions, Backdrop, CircularProgress, Snackbar } from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
+import { Card, Button, TextField, Grid, Drawer, CardHeader, CardContent, CardActions, Backdrop, CircularProgress } from "@material-ui/core";
 
 import { Category } from "../../../entities/Category";
 import { ApiConsumer } from "../../../ApiConsumer";
 import { CancelTokenSource } from "axios";
+import { MySnackbar } from "../../components/MySnackbar";
 
 export class CategoriesAdd extends React.Component<CategoriesAddProps, CategoriesAddState> {
     state: Readonly<CategoriesAddState>;
@@ -53,63 +53,47 @@ export class CategoriesAdd extends React.Component<CategoriesAddProps, Categorie
     render(): ReactNode {
         if (!this.props.openAddDrawer) {
             return null;
-        } else {
-            return (
-                <Drawer anchor="right" open={this.props.openAddDrawer} >
-                    <Card style={{minWidth: "90vw", display:"flex", flexGrow: 1}}>
-                        <Grid container direction="column" style={{display:"flex", flexGrow: 1}}>
-                            <Grid item>
-                                <Grid container direction="row" justify="center" alignContent="center" alignItems="center">
-                                    <CardHeader title="Προσθήκη Υποσυγκροτήματος" />
-                                </Grid>
-                            </Grid>
-
-                            <Grid item style={{display: "flex", flexGrow: 1}}>
-                                <form onSubmit={this.onAddSave.bind(this)} style={{display: "flex", flexGrow: 1}}>
-
-                                    <Grid container direction="column" style={{display:"flex", flexGrow: 1}}>
-                                        <fieldset>
-                                            <Grid container direction="column" justify="flex-start" alignContent="center" alignItems="center">
-                                                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ" inputRef={this.nameInputRef} />
-                                                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΣΕΙΡΙΑΚΟΣ ΑΡΙΘΜΟΣ" inputRef={this.serialNumberInputRef} />
-                                            </Grid>
-                                        </fieldset>
-                                        <div style={{display: "flex", flexGrow: 1}} />
-                                        <CardActions>
-                                            <Grid container direction="row" justify="flex-end">
-
-                                                <Button variant="contained" style={{margin: "10px"}} disabled={this.state.loading} onClick={this.onAddCancel.bind(this)}>
-                                                Cancel
-                                                </Button>
-                                                <Button variant="contained" style={{margin: "10px 20px 10px 10px"}} disabled={this.state.loading} color="primary" autoFocus type="submit" value="Submit">
-                                                Save
-                                                </Button>
-                                            </Grid>
-                                        </CardActions>
-                                    </Grid>
-                                </form>
-                            </Grid>
-                        </Grid>
-                        <Backdrop open={this.state.loading} style={{position: "fixed", left: "10vw", height: "100vh", width: "90vw", zIndex: 100}}>
-                            <CircularProgress color="inherit" />
-                        </Backdrop>
-                        <Snackbar
-                            anchorOrigin={{
-                                vertical: "bottom",
-                                horizontal: "left",
-                            }}
-                            open={this.state.errorSnackbarOpen}
-                            autoHideDuration={2000}
-                            onClose={() => this.setState({errorSnackbarOpen: false})}
-                        >
-                            <Alert variant="filled" severity="error" onClose={() => this.setState({errorSnackbarOpen: false})}>
-                                Αποτυχία προσθήκης υποσυγκροτήματος!
-                            </Alert>
-                        </Snackbar>
-                    </Card>
-                </Drawer>
-            );
         }
+        const textfields =
+            <Grid container direction="column" justify="flex-start" alignContent="center" alignItems="center">
+                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ" inputRef={this.nameInputRef} />
+                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΣΕΙΡΙΑΚΟΣ ΑΡΙΘΜΟΣ" inputRef={this.serialNumberInputRef} />
+            </Grid>
+        ;
+        return (
+            <Drawer anchor="right" open={this.props.openAddDrawer} >
+                <Card className="drawer-card">
+                    <CardHeader title="Προσθήκη Συγκροτήματος" style={{textAlign: "center"}} />
+                    <CardContent className="drawer-cardcontent">
+                        <form id="myform" onSubmit={this.onAddSave.bind(this)} style={{flexGrow: 1}}>
+                            <fieldset className="fieldset-textfields">
+                                <legend>Στοιχεία Συγκροτήματος:</legend>
+                                {textfields}
+                            </fieldset>
+                        </form>
+                    </CardContent>
+                    <CardActions>
+                        <Grid container direction="row" justify="flex-end">
+                            <Button variant="contained" style={{margin: "10px"}} disabled={this.state.loading} onClick={this.onAddCancel.bind(this)}>
+                                ΑΚΥΡΩΣΗ
+                            </Button>
+                            <Button variant="contained" style={{margin: "10px 20px 10px 10px"}} disabled={this.state.loading} color="primary" autoFocus type="submit" value="Submit" form="myform">
+                                ΑΠΟΘΗΚΕΥΣΗ
+                            </Button>
+                        </Grid>
+                    </CardActions>
+                </Card>
+                <Backdrop open={this.state.loading} style={{position: "fixed", left: "10vw", height: "100vh", width: "90vw", zIndex: 100}}>
+                    <CircularProgress color="inherit" />
+                </Backdrop>
+                <MySnackbar
+                    open={this.state.errorSnackbarOpen}
+                    onClose={() => this.setState({errorSnackbarOpen: false})}
+                    severity="error"
+                    message="Αποτυχία προσθήκης!"
+                />
+            </Drawer>
+        );
     }
 }
 
