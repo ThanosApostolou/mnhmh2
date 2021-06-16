@@ -40,6 +40,15 @@ export class Webserver {
         this.expressapp.get("/api/importsexportstbl", (req: Request, res: Response) => {
             new ImportsExportsTblController(req, res).GET();
         });
+        this.expressapp.post("/api/importsexportstbl", (req: Request, res: Response) => {
+            new ImportsExportsTblController(req, res).POST();
+        });
+        this.expressapp.delete("/api/importsexportstbl", (req: Request, res: Response) => {
+            new ImportsExportsTblController(req, res).DELETE();
+        });
+        this.expressapp.put("/api/importsexportstbl", (req: Request, res: Response) => {
+            new ImportsExportsTblController(req, res).PUT();
+        });
 
         this.expressapp.get("/api/category", (req: Request, res: Response) => {
             new CategoryController(req, res).GET();

@@ -13,11 +13,21 @@ export class ImportsExportsTblAdd extends React.Component<ImportsExportsTblAddPr
     state: Readonly<ImportsExportsTblAddState>;
     cancelTokenSource: CancelTokenSource;
     unitInputRef: React.RefObject<HTMLInputElement>;
+    justificationFileNumberInputRef: React.RefObject<HTMLInputElement>;
+    importedInputRef: React.RefObject<HTMLInputElement>;
+    exportedInputRef: React.RefObject<HTMLInputElement>;
+    remainingInputRef: React.RefObject<HTMLInputElement>;
+    commentsInputRef: React.RefObject<HTMLInputElement>;
 
     constructor(props: ImportsExportsTblAddProps) {
         super(props);
         this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
         this.unitInputRef = React.createRef<HTMLInputElement>();
+        this.justificationFileNumberInputRef = React.createRef<HTMLInputElement>();
+        this.importedInputRef = React.createRef<HTMLInputElement>();
+        this.exportedInputRef = React.createRef<HTMLInputElement>();
+        this.remainingInputRef = React.createRef<HTMLInputElement>();
+        this.commentsInputRef = React.createRef<HTMLInputElement>();
         this.state = {
             loading: false,
             errorSnackbarOpen: false,
@@ -35,6 +45,11 @@ export class ImportsExportsTblAdd extends React.Component<ImportsExportsTblAddPr
             Id: null,
             Date: this.state.date,
             Unit: this.unitInputRef.current.value,
+            JustificationFileNumber: this.justificationFileNumberInputRef.current.value,
+            Imported: this.importedInputRef.current.value,
+            Exported: this.exportedInputRef.current.value,
+            Remaining: this.remainingInputRef.current.value,
+            Comments: this.commentsInputRef.current.value,
             MaterialTab: this.state.materialTab
         });
         ImportsExportsTbl.insertToApi(this.cancelTokenSource, importsExportsTbl).then(() => {
@@ -94,6 +109,11 @@ export class ImportsExportsTblAdd extends React.Component<ImportsExportsTblAddPr
                     }}
                 />
                 <TextField size="small" InputLabelProps={{ shrink: true }} label="ΜΟΝΑΔΑ" inputRef={this.unitInputRef} />
+                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΑΡΙΘΜΟΣ ΔΙΚΑΙΟΛΟΓΗΣΗ ΑΡΧΕΙΟΥ" inputRef={this.justificationFileNumberInputRef} />
+                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΕΙΣΑΧΘΗΚΕ" type="number" inputRef={this.importedInputRef} />
+                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΕΞΑΧΘΗΚΕ" type="number" inputRef={this.exportedInputRef} />
+                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΥΠΟΛΟΙΠΟ" type="number" inputRef={this.remainingInputRef} />
+                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΣΧΟΛΙΑ" inputRef={this.commentsInputRef} />
             </Grid>
         ;
         return (

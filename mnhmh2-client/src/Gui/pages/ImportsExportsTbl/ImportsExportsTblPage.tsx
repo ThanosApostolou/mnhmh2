@@ -9,7 +9,7 @@ import { ImportsExportsTbl } from "../../../entities/ImportsExportsTbl";
 import { GridRowsProp } from "@material-ui/data-grid";
 import { AddEditActions } from "../../components/AddEditActions";
 import { ImportsExportsTblAdd } from "./ImportsExportsTblAdd";
-//import { AmmunitionStoresEdit } from "./AmmunitionStoresEdit";
+import { ImportsExportsTblEdit } from "./ImportsExportsTblEdit";
 
 export class ImportsExportsTblPage extends React.Component<Record<string, never>, ImportsExportsTblPageState> {
     state: Readonly<ImportsExportsTblPageState>;
@@ -140,14 +140,12 @@ export class ImportsExportsTblPage extends React.Component<Record<string, never>
                     onAddSave={this.onAddSave.bind(this)}
                     onAddCancel={this.onAddCancel.bind(this)}
                 />
-                {/*
-                <AmmunitionStoresEdit store={this.state.selectedPortion}
+                <ImportsExportsTblEdit importsExportsTbl={this.state.selectedImportsExportsTbl}
                     openEditDrawer={this.state.openEditDrawer}
                     onEditSave={this.onEditSave.bind(this)}
                     onEditDelete={this.onEditDelete.bind(this)}
                     onEditCancel={this.onEditCancel.bind(this)}
                 />
-                */}
                 <Snackbar
                     anchorOrigin={{
                         vertical: "bottom",

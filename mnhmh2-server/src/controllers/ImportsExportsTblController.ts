@@ -70,6 +70,7 @@ export class ImportsExportsTblController {
             //    this.res.setHeader("Content-Type", "application/json");
             //    this.res.send({error: "Name cannot be empty!"});
             //} else {
+            importsexportstbl.Date = new Date(importsexportstbl.Date);
             await ImportsExportsTbl.insertToDB(importsexportstbl);
             this.res.setHeader("Content-Type", "application/json");
             this.res.send({message: "OK"});
