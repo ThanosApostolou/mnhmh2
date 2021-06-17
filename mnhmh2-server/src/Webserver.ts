@@ -36,6 +36,15 @@ export class Webserver {
         this.expressapp.get("/api/directmaterialborrower", (req: Request, res: Response) => {
             new DirectMaterialBorrowerController(req, res).GET();
         });
+        this.expressapp.post("/api/directmaterialborrower", (req: Request, res: Response) => {
+            new DirectMaterialBorrowerController(req, res).POST();
+        });
+        this.expressapp.delete("/api/directmaterialborrower", (req: Request, res: Response) => {
+            new DirectMaterialBorrowerController(req, res).DELETE();
+        });
+        this.expressapp.put("/api/directmaterialborrower", (req: Request, res: Response) => {
+            new DirectMaterialBorrowerController(req, res).PUT();
+        });
 
         this.expressapp.get("/api/importsexportstbl", (req: Request, res: Response) => {
             new ImportsExportsTblController(req, res).GET();

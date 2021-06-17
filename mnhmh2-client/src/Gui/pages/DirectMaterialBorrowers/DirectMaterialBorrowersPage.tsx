@@ -10,7 +10,7 @@ import { Borrower } from "../../../entities/Borrower";
 import { GridRowsProp } from "@material-ui/data-grid";
 import { AddEditActions } from "../../components/AddEditActions";
 import { CancelTokenSource } from "axios";
-//import { SubcategoriesAdd } from "./SubcategoriesAdd";
+import { DirectMaterialBorrowersAdd } from "./DirectMaterialBorrowersAdd";
 //import { AmmunitionStoresEdit } from "./AmmunitionStoresEdit";
 
 export class DirectMaterialBorrowersPage extends React.Component<Record<string, never>, DirectMaterialBorrowersPageState> {
@@ -143,11 +143,11 @@ export class DirectMaterialBorrowersPage extends React.Component<Record<string, 
                     borrowerId={this.state.selectedBorrowerId}
                     onFetchData={this.onFetchData.bind(this)}
                 />
-                {/*
-                <SubcategoriesAdd openAddDrawer={this.state.openAddDrawer}
+                <DirectMaterialBorrowersAdd openAddDrawer={this.state.openAddDrawer}
                     onAddSave={this.onAddSave.bind(this)}
                     onAddCancel={this.onAddCancel.bind(this)}
                 />
+                {/*
                 <AmmunitionStoresEdit store={this.state.selectedPortion}
                     openEditDrawer={this.state.openEditDrawer}
                     onEditSave={this.onEditSave.bind(this)}

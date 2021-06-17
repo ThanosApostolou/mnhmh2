@@ -66,7 +66,6 @@ export class DirectMaterialBorrowerController {
             await DirectMaterialBorrower.insertToDB(dmb);
             this.res.setHeader("Content-Type", "application/json");
             this.res.send({message: "OK"});
-            //}
         } catch(err) {
             console.log(err);
             this.res.status(500);
