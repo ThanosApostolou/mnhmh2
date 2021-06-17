@@ -11,7 +11,7 @@ import { GridRowsProp } from "@material-ui/data-grid";
 import { AddEditActions } from "../../components/AddEditActions";
 import { CancelTokenSource } from "axios";
 import { DirectMaterialBorrowersAdd } from "./DirectMaterialBorrowersAdd";
-//import { AmmunitionStoresEdit } from "./AmmunitionStoresEdit";
+import { DirectMaterialBorrowersEdit } from "./DirectMaterialBorrowersEdit";
 
 export class DirectMaterialBorrowersPage extends React.Component<Record<string, never>, DirectMaterialBorrowersPageState> {
     state: Readonly<DirectMaterialBorrowersPageState>;
@@ -147,14 +147,12 @@ export class DirectMaterialBorrowersPage extends React.Component<Record<string, 
                     onAddSave={this.onAddSave.bind(this)}
                     onAddCancel={this.onAddCancel.bind(this)}
                 />
-                {/*
-                <AmmunitionStoresEdit store={this.state.selectedPortion}
+                <DirectMaterialBorrowersEdit directMaterialBorrower={this.state.selectedDirectMaterialBorrower}
                     openEditDrawer={this.state.openEditDrawer}
                     onEditSave={this.onEditSave.bind(this)}
                     onEditDelete={this.onEditDelete.bind(this)}
                     onEditCancel={this.onEditCancel.bind(this)}
                 />
-                */}
                 <Snackbar
                     anchorOrigin={{
                         vertical: "bottom",

@@ -90,7 +90,7 @@ export class DirectMaterialBorrowersAdd extends React.Component<DirectMaterialBo
         }
         const textfields =
             <Grid container direction="column" justify="flex-start" alignContent="center" alignItems="center">
-                <TextField size="small" InputLabelProps={{ shrink: true }} label="Ποσότητα" type="number" inputRef={this.quantityInputRef} />
+                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΠΟΣΟΤΗΤΑ" type="number" inputRef={this.quantityInputRef} />
             </Grid>
         ;
         return (
