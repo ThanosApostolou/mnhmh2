@@ -19,19 +19,19 @@ export class MaterialTab {
     ImportSum: number;
     ExportSum: number;
     Found: number;
-    PendingCrediting: number;
-    Surplus: number;
-    Deficit: number;
-    Image: string;
+    //PendingCrediting: number;
+    //Surplus: number;
+    //Deficit: number;
+    //Image: string;
     GeneralRegistryCode: number;
     Archived: boolean;
     SerialNumber: number;
     MaterialWithoutTab: boolean;
     CurrentMaterialTab: boolean;
-    FEEFCode: string;
+    //GEEFCode: string;
     Group: Group;
     Category: Category;
-    ComparativesPrintPage_MaterialTabs: number;
+    //ComparativesPrintPage_MaterialTabs: number;
 
     toJson(): string {
         return JSON.stringify(this);
@@ -59,19 +59,19 @@ export class MaterialTab {
         materialtab.ImportSum = obj.ImportSum;
         materialtab.ExportSum = obj.ExportSum;
         materialtab.Found = obj.Found;
-        materialtab.PendingCrediting = obj.PendingCrediting;
-        materialtab.Surplus = obj.Surplus;
-        materialtab.Deficit = obj.Deficit;
-        materialtab.Image = obj.Image;
+        //materialtab.PendingCrediting = obj.PendingCrediting;
+        //materialtab.Surplus = obj.Surplus;
+        //materialtab.Deficit = obj.Deficit;
+        //materialtab.Image = obj.Image;
         materialtab.GeneralRegistryCode = obj.GeneralRegistryCode;
         materialtab.Archived = obj.Archived;
         materialtab.SerialNumber = obj.SerialNumber;
         materialtab.MaterialWithoutTab = obj.MaterialWithoutTab;
         materialtab.CurrentMaterialTab = obj.CurrentMaterialTab;
-        materialtab.FEEFCode = obj.FEEFCode;
+        //materialtab.GEEFCode = obj.GEEFCode;
         materialtab.Group = Group.fromObject(obj.Group);
         materialtab.Category = Category.fromObject(obj.Category);
-        materialtab.ComparativesPrintPage_MaterialTabs = obj.ComparativesPrintPage_MaterialTabs;
+        //materialtab.ComparativesPrintPage_MaterialTabs = obj.ComparativesPrintPage_MaterialTabs;
         return materialtab;
     }
 
@@ -111,14 +111,72 @@ export class MaterialTab {
             throw error;
         }
     }
+    static async insertToApi(cancelTokenSource: CancelTokenSource, materialTab: MaterialTab): Promise<any> {
+        try {
+            const response = await App.app.apiconsumer.axios.request({
+                method: "post",
+                url: "/materialtab",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                cancelToken: cancelTokenSource.token,
+                data: {
+                    materialTab: materialTab
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+    static async updateInApi(cancelTokenSource: CancelTokenSource, materialTab: MaterialTab): Promise<any> {
+        try {
+            const response = await App.app.apiconsumer.axios.request({
+                method: "put",
+                url: "/materialtab",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                cancelToken: cancelTokenSource.token,
+                data: {
+                    materialTab: materialTab
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+    static async deleteInApi(cancelTokenSource: CancelTokenSource, Id: number): Promise<any> {
+        try {
+            const response = await App.app.apiconsumer.axios.request({
+                method: "delete",
+                url: "/materialtab",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                cancelToken: cancelTokenSource.token,
+                data: {
+                    Id: Id
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+
 
     static getColumns(): GridColDef[] {
         const columns: GridColDef[] = [
             { field: "AA", headerName: "AA", width: 100, hide: false },
             { field: "Id", headerName: "Id", width: 100, hide: false },
-            { field: "PartialRegistryCode", headerName: "ΜΕΡΙΚΟΣ ΚΩΔΙΚΟΣ ΕΓΓΡΑΦΗΣ", width: 200, hide: false },
-            { field: "PartialRegistryCodeNumber", headerName: "ΑΡΙΘΜΟΣ ΜΕΡΙΚΟΥ ΚΩΔΙΚΟΥ ΕΓΓΡΑΦΗΣ", width: 100, hide: false },
-            { field: "AOEF", headerName: "AOEF", width: 200, hide: false },
+            { field: "PartialRegistryCode", headerName: "ΕΦ24", width: 200, hide: false },
+            { field: "PartialRegistryCodeNumber", headerName: "ΑΑΜΜ", width: 100, hide: false },
+            { field: "AOEF", headerName: "ΑΟΕΦ", width: 200, hide: false },
             { field: "Name", headerName: "ΟΝΟΜΑ", width: 200, hide: false },
             { field: "MeasurementUnit", headerName: "ΜΟΝΑΔΑ ΜΕΤΡΗΣΗΣ", width: 200, hide: false },
             { field: "TabRemainder", headerName: "TabRemainder", width: 200, hide: false },
@@ -128,19 +186,19 @@ export class MaterialTab {
             { field: "ImportSum", headerName: "ImportSum", width: 200, hide: false },
             { field: "ExportSum", headerName: "ExportSum", width: 200, hide: false },
             { field: "Found", headerName: "Found", width: 200, hide: false },
-            { field: "PendingCrediting", headerName: "PendingCrediting", width: 200, hide: false },
-            { field: "Surplus", headerName: "Surplus", width: 200, hide: false },
-            { field: "Deficit", headerName: "Deficit", width: 200, hide: false },
-            { field: "Image", headerName: "Image", width: 200, hide: false },
+            //{ field: "PendingCrediting", headerName: "PendingCrediting", width: 200, hide: false },
+            //{ field: "Surplus", headerName: "Surplus", width: 200, hide: false },
+            //{ field: "Deficit", headerName: "Deficit", width: 200, hide: false },
+            //{ field: "Image", headerName: "Image", width: 200, hide: false },
             { field: "GeneralRegistryCode", headerName: "GeneralRegistryCode", width: 200, hide: false },
             { field: "Archived", headerName: "Archived", width: 200, hide: false },
             { field: "SerialNumber", headerName: "SerialNumber", width: 200, hide: false },
             { field: "MaterialWithoutTab", headerName: "MaterialWithoutTab", width: 200, hide: false },
             { field: "CurrentMaterialTab", headerName: "CurrentMaterialTab", width: 200, hide: false },
-            { field: "FEEFCode", headerName: "FEEFCode", width: 200, hide: false },
+            //{ field: "GEEFCode", headerName: "GEEFCode", width: 200, hide: false },
             { field: "Group", headerName: "ΟΜΑΔΑ", width: 200, hide: false },
             { field: "Category", headerName: "ΣΥΓΚΡΟΤΗΜΑ", width: 200, hide: false },
-            { field: "ComparativesPrintPage_MaterialTabs", headerName: "ComparativesPrintPage_MaterialTabs", width: 200, hide: false },
+            //{ field: "ComparativesPrintPage_MaterialTabs", headerName: "ComparativesPrintPage_MaterialTabs", width: 200, hide: false },
         ];
         return columns;
     }
@@ -165,19 +223,19 @@ export class MaterialTab {
                 ImportSum: mt.ImportSum,
                 ExportSum: mt.ExportSum,
                 Found: mt.Found,
-                PendingCrediting: mt.PendingCrediting,
-                Surplus: mt.Surplus,
-                Deficit: mt.Deficit,
-                Image: mt.Image,
+                //PendingCrediting: mt.PendingCrediting,
+                //Surplus: mt.Surplus,
+                //Deficit: mt.Deficit,
+                //Image: mt.Image,
                 GeneralRegistryCode: mt.GeneralRegistryCode,
                 Archived: mt.Archived,
                 SerialNumber: mt.SerialNumber,
                 MaterialWithoutTab: mt.MaterialWithoutTab,
                 CurrentMaterialTab: mt.CurrentMaterialTab,
-                FEEFCode: mt.FEEFCode,
+                //GEEFCode: mt.GEEFCode,
                 Group: mt.Group ? mt.Group.Name : null,
                 Category: mt.Category ? mt.Category.Name : null,
-                ComparativesPrintPage_MaterialTabs: mt.ComparativesPrintPage_MaterialTabs
+                //ComparativesPrintPage_MaterialTabs: mt.ComparativesPrintPage_MaterialTabs
             };
             count++;
             rows.push(row);

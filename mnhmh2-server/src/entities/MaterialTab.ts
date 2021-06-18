@@ -32,14 +32,14 @@ export class MaterialTab {
     ExportSum: number;
     @Column()
     Found: number;
-    @Column()
-    PendingCrediting: number;
-    @Column()
-    Surplus: number;
-    @Column()
-    Deficit: number;
-    @Column()
-    Image: string;
+    //@Column()
+    //PendingCrediting: number;
+    //@Column()
+    //Surplus: number;
+    //@Column()
+    //Deficit: number;
+    //@Column()
+    //Image: string;
     @Column()
     GeneralRegistryCode: number;
     @Column()
@@ -50,8 +50,8 @@ export class MaterialTab {
     MaterialWithoutTab: boolean;
     @Column()
     CurrentMaterialTab: boolean;
-    @Column()
-    GEEFCode: string;
+    //@Column()
+    //GEEFCode: string;
 
     @ManyToOne(() => Group)
     @JoinColumn({name: "Group"})
@@ -61,8 +61,8 @@ export class MaterialTab {
     @JoinColumn({name: "Category"})
     Category: Category;
 
-    @Column()
-    ComparativesPrintPage_MaterialTabs: number;
+    //@Column()
+    //ComparativesPrintPage_MaterialTabs: number;
 
     toJson(): string {
         return JSON.stringify(this);
@@ -90,16 +90,16 @@ export class MaterialTab {
         materialtab.ImportSum = obj.ImportSum;
         materialtab.ExportSum = obj.ExportSum;
         materialtab.Found = obj.Found;
-        materialtab.PendingCrediting = obj.PendingCrediting;
-        materialtab.Surplus = obj.Surplus;
-        materialtab.Deficit = obj.Deficit;
-        materialtab.Image = obj.Image;
+        //materialtab.PendingCrediting = obj.PendingCrediting;
+        //materialtab.Surplus = obj.Surplus;
+        //materialtab.Deficit = obj.Deficit;
+        //materialtab.Image = obj.Image;
         materialtab.GeneralRegistryCode = obj.GeneralRegistryCode;
         materialtab.Archived = obj.Archived;
         materialtab.SerialNumber = obj.SerialNumber;
         materialtab.MaterialWithoutTab = obj.MaterialWithoutTab;
         materialtab.CurrentMaterialTab = obj.CurrentMaterialTab;
-        materialtab.GEEFCode = obj.GEEFCode;
+        //materialtab.GEEFCode = obj.GEEFCode;
 
         if (obj.Group !== undefined) {
             materialtab.Group = Group.fromObject(obj.Group);
@@ -107,7 +107,7 @@ export class MaterialTab {
         if (obj.Category !== undefined) {
             materialtab.Category = Category.fromObject(obj.Category);
         }
-        materialtab.ComparativesPrintPage_MaterialTabs = obj.ComparativesPrintPage_MaterialTabs;
+        //materialtab.ComparativesPrintPage_MaterialTabs = obj.ComparativesPrintPage_MaterialTabs;
         return materialtab;
     }
 
@@ -123,10 +123,10 @@ export class MaterialTab {
         "MaterialTab.PartialRegistryCodeNumber", "MaterialTab.AOEF", "MaterialTab.Name",
         "MaterialTab.MeasurementUnit", "MaterialTab.TabRemainder", "MaterialTab.Sum",
         "MaterialTab.Difference", "MaterialTab.Comments", "MaterialTab.ImportSum",
-        "MaterialTab.ExportSum", "MaterialTab.Found", "MaterialTab.PendingCrediting",
-        "MaterialTab.Surplus", "MaterialTab.Deficit", "MaterialTab.GeneralRegistryCode",
+        "MaterialTab.ExportSum", "MaterialTab.Found", "MaterialTab.GeneralRegistryCode",
         "MaterialTab.Archived", "MaterialTab.SerialNumber", "MaterialTab.MaterialWithoutTab",
-        "MaterialTab.CurrentMaterialTab", "MaterialTab.GEEFCode"];
+        "MaterialTab.CurrentMaterialTab"];
+    // , "MaterialTab.PendingCrediting", "MaterialTab.Surplus", "MaterialTab.Deficit", "MaterialTab.GEEFCode"
     static searchQueryString(search: string): string {
         return `MaterialTab.Id LIKE '%${search}%' OR MaterialTab.PartialRegistryCode LIKE '%${search}%'
         OR MaterialTab.PartialRegistryCodeNumber LIKE '%${search}%' OR MaterialTab.AOEF LIKE '%${search}%'
@@ -134,9 +134,9 @@ export class MaterialTab {
         OR MaterialTab.TabRemainder LIKE '%${search}%' OR MaterialTab.Sum LIKE '%${search}%'
         OR MaterialTab.Difference LIKE '%${search}%' OR MaterialTab.Comments LIKE '%${search}%'
         OR MaterialTab.ImportSum LIKE '%${search}%' OR MaterialTab.ExportSum LIKE '%${search}%'
-        OR MaterialTab.PendingCrediting LIKE '%${search}%' OR MaterialTab.Surplus LIKE '%${search}%'
-        OR MaterialTab.Deficit LIKE '%${search}%' OR MaterialTab.GeneralRegistryCode LIKE '%${search}%'
-        OR MaterialTab.SerialNumber LIKE '%${search}%' OR MaterialTab.GEEFCode LIKE '%${search}%'`;
+        OR MaterialTab.GeneralRegistryCode LIKE '%${search}%'
+        OR MaterialTab.SerialNumber LIKE '%${search}%'`;
+        // OR MaterialTab.PendingCrediting LIKE '%${search}%' OR MaterialTab.Surplus LIKE '%${search}%' OR MaterialTab.Deficit LIKE '%${search}%' OR MaterialTab.GEEFCode LIKE '%${search}%'
     }
 
     static async listSelectFromDB(Id: number, notId: number, search: string, withGroup: boolean, withCategory: boolean, groupId: number, notGroupId: number, categoryId: number, notCategoryId: number): Promise<MaterialTab[]> {
@@ -192,6 +192,12 @@ export class MaterialTab {
             const result = await App.app.dbmanager.materialTabRepo.createQueryBuilder().select("MAX(MaterialTab.Id)", "max").getRawOne();
             const maxId = result.max;
             mtb.Id = 1 + maxId;
+            const result2 = await App.app.dbmanager.materialTabRepo.createQueryBuilder().leftJoinAndSelect("MaterialTab.Group", "Group").where(`Group.Id = '${mtb.Group.Id}'`).select("MAX(MaterialTab.PartialRegistryCodeNumber)", "max").getRawOne();
+            const maxPartialRegistryCodeNumber = result2.max;
+            mtb.PartialRegistryCodeNumber = 1 + maxPartialRegistryCodeNumber;
+            const result3 = await App.app.dbmanager.materialTabRepo.createQueryBuilder().select("MAX(MaterialTab.SerialNumber)", "max").getRawOne();
+            const maxSerialNumber = result3.max;
+            mtb.SerialNumber = 1 + maxSerialNumber;
             await App.app.dbmanager.materialTabRepo.insert(mtb);
             return mtb;
         } catch(err) {
@@ -233,17 +239,17 @@ export interface MaterialTabObj {
     ImportSum: number;
     ExportSum: number;
     Found: number;
-    PendingCrediting: number;
-    Surplus: number;
-    Deficit: number;
-    Image: string;
+    //PendingCrediting: number;
+    //Surplus: number;
+    //Deficit: number;
+    //Image: string;
     GeneralRegistryCode: number;
     Archived: boolean;
     SerialNumber: number;
     MaterialWithoutTab: boolean;
     CurrentMaterialTab: boolean;
-    GEEFCode: string;
+    //GEEFCode: string;
     Group: GroupObj;
     Category: CategoryObj;
-    ComparativesPrintPage_MaterialTabs: number;
+    //ComparativesPrintPage_MaterialTabs: number;
 }

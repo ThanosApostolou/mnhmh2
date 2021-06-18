@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 import { Card, CardContent, TextField, Tooltip, IconButton, Grid, Snackbar, Select, MenuItem, InputLabel } from "@material-ui/core";
-import { CategoryRounded, Search } from "@material-ui/icons";
+import { Search } from "@material-ui/icons";
 import { Alert } from "@material-ui/lab";
 
 import { ApiConsumer } from "../../../ApiConsumer";
@@ -11,7 +11,7 @@ import { Category } from "../../../entities/Category";
 import { GridRowsProp } from "@material-ui/data-grid";
 import { AddEditActions } from "../../components/AddEditActions";
 import { CancelTokenSource } from "axios";
-//import { SubcategoriesAdd } from "./SubcategoriesAdd";
+import { MaterialTabsAdd } from "./MaterialTabsAdd";
 //import { AmmunitionStoresEdit } from "./AmmunitionStoresEdit";
 
 export class MaterialTabsPage extends React.Component<Record<string, never>, MaterialTabsPageState> {
@@ -176,11 +176,11 @@ export class MaterialTabsPage extends React.Component<Record<string, never>, Mat
                     categoryId={this.state.selectedCategoryId}
                     onFetchData={this.onFetchData.bind(this)}
                 />
-                {/*
-                <SubcategoriesAdd openAddDrawer={this.state.openAddDrawer}
+                <MaterialTabsAdd openAddDrawer={this.state.openAddDrawer}
                     onAddSave={this.onAddSave.bind(this)}
                     onAddCancel={this.onAddCancel.bind(this)}
                 />
+                {/*
                 <AmmunitionStoresEdit store={this.state.selectedPortion}
                     openEditDrawer={this.state.openEditDrawer}
                     onEditSave={this.onEditSave.bind(this)}

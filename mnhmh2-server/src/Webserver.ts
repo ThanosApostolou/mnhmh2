@@ -32,6 +32,15 @@ export class Webserver {
         this.expressapp.get("/api/materialtab", (req: Request, res: Response) => {
             new MaterialTabController(req, res).GET();
         });
+        this.expressapp.post("/api/materialtab", (req: Request, res: Response) => {
+            new MaterialTabController(req, res).POST();
+        });
+        this.expressapp.delete("/api/materialtab", (req: Request, res: Response) => {
+            new MaterialTabController(req, res).DELETE();
+        });
+        this.expressapp.put("/api/materialtab", (req: Request, res: Response) => {
+            new MaterialTabController(req, res).PUT();
+        });
 
         this.expressapp.get("/api/directmaterialborrower", (req: Request, res: Response) => {
             new DirectMaterialBorrowerController(req, res).GET();

@@ -20,4 +20,12 @@ export class ApiConsumer {
     static isCancel(error: string): boolean {
         return axios.isCancel(error);
     }
+
+    static getErrorMessage(error: any): string {
+        if (error.response && error.response.status && error.response.data && error.response.data.error) {
+            return `: ${error.response.status}: ${error.response.data.error}`;
+        } else {
+            return "";
+        }
+    }
 }

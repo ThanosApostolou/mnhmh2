@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 
 import { App } from "../App";
 import { MaterialTab } from "../entities/MaterialTab";
+import { ErrorController } from "./ErrorController";
 
 export class MaterialTabController {
     req: Request = null;
@@ -63,11 +64,13 @@ export class MaterialTabController {
     async POST(): Promise<void> {
         try {
             const body = this.req.body;
-            const mtb = MaterialTab.fromObject(body.group);
+            const mtb = MaterialTab.fromObject(body.materialTab);
             if (!mtb.Name || mtb.Name === null || mtb.Name === "") {
-                this.res.status(422);
-                this.res.setHeader("Content-Type", "application/json");
-                this.res.send({error: "Name cannot be empty!"});
+                ErrorController.sendError(this.res, 422,"Το όνομα δεν μπορεί να είναι κενό");
+            } else if (mtb.Group === undefined || mtb.Group === null) {
+                ErrorController.sendError(this.res, 422,"Η ομάδα δεν μπορεί να είναι κενή");
+            }  else if (mtb.Category === undefined || mtb.Category === null) {
+                ErrorController.sendError(this.res, 422, "Το συκγρότημα δεν μπορεί να είναι κενό");
             } else {
                 await MaterialTab.insertToDB(mtb);
                 this.res.setHeader("Content-Type", "application/json");
@@ -75,8 +78,7 @@ export class MaterialTabController {
             }
         } catch(err) {
             console.log(err);
-            this.res.status(500);
-            this.res.send(err);
+            ErrorController.sendError(this.res, 500, err);
         }
     }
     async DELETE(): Promise<void> {
@@ -95,7 +97,7 @@ export class MaterialTabController {
     async PUT(): Promise<void> {
         try {
             const body = this.req.body;
-            const mtb = MaterialTab.fromObject(body.group);
+            const mtb = MaterialTab.fromObject(body.materialTab);
             if (!mtb.Name || mtb.Name === null || mtb.Name === "") {
                 this.res.status(422);
                 this.res.setHeader("Content-Type", "application/json");
