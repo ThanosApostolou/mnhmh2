@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { Card, Button, TextField, Grid, Drawer, CardHeader, CardContent, CardActions, Backdrop, CircularProgress } from "@material-ui/core";
+import { Card, Button, TextField, Select, MenuItem, InputLabel, Grid, Drawer, CardHeader, CardContent, CardActions, Backdrop, CircularProgress } from "@material-ui/core";
 import { CancelTokenSource } from "axios";
 
 import { ApiConsumer } from "../../../ApiConsumer";
@@ -27,6 +27,7 @@ export class MaterialTabsAdd extends React.Component<MaterialTabsAddProps, Mater
             loading: false,
             errorSnackbarOpen: false,
             errorMessage: "",
+            measurementUnit: "",
             group: null,
             category: null
         };
@@ -42,6 +43,7 @@ export class MaterialTabsAdd extends React.Component<MaterialTabsAddProps, Mater
             PartialRegistryCode: this.partialRegistryCodeInputRef.current.value,
             AOEF: this.AOEFInputRef.current.value,
             Name: this.nameInputRef.current.value,
+            MeasurementUnit: this.state.measurementUnit,
             Group: this.state.group,
             Category: this.state.category
         });
@@ -98,10 +100,38 @@ export class MaterialTabsAdd extends React.Component<MaterialTabsAddProps, Mater
             return null;
         }
         const textfields =
-            <Grid container direction="column" justify="flex-start" alignContent="center" alignItems="center">
-                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΕΦ24" inputRef={this.partialRegistryCodeInputRef} />
-                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΑΟΕΦ" inputRef={this.AOEFInputRef} />
-                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ" inputRef={this.nameInputRef} />
+            <Grid container direction="row" justify="center" alignContent="center" alignItems="center">
+                <Grid item>
+                    <Grid container direction="column" justify="flex-start" alignContent="center" alignItems="center">
+                        <TextField size="small" InputLabelProps={{ shrink: true }} label="ΕΦ24" inputRef={this.partialRegistryCodeInputRef} />
+                        <TextField size="small" InputLabelProps={{ shrink: true }} label="ΑΟΕΦ" inputRef={this.AOEFInputRef} />
+                        <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ*" inputRef={this.nameInputRef} />
+                        <InputLabel shrink={true} id="label">ΜΟΝΑΔΑ ΜΕΤΡΗΣΗΣ</InputLabel>
+                        <Select autoWidth={false} labelId="label" id="select"
+                            value={this.state.measurementUnit}
+                            onChange={(event: React.ChangeEvent<{ value: any }>) => {
+                                this.setState({measurementUnit: event.target.value});
+                            }}
+                        >
+                            <MenuItem value=""></MenuItem>;
+                            <MenuItem value="ΤΕΜ">ΤΕΜ</MenuItem>;
+                            <MenuItem value="ΖΕΥΓΗ">ΖΕΥΓΗ</MenuItem>;
+                            <MenuItem value="ΣΕΤ">ΣΕΤ</MenuItem>;
+                            <MenuItem value="ΜΕΤΡΑ">ΜΕΤΡΑ</MenuItem>;
+                            <MenuItem value="ΚΙΛΑ">ΚΙΛΑ</MenuItem>;
+                        </Select>
+                    </Grid>
+                </Grid>
+                <Grid item>
+                    <Grid container direction="column" justify="flex-start" alignContent="center" alignItems="center">
+                        <TextField size="small" InputLabelProps={{ shrink: true }} label="ΥΠΟΛΟΙΠΟ ΚΑΡΤΕΛΑΣ" type="number" value={0} disabled />
+                        <TextField size="small" InputLabelProps={{ shrink: true }} label="ΣΥΝΟΛΟ" type="number" value={0} disabled />
+                        <TextField size="small" InputLabelProps={{ shrink: true }} label="ΔΙΑΦΟΡΑ" type="number" value={0} disabled />
+                        <TextField size="small" InputLabelProps={{ shrink: true }} label="ΣΥΝΟΛΟ ΕΙΣΑΓΩΓΩΝ" type="number" value={0} disabled />
+                        <TextField size="small" InputLabelProps={{ shrink: true }} label="ΣΥΝΟΛΟ ΕΞΑΓΩΓΩΝ" type="number" value={0} disabled />
+                        <TextField size="small" InputLabelProps={{ shrink: true }} label="ΕΥΡΕΘΕΝΤΑ" type="number" value={0} disabled />
+                    </Grid>
+                </Grid>
             </Grid>
         ;
         return (
@@ -115,7 +145,7 @@ export class MaterialTabsAdd extends React.Component<MaterialTabsAddProps, Mater
                                 {textfields}
                             </fieldset>
                             <fieldset style={{display: "flex", height: "270px"}}>
-                                <legend>Ομάδα:</legend>
+                                <legend>Ομάδα*:</legend>
                                 <GroupSingleDataGrid group={this.state.group}
                                     onRemoveClick={this.onGroupRemove.bind(this)}
                                     onSelectClick={this.onGroupSelect.bind(this)}
@@ -123,7 +153,7 @@ export class MaterialTabsAdd extends React.Component<MaterialTabsAddProps, Mater
                                 />
                             </fieldset>
                             <fieldset style={{display: "flex", height: "270px"}}>
-                                <legend>Συγκρότημα:</legend>
+                                <legend>Συγκρότημα*:</legend>
                                 <CategorySingleDataGrid category={this.state.category}
                                     onRemoveClick={this.onCategoryRemove.bind(this)}
                                     onSelectClick={this.onCategorySelect.bind(this)}
@@ -167,6 +197,7 @@ interface MaterialTabsAddState {
     loading: boolean;
     errorSnackbarOpen: boolean;
     errorMessage: string;
+    measurementUnit: string;
     group: Group;
     category: Category;
 }
