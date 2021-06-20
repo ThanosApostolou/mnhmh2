@@ -42,8 +42,8 @@ export class MaterialTab {
     //Image: string;
     @Column()
     GeneralRegistryCode: number;
-    @Column()
-    Archived: boolean;
+    //@Column()
+    //Archived: number;
     @Column()
     SerialNumber: number;
     @Column()
@@ -95,7 +95,7 @@ export class MaterialTab {
         //materialtab.Deficit = obj.Deficit;
         //materialtab.Image = obj.Image;
         materialtab.GeneralRegistryCode = obj.GeneralRegistryCode;
-        materialtab.Archived = obj.Archived;
+        //materialtab.Archived = obj.Archived;
         materialtab.SerialNumber = obj.SerialNumber;
         materialtab.MaterialWithoutTab = obj.MaterialWithoutTab;
         materialtab.CurrentMaterialTab = obj.CurrentMaterialTab;
@@ -192,12 +192,48 @@ export class MaterialTab {
             const result = await App.app.dbmanager.materialTabRepo.createQueryBuilder().select("MAX(MaterialTab.Id)", "max").getRawOne();
             const maxId = result.max;
             mtb.Id = 1 + maxId;
-            const result2 = await App.app.dbmanager.materialTabRepo.createQueryBuilder().leftJoinAndSelect("MaterialTab.Group", "Group").where(`Group.Id = '${mtb.Group.Id}'`).select("MAX(MaterialTab.PartialRegistryCodeNumber)", "max").getRawOne();
-            const maxPartialRegistryCodeNumber = result2.max;
-            mtb.PartialRegistryCodeNumber = 1 + maxPartialRegistryCodeNumber;
+            const materialTabsWithGroupQueryBuilder = App.app.dbmanager.materialTabRepo.createQueryBuilder().leftJoinAndSelect("MaterialTab.Group", "Group").where(`Group.Id = '${mtb.Group.Id}'`);
+            const groups = await Group.listSelectFromDB(mtb.Group.Id, null, null);
+            if (groups.length > 0) {
+                const group = groups[0];
+                group.LastRegistryCode += 1;
+                mtb.PartialRegistryCodeNumber = group.LastRegistryCode;
+                await Group.updateInDB(group);
+            } else {
+                mtb.PartialRegistryCodeNumber = 1;
+            }
             const result3 = await App.app.dbmanager.materialTabRepo.createQueryBuilder().select("MAX(MaterialTab.SerialNumber)", "max").getRawOne();
             const maxSerialNumber = result3.max;
             mtb.SerialNumber = 1 + maxSerialNumber;
+
+            mtb.TabRemainder = 0;
+            mtb.Sum = 0;
+            mtb.Difference = 0;
+            mtb.ImportSum = 0;
+            mtb.ExportSum = 0;
+            mtb.Found = 0;
+
+            mtb.MaterialWithoutTab = Boolean(mtb.MaterialWithoutTab);
+            mtb.CurrentMaterialTab = Boolean(mtb.CurrentMaterialTab);
+
+            if (!mtb.MaterialWithoutTab) {
+                const materialTabsWithGroup = await materialTabsWithGroupQueryBuilder.andWhere("MaterialTab.MaterialWithoutTab = 'false'").select(MaterialTab.selectStringList).getMany();
+                let max = 0;
+                for (const materialTab of materialTabsWithGroup) {
+                    console.log("PartialRegistryCode", materialTab.PartialRegistryCode);
+                    const ef24Splited = materialTab.PartialRegistryCode.split("-");
+                    let ef24Number = 0;
+                    try {
+                        ef24Number = parseInt(ef24Splited[1]);
+                    } finally {
+                        if (ef24Number > max) {
+                            max = ef24Number;
+                        }
+                    }
+                }
+                mtb.PartialRegistryCode = `${mtb.Group.Name}-${1+max}`;
+            }
+
             await App.app.dbmanager.materialTabRepo.insert(mtb);
             return mtb;
         } catch(err) {
@@ -244,7 +280,7 @@ export interface MaterialTabObj {
     //Deficit: number;
     //Image: string;
     GeneralRegistryCode: number;
-    Archived: boolean;
+    //Archived: number;
     SerialNumber: number;
     MaterialWithoutTab: boolean;
     CurrentMaterialTab: boolean;

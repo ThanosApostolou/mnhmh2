@@ -24,7 +24,7 @@ export class MaterialTab {
     //Deficit: number;
     //Image: string;
     GeneralRegistryCode: number;
-    Archived: boolean;
+    //Archived: number;
     SerialNumber: number;
     MaterialWithoutTab: boolean;
     CurrentMaterialTab: boolean;
@@ -64,7 +64,7 @@ export class MaterialTab {
         //materialtab.Deficit = obj.Deficit;
         //materialtab.Image = obj.Image;
         materialtab.GeneralRegistryCode = obj.GeneralRegistryCode;
-        materialtab.Archived = obj.Archived;
+        //materialtab.Archived = obj.Archived;
         materialtab.SerialNumber = obj.SerialNumber;
         materialtab.MaterialWithoutTab = obj.MaterialWithoutTab;
         materialtab.CurrentMaterialTab = obj.CurrentMaterialTab;
@@ -182,7 +182,7 @@ export class MaterialTab {
             { field: "TabRemainder", headerName: "ΥΠΟΛΟΙΠΟ ΚΑΡΤΕΛΑΣ", width: 200, hide: false },
             { field: "Sum", headerName: "ΣΥΝΟΛΟ", width: 200, hide: false },
             { field: "Difference", headerName: "ΔΙΑΦΟΡΑ", width: 200, hide: false },
-            { field: "Comments", headerName: "Comments", width: 200, hide: false },
+            { field: "Comments", headerName: "ΠΑΡΑΤΗΡΗΣΕΙΣ", width: 200, hide: false },
             { field: "ImportSum", headerName: "ΣΥΝΟΛΟ ΕΙΣΑΓΩΓΩΝ", width: 200, hide: false },
             { field: "ExportSum", headerName: "ΣΥΝΟΛΟ ΕΞΑΓΩΓΩΝ", width: 200, hide: false },
             { field: "Found", headerName: "ΕΥΡΕΘΕΝΤΑ", width: 200, hide: false },
@@ -190,11 +190,11 @@ export class MaterialTab {
             //{ field: "Surplus", headerName: "Surplus", width: 200, hide: false },
             //{ field: "Deficit", headerName: "Deficit", width: 200, hide: false },
             //{ field: "Image", headerName: "Image", width: 200, hide: false },
-            { field: "GeneralRegistryCode", headerName: "GeneralRegistryCode", width: 200, hide: false },
-            { field: "Archived", headerName: "Archived", width: 200, hide: false },
+            { field: "GeneralRegistryCode", headerName: "ΓΕΝΙΚΟ ΜΗΤΡΩΟ", width: 200, hide: false },
+            //{ field: "Archived", headerName: "Archived", width: 200, hide: false },
             { field: "SerialNumber", headerName: "SerialNumber", width: 200, hide: false },
-            { field: "MaterialWithoutTab", headerName: "MaterialWithoutTab", width: 200, hide: false },
-            { field: "CurrentMaterialTab", headerName: "CurrentMaterialTab", width: 200, hide: false },
+            { field: "MaterialWithoutTab", headerName: "ΧΩΡΙΣ ΚΑΡΤΕΛΑ", width: 200, hide: false },
+            { field: "CurrentMaterialTab", headerName: "ΤΡΕΧΟΥΣΑ ΚΑΡΤΕΛΑ", width: 200, hide: false },
             //{ field: "GEEFCode", headerName: "GEEFCode", width: 200, hide: false },
             { field: "Group", headerName: "ΟΜΑΔΑ", width: 200, hide: false },
             { field: "Category", headerName: "ΣΥΓΚΡΟΤΗΜΑ", width: 200, hide: false },
@@ -228,7 +228,7 @@ export class MaterialTab {
                 //Deficit: mt.Deficit,
                 //Image: mt.Image,
                 GeneralRegistryCode: mt.GeneralRegistryCode,
-                Archived: mt.Archived,
+                //Archived: mt.Archived,
                 SerialNumber: mt.SerialNumber,
                 MaterialWithoutTab: mt.MaterialWithoutTab,
                 CurrentMaterialTab: mt.CurrentMaterialTab,
