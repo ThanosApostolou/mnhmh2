@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 
 import { App } from "../App";
 import { Group } from "../entities/Group";
+import { ErrorController } from "./ErrorController";
 
 export class GroupController {
     req: Request = null;
@@ -41,9 +42,7 @@ export class GroupController {
             const body = this.req.body;
             const group = Group.fromObject(body.group);
             if (!group.Name || group.Name === null || group.Name === "") {
-                this.res.status(422);
-                this.res.setHeader("Content-Type", "application/json");
-                this.res.send({error: "Name cannot be empty!"});
+                ErrorController.sendError(this.res, 422,"Το όνομα δεν μπορεί να είναι κενό");
             } else {
                 await Group.insertToDB(group);
                 this.res.setHeader("Content-Type", "application/json");
@@ -73,9 +72,7 @@ export class GroupController {
             const body = this.req.body;
             const group = Group.fromObject(body.group);
             if (!group.Name || group.Name === null || group.Name === "") {
-                this.res.status(422);
-                this.res.setHeader("Content-Type", "application/json");
-                this.res.send({error: "Name cannot be empty!"});
+                ErrorController.sendError(this.res, 422,"Το όνομα δεν μπορεί να είναι κενό");
             } else {
                 await Group.updateInDB(group);
                 this.res.setHeader("Content-Type", "application/json");

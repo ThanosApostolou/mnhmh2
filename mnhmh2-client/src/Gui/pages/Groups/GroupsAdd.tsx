@@ -5,23 +5,21 @@ import { Alert } from "@material-ui/lab";
 import { Group } from "../../../entities/Group";
 import { ApiConsumer } from "../../../ApiConsumer";
 import { CancelTokenSource } from "axios";
+import { MySnackbar } from "../../components/MySnackbar";
 
 export class GroupsAdd extends React.Component<GroupsAddProps, GroupsAddState> {
     state: Readonly<GroupsAddState>;
     cancelTokenSource: CancelTokenSource;
     nameInputRef: React.RefObject<HTMLInputElement>;
-    lastRegistryCodeInputRef: React.RefObject<HTMLInputElement>;
-    serialNumberInputRef: React.RefObject<HTMLInputElement>;
 
     constructor(props: GroupsAddProps) {
         super(props);
         this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
         this.nameInputRef = React.createRef<HTMLInputElement>();
-        this.lastRegistryCodeInputRef = React.createRef<HTMLInputElement>();
-        this.serialNumberInputRef = React.createRef<HTMLInputElement>();
         this.state = {
             loading: false,
-            errorSnackbarOpen: false
+            errorSnackbarOpen: false,
+            errorMessage: ""
         };
     }
 
@@ -32,9 +30,7 @@ export class GroupsAdd extends React.Component<GroupsAddProps, GroupsAddState> {
         this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
         const group = Group.fromObject({
             Id: null,
-            Name: this.nameInputRef.current.value,
-            LastRegistryCode: this.lastRegistryCodeInputRef.current.value,
-            SerialNumber: this.serialNumberInputRef.current.value
+            Name: this.nameInputRef.current.value
         });
         Group.insertToApi(this.cancelTokenSource, group).then(() => {
             this.setState({loading: false});
@@ -43,6 +39,7 @@ export class GroupsAdd extends React.Component<GroupsAddProps, GroupsAddState> {
             }
         }).catch((error) => {
             console.log(error);
+            this.setState({errorMessage: ApiConsumer.getErrorMessage(error)});
             this.setState({loading: false, errorSnackbarOpen: true});
         });
     }
@@ -63,7 +60,7 @@ export class GroupsAdd extends React.Component<GroupsAddProps, GroupsAddState> {
                         <Grid container direction="column" style={{display:"flex", flexGrow: 1}}>
                             <Grid item>
                                 <Grid container direction="row" justify="center" alignContent="center" alignItems="center">
-                                    <CardHeader title="Προσθήκη Μέλους Ομάδας" />
+                                    <CardHeader title="Προσθήκη Ομάδας" />
                                 </Grid>
                             </Grid>
 
@@ -72,10 +69,13 @@ export class GroupsAdd extends React.Component<GroupsAddProps, GroupsAddState> {
 
                                     <Grid container direction="column" style={{display:"flex", flexGrow: 1}}>
                                         <fieldset>
-                                            <Grid container direction="column" justify="flex-start" alignContent="center" alignItems="center">
-                                                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ" inputRef={this.nameInputRef} />
-                                                <TextField size="small" type="number" InputLabelProps={{ shrink: true }} label="Τελευταίος Κώδικας Εγγραφής" inputRef={this.lastRegistryCodeInputRef} />
-                                                <TextField size="small" type="number" InputLabelProps={{ shrink: true }} label="Σειραικός Αριθμός" inputRef={this.serialNumberInputRef} />
+                                            <Grid container direction="column" justify="flex-start" alignContent="center" alignItems="center" spacing={2}>
+                                                <Grid item>
+                                                    <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ" inputRef={this.nameInputRef} />
+                                                </Grid>
+                                                <Grid item>
+                                                    <TextField size="small" type="number" InputLabelProps={{ shrink: true }} label="Τελευταίος Κώδικας Εγγραφής" disabled value={0} />
+                                                </Grid>
                                             </Grid>
                                         </fieldset>
                                         <div style={{display: "flex", flexGrow: 1}} />
@@ -97,19 +97,13 @@ export class GroupsAdd extends React.Component<GroupsAddProps, GroupsAddState> {
                         <Backdrop open={this.state.loading} style={{position: "fixed", left: "10vw", height: "100vh", width: "90vw", zIndex: 100}}>
                             <CircularProgress color="inherit" />
                         </Backdrop>
-                        <Snackbar
-                            anchorOrigin={{
-                                vertical: "bottom",
-                                horizontal: "left",
-                            }}
+
+                        <MySnackbar
                             open={this.state.errorSnackbarOpen}
-                            autoHideDuration={2000}
                             onClose={() => this.setState({errorSnackbarOpen: false})}
-                        >
-                            <Alert variant="filled" severity="error" onClose={() => this.setState({errorSnackbarOpen: false})}>
-                                Αποτυχία προσθήκης μέλους ομάδας!
-                            </Alert>
-                        </Snackbar>
+                            severity="error"
+                            message={`Αποτυχία προσθήκης ομάδας!${this.state.errorMessage}`}
+                        />
                     </Card>
                 </Drawer>
             );
@@ -126,4 +120,5 @@ export interface GroupsAddProps {
 interface GroupsAddState {
     loading: boolean;
     errorSnackbarOpen: boolean;
+    errorMessage: string;
 }

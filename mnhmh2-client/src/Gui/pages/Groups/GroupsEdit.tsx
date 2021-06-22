@@ -11,18 +11,15 @@ export class GroupsEdit extends React.Component<GroupsEditProps, GroupsEditState
     state: Readonly<GroupsEditState>;
     cancelTokenSource: CancelTokenSource;
     nameInputRef: React.RefObject<HTMLInputElement>;
-    lastRegistryCodeInputRef: React.RefObject<HTMLInputElement>;
-    serialNumberInputRef: React.RefObject<HTMLInputElement>;
 
     constructor(props: GroupsEditProps) {
         super(props);
         this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
         this.nameInputRef = React.createRef<HTMLInputElement>();
-        this.lastRegistryCodeInputRef = React.createRef<HTMLInputElement>();
-        this.serialNumberInputRef = React.createRef<HTMLInputElement>();
         this.state = {
             loading: false,
             errorSnackbarOpen: false,
+            errorMessage: "",
             tabValue: 0
         };
     }
@@ -34,9 +31,7 @@ export class GroupsEdit extends React.Component<GroupsEditProps, GroupsEditState
         this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
         const group = Group.fromObject({
             Id: this.props.group.Id,
-            Name: this.nameInputRef.current.value,
-            LastRegistryCode: this.lastRegistryCodeInputRef.current.value,
-            SerialNumber: this.serialNumberInputRef.current.value
+            Name: this.nameInputRef.current.value
         });
         Group.updateInApi(this.cancelTokenSource, group).then(() => {
             this.setState({loading: false});
@@ -45,6 +40,7 @@ export class GroupsEdit extends React.Component<GroupsEditProps, GroupsEditState
             }
         }).catch((error) => {
             console.log(error);
+            this.setState({errorMessage: ApiConsumer.getErrorMessage(error)});
             this.setState({loading: false, errorSnackbarOpen: true});
         });
     }
@@ -80,13 +76,13 @@ export class GroupsEdit extends React.Component<GroupsEditProps, GroupsEditState
                         <TextField size="small" InputLabelProps={{ shrink: true }} label="Id" type="number" value={this.props.group.Id} disabled />
                     </Grid>
                     <Grid item>
+                        <TextField size="small" type="number" InputLabelProps={{ shrink: true }} label="Τελευταίος Κώδικας Εγγραφής" value={this.props.group.LastRegistryCode} disabled />
+                    </Grid>
+                    <Grid item>
+                        <TextField size="small" type="number" InputLabelProps={{ shrink: true }} label="Σειραικός Αριθμός" value={this.props.group.SerialNumber} disabled />
+                    </Grid>
+                    <Grid item>
                         <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ" defaultValue={this.props.group.Name} inputRef={this.nameInputRef} />
-                    </Grid>
-                    <Grid item>
-                        <TextField size="small" type="number" InputLabelProps={{ shrink: true }} label="Τελευταίος Κώδικας Εγγραφής" defaultValue={this.props.group.LastRegistryCode} inputRef={this.lastRegistryCodeInputRef} />
-                    </Grid>
-                    <Grid item>
-                        <TextField size="small" type="number" InputLabelProps={{ shrink: true }} label="Σειραικός Αριθμός" defaultValue={this.props.group.SerialNumber} inputRef={this.serialNumberInputRef} />
                     </Grid>
                 </Grid>
         ;
@@ -136,7 +132,7 @@ export class GroupsEdit extends React.Component<GroupsEditProps, GroupsEditState
                     open={this.state.errorSnackbarOpen}
                     onClose={() => this.setState({errorSnackbarOpen: false})}
                     severity="error"
-                    message="Αποτυχία τροποποίησης!"
+                    message={`Αποτυχία τροποποίησης ομάδας!${this.state.errorMessage}`}
                 />
             </Drawer>
         );
@@ -154,5 +150,6 @@ export interface GroupsEditProps {
 interface GroupsEditState {
     loading: boolean;
     errorSnackbarOpen: boolean;
+    errorMessage: string;
     tabValue: number;
 }

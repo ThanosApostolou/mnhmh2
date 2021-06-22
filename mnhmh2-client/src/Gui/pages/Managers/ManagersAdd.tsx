@@ -74,10 +74,16 @@ export class ManagersAdd extends React.Component<ManagersAddProps, ManagersAddSt
 
                                     <Grid container direction="column" style={{display:"flex", flexGrow: 1}}>
                                         <fieldset>
-                                            <Grid container direction="column" justify="flex-start" alignContent="center" alignItems="center">
-                                                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ" inputRef={this.nameInputRef} />
-                                                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΒΑΘΜΟΣ" inputRef={this.rankInputRef} />
-                                                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΘΕΣΗ" inputRef={this.positionInputRef} />
+                                            <Grid container direction="column" justify="flex-start" alignContent="center" alignItems="center" spacing={2}>
+                                                <Grid item>
+                                                    <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ" inputRef={this.nameInputRef} />
+                                                </Grid>
+                                                <Grid item>
+                                                    <TextField size="small" InputLabelProps={{ shrink: true }} label="ΒΑΘΜΟΣ" inputRef={this.rankInputRef} />
+                                                </Grid>
+                                                <Grid item>
+                                                    <TextField size="small" InputLabelProps={{ shrink: true }} label="ΘΕΣΗ" inputRef={this.positionInputRef} />
+                                                </Grid>
                                             </Grid>
                                         </fieldset>
                                         <div style={{display: "flex", flexGrow: 1}} />

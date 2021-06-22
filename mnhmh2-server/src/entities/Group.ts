@@ -74,9 +74,13 @@ export class Group {
     }
     static async insertToDB(group: Group): Promise<Group> {
         try {
-            const result = await App.app.dbmanager.groupRepo.createQueryBuilder().select("MAX(Group.Id)", "max").getRawOne();
-            const maxId = result.max;
+            const result = await App.app.dbmanager.groupRepo.createQueryBuilder().select("MAX(Group.Id)", "maxId").addSelect("Max(Group.SerialNumber)", "maxSerialNumber").getRawOne();
+            console.log("RESULT", result);
+            const maxId = result["maxId"];
             group.Id = 1 + maxId;
+            const maxSerialNumber = result["maxSerialNumber"];
+            group.SerialNumber = 1 + maxSerialNumber;
+            group.LastRegistryCode = 0;
             await App.app.dbmanager.groupRepo.insert(group);
             return group;
         } catch(err) {
@@ -94,7 +98,10 @@ export class Group {
     }
     static async updateInDB(group: Group): Promise<Group> {
         try {
-            await App.app.dbmanager.groupRepo.update(group.Id, group);
+            const newGroup = new Group();
+            newGroup.Id = group.Id;
+            newGroup.Name = group.Name;
+            await App.app.dbmanager.groupRepo.update(newGroup.Id, newGroup);
             return group;
         } catch(err) {
             console.log(err);

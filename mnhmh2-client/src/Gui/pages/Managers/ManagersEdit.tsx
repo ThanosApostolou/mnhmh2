@@ -80,11 +80,19 @@ export class ManagersEdit extends React.Component<ManagersEditProps, ManagersEdi
             return null;
         }
         const textfields =
-            <Grid container direction="column" justify="flex-start" alignContent="center" alignItems="center">
-                <TextField size="small" InputLabelProps={{ shrink: true }} label="Id" type="number" value={this.props.manager.Id} disabled />
-                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ" defaultValue={this.props.manager.Name} inputRef={this.nameInputRef} />
-                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΒΑΘΜΟΣ" defaultValue={this.props.manager.Rank} inputRef={this.rankInputRef} />
-                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΘΕΣΗ" defaultValue={this.props.manager.Position} inputRef={this.positionInputRef} />
+            <Grid container direction="column" justify="flex-start" alignContent="center" alignItems="center" spacing={2}>
+                <Grid item>
+                    <TextField size="small" InputLabelProps={{ shrink: true }} label="Id" type="number" value={this.props.manager.Id} disabled />
+                </Grid>
+                <Grid item>
+                    <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ" defaultValue={this.props.manager.Name} inputRef={this.nameInputRef} />
+                </Grid>
+                <Grid item>
+                    <TextField size="small" InputLabelProps={{ shrink: true }} label="ΒΑΘΜΟΣ" defaultValue={this.props.manager.Rank} inputRef={this.rankInputRef} />
+                </Grid>
+                <Grid item>
+                    <TextField size="small" InputLabelProps={{ shrink: true }} label="ΘΕΣΗ" defaultValue={this.props.manager.Position} inputRef={this.positionInputRef} />
+                </Grid>
             </Grid>
         ;
         return (
