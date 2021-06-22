@@ -99,7 +99,7 @@ export class ManagersEdit extends React.Component<ManagersEditProps, ManagersEdi
             <Drawer anchor="right" open={this.props.openEditDrawer} >
                 <Card style={{minWidth: "90vw", height: "100%", overflowY: "auto"}}>
                     <Grid container direction="column" style={{height: "100%"}}>
-                        <CardHeader title="Τροποποίηση Μέλους Επιτροπής" style={{textAlign: "center"}} />
+                        <CardHeader title={`Τροποποίηση Μέλους Επιτροπής: ${this.props.manager.Name}`} style={{textAlign: "center"}} />
                         <Tabs value={this.state.tabValue} onChange={(event: React.ChangeEvent<any>, newValue: number) => this.setState({tabValue: newValue})} >
                             <Tab label="Στοιχεία" value={0} {...a11yProps(0)} />
                             <Tab label="Μερικοί Διαχειριστές" value={1} {...a11yProps(1)} />

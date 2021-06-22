@@ -6,6 +6,7 @@ import { ApiConsumer } from "../../../ApiConsumer";
 import { TabPanel, a11yProps } from "../../components/TabPanel";
 import { MySnackbar } from "../../components/MySnackbar";
 import { CancelTokenSource } from "axios";
+import { GroupsEditMaterialTabs } from "./GroupsEditMaterialTabs";
 
 export class GroupsEdit extends React.Component<GroupsEditProps, GroupsEditState> {
     state: Readonly<GroupsEditState>;
@@ -91,9 +92,10 @@ export class GroupsEdit extends React.Component<GroupsEditProps, GroupsEditState
             <Drawer anchor="right" open={this.props.openEditDrawer} >
                 <Card style={{minWidth: "90vw", height: "100%", overflowY: "auto"}}>
                     <Grid container direction="column" style={{height: "100%"}}>
-                        <CardHeader title="Τροποποίηση Μέλους Επιτροπής" style={{textAlign: "center"}} />
+                        <CardHeader title={`Τροποποίηση Ομάδας: ${this.props.group.Name}`} style={{textAlign: "center"}} />
                         <Tabs value={this.state.tabValue} onChange={(event: React.ChangeEvent<any>, newValue: number) => this.setState({tabValue: newValue})} >
                             <Tab label="Στοιχεία" value={0} {...a11yProps(0)} />
+                            <Tab label="Καρτέλες Υλικού" value={1} {...a11yProps(1)} />
                         </Tabs>
                         <CardContent style={{display: "flex", flexGrow: 1}}>
                             <TabPanel value={this.state.tabValue} index={0} style={{display: "flex", flexGrow: 1}}>
@@ -112,6 +114,14 @@ export class GroupsEdit extends React.Component<GroupsEditProps, GroupsEditState
                                     </Grid>
                                 </form>
                             </TabPanel >
+                            <TabPanel value={this.state.tabValue} index={1} style={{display: "flex", flexGrow: 1}}>
+                                <Grid container direction="column" style={{display:"flex", flexGrow: 1}}>
+                                    <fieldset style={{display: "flex", flexGrow: 1}}>
+                                        <legend>Καρτέλες Υλικού που ανήκουν στην ομάδα:</legend>
+                                        <GroupsEditMaterialTabs group={this.props.group} />
+                                    </fieldset>
+                                </Grid>
+                            </TabPanel>
                         </CardContent>
                         <CardActions>
                             <Grid container direction="row" justify="flex-end">
