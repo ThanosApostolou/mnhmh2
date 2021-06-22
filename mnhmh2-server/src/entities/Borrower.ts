@@ -93,9 +93,11 @@ export class Borrower {
     }
     static async insertToDB(borrower: Borrower): Promise<Borrower> {
         try {
-            const result = await App.app.dbmanager.borrowerRepo.createQueryBuilder().select("MAX(Borrower.Id)", "max").getRawOne();
-            const maxId = result.max;
+            const result = await App.app.dbmanager.borrowerRepo.createQueryBuilder().select("MAX(Borrower.Id)", "maxId").addSelect("Max(Borrower.SerialNumber)", "maxSerialNumber").getRawOne();
+            const maxId = result["maxId"];
             borrower.Id = 1 + maxId;
+            const maxSerialNumber = result["maxSerialNumber"];
+            borrower.SerialNumber = 1 + maxSerialNumber;
             await App.app.dbmanager.borrowerRepo.insert(borrower);
             return borrower;
         } catch(err) {
@@ -113,6 +115,7 @@ export class Borrower {
     }
     static async updateInDB(borrower: Borrower): Promise<Borrower> {
         try {
+            delete borrower["SerialNumber"];
             await App.app.dbmanager.borrowerRepo.update(borrower.Id, borrower);
             return borrower;
         } catch(err) {

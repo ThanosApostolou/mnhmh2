@@ -8,22 +8,23 @@ import { Manager } from "../../../entities/Manager";
 import { ManagerSingleDataGrid } from "../Managers/ManagerSingleDataGrid";
 import { TabPanel, a11yProps } from "../../components/TabPanel";
 import { MySnackbar } from "../../components/MySnackbar";
+import { BorrowersEditDirectMaterialBorrowers} from "./BorrowersEditDirectMaterialBorrowers";
+import { BorrowersEditSubcategories} from "./BorrowersEditSubcategories";
 
 export class BorrowersEdit extends React.Component<BorrowersEditProps, BorrowersEditState> {
     state: Readonly<BorrowersEditState>;
     cancelTokenSource: CancelTokenSource;
     nameInputRef: React.RefObject<HTMLInputElement>;
-    serialNumberInputRef: React.RefObject<HTMLInputElement>;
 
     constructor(props: BorrowersEditProps) {
         super(props);
         this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
         this.nameInputRef = React.createRef<HTMLInputElement>();
-        this.serialNumberInputRef = React.createRef<HTMLInputElement>();
         this.state = {
             manager: null,
             loading: false,
             errorSnackbarOpen: false,
+            errorMessage: "",
             tabValue: 0
         };
     }
@@ -36,7 +37,6 @@ export class BorrowersEdit extends React.Component<BorrowersEditProps, Borrowers
         const borrower = Borrower.fromObject({
             Id: this.props.borrower.Id,
             Name: this.nameInputRef.current.value,
-            SerialNumber: this.serialNumberInputRef.current.value,
             Manager: this.state.manager
         });
         Borrower.updateInApi(this.cancelTokenSource, borrower).then(() => {
@@ -46,6 +46,7 @@ export class BorrowersEdit extends React.Component<BorrowersEditProps, Borrowers
             }
         }).catch((error) => {
             console.log(error);
+            this.setState({errorMessage: ApiConsumer.getErrorMessage(error)});
             this.setState({loading: false, errorSnackbarOpen: true});
         });
     }
@@ -95,16 +96,18 @@ export class BorrowersEdit extends React.Component<BorrowersEditProps, Borrowers
         const textfields =
             <Grid container direction="column" justify="flex-start" alignContent="center" alignItems="center">
                 <TextField size="small" InputLabelProps={{ shrink: true }} label="Id" type="number" value={this.props.borrower.Id} disabled />
-                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ" defaultValue={this.props.borrower.Name} inputRef={this.nameInputRef} />
-                <TextField size="small" type="number" InputLabelProps={{ shrink: true }} label="ΣΕΙΡΙΑΚΟΣ ΑΡΙΘΜΟΣ" defaultValue={this.props.borrower.SerialNumber} inputRef={this.serialNumberInputRef} />
+                <TextField size="small" type="number" InputLabelProps={{ shrink: true }} label="ΣΕΙΡΙΑΚΟΣ ΑΡΙΘΜΟΣ" value={this.props.borrower.SerialNumber} disabled />
+                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ*" defaultValue={this.props.borrower.Name} inputRef={this.nameInputRef} />
             </Grid>
         ;
         return (
             <Drawer anchor="right" open={this.props.openEditDrawer} >
                 <Card className="drawer-card">
-                    <CardHeader title="Τροποποίηση Μέλους Επιτροπής" style={{textAlign: "center"}} />
+                    <CardHeader title={`Τροποποίηση Μερικού Διαχειριστή: ${this.props.borrower.Name}`} style={{textAlign: "center"}} />
                     <Tabs value={this.state.tabValue} onChange={(event: React.ChangeEvent<any>, newValue: number) => this.setState({tabValue: newValue})} >
                         <Tab label="Στοιχεία" value={0} {...a11yProps(0)} />
+                        <Tab label="Χρεωστικά" value={1} {...a11yProps(1)} />
+                        <Tab label="Υποσυγκροτήματα" value={2} {...a11yProps(2)} />
                     </Tabs>
                     <CardContent className="drawer-cardcontent">
                         <TabPanel value={this.state.tabValue} index={0} style={{flexGrow: 1}}>
@@ -127,6 +130,22 @@ export class BorrowersEdit extends React.Component<BorrowersEditProps, Borrowers
                                 </Grid>
                             </form>
                         </TabPanel >
+                        <TabPanel value={this.state.tabValue} index={1} style={{display: "flex", flexGrow: 1}}>
+                            <Grid container direction="column" style={{display:"flex", flexGrow: 1}}>
+                                <fieldset style={{display: "flex", flexGrow: 1}}>
+                                    <legend>Χρεωστικά του μερικού διαχειριστή:</legend>
+                                    <BorrowersEditDirectMaterialBorrowers borrower={this.props.borrower} />
+                                </fieldset>
+                            </Grid>
+                        </TabPanel>
+                        <TabPanel value={this.state.tabValue} index={2} style={{display: "flex", flexGrow: 1}}>
+                            <Grid container direction="column" style={{display:"flex", flexGrow: 1}}>
+                                <fieldset style={{display: "flex", flexGrow: 1}}>
+                                    <legend>Υποσυγκροτήματα του μερικού διαχειριστή:</legend>
+                                    <BorrowersEditSubcategories borrower={this.props.borrower} />
+                                </fieldset>
+                            </Grid>
+                        </TabPanel>
                     </CardContent>
                     <CardActions>
                         <Grid container direction="row" justify="flex-end">
@@ -146,7 +165,7 @@ export class BorrowersEdit extends React.Component<BorrowersEditProps, Borrowers
                     open={this.state.errorSnackbarOpen}
                     onClose={() => this.setState({errorSnackbarOpen: false})}
                     severity="error"
-                    message="Αποτυχία τροποποίησης!"
+                    message={`Αποτυχία τροποποίησης Μερικού Διαχειριστή!${this.state.errorMessage}`}
                 />
             </Drawer>
         );
@@ -165,5 +184,6 @@ interface BorrowersEditState {
     manager: Manager;
     loading: boolean;
     errorSnackbarOpen: boolean;
+    errorMessage: string;
     tabValue: number;
 }

@@ -83,7 +83,7 @@ export class GroupsEdit extends React.Component<GroupsEditProps, GroupsEditState
                         <TextField size="small" type="number" InputLabelProps={{ shrink: true }} label="Σειραικός Αριθμός" value={this.props.group.SerialNumber} disabled />
                     </Grid>
                     <Grid item>
-                        <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ" defaultValue={this.props.group.Name} inputRef={this.nameInputRef} />
+                        <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ*" defaultValue={this.props.group.Name} inputRef={this.nameInputRef} />
                     </Grid>
                 </Grid>
         ;

@@ -71,7 +71,7 @@ export class GroupsAdd extends React.Component<GroupsAddProps, GroupsAddState> {
                                         <fieldset>
                                             <Grid container direction="column" justify="flex-start" alignContent="center" alignItems="center" spacing={2}>
                                                 <Grid item>
-                                                    <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ" inputRef={this.nameInputRef} />
+                                                    <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ*" inputRef={this.nameInputRef} />
                                                 </Grid>
                                                 <Grid item>
                                                     <TextField size="small" type="number" InputLabelProps={{ shrink: true }} label="Τελευταίος Κώδικας Εγγραφής" disabled value={0} />

@@ -12,16 +12,15 @@ export class BorrowersAdd extends React.Component<BorrowersAddProps, BorrowersAd
     state: Readonly<BorrowersAddState>;
     cancelTokenSource: CancelTokenSource;
     nameInputRef: React.RefObject<HTMLInputElement>;
-    serialNumberInputRef: React.RefObject<HTMLInputElement>;
 
     constructor(props: BorrowersAddProps) {
         super(props);
         this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
         this.nameInputRef = React.createRef<HTMLInputElement>();
-        this.serialNumberInputRef = React.createRef<HTMLInputElement>();
         this.state = {
             loading: false,
             errorSnackbarOpen: false,
+            errorMessage: "",
             manager: null
         };
     }
@@ -34,7 +33,6 @@ export class BorrowersAdd extends React.Component<BorrowersAddProps, BorrowersAd
         const borrower = Borrower.fromObject({
             Id: null,
             Name: this.nameInputRef.current.value,
-            SerialNumber: this.serialNumberInputRef.current.value,
             Manager: this.state.manager
         });
         Borrower.insertToApi(this.cancelTokenSource, borrower).then(() => {
@@ -44,6 +42,7 @@ export class BorrowersAdd extends React.Component<BorrowersAddProps, BorrowersAd
             }
         }).catch((error) => {
             console.log(error);
+            this.setState({errorMessage: ApiConsumer.getErrorMessage(error)});
             this.setState({loading: false, errorSnackbarOpen: true});
         });
     }
@@ -78,7 +77,6 @@ export class BorrowersAdd extends React.Component<BorrowersAddProps, BorrowersAd
         const textfields =
             <Grid container direction="column" justify="flex-start" alignContent="center" alignItems="center">
                 <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ" inputRef={this.nameInputRef} />
-                <TextField size="small" type="number" InputLabelProps={{ shrink: true }} label="ΣΕΙΡΙΑΚΟΣ ΑΡΙΘΜΟΣ" inputRef={this.serialNumberInputRef} />
             </Grid>
         ;
         return (
@@ -118,7 +116,7 @@ export class BorrowersAdd extends React.Component<BorrowersAddProps, BorrowersAd
                     open={this.state.errorSnackbarOpen}
                     onClose={() => this.setState({errorSnackbarOpen: false})}
                     severity="error"
-                    message="Αποτυχία προσθήκης!"
+                    message={`Αποτυχία προσθήκης Μερικού Διαχειριστή!${this.state.errorMessage}`}
                 />
             </Drawer>
         );
@@ -134,5 +132,6 @@ export interface BorrowersAddProps {
 interface BorrowersAddState {
     loading: boolean;
     errorSnackbarOpen: boolean;
+    errorMessage: string;
     manager: Manager;
 }

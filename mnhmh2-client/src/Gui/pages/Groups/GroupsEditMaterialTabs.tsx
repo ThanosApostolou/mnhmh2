@@ -13,8 +13,7 @@ export class GroupsEditMaterialTabs extends React.Component<GroupsEditMaterialTa
         super(props);
         this.state = {
             selectedMaterialTab: null,
-            fetchData: false,
-            openDialog: false
+            fetchData: false
         };
         this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
     }
@@ -50,5 +49,4 @@ export interface GroupsEditMaterialTabsProps {
 export interface GroupsEditMaterialTabsState {
     selectedMaterialTab: MaterialTab;
     fetchData: boolean;
-    openDialog: boolean;
 }

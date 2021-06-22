@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 
 import { Borrower } from "../entities/Borrower";
+import { ErrorController } from "./ErrorController";
 
 export class BorrowerController {
     req: Request = null;
@@ -52,9 +53,7 @@ export class BorrowerController {
             const body = this.req.body;
             const borrower = Borrower.fromObject(body.borrower);
             if (!borrower.Name || borrower.Name === null || borrower.Name === "") {
-                this.res.status(422);
-                this.res.setHeader("Content-Type", "application/json");
-                this.res.send({error: "Name cannot be empty!"});
+                ErrorController.sendError(this.res, 422,"Το όνομα δεν μπορεί να είναι κενό");
             } else {
                 await Borrower.insertToDB(borrower);
                 this.res.setHeader("Content-Type", "application/json");
@@ -84,9 +83,7 @@ export class BorrowerController {
             const body = this.req.body;
             const borrower = Borrower.fromObject(body.borrower);
             if (!borrower.Name || borrower.Name === null || borrower.Name === "") {
-                this.res.status(422);
-                this.res.setHeader("Content-Type", "application/json");
-                this.res.send({error: "Name cannot be empty!"});
+                ErrorController.sendError(this.res, 422,"Το όνομα δεν μπορεί να είναι κενό");
             } else {
                 await Borrower.updateInDB(borrower);
                 this.res.setHeader("Content-Type", "application/json");
