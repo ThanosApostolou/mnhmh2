@@ -24,6 +24,7 @@ export class AmmunitionPortionsAdd extends React.Component<AmmunitionPortionsAdd
         this.state = {
             loading: false,
             errorSnackbarOpen: false,
+            errorMessage: "",
             materialTab: null,
             ammunitionStore: null
         };
@@ -48,6 +49,7 @@ export class AmmunitionPortionsAdd extends React.Component<AmmunitionPortionsAdd
             }
         }).catch((error) => {
             console.log(error);
+            this.setState({errorMessage: ApiConsumer.getErrorMessage(error)});
             this.setState({loading: false, errorSnackbarOpen: true});
         });
     }
@@ -93,8 +95,8 @@ export class AmmunitionPortionsAdd extends React.Component<AmmunitionPortionsAdd
         }
         const textfields =
             <Grid container direction="column" justify="flex-start" alignContent="center" alignItems="center">
-                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ" inputRef={this.nameInputRef} />
-                <TextField size="small" type="number" InputLabelProps={{ shrink: true }} label="Ποσότητα" inputRef={this.quantityInputRef} />
+                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ*" inputRef={this.nameInputRef} />
+                <TextField size="small" type="number" InputLabelProps={{ shrink: true }} label="Ποσότητα*" defaultValue={0} inputRef={this.quantityInputRef} />
             </Grid>
         ;
         return (
@@ -108,7 +110,7 @@ export class AmmunitionPortionsAdd extends React.Component<AmmunitionPortionsAdd
                                 {textfields}
                             </fieldset>
                             <fieldset style={{display: "flex", height: "270px"}}>
-                                <legend>Καρτέλα Υλικού:</legend>
+                                <legend>Καρτέλα Υλικού*:</legend>
                                 <MaterialTabSingleDataGrid materialTab={this.state.materialTab}
                                     onRemoveClick={this.onMaterialTabRemove.bind(this)}
                                     onSelectClick={this.onMaterialTabSelect.bind(this)}
@@ -116,7 +118,7 @@ export class AmmunitionPortionsAdd extends React.Component<AmmunitionPortionsAdd
                                 />
                             </fieldset>
                             <fieldset style={{display: "flex", height: "270px"}}>
-                                <legend>Αποθήκη:</legend>
+                                <legend>Αποθήκη*:</legend>
                                 <AmmunitionStoreSingleDataGrid ammunitionStore={this.state.ammunitionStore}
                                     onRemoveClick={this.onAmmunitionStoreRemove.bind(this)}
                                     onSelectClick={this.onAmmunitionStoreSelect.bind(this)}
@@ -143,7 +145,7 @@ export class AmmunitionPortionsAdd extends React.Component<AmmunitionPortionsAdd
                     open={this.state.errorSnackbarOpen}
                     onClose={() => this.setState({errorSnackbarOpen: false})}
                     severity="error"
-                    message="Αποτυχία προσθήκης!"
+                    message={`Αποτυχία προσθήκης πυρομαχικού!${this.state.errorMessage}`}
                 />
             </Drawer>
         );
@@ -159,6 +161,7 @@ export interface AmmunitionPortionsAddProps {
 interface AmmunitionPortionsAddState {
     loading: boolean;
     errorSnackbarOpen: boolean;
+    errorMessage: string;
     materialTab: MaterialTab;
     ammunitionStore: AmmunitionStore;
 }

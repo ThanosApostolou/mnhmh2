@@ -27,6 +27,7 @@ export class AmmunitionPortionsEdit extends React.Component<AmmunitionPortionsEd
             ammunitionStore: null,
             loading: false,
             errorSnackbarOpen: false,
+            errorMessage: "",
             tabValue: 0
         };
     }
@@ -50,6 +51,7 @@ export class AmmunitionPortionsEdit extends React.Component<AmmunitionPortionsEd
             }
         }).catch((error) => {
             console.log(error);
+            this.setState({errorMessage: ApiConsumer.getErrorMessage(error)});
             this.setState({loading: false, errorSnackbarOpen: true});
         });
     }
@@ -111,14 +113,14 @@ export class AmmunitionPortionsEdit extends React.Component<AmmunitionPortionsEd
         const textfields =
             <Grid container direction="column" justify="flex-start" alignContent="center" alignItems="center">
                 <TextField size="small" InputLabelProps={{ shrink: true }} label="Id" type="number" value={this.props.ammunitionPortion.Id} disabled />
-                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ" defaultValue={this.props.ammunitionPortion.Name} inputRef={this.nameInputRef} />
-                <TextField size="small" type="number" InputLabelProps={{ shrink: true }} label="Ποσότητα" defaultValue={this.props.ammunitionPortion.Quantity} inputRef={this.quantityInputRef} />
+                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ*" defaultValue={this.props.ammunitionPortion.Name} inputRef={this.nameInputRef} />
+                <TextField size="small" type="number" InputLabelProps={{ shrink: true }} label="Ποσότητα*" defaultValue={this.props.ammunitionPortion.Quantity} inputRef={this.quantityInputRef} />
             </Grid>
         ;
         return (
             <Drawer anchor="right" open={this.props.openEditDrawer} >
                 <Card className="drawer-card">
-                    <CardHeader title="Τροποποίηση Μέλους Επιτροπής" style={{textAlign: "center"}} />
+                    <CardHeader title={`Τροποποίηση Πυρομαχικού: ${this.props.ammunitionPortion.Name}`} style={{textAlign: "center"}} />
                     <Tabs value={this.state.tabValue} onChange={(event: React.ChangeEvent<any>, newValue: number) => this.setState({tabValue: newValue})} >
                         <Tab label="Στοιχεία" value={0} {...a11yProps(0)} />
                     </Tabs>
@@ -126,11 +128,11 @@ export class AmmunitionPortionsEdit extends React.Component<AmmunitionPortionsEd
                         <TabPanel value={this.state.tabValue} index={0} style={{flexGrow: 1}}>
                             <form id="myform" onSubmit={this.onEditSave.bind(this)} style={{flexGrow: 1}}>
                                 <fieldset style={{display: "flex"}}>
-                                    <legend>Στοιχεία Μέλους Επιτροπής:</legend>
+                                    <legend>Στοιχεία Πυρομαχικού:</legend>
                                     {textfields}
                                 </fieldset>
                                 <fieldset style={{display: "flex", height: "270px"}}>
-                                    <legend>Καρτέλα Υλικού:</legend>
+                                    <legend>Καρτέλα Υλικού*:</legend>
                                     <MaterialTabSingleDataGrid materialTab={this.state.materialTab}
                                         onRemoveClick={this.onMaterialTabRemove.bind(this)}
                                         onSelectClick={this.onMaterialTabSelect.bind(this)}
@@ -138,7 +140,7 @@ export class AmmunitionPortionsEdit extends React.Component<AmmunitionPortionsEd
                                     />
                                 </fieldset>
                                 <fieldset style={{display: "flex", height: "270px"}}>
-                                    <legend>Αποθήκη:</legend>
+                                    <legend>Αποθήκη*:</legend>
                                     <AmmunitionStoreSingleDataGrid ammunitionStore={this.state.ammunitionStore}
                                         onRemoveClick={this.onAmmunitionStoreRemove.bind(this)}
                                         onSelectClick={this.onAmmunitionStoreSelect.bind(this)}
@@ -172,7 +174,7 @@ export class AmmunitionPortionsEdit extends React.Component<AmmunitionPortionsEd
                     open={this.state.errorSnackbarOpen}
                     onClose={() => this.setState({errorSnackbarOpen: false})}
                     severity="error"
-                    message="Αποτυχία τροποποίησης!"
+                    message={`Αποτυχία τροποποίησης πυρομαχικού!${this.state.errorMessage}`}
                 />
             </Drawer>
         );
@@ -192,5 +194,6 @@ interface AmmunitionPortionsEditState {
     ammunitionStore: AmmunitionStore;
     loading: boolean;
     errorSnackbarOpen: boolean;
+    errorMessage: string;
     tabValue: number;
 }

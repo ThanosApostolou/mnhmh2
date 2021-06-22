@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 
 import { App } from "../App";
 import { AmmunitionPortion } from "../entities/AmmunitionPortion";
+import { ErrorController } from "./ErrorController";
 
 export class AmmunitionPortionController {
     req: Request = null;
@@ -65,9 +66,17 @@ export class AmmunitionPortionController {
             const body = this.req.body;
             const portion = AmmunitionPortion.fromObject(body.portion);
             if (!portion.Name || portion.Name === null || portion.Name === "") {
-                this.res.status(422);
-                this.res.setHeader("Content-Type", "application/json");
-                this.res.send({error: "Name cannot be empty!"});
+                ErrorController.sendError(this.res, 422,"Το όνομα δεν μπορεί να είναι κενό");
+            } else if (portion.Quantity === undefined || portion.Quantity === null) {
+                ErrorController.sendError(this.res, 422,"Η ποστότητα δεν μπορεί να είναι κενή");
+            } else if (!Number.isInteger(Number(portion.Quantity))) {
+                ErrorController.sendError(this.res, 422,"Η ποστότητα πρέπει να είναι ακέραιος αριθμός");
+            } else if (portion.Quantity < 0) {
+                ErrorController.sendError(this.res, 422,"Η ποστότητα πρέπει να είναι θετικός αριθμός");
+            } else if (portion.MaterialTab === undefined || portion.MaterialTab === null) {
+                ErrorController.sendError(this.res, 422,"Η καρτέλα υλικού δεν μπορεί να είναι κενή");
+            } else if (portion.AmmunitionStore === undefined || portion.AmmunitionStore === null) {
+                ErrorController.sendError(this.res, 422,"Η αποθήκη δεν μπορεί να είναι κενή");
             } else {
                 await AmmunitionPortion.insertToDB(portion);
                 this.res.setHeader("Content-Type", "application/json");
@@ -97,9 +106,17 @@ export class AmmunitionPortionController {
             const body = this.req.body;
             const portion = AmmunitionPortion.fromObject(body.portion);
             if (!portion.Name || portion.Name === null || portion.Name === "") {
-                this.res.status(422);
-                this.res.setHeader("Content-Type", "application/json");
-                this.res.send({error: "Name cannot be empty!"});
+                ErrorController.sendError(this.res, 422,"Το όνομα δεν μπορεί να είναι κενό");
+            } else if (portion.Quantity === undefined || portion.Quantity === null) {
+                ErrorController.sendError(this.res, 422,"Η ποστότητα δεν μπορεί να είναι κενή");
+            } else if (!Number.isInteger(Number(portion.Quantity))) {
+                ErrorController.sendError(this.res, 422,"Η ποστότητα πρέπει να είναι ακέραιος αριθμός");
+            } else if (portion.Quantity < 0) {
+                ErrorController.sendError(this.res, 422,"Η ποστότητα πρέπει να είναι θετικός αριθμός");
+            } else if (portion.MaterialTab === undefined || portion.MaterialTab === null) {
+                ErrorController.sendError(this.res, 422,"Η καρτέλα υλικού δεν μπορεί να είναι κενή");
+            } else if (portion.AmmunitionStore === undefined || portion.AmmunitionStore === null) {
+                ErrorController.sendError(this.res, 422,"Η αποθήκη δεν μπορεί να είναι κενή");
             } else {
                 await AmmunitionPortion.updateInDB(portion);
                 this.res.setHeader("Content-Type", "application/json");
