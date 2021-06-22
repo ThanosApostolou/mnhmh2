@@ -26,6 +26,7 @@ export class ManagersEdit extends React.Component<ManagersEditProps, ManagersEdi
             loading: false,
             borrowers: [],
             errorSnackbarOpen: false,
+            errorMessage: "",
             tabValue: 0
         };
     }
@@ -48,6 +49,7 @@ export class ManagersEdit extends React.Component<ManagersEditProps, ManagersEdi
             }
         }).catch((error) => {
             console.log(error);
+            this.setState({errorMessage: ApiConsumer.getErrorMessage(error)});
             this.setState({loading: false, errorSnackbarOpen: true});
         });
     }
@@ -140,7 +142,7 @@ export class ManagersEdit extends React.Component<ManagersEditProps, ManagersEdi
                     open={this.state.errorSnackbarOpen}
                     onClose={() => this.setState({errorSnackbarOpen: false})}
                     severity="error"
-                    message="Αποτυχία τροποποίησης!"
+                    message={`Αποτυχία τροποποίησης μέλους επιτροπής!${this.state.errorMessage}`}
                 />
             </Drawer>
         );
@@ -159,5 +161,6 @@ interface ManagersEditState {
     loading: boolean;
     borrowers: Borrower[];
     errorSnackbarOpen: boolean;
+    errorMessage: string;
     tabValue: number;
 }

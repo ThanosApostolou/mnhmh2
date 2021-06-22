@@ -21,7 +21,8 @@ export class ManagersAdd extends React.Component<ManagersAddProps, ManagersAddSt
         this.positionInputRef = React.createRef<HTMLInputElement>();
         this.state = {
             loading: false,
-            errorSnackbarOpen: false
+            errorSnackbarOpen: false,
+            errorMessage: "",
         };
     }
 
@@ -43,6 +44,7 @@ export class ManagersAdd extends React.Component<ManagersAddProps, ManagersAddSt
             }
         }).catch((error) => {
             console.log(error);
+            this.setState({errorMessage: ApiConsumer.getErrorMessage(error)});
             this.setState({loading: false, errorSnackbarOpen: true});
         });
     }
@@ -102,7 +104,7 @@ export class ManagersAdd extends React.Component<ManagersAddProps, ManagersAddSt
                             open={this.state.errorSnackbarOpen}
                             onClose={() => this.setState({errorSnackbarOpen: false})}
                             severity="error"
-                            message="Αποτυχία προσθήκης μέλους επιτροπής!"
+                            message={`Αποτυχία προσθήκης μέλους επιτροπής!${this.state.errorMessage}`}
                         />
                     </Card>
                 </Drawer>
@@ -120,4 +122,5 @@ export interface ManagersAddProps {
 interface ManagersAddState {
     loading: boolean;
     errorSnackbarOpen: boolean;
+    errorMessage: string;
 }

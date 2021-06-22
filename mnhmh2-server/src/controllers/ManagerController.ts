@@ -3,6 +3,7 @@ import {Like} from "typeorm";
 
 import { App } from "../App";
 import { Manager } from "../entities/Manager";
+import { ErrorController } from "./ErrorController";
 
 export class ManagerController {
     req: Request = null;
@@ -42,9 +43,7 @@ export class ManagerController {
             const body = this.req.body;
             const manager = Manager.fromObject(body.manager);
             if (!manager.Name || manager.Name === null || manager.Name === "") {
-                this.res.status(422);
-                this.res.setHeader("Content-Type", "application/json");
-                this.res.send({error: "Name cannot be empty!"});
+                ErrorController.sendError(this.res, 422,"Το όνομα δεν μπορεί να είναι κενό");
             } else {
                 await Manager.insertToDB(manager);
                 this.res.setHeader("Content-Type", "application/json");
@@ -74,9 +73,7 @@ export class ManagerController {
             const body = this.req.body;
             const manager = Manager.fromObject(body.manager);
             if (!manager.Name || manager.Name === null || manager.Name === "") {
-                this.res.status(422);
-                this.res.setHeader("Content-Type", "application/json");
-                this.res.send({error: "Name cannot be empty!"});
+                ErrorController.sendError(this.res, 422,"Το όνομα δεν μπορεί να είναι κενό");
             } else {
                 await Manager.updateInDB(manager);
                 this.res.setHeader("Content-Type", "application/json");
