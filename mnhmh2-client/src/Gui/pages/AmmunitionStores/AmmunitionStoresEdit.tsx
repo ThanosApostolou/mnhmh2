@@ -6,21 +6,21 @@ import { ApiConsumer } from "../../../ApiConsumer";
 import { AmmunitionStore } from "../../../entities/AmmunitionStore";
 import { TabPanel, a11yProps } from "../../components/TabPanel";
 import { MySnackbar } from "../../components/MySnackbar";
+import { AmmunitionStoresEditAmmunitionPortions } from "./AmmunitionStoresEditAmmunitionPortions";
 
 export class AmmunitionStoresEdit extends React.Component<AmmunitionStoresEditProps, AmmunitionStoresEditState> {
     state: Readonly<AmmunitionStoresEditState>;
     cancelTokenSource: CancelTokenSource;
     nameInputRef: React.RefObject<HTMLInputElement>;
-    serialNumberInputRef: React.RefObject<HTMLInputElement>;
 
     constructor(props: AmmunitionStoresEditProps) {
         super(props);
         this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
         this.nameInputRef = React.createRef<HTMLInputElement>();
-        this.serialNumberInputRef = React.createRef<HTMLInputElement>();
         this.state = {
             loading: false,
             errorSnackbarOpen: false,
+            errorMessage: "",
             tabValue: 0
         };
     }
@@ -32,8 +32,7 @@ export class AmmunitionStoresEdit extends React.Component<AmmunitionStoresEditPr
         this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
         const store = AmmunitionStore.fromObject({
             Id: this.props.store.Id,
-            Name: this.nameInputRef.current.value,
-            SerialNumber: this.serialNumberInputRef.current.value
+            Name: this.nameInputRef.current.value
         });
         AmmunitionStore.updateInApi(this.cancelTokenSource, store).then(() => {
             this.setState({loading: false});
@@ -42,6 +41,7 @@ export class AmmunitionStoresEdit extends React.Component<AmmunitionStoresEditPr
             }
         }).catch((error) => {
             console.log(error);
+            this.setState({errorMessage: ApiConsumer.getErrorMessage(error)});
             this.setState({loading: false, errorSnackbarOpen: true});
         });
     }
@@ -74,8 +74,8 @@ export class AmmunitionStoresEdit extends React.Component<AmmunitionStoresEditPr
         const textfields =
             <Grid container direction="column" justify="flex-start" alignContent="center" alignItems="center">
                 <TextField size="small" InputLabelProps={{ shrink: true }} label="Id" type="number" value={this.props.store.Id} disabled />
-                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ" defaultValue={this.props.store.Name} inputRef={this.nameInputRef} />
-                <TextField size="small" type="number" InputLabelProps={{ shrink: true }} label="Σειραικός Αριθμός" defaultValue={this.props.store.SerialNumber} inputRef={this.serialNumberInputRef} />
+                <TextField size="small" type="number" InputLabelProps={{ shrink: true }} label="Σειραικός Αριθμός" value={this.props.store.SerialNumber} disabled />
+                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ*" defaultValue={this.props.store.Name} inputRef={this.nameInputRef} />
             </Grid>
         ;
         return (
@@ -85,6 +85,7 @@ export class AmmunitionStoresEdit extends React.Component<AmmunitionStoresEditPr
                         <CardHeader title="Τροποποίηση Αποθήκης" style={{textAlign: "center"}} />
                         <Tabs value={this.state.tabValue} onChange={(event: React.ChangeEvent<any>, newValue: number) => this.setState({tabValue: newValue})} >
                             <Tab label="Στοιχεία" value={0} {...a11yProps(0)} />
+                            <Tab label="Πυρομαχικά" value={1} {...a11yProps(1)} />
                         </Tabs>
                         <CardContent style={{display: "flex", flexGrow: 1}}>
                             <TabPanel value={this.state.tabValue} index={0} style={{display: "flex", flexGrow: 1}}>
@@ -103,6 +104,14 @@ export class AmmunitionStoresEdit extends React.Component<AmmunitionStoresEditPr
                                     </Grid>
                                 </form>
                             </TabPanel >
+                            <TabPanel value={this.state.tabValue} index={1} style={{display: "flex", flexGrow: 1}}>
+                                <Grid container direction="column" style={{display:"flex", flexGrow: 1}}>
+                                    <fieldset style={{display: "flex", flexGrow: 1}}>
+                                        <legend>Πυρομαχικά της αποθήκης:</legend>
+                                        <AmmunitionStoresEditAmmunitionPortions ammunitionStore={this.props.store} />
+                                    </fieldset>
+                                </Grid>
+                            </TabPanel>
                         </CardContent>
                         <CardActions>
                             <Grid container direction="row" justify="flex-end">
@@ -123,7 +132,7 @@ export class AmmunitionStoresEdit extends React.Component<AmmunitionStoresEditPr
                     open={this.state.errorSnackbarOpen}
                     onClose={() => this.setState({errorSnackbarOpen: false})}
                     severity="error"
-                    message="Αποτυχία τροποποίησης!"
+                    message={`Αποτυχία τροποποίησης αποθήκης!${this.state.errorMessage}`}
                 />
             </Drawer>
         );
@@ -141,5 +150,6 @@ export interface AmmunitionStoresEditProps {
 interface AmmunitionStoresEditState {
     loading: boolean;
     errorSnackbarOpen: boolean;
+    errorMessage: string;
     tabValue: number;
 }

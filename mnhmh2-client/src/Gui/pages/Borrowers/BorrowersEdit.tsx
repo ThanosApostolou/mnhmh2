@@ -113,7 +113,7 @@ export class BorrowersEdit extends React.Component<BorrowersEditProps, Borrowers
                         <TabPanel value={this.state.tabValue} index={0} style={{flexGrow: 1}}>
                             <form id="myform" onSubmit={this.onEditSave.bind(this)} style={{flexGrow: 1}}>
                                 <fieldset className="fieldset-textfields">
-                                    <legend>Στοιχεία Μέλους Επιτροπής:</legend>
+                                    <legend>Στοιχεία Μερικού Διαχειριστή:</legend>
                                     {textfields}
                                 </fieldset>
                                 <fieldset className="fieldset-singledatagrid">

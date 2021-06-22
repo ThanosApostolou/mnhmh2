@@ -5,21 +5,21 @@ import { Alert } from "@material-ui/lab";
 import { AmmunitionStore } from "../../../entities/AmmunitionStore";
 import { ApiConsumer } from "../../../ApiConsumer";
 import { CancelTokenSource } from "axios";
+import { MySnackbar } from "../../components/MySnackbar";
 
 export class AmmunitionStoresAdd extends React.Component<AmmunitionStoresAddProps, AmmunitionStoresAddState> {
     state: Readonly<AmmunitionStoresAddState>;
     cancelTokenSource: CancelTokenSource;
     nameInputRef: React.RefObject<HTMLInputElement>;
-    serialNumberInputRef: React.RefObject<HTMLInputElement>;
 
     constructor(props: AmmunitionStoresAddProps) {
         super(props);
         this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
         this.nameInputRef = React.createRef<HTMLInputElement>();
-        this.serialNumberInputRef = React.createRef<HTMLInputElement>();
         this.state = {
             loading: false,
-            errorSnackbarOpen: false
+            errorSnackbarOpen: false,
+            errorMessage: ""
         };
     }
 
@@ -30,8 +30,7 @@ export class AmmunitionStoresAdd extends React.Component<AmmunitionStoresAddProp
         this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
         const store = AmmunitionStore.fromObject({
             Id: null,
-            Name: this.nameInputRef.current.value,
-            SerialNumber: this.serialNumberInputRef.current.value
+            Name: this.nameInputRef.current.value
         });
         AmmunitionStore.insertToApi(this.cancelTokenSource, store).then(() => {
             this.setState({loading: false});
@@ -40,6 +39,7 @@ export class AmmunitionStoresAdd extends React.Component<AmmunitionStoresAddProp
             }
         }).catch((error) => {
             console.log(error);
+            this.setState({errorMessage: ApiConsumer.getErrorMessage(error)});
             this.setState({loading: false, errorSnackbarOpen: true});
         });
     }
@@ -70,8 +70,7 @@ export class AmmunitionStoresAdd extends React.Component<AmmunitionStoresAddProp
                                     <Grid container direction="column" style={{display:"flex", flexGrow: 1}}>
                                         <fieldset>
                                             <Grid container direction="column" justify="flex-start" alignContent="center" alignItems="center">
-                                                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ" inputRef={this.nameInputRef} />
-                                                <TextField size="small" type="number" InputLabelProps={{ shrink: true }} label="Σειραικός Αριθμός" inputRef={this.serialNumberInputRef} />
+                                                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ*" inputRef={this.nameInputRef} />
                                             </Grid>
                                         </fieldset>
                                         <div style={{display: "flex", flexGrow: 1}} />
@@ -93,19 +92,12 @@ export class AmmunitionStoresAdd extends React.Component<AmmunitionStoresAddProp
                         <Backdrop open={this.state.loading} style={{position: "fixed", left: "10vw", height: "100vh", width: "90vw", zIndex: 100}}>
                             <CircularProgress color="inherit" />
                         </Backdrop>
-                        <Snackbar
-                            anchorOrigin={{
-                                vertical: "bottom",
-                                horizontal: "left",
-                            }}
+                        <MySnackbar
                             open={this.state.errorSnackbarOpen}
-                            autoHideDuration={2000}
                             onClose={() => this.setState({errorSnackbarOpen: false})}
-                        >
-                            <Alert variant="filled" severity="error" onClose={() => this.setState({errorSnackbarOpen: false})}>
-                                Αποτυχία προσθήκης αποθήκης!
-                            </Alert>
-                        </Snackbar>
+                            severity="error"
+                            message={`Αποτυχία προσθήκης αποθήκης!${this.state.errorMessage}`}
+                        />
                     </Card>
                 </Drawer>
             );
@@ -122,4 +114,5 @@ export interface AmmunitionStoresAddProps {
 interface AmmunitionStoresAddState {
     loading: boolean;
     errorSnackbarOpen: boolean;
+    errorMessage: string;
 }

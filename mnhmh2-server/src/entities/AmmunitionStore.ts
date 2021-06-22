@@ -71,9 +71,11 @@ export class AmmunitionStore {
     }
     static async insertToDB(store: AmmunitionStore): Promise<AmmunitionStore> {
         try {
-            const result = await App.app.dbmanager.ammunitionStoreRepo.createQueryBuilder().select("MAX(AmmunitionStore.Id)", "max").getRawOne();
-            const maxId = result.max;
+            const result = await App.app.dbmanager.ammunitionStoreRepo.createQueryBuilder().select("MAX(AmmunitionStore.Id)", "maxId").addSelect("Max(AmmunitionStore.SerialNumber)", "maxSerialNumber").getRawOne();
+            const maxId = result["maxId"];
             store.Id = 1 + maxId;
+            const maxSerialNumber = result["maxSerialNumber"];
+            store.SerialNumber = 1 + maxSerialNumber;
             await App.app.dbmanager.ammunitionStoreRepo.insert(store);
             return store;
         } catch(err) {
@@ -91,6 +93,7 @@ export class AmmunitionStore {
     }
     static async updateInDB(store: AmmunitionStore): Promise<AmmunitionStore> {
         try {
+            delete store.SerialNumber;
             await App.app.dbmanager.ammunitionStoreRepo.update(store.Id, store);
             return store;
         } catch(err) {

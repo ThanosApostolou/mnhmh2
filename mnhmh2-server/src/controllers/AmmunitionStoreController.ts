@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 
 import { App } from "../App";
 import { AmmunitionStore } from "../entities/AmmunitionStore";
+import { ErrorController } from "./ErrorController";
 
 export class AmmunitionStoreController {
     req: Request = null;
@@ -41,9 +42,7 @@ export class AmmunitionStoreController {
             const body = this.req.body;
             const store = AmmunitionStore.fromObject(body.store);
             if (!store.Name || store.Name === null || store.Name === "") {
-                this.res.status(422);
-                this.res.setHeader("Content-Type", "application/json");
-                this.res.send({error: "Name cannot be empty!"});
+                ErrorController.sendError(this.res, 422,"Το όνομα δεν μπορεί να είναι κενό");
             } else {
                 await AmmunitionStore.insertToDB(store);
                 this.res.setHeader("Content-Type", "application/json");
@@ -73,9 +72,7 @@ export class AmmunitionStoreController {
             const body = this.req.body;
             const store = AmmunitionStore.fromObject(body.store);
             if (!store.Name || store.Name === null || store.Name === "") {
-                this.res.status(422);
-                this.res.setHeader("Content-Type", "application/json");
-                this.res.send({error: "Name cannot be empty!"});
+                ErrorController.sendError(this.res, 422,"Το όνομα δεν μπορεί να είναι κενό");
             } else {
                 await AmmunitionStore.updateInDB(store);
                 this.res.setHeader("Content-Type", "application/json");

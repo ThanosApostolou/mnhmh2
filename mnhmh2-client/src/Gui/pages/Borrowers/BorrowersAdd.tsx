@@ -76,7 +76,7 @@ export class BorrowersAdd extends React.Component<BorrowersAddProps, BorrowersAd
         }
         const textfields =
             <Grid container direction="column" justify="flex-start" alignContent="center" alignItems="center">
-                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ" inputRef={this.nameInputRef} />
+                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ*" inputRef={this.nameInputRef} />
             </Grid>
         ;
         return (
