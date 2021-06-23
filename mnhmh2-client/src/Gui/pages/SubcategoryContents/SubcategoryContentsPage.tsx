@@ -9,7 +9,7 @@ import { SubcategoryContent } from "../../../entities/SubcategoryContent";
 import { GridRowsProp } from "@material-ui/data-grid";
 import { AddEditActions } from "../../components/AddEditActions";
 import { SubcategoryContentsAdd } from "./SubcategoryContentsAdd";
-import { SubcategoriesEdit } from "./SubcategoriesEdit";
+import { SubcategoryContentsEdit } from "./SubcategoryContentsEdit";
 
 export class SubcategoryContentsPage extends React.Component<Record<string, never>, SubcategoryContentsPageState> {
     state: Readonly<SubcategoryContentsPageState>;
@@ -102,14 +102,12 @@ export class SubcategoryContentsPage extends React.Component<Record<string, neve
                     onAddSave={this.onAddSave.bind(this)}
                     onAddCancel={this.onAddCancel.bind(this)}
                 />
-                {/*
-                <SubcategoriesEdit subcategoryContent={this.state.selectedSubcategoryContent}
+                <SubcategoryContentsEdit subcategoryContent={this.state.selectedSubcategoryContent}
                     openEditDrawer={this.state.openEditDrawer}
                     onEditSave={this.onEditSave.bind(this)}
                     onEditDelete={this.onEditDelete.bind(this)}
                     onEditCancel={this.onEditCancel.bind(this)}
                 />
-                */}
                 <Snackbar
                     anchorOrigin={{
                         vertical: "bottom",

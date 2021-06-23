@@ -103,13 +103,15 @@ export class SubcategoryContentController {
         try {
             const body = this.req.body;
             const subcategoryContent = SubcategoryContent.fromObject(body["subcategoryContent"]);
-            if (!subcategoryContent.Name || subcategoryContent.Name === null || subcategoryContent.Name === "") {
-                ErrorController.sendError(this.res, 422,"Το όνομα δεν μπορεί να είναι κενό");
-            } else if (subcategoryContent.SubcategoryBelongingTo === undefined || subcategoryContent.SubcategoryBelongingTo === null) {
-                ErrorController.sendError(this.res, 422,"Το υποσυγκρότημα δεν Borrower να είναι κενό");
-            } else if (subcategoryContent.SubcategoryContentTab === undefined || subcategoryContent.SubcategoryContentTab === null) {
-                ErrorController.sendError(this.res, 422,"Η καρτέλα υλικού δεν μπορεί να είναι κενή");
+            if (subcategoryContent.Quantity === undefined || subcategoryContent.Quantity === null) {
+                ErrorController.sendError(this.res, 422,"Η ποσότητα δεν μπορεί να είναι κενή");
+            } else if (!Number.isInteger(Number(subcategoryContent.Quantity))) {
+                ErrorController.sendError(this.res, 422,"Η ποσότητα πρέπει να είναι ακέραιος αριθμός");
+            } else if (subcategoryContent.Quantity < 0) {
+                ErrorController.sendError(this.res, 422,"Η ποσότητα πρέπει να είναι θετικός αριθμός");
             } else {
+                delete subcategoryContent.SubcategoryBelongingTo;
+                delete subcategoryContent.SubcategoryContentTab;
                 await SubcategoryContent.updateInDB(subcategoryContent);
                 this.res.setHeader("Content-Type", "application/json");
                 this.res.send({message: "OK"});

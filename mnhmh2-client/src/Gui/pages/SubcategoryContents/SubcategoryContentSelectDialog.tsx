@@ -1,37 +1,37 @@
 import React, { ReactNode } from "react";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Grid, Button } from "@material-ui/core";
 
-import { Subcategory } from "../../../entities/Subcategory";
+import { SubcategoryContent } from "../../../entities/SubcategoryContent";
 import { ApiConsumer } from "../../../ApiConsumer";
 import { CancelTokenSource } from "axios";
 import { SubcategoryContentDataGrid } from "./SubcategoryContentDataGrid";
 import { SelectActions } from "../../components/SelectActions";
 
-export class SubcategorySelectDialog extends React.Component<SubcategorySelectDialogProps, SubcategorySelectDialogState> {
+export class SubcategoryContentSelectDialog extends React.Component<SubcategoryContentSelectDialogProps, SubcategoryContentSelectDialogState> {
     cancelTokenSource: CancelTokenSource;
 
-    constructor(props: SubcategorySelectDialogProps) {
+    constructor(props: SubcategoryContentSelectDialogProps) {
         super(props);
         this.state = {
-            selectedSubcategory: null
+            selectedSubcategoryContent: null
         };
         this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
     }
 
     onFetchData(): void {
-        this.setState({selectedSubcategory: null});
+        this.setState({selectedSubcategoryContent: null});
     }
 
-    onRowSelected(subcategory: Subcategory): void {
-        this.setState({selectedSubcategory: subcategory});
+    onRowSelected(subcategoryContent: SubcategoryContent): void {
+        this.setState({selectedSubcategoryContent: subcategoryContent});
     }
 
     onSelectClick(): void {
-        this.props.onSelectClick(this.state.selectedSubcategory);
+        this.props.onSelectClick(this.state.selectedSubcategoryContent);
     }
 
     render(): ReactNode {
-        const actions = <SelectActions disabledSelect={this.state.selectedSubcategory === null} onSelectClick={this.onSelectClick.bind(this)} />;
+        const actions = <SelectActions disabledSelect={this.state.selectedSubcategoryContent === null} onSelectClick={this.onSelectClick.bind(this)} />;
         if (!this.props.openDialog) {
             return null;
         } else {
@@ -39,11 +39,11 @@ export class SubcategorySelectDialog extends React.Component<SubcategorySelectDi
                 <Dialog open={this.props.openDialog} maxWidth={false} fullWidth={true} style={{height: "100vh"}}>
                     <DialogTitle>
                         <Grid container direction="row" justify="center">
-                            Υποσυγκροτήματα
+                            Περιεχόμενα Υποσυγκροτημάτων
                         </Grid>
                     </DialogTitle>
                     <DialogContent style={{height: "100vh", display: "flex", flexGrow: 1}}>
-                        <SubcategoryContentDataGrid actions={actions} onRowSelected={this.onRowSelected.bind(this)} storagePrefix="subcategories_select"
+                        <SubcategoryContentDataGrid actions={actions} onRowSelected={this.onRowSelected.bind(this)} storagePrefix="subcategorycontents_select"
                             onFetchData={this.onFetchData.bind(this)}
                         />
                     </DialogContent>
@@ -60,12 +60,12 @@ export class SubcategorySelectDialog extends React.Component<SubcategorySelectDi
     }
 }
 
-export interface SubcategorySelectDialogProps {
+export interface SubcategoryContentSelectDialogProps {
     openDialog: boolean;
-    onSelectClick(subcategory: Subcategory): void;
+    onSelectClick(subcategoryContent: SubcategoryContent): void;
     onCancelClick(): void;
 }
 
-export interface SubcategorySelectDialogState {
-    selectedSubcategory: Subcategory;
+export interface SubcategoryContentSelectDialogState {
+    selectedSubcategoryContent: SubcategoryContent;
 }
