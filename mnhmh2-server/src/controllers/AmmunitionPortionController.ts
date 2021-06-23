@@ -68,11 +68,11 @@ export class AmmunitionPortionController {
             if (!portion.Name || portion.Name === null || portion.Name === "") {
                 ErrorController.sendError(this.res, 422,"Το όνομα δεν μπορεί να είναι κενό");
             } else if (portion.Quantity === undefined || portion.Quantity === null) {
-                ErrorController.sendError(this.res, 422,"Η ποστότητα δεν μπορεί να είναι κενή");
+                ErrorController.sendError(this.res, 422,"Η ποσότητα δεν μπορεί να είναι κενή");
             } else if (!Number.isInteger(Number(portion.Quantity))) {
-                ErrorController.sendError(this.res, 422,"Η ποστότητα πρέπει να είναι ακέραιος αριθμός");
+                ErrorController.sendError(this.res, 422,"Η ποσότητα πρέπει να είναι ακέραιος αριθμός");
             } else if (portion.Quantity < 0) {
-                ErrorController.sendError(this.res, 422,"Η ποστότητα πρέπει να είναι θετικός αριθμός");
+                ErrorController.sendError(this.res, 422,"Η ποσότητα πρέπει να είναι θετικός αριθμός");
             } else if (portion.MaterialTab === undefined || portion.MaterialTab === null) {
                 ErrorController.sendError(this.res, 422,"Η καρτέλα υλικού δεν μπορεί να είναι κενή");
             } else if (portion.AmmunitionStore === undefined || portion.AmmunitionStore === null) {

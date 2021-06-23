@@ -3,27 +3,28 @@ import { Card, Button, TextField, Grid, Drawer, CardHeader, CardContent, CardAct
 import { CancelTokenSource } from "axios";
 
 import { ApiConsumer } from "../../../ApiConsumer";
+import { SubcategoryContent } from "../../../entities/SubcategoryContent";
 import { Subcategory } from "../../../entities/Subcategory";
+import { SubcategorySingleDataGrid } from "../Subcategories/SubcategorySingleDataGrid";
 import { MaterialTab } from "../../../entities/MaterialTab";
 import { MaterialTabSingleDataGrid } from "../MaterialTabs/MaterialTabSingleDataGrid";
-import { Borrower } from "../../../entities/Borrower";
-import { BorrowerSingleDataGrid } from "../Borrowers/BorrowerSingleDataGrid";
 import { MySnackbar } from "../../components/MySnackbar";
 
-export class SubcategoriesAdd extends React.Component<SubcategoriesAddProps, SubcategoriesAddState> {
-    state: Readonly<SubcategoriesAddState>;
+export class SubcategoryContentsAdd extends React.Component<SubcategoryContentsAddProps, SubcategoryContentsAddState> {
+    state: Readonly<SubcategoryContentsAddState>;
     cancelTokenSource: CancelTokenSource;
-    nameInputRef: React.RefObject<HTMLInputElement>;
+    quantityInputRef: React.RefObject<HTMLInputElement>;
 
-    constructor(props: SubcategoriesAddProps) {
+    constructor(props: SubcategoryContentsAddProps) {
         super(props);
         this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
-        this.nameInputRef = React.createRef<HTMLInputElement>();
+        this.quantityInputRef = React.createRef<HTMLInputElement>();
         this.state = {
             loading: false,
             errorSnackbarOpen: false,
-            materialTab: null,
-            borrower: null
+            errorMessage: "",
+            subcategory: null,
+            materialTab: null
         };
     }
 
@@ -32,19 +33,20 @@ export class SubcategoriesAdd extends React.Component<SubcategoriesAddProps, Sub
         this.setState({loading: true});
         this.cancelTokenSource.cancel("cancel sending data");
         this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
-        const subcategory = Subcategory.fromObject({
+        const subcategoryContent = SubcategoryContent.fromObject({
             Id: null,
-            Name: this.nameInputRef.current.value,
-            MaterialTab: this.state.materialTab,
-            Borrower: this.state.borrower
+            Quantity: this.quantityInputRef.current.value,
+            SubcategoryBelongingTo: this.state.subcategory,
+            SubcategoryContentTab: this.state.materialTab
         });
-        Subcategory.insertToApi(this.cancelTokenSource, subcategory).then(() => {
+        SubcategoryContent.insertToApi(this.cancelTokenSource, subcategoryContent).then(() => {
             this.setState({loading: false});
             if (this.props.onAddSave) {
                 this.props.onAddSave();
             }
         }).catch((error) => {
             console.log(error);
+            this.setState({errorMessage: ApiConsumer.getErrorMessage(error)});
             this.setState({loading: false, errorSnackbarOpen: true});
         });
     }
@@ -55,6 +57,13 @@ export class SubcategoriesAdd extends React.Component<SubcategoriesAddProps, Sub
         }
     }
 
+    onSubcategorySelect(subcategory: Subcategory): void {
+        this.setState({subcategory: subcategory});
+    }
+    onSubcategoryRemove(): void {
+        this.setState({subcategory: null});
+    }
+
     onMaterialTabSelect(materialTab: MaterialTab): void {
         this.setState({materialTab: materialTab});
     }
@@ -62,24 +71,17 @@ export class SubcategoriesAdd extends React.Component<SubcategoriesAddProps, Sub
         this.setState({materialTab: null});
     }
 
-    onBorrowerSelect(borrower: Borrower): void {
-        this.setState({borrower: borrower});
-    }
-    onBorrowerRemove(): void {
-        this.setState({borrower: null});
-    }
-
     componentDidMount(): void {
         this.setState({
-            materialTab: null,
-            borrower: null
+            subcategory: null,
+            materialTab: null
         });
     }
-    componentDidUpdate(prevProps: SubcategoriesAddProps): void {
+    componentDidUpdate(prevProps: SubcategoryContentsAddProps): void {
         if (prevProps.openAddDrawer !== this.props.openAddDrawer) {
             this.setState({
-                materialTab: null,
-                borrower: null
+                subcategory: null,
+                materialTab: null
             });
         }
     }
@@ -90,32 +92,32 @@ export class SubcategoriesAdd extends React.Component<SubcategoriesAddProps, Sub
         }
         const textfields =
             <Grid container direction="column" justify="flex-start" alignContent="center" alignItems="center">
-                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ" inputRef={this.nameInputRef} />
+                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΠΟΣΟΤΗΤΑ*" type="number" defaultValue={0} inputRef={this.quantityInputRef} />
             </Grid>
         ;
         return (
             <Drawer anchor="right" open={this.props.openAddDrawer} >
                 <Card className="drawer-card">
-                    <CardHeader title="Προσθήκη Υποσυγκροτήματος" style={{textAlign: "center"}} />
+                    <CardHeader title="Προσθήκη Περιεχομένου Υποσυγκροτήματος" style={{textAlign: "center"}} />
                     <CardContent className="drawer-cardcontent">
                         <form id="myform" onSubmit={this.onAddSave.bind(this)} style={{flexGrow: 1}}>
                             <fieldset className="fieldset-textfields">
-                                <legend>Στοιχεία Υποσυγκροτήματος:</legend>
+                                <legend>Στοιχεία Περιεχομένου Υποσυγκροτήματος:</legend>
                                 {textfields}
                             </fieldset>
                             <fieldset style={{display: "flex", height: "270px"}}>
-                                <legend>Καρτέλα Υλικού:</legend>
-                                <MaterialTabSingleDataGrid materialTab={this.state.materialTab}
-                                    onRemoveClick={this.onMaterialTabRemove.bind(this)}
-                                    onSelectClick={this.onMaterialTabSelect.bind(this)}
-                                    storagePrefix="materialtabs_single"
+                                <legend>Υποσυγκρότημα*:</legend>
+                                <SubcategorySingleDataGrid subcategory={this.state.subcategory}
+                                    onRemoveClick={this.onSubcategoryRemove.bind(this)}
+                                    onSelectClick={this.onSubcategorySelect.bind(this)}
+                                    storagePrefix="subcategories_single"
                                 />
                             </fieldset>
                             <fieldset style={{display: "flex", height: "270px"}}>
-                                <legend>Μερικός Διαχειριστής:</legend>
-                                <BorrowerSingleDataGrid borrower={this.state.borrower}
-                                    onRemoveClick={this.onBorrowerRemove.bind(this)}
-                                    onSelectClick={this.onBorrowerSelect.bind(this)}
+                                <legend>Καρτέλα Υλικού*:</legend>
+                                <MaterialTabSingleDataGrid materialTab={this.state.materialTab}
+                                    onRemoveClick={this.onMaterialTabRemove.bind(this)}
+                                    onSelectClick={this.onMaterialTabSelect.bind(this)}
                                     storagePrefix="ammunitionstores_single"
                                 />
                             </fieldset>
@@ -139,22 +141,23 @@ export class SubcategoriesAdd extends React.Component<SubcategoriesAddProps, Sub
                     open={this.state.errorSnackbarOpen}
                     onClose={() => this.setState({errorSnackbarOpen: false})}
                     severity="error"
-                    message="Αποτυχία προσθήκης!"
+                    message={`Αποτυχία προσθήκης περιεχομένου υποσυγκροτήματος!${this.state.errorMessage}`}
                 />
             </Drawer>
         );
     }
 }
 
-export interface SubcategoriesAddProps {
+export interface SubcategoryContentsAddProps {
     openAddDrawer: boolean;
     onAddSave?: () => void;
     onAddCancel?: () => void;
 }
 
-interface SubcategoriesAddState {
+interface SubcategoryContentsAddState {
     loading: boolean;
     errorSnackbarOpen: boolean;
+    errorMessage: string;
+    subcategory: Subcategory;
     materialTab: MaterialTab;
-    borrower: Borrower;
 }

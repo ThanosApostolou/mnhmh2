@@ -131,11 +131,10 @@ export class SubcategoryContent {
         const columns: GridColDef[] = [
             { field: "AA", headerName: "AA", width: 100, hide: false },
             { field: "Id", headerName: "Id", width: 100, hide: false },
-            { field: "Name", headerName: "ΟΝΟΜΑ", width: 200, hide: false },
             { field: "Quantity", headerName: "ΠΟΣΟΤΗΤΑ", width: 200, hide: false },
             { field: "SubcategoryBelongingTo", headerName: "ΥΠΟΣΥΓΚΡΟΤΗΜΑ", width: 200, hide: false },
-            { field: "SubcategoryContentTabPartialRegistryCodeNumber", headerName: "ΕΦ24", width: 200, hide: false },
-            { field: "SubcategoryContentTabName", headerName: "ΟΝΟΜΑ ΚΑΡΤΕΛΑΣ ΥΛΙΚΟΥ", width: 200, hide: false },
+            { field: "SubcategoryContentTabPartialRegistryCode", headerName: "ΕΦ24", width: 200, hide: false },
+            { field: "SubcategoryContentTabName", headerName: "ΟΝΟΜΑ", width: 200, hide: false },
         ];
         return columns;
     }
@@ -148,10 +147,9 @@ export class SubcategoryContent {
                 id: count,
                 AA: count,
                 Id: subcategoryContent.Id,
-                Name: subcategoryContent.Name,
                 Quantity: subcategoryContent.Quantity,
                 SubcategoryBelongingTo: subcategoryContent.SubcategoryBelongingTo ? subcategoryContent.SubcategoryBelongingTo.Name : null,
-                SubcategoryContentTabPartialRegistryCodeNumber: subcategoryContent.SubcategoryContentTab ? subcategoryContent.SubcategoryContentTab.PartialRegistryCodeNumber : null,
+                SubcategoryContentTabPartialRegistryCode: subcategoryContent.SubcategoryContentTab ? subcategoryContent.SubcategoryContentTab.PartialRegistryCode : null,
                 SubcategoryContentTabName: subcategoryContent.SubcategoryContentTab ? subcategoryContent.SubcategoryContentTab.Name : null
 
             };

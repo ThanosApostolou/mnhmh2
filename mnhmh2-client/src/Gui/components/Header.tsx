@@ -110,6 +110,10 @@ class Header extends React.Component<any, any> {
                         horizontal: "center",
                     }}
                 >
+                    <MenuItem component={NavLink} to="/subcategorycontents" selected={path === "/subcategorycontents" ? true : false} onClick={this.handleClose.bind(this)}>
+                        <RecentActors />
+                                            &nbsp;Περιεχόμενα Υποσυγκροτημάτων
+                    </MenuItem>
                     <MenuItem component={NavLink} to="/borrowers" selected={path === "/borrowers" ? true : false} onClick={this.handleClose.bind(this)}>
                         <RecentActors />
                                             &nbsp;Μερικοί Διαχειριστές

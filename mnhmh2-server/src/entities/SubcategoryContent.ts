@@ -36,6 +36,7 @@ export class SubcategoryContent {
         const subcategoryContent = new SubcategoryContent();
         subcategoryContent.Id = obj.Id;
         subcategoryContent.Name = obj.Name;
+        subcategoryContent.Quantity = obj.Quantity;
 
         if (obj.SubcategoryBelongingTo !== undefined) {
             subcategoryContent.SubcategoryBelongingTo = Subcategory.fromObject(obj.SubcategoryBelongingTo);
@@ -115,7 +116,7 @@ export class SubcategoryContent {
     }
     static async insertToDB(subcategoryContent: SubcategoryContent): Promise<SubcategoryContent> {
         try {
-            const result = await App.app.dbmanager.subcategoryContentRepo.createQueryBuilder().select("MAX(Subcategory.Id)", "max").getRawOne();
+            const result = await App.app.dbmanager.subcategoryContentRepo.createQueryBuilder().select("MAX(SubcategoryContent.Id)", "max").getRawOne();
             const maxId = result.max;
             subcategoryContent.Id = 1 + maxId;
             await App.app.dbmanager.subcategoryContentRepo.insert(subcategoryContent);

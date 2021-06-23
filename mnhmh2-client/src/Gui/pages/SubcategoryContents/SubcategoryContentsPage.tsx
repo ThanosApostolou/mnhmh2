@@ -8,11 +8,11 @@ import { SubcategoryContentDataGrid } from "./SubcategoryContentDataGrid";
 import { SubcategoryContent } from "../../../entities/SubcategoryContent";
 import { GridRowsProp } from "@material-ui/data-grid";
 import { AddEditActions } from "../../components/AddEditActions";
-import { SubcategoriesAdd } from "./SubcategoriesAdd";
+import { SubcategoryContentsAdd } from "./SubcategoryContentsAdd";
 import { SubcategoriesEdit } from "./SubcategoriesEdit";
 
-export class SubcategoriesContentsPage extends React.Component<Record<string, never>, SubcategoriesContentsPageState> {
-    state: Readonly<SubcategoriesContentsPageState>;
+export class SubcategoryContentsPage extends React.Component<Record<string, never>, SubcategoryContentsPageState> {
+    state: Readonly<SubcategoryContentsPageState>;
     search: string;
 
     constructor(props: Record<string, never>) {
@@ -98,11 +98,11 @@ export class SubcategoriesContentsPage extends React.Component<Record<string, ne
                     search={this.state.search}
                     onFetchData={this.onFetchData.bind(this)}
                 />
-                {/*
-                <SubcategoriesAdd openAddDrawer={this.state.openAddDrawer}
+                <SubcategoryContentsAdd openAddDrawer={this.state.openAddDrawer}
                     onAddSave={this.onAddSave.bind(this)}
                     onAddCancel={this.onAddCancel.bind(this)}
                 />
+                {/*
                 <SubcategoriesEdit subcategoryContent={this.state.selectedSubcategoryContent}
                     openEditDrawer={this.state.openEditDrawer}
                     onEditSave={this.onEditSave.bind(this)}
@@ -128,7 +128,7 @@ export class SubcategoriesContentsPage extends React.Component<Record<string, ne
     }
 }
 
-export interface SubcategoriesContentsPageState {
+export interface SubcategoryContentsPageState {
     subcategoryContents: SubcategoryContent[];
     selectedSubcategoryContent: SubcategoryContent;
     rows: GridRowsProp;
