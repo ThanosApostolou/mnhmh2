@@ -15,6 +15,7 @@ import { SubcategoryController } from "./controllers/SubcategoryController";
 import { DirectMaterialBorrowerController } from "./controllers/DirectMaterialBorrowerController";
 import { ImportsExportsTblController } from "./controllers/ImportsExportsTblController";
 import { NotFoundController } from "./controllers/NotFoundController";
+import { SubcategoryContentController } from "./controllers/SubcategoryContentController";
 
 export class Webserver {
     expressapp: any = null;
@@ -71,15 +72,12 @@ export class Webserver {
         this.expressapp.get("/api/category", (req: Request, res: Response) => {
             new CategoryController(req, res).GET();
         });
-
         this.expressapp.post("/api/category", (req: Request, res: Response) => {
             new CategoryController(req, res).POST();
         });
-
         this.expressapp.delete("/api/category", (req: Request, res: Response) => {
             new CategoryController(req, res).DELETE();
         });
-
         this.expressapp.put("/api/category", (req: Request, res: Response) => {
             new CategoryController(req, res).PUT();
         });
@@ -87,17 +85,27 @@ export class Webserver {
         this.expressapp.get("/api/subcategory", (req: Request, res: Response) => {
             new SubcategoryController(req, res).GET();
         });
-
         this.expressapp.post("/api/subcategory", (req: Request, res: Response) => {
             new SubcategoryController(req, res).POST();
         });
-
         this.expressapp.delete("/api/subcategory", (req: Request, res: Response) => {
             new SubcategoryController(req, res).DELETE();
         });
-
         this.expressapp.put("/api/subcategory", (req: Request, res: Response) => {
             new SubcategoryController(req, res).PUT();
+        });
+
+        this.expressapp.get("/api/subcategorycontent", (req: Request, res: Response) => {
+            new SubcategoryContentController(req, res).GET();
+        });
+        this.expressapp.post("/api/subcategorycontent", (req: Request, res: Response) => {
+            new SubcategoryContentController(req, res).POST();
+        });
+        this.expressapp.delete("/api/subcategorycontent", (req: Request, res: Response) => {
+            new SubcategoryContentController(req, res).DELETE();
+        });
+        this.expressapp.put("/api/subcategorycontent", (req: Request, res: Response) => {
+            new SubcategoryContentController(req, res).PUT();
         });
 
         this.expressapp.get("/api/ammunitionportion", (req: Request, res: Response) => {

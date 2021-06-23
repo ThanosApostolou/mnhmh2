@@ -111,13 +111,13 @@ export class Subcategory {
             throw err;
         }
     }
-    static async insertToDB(subcategories: Subcategory): Promise<Subcategory> {
+    static async insertToDB(subcategory: Subcategory): Promise<Subcategory> {
         try {
             const result = await App.app.dbmanager.subcategoryRepo.createQueryBuilder().select("MAX(Subcategory.Id)", "max").getRawOne();
             const maxId = result.max;
-            subcategories.Id = 1 + maxId;
-            await App.app.dbmanager.subcategoryRepo.insert(subcategories);
-            return subcategories;
+            subcategory.Id = 1 + maxId;
+            await App.app.dbmanager.subcategoryRepo.insert(subcategory);
+            return subcategory;
         } catch(err) {
             console.log(err);
             throw err;

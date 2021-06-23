@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 
 import { App } from "../App";
 import { Subcategory } from "../entities/Subcategory";
+import { ErrorController } from "./ErrorController";
 
 export class SubcategoryController {
     req: Request = null;
@@ -65,9 +66,11 @@ export class SubcategoryController {
             const body = this.req.body;
             const subcategory = Subcategory.fromObject(body.subcategory);
             if (!subcategory.Name || subcategory.Name === null || subcategory.Name === "") {
-                this.res.status(422);
-                this.res.setHeader("Content-Type", "application/json");
-                this.res.send({error: "Name cannot be empty!"});
+                ErrorController.sendError(this.res, 422,"Το όνομα δεν μπορεί να είναι κενό");
+            } else if (subcategory.MaterialTab === undefined || subcategory.MaterialTab === null) {
+                ErrorController.sendError(this.res, 422,"Η καρτέλα υλικού δεν Borrower να είναι κενή");
+            } else if (subcategory.Borrower === undefined || subcategory.MaterialTab === null) {
+                ErrorController.sendError(this.res, 422,"Ο μερικός διαχειριστής δεν μπορεί να είναι κενός");
             } else {
                 await Subcategory.insertToDB(subcategory);
                 this.res.setHeader("Content-Type", "application/json");

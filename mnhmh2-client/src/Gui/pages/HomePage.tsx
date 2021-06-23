@@ -42,6 +42,12 @@ export class HomePage extends React.Component {
                                 <GroupWork style={styles.largeIcon} />
                             </Grid>
                         </Button>
+                        <Button variant="contained" component={NavLink} to="/subcategorycontents" style={{margin: "10px"}}>
+                            <Grid container direction="column" justify="center" alignItems="center">
+                                <h3>ΠΕΡΙΕΧΟΜΕΝΑ ΥΠΟΣΥΓΚΡΟΤΗΜΑΤΩΝ</h3>
+                                <GroupWorkTwoTone style={styles.largeIcon} />
+                            </Grid>
+                        </Button>
                         <Button variant="contained" component={NavLink} to="/subcategories" style={{margin: "10px"}}>
                             <Grid container direction="column" justify="center" alignItems="center">
                                 <h3>ΥΠΟΣΥΓΚΡΟΤΗΜΑΤΑ</h3>

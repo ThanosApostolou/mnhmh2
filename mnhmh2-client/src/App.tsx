@@ -12,6 +12,7 @@ import { AmmunitionPortionsPage } from "./Gui/pages/AmmunitionPortions/Ammunitio
 import { GroupsPage } from "./Gui/pages/Groups/GroupsPage";
 import { CategoriesPage } from "./Gui/pages/Categories/CategoriesPage";
 import { SubcategoriesPage } from "./Gui/pages/Subcategories/SubcategoriesPage";
+import { SubcategoriesContentsPage } from "./Gui/pages/SubcategoryContents/SubcategoriesContentsPage";
 import { ManagersPage } from "./Gui/pages/Managers/ManagersPage";
 import { BorrowersPage } from "./Gui/pages/Borrowers/BorrowersPage";
 import { ThemeProvider } from "@material-ui/core/styles";
@@ -76,6 +77,9 @@ class App extends React.Component<Record<string, never>, any> {
                                 </Route>
                                 <Route path="/subcategories">
                                     <SubcategoriesPage />
+                                </Route>
+                                <Route path="/subcategorycontents">
+                                    <SubcategoriesContentsPage />
                                 </Route>
                                 <Route path="/ammunitionstores">
                                     <AmmunitionStoresPage />

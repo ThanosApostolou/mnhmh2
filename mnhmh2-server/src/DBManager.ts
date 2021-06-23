@@ -10,6 +10,7 @@ import { ImportsExportsTbl } from "./entities/ImportsExportsTbl";
 import {Manager} from "./entities/Manager";
 import { MaterialTab } from "./entities/MaterialTab";
 import { Subcategory } from "./entities/Subcategory";
+import { SubcategoryContent } from "./entities/SubcategoryContent";
 
 export class DBManager {
     connection: Connection = null;
@@ -17,6 +18,7 @@ export class DBManager {
     directMaterialBorrowerRepo: Repository<DirectMaterialBorrower> = null;
     importsexportstblRepo: Repository<ImportsExportsTbl> = null;
     subcategoryRepo: Repository<Subcategory> = null;
+    subcategoryContentRepo: Repository<SubcategoryContent> = null;
     categoryRepo: Repository<Category> = null;
     ammunitionPortionRepo: Repository<AmmunitionPortion> = null;
     ammunitionStoreRepo: Repository<AmmunitionStore> = null;
@@ -42,6 +44,7 @@ export class DBManager {
                     ImportsExportsTbl,
                     Category,
                     Subcategory,
+                    SubcategoryContent,
                     AmmunitionPortion,
                     AmmunitionStore,
                     Manager,
@@ -54,6 +57,7 @@ export class DBManager {
             this.directMaterialBorrowerRepo = this.connection.getRepository(DirectMaterialBorrower);
             this.importsexportstblRepo = this.connection.getRepository(ImportsExportsTbl);
             this.subcategoryRepo = this.connection.getRepository(Subcategory);
+            this.subcategoryContentRepo = this.connection.getRepository(SubcategoryContent);
             this.categoryRepo = this.connection.getRepository(Category);
             this.ammunitionPortionRepo = this.connection.getRepository(AmmunitionPortion);
             this.ammunitionStoreRepo = this.connection.getRepository(AmmunitionStore);
