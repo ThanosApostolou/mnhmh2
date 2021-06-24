@@ -6,21 +6,21 @@ import { CancelTokenSource } from "axios";
 import { Category } from "../../../entities/Category";
 import { TabPanel, a11yProps } from "../../components/TabPanel";
 import { MySnackbar } from "../../components/MySnackbar";
+import { CategoriesEditMaterialTabs } from "./CategoriesEditMaterialTabs";
 
 export class CategoriesEdit extends React.Component<CategoriesEditProps, CategoriesEditState> {
     state: Readonly<CategoriesEditState>;
     cancelTokenSource: CancelTokenSource;
     nameInputRef: React.RefObject<HTMLInputElement>;
-    serialNumberInputRef: React.RefObject<HTMLInputElement>;
 
     constructor(props: CategoriesEditProps) {
         super(props);
         this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
         this.nameInputRef = React.createRef<HTMLInputElement>();
-        this.serialNumberInputRef = React.createRef<HTMLInputElement>();
         this.state = {
             loading: false,
             errorSnackbarOpen: false,
+            errorMessage: "",
             tabValue: 0
         };
     }
@@ -32,8 +32,7 @@ export class CategoriesEdit extends React.Component<CategoriesEditProps, Categor
         this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
         const category = Category.fromObject({
             Id: this.props.category.Id,
-            Name: this.nameInputRef.current.value,
-            SerialNumber: this.serialNumberInputRef.current.value
+            Name: this.nameInputRef.current.value
         });
         Category.updateInApi(this.cancelTokenSource, category).then(() => {
             this.setState({loading: false});
@@ -42,6 +41,7 @@ export class CategoriesEdit extends React.Component<CategoriesEditProps, Categor
             }
         }).catch((error) => {
             console.log(error);
+            this.setState({errorMessage: ApiConsumer.getErrorMessage(error)});
             this.setState({loading: false, errorSnackbarOpen: true});
         });
     }
@@ -74,16 +74,17 @@ export class CategoriesEdit extends React.Component<CategoriesEditProps, Categor
         const textfields =
             <Grid container direction="column" justify="flex-start" alignContent="center" alignItems="center">
                 <TextField size="small" InputLabelProps={{ shrink: true }} label="Id" type="number" value={this.props.category.Id} disabled />
-                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ" defaultValue={this.props.category.Name} inputRef={this.nameInputRef} />
-                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΣΕΙΡΙΑΚΟΣ ΑΡΙΘΜΟΣ" defaultValue={this.props.category.Name} inputRef={this.serialNumberInputRef} />
+                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΣΕΙΡΙΑΚΟΣ ΑΡΙΘΜΟΣ" value={this.props.category.SerialNumber} disabled />
+                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ*" defaultValue={this.props.category.Name} inputRef={this.nameInputRef} />
             </Grid>
         ;
         return (
             <Drawer anchor="right" open={this.props.openEditDrawer} >
                 <Card className="drawer-card">
-                    <CardHeader title="Τροποποίηση Συγκροτήματος" style={{textAlign: "center"}} />
+                    <CardHeader title={`Τροποποίηση Συγκροτήματος: ${this.props.category.Name}`} style={{textAlign: "center"}} />
                     <Tabs value={this.state.tabValue} onChange={(event: React.ChangeEvent<any>, newValue: number) => this.setState({tabValue: newValue})} >
                         <Tab label="Στοιχεία" value={0} {...a11yProps(0)} />
+                        <Tab label="Καρτέλες Υλικού" value={1} {...a11yProps(1)} />
                     </Tabs>
                     <CardContent className="drawer-cardcontent">
                         <TabPanel value={this.state.tabValue} index={0} style={{flexGrow: 1}}>
@@ -100,6 +101,14 @@ export class CategoriesEdit extends React.Component<CategoriesEditProps, Categor
                             </form>
                             <div style={{display:"flex", flexGrow: 1}} />
                         </TabPanel >
+                        <TabPanel value={this.state.tabValue} index={1} style={{display: "flex", flexGrow: 1}}>
+                            <Grid container direction="column" style={{display:"flex", flexGrow: 1}}>
+                                <fieldset style={{display: "flex", flexGrow: 1}}>
+                                    <legend>Καρτέλες υλικού του συγκροτήματος:</legend>
+                                    <CategoriesEditMaterialTabs category={this.props.category} />
+                                </fieldset>
+                            </Grid>
+                        </TabPanel>
                     </CardContent>
                     <CardActions>
                         <Grid container direction="row" justify="flex-end">
@@ -119,7 +128,7 @@ export class CategoriesEdit extends React.Component<CategoriesEditProps, Categor
                     open={this.state.errorSnackbarOpen}
                     onClose={() => this.setState({errorSnackbarOpen: false})}
                     severity="error"
-                    message="Αποτυχία τροποποίησης!"
+                    message={`Αποτυχία τροποποίησης συγκροτήματος!${this.state.errorMessage}`}
                 />
             </Drawer>
         );
@@ -137,5 +146,6 @@ export interface CategoriesEditProps {
 interface CategoriesEditState {
     loading: boolean;
     errorSnackbarOpen: boolean;
+    errorMessage: string;
     tabValue: number;
 }

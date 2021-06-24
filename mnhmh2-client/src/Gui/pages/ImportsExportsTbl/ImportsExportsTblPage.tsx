@@ -50,7 +50,7 @@ export class ImportsExportsTblPage extends React.Component<Record<string, never>
         this.setState({openAddDrawer: true});
     }
     onAddSave(): void {
-        this.setState({openAddDrawer: false, snackbarMessage: "Επιτυχία προσθήκης συγκριτικού!", openSnackbar: true});
+        this.setState({openAddDrawer: false, snackbarMessage: "Επιτυχία προσθήκης Εισαγωγής/Εξαγωγής!", openSnackbar: true});
         this.fetchData();
     }
     onAddCancel(): void {
@@ -61,11 +61,11 @@ export class ImportsExportsTblPage extends React.Component<Record<string, never>
         this.setState({openEditDrawer: true});
     }
     onEditSave(): void {
-        this.setState({openEditDrawer: false, snackbarMessage: "Επιτυχία τροποποίησης συγκριτικού!", openSnackbar: true});
+        this.setState({openEditDrawer: false, snackbarMessage: "Επιτυχία τροποποίησης Εισαγωγής/Εξαγωγής!", openSnackbar: true});
         this.fetchData();
     }
     onEditDelete(): void {
-        this.setState({openEditDrawer: false, snackbarMessage: "Επιτυχία διαγραφής συγκριτικού!", openSnackbar: true});
+        this.setState({openEditDrawer: false, snackbarMessage: "Επιτυχία διαγραφής Εισαγωγής/Εξαγωγής!", openSnackbar: true});
         this.fetchData();
     }
     onEditCancel(): void {

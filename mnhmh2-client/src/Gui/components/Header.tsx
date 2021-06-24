@@ -59,10 +59,6 @@ class Header extends React.Component<any, any> {
                                     <MenuBook />
                                     &nbsp;Χρεωστικά
                                 </MenuItem>
-                                <MenuItem component={NavLink} to="/importsexportstbl" selected={path === "/importsexportstbl" ? true : false}>
-                                    <CompareArrows />
-                                    &nbsp;Συγρκιτικές
-                                </MenuItem>
                                 <MenuItem component={NavLink} to="/categories" selected={path === "/categories" ? true : false}>
                                     <GroupWork />
                                     &nbsp;Συγκροτήματα
@@ -79,7 +75,7 @@ class Header extends React.Component<any, any> {
                                     <Store />
                                     &nbsp;Αποθήκες
                                 </MenuItem>
-                                <MenuItem selected={path === "/borrowers" || path==="/groups" || path==="/managers" || path==="/subcategorycontents" ? true : false} onClick={this.handleClick.bind(this)}>
+                                <MenuItem selected={path==="/importsexportstbl" || path === "/borrowers" || path==="/groups" || path==="/managers" || path==="/subcategorycontents" ? true : false} onClick={this.handleClick.bind(this)}>
                                     <FolderOpen />
                                     &nbsp;Δεδομένα
                                     <ArrowDropDown />
@@ -110,6 +106,10 @@ class Header extends React.Component<any, any> {
                         horizontal: "center",
                     }}
                 >
+                    <MenuItem component={NavLink} to="/importsexportstbl" selected={path === "/importsexportstbl" ? true : false} onClick={this.handleClose.bind(this)}>
+                        <CompareArrows />
+                        &nbsp;Εισαγωγές/Εξαγωγές
+                    </MenuItem>
                     <MenuItem component={NavLink} to="/subcategorycontents" selected={path === "/subcategorycontents" ? true : false} onClick={this.handleClose.bind(this)}>
                         <RecentActors />
                                             &nbsp;Περιεχόμενα Υποσυγκροτημάτων

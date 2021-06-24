@@ -10,16 +10,15 @@ export class CategoriesAdd extends React.Component<CategoriesAddProps, Categorie
     state: Readonly<CategoriesAddState>;
     cancelTokenSource: CancelTokenSource;
     nameInputRef: React.RefObject<HTMLInputElement>;
-    serialNumberInputRef: React.RefObject<HTMLInputElement>;
 
     constructor(props: CategoriesAddProps) {
         super(props);
         this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
         this.nameInputRef = React.createRef<HTMLInputElement>();
-        this.serialNumberInputRef = React.createRef<HTMLInputElement>();
         this.state = {
             loading: false,
-            errorSnackbarOpen: false
+            errorSnackbarOpen: false,
+            errorMessage: ""
         };
     }
 
@@ -30,8 +29,7 @@ export class CategoriesAdd extends React.Component<CategoriesAddProps, Categorie
         this.cancelTokenSource = ApiConsumer.getCancelTokenSource();
         const store = Category.fromObject({
             Id: null,
-            Name: this.nameInputRef.current.value,
-            SerialNumber: this.serialNumberInputRef.current.value
+            Name: this.nameInputRef.current.value
         });
         Category.insertToApi(this.cancelTokenSource, store).then(() => {
             this.setState({loading: false});
@@ -40,6 +38,7 @@ export class CategoriesAdd extends React.Component<CategoriesAddProps, Categorie
             }
         }).catch((error) => {
             console.log(error);
+            this.setState({errorMessage: ApiConsumer.getErrorMessage(error)});
             this.setState({loading: false, errorSnackbarOpen: true});
         });
     }
@@ -56,8 +55,7 @@ export class CategoriesAdd extends React.Component<CategoriesAddProps, Categorie
         }
         const textfields =
             <Grid container direction="column" justify="flex-start" alignContent="center" alignItems="center">
-                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ" inputRef={this.nameInputRef} />
-                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΣΕΙΡΙΑΚΟΣ ΑΡΙΘΜΟΣ" inputRef={this.serialNumberInputRef} />
+                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ*" inputRef={this.nameInputRef} />
             </Grid>
         ;
         return (
@@ -90,7 +88,7 @@ export class CategoriesAdd extends React.Component<CategoriesAddProps, Categorie
                     open={this.state.errorSnackbarOpen}
                     onClose={() => this.setState({errorSnackbarOpen: false})}
                     severity="error"
-                    message="Αποτυχία προσθήκης!"
+                    message={`Αποτυχία προσθήκης συγκροτήματος!${this.state.errorMessage}`}
                 />
             </Drawer>
         );
@@ -106,4 +104,5 @@ export interface CategoriesAddProps {
 interface CategoriesAddState {
     loading: boolean;
     errorSnackbarOpen: boolean;
+    errorMessage: string;
 }

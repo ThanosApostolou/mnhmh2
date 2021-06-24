@@ -31,6 +31,7 @@ export class ImportsExportsTblAdd extends React.Component<ImportsExportsTblAddPr
         this.state = {
             loading: false,
             errorSnackbarOpen: false,
+            errorMessage: "",
             date: "",
             materialTab: null
         };
@@ -59,6 +60,7 @@ export class ImportsExportsTblAdd extends React.Component<ImportsExportsTblAddPr
             }
         }).catch((error) => {
             console.log(error);
+            this.setState({errorMessage: ApiConsumer.getErrorMessage(error)});
             this.setState({loading: false, errorSnackbarOpen: true});
         });
     }
@@ -95,7 +97,7 @@ export class ImportsExportsTblAdd extends React.Component<ImportsExportsTblAddPr
         }
         const textfields =
             <Grid container direction="column" justify="flex-start" alignContent="center" alignItems="center">
-                <TextField id="datetime-local" label="Ημερομηνία" type="datetime-local" value={this.state.date}
+                <TextField id="datetime-local" label="Ημερομηνία*" type="datetime-local" value={this.state.date}
                     onChange={(event) => this.setState({date: event.target.value})}
                     InputLabelProps={{
                         shrink: true
@@ -110,9 +112,9 @@ export class ImportsExportsTblAdd extends React.Component<ImportsExportsTblAddPr
                 />
                 <TextField size="small" InputLabelProps={{ shrink: true }} label="ΜΟΝΑΔΑ" inputRef={this.unitInputRef} />
                 <TextField size="small" InputLabelProps={{ shrink: true }} label="ΑΡΙΘΜΟΣ ΔΙΚΑΙΟΛΟΓΗΣΗ ΑΡΧΕΙΟΥ" inputRef={this.justificationFileNumberInputRef} />
-                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΕΙΣΑΧΘΗΚΕ" type="number" inputRef={this.importedInputRef} />
-                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΕΞΑΧΘΗΚΕ" type="number" inputRef={this.exportedInputRef} />
-                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΥΠΟΛΟΙΠΟ" type="number" inputRef={this.remainingInputRef} />
+                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΕΙΣΑΧΘΗΚΕ" type="number" defaultValue={0} inputRef={this.importedInputRef} />
+                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΕΞΑΧΘΗΚΕ" type="number" defaultValue={0} inputRef={this.exportedInputRef} />
+                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΥΠΟΛΟΙΠΟ" type="number" defaultValue={0} inputRef={this.remainingInputRef} />
                 <TextField size="small" InputLabelProps={{ shrink: true }} label="ΣΧΟΛΙΑ" inputRef={this.commentsInputRef} />
             </Grid>
         ;
@@ -127,7 +129,7 @@ export class ImportsExportsTblAdd extends React.Component<ImportsExportsTblAddPr
                                 {textfields}
                             </fieldset>
                             <fieldset style={{display: "flex", height: "270px"}}>
-                                <legend>Καρτέλα Υλικού:</legend>
+                                <legend>Καρτέλα Υλικού*:</legend>
                                 <MaterialTabSingleDataGrid materialTab={this.state.materialTab}
                                     onRemoveClick={this.onMaterialTabRemove.bind(this)}
                                     onSelectClick={this.onMaterialTabSelect.bind(this)}
@@ -154,7 +156,7 @@ export class ImportsExportsTblAdd extends React.Component<ImportsExportsTblAddPr
                     open={this.state.errorSnackbarOpen}
                     onClose={() => this.setState({errorSnackbarOpen: false})}
                     severity="error"
-                    message="Αποτυχία προσθήκης!"
+                    message={`Αποτυχία προσθήκης εισαγωγής/εξαγωγής!${this.state.errorMessage}`}
                 />
             </Drawer>
         );
@@ -170,6 +172,7 @@ export interface ImportsExportsTblAddProps {
 interface ImportsExportsTblAddState {
     loading: boolean;
     errorSnackbarOpen: boolean;
+    errorMessage: string;
     date: string;
     materialTab: MaterialTab;
 }

@@ -98,8 +98,8 @@ export class Group {
     }
     static async updateInDB(group: Group): Promise<Group> {
         try {
-            delete group["SerialNumber"];
-            delete group["LastRegistryCode"];
+            delete group.SerialNumber;
+            delete group.LastRegistryCode;
             await App.app.dbmanager.groupRepo.update(group.Id, group);
             return group;
         } catch(err) {

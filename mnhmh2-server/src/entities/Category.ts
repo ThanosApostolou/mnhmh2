@@ -108,9 +108,11 @@ export class Category {
     }
     static async insertToDB(category: Category): Promise<Category> {
         try {
-            const result = await App.app.dbmanager.categoryRepo.createQueryBuilder().select("MAX(Category.Id)", "max").getRawOne();
-            const maxId = result.max;
+            const result = await App.app.dbmanager.categoryRepo.createQueryBuilder().select("MAX(Category.Id)", "maxId").addSelect("Max(Category.SerialNumber)", "maxSerialNumber").getRawOne();
+            const maxId = result["maxId"];
             category.Id = 1 + maxId;
+            const maxSerialNumber = result["maxSerialNumber"];
+            category.SerialNumber = 1 + maxSerialNumber;
             await App.app.dbmanager.categoryRepo.insert(category);
             return category;
         } catch(err) {
@@ -128,6 +130,7 @@ export class Category {
     }
     static async updateInDB(category: Category): Promise<Category> {
         try {
+            delete category.SerialNumber;
             await App.app.dbmanager.categoryRepo.update(category.Id, category);
             return category;
         } catch(err) {

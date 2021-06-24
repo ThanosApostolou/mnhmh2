@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 
 import { Category } from "../entities/Category";
+import { ErrorController } from "./ErrorController";
 
 export class CategoryController {
     req: Request = null;
@@ -40,9 +41,7 @@ export class CategoryController {
             const body = this.req.body;
             const category = Category.fromObject(body.category);
             if (!category.Name || category.Name === null || category.Name === "") {
-                this.res.status(422);
-                this.res.setHeader("Content-Type", "application/json");
-                this.res.send({error: "Name cannot be empty!"});
+                ErrorController.sendError(this.res, 422,"Το όνομα δεν μπορεί να είναι κενό");
             } else {
                 await Category.insertToDB(category);
                 this.res.setHeader("Content-Type", "application/json");
@@ -72,9 +71,7 @@ export class CategoryController {
             const body = this.req.body;
             const category = Category.fromObject(body.category);
             if (!category.Name || category.Name === null || category.Name === "") {
-                this.res.status(422);
-                this.res.setHeader("Content-Type", "application/json");
-                this.res.send({error: "Name cannot be empty!"});
+                ErrorController.sendError(this.res, 422,"Το όνομα δεν μπορεί να είναι κενό");
             } else {
                 await Category.updateInDB(category);
                 this.res.setHeader("Content-Type", "application/json");

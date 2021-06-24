@@ -1,7 +1,7 @@
 import {Entity, PrimaryColumn, Column, ManyToOne, JoinColumn, Like } from "typeorm";
 
 import { App } from "../App";
-import { DBManager } from "../DBManager";
+import { ErrorController } from "../controllers/ErrorController";
 import { MaterialTab, MaterialTabObj } from "./MaterialTab";
 
 @Entity({name: "ImportsExportsTbl"})
@@ -81,47 +81,7 @@ export class ImportsExportsTbl {
     }
 
     static async listSelectFromDB(Id: number, notId: number, fromDate: string, toDate: string, search: string, withMaterialTab: boolean, materialTabId: number, notMaterialTabId: number): Promise<ImportsExportsTbl[]> {
-        //let importsexportstbls: ImportsExportsTbl[] = [];
         try {
-            /*
-            if (search === "") {
-                importsexportstbls = await App.app.dbmanager.importsexportstblRepo.find({
-                    relations: ["MaterialTab"]
-                });
-            } else {
-                importsexportstbls = await App.app.dbmanager.importsexportstblRepo.createQueryBuilder("ImportsExportsTbl")
-                    .leftJoinAndSelect("ImportsExportsTbl.MaterialTab", "MaterialTab")
-                    .leftJoinAndSelect("MaterialTab.Category", "Category")
-                    .where([
-                        {
-                            Id: Like(`%${search}%`)
-                        },
-                        {
-                            Date: Like(`%${search}%`)
-                        },
-                        {
-                            Unit: Like(`%${search}%`)
-                        },
-                        {
-                            JustificationFileNumber: Like(`%${search}%`)
-                        },
-                        {
-                            Imported: Like(`%${search}%`)
-                        },
-                        {
-                            Exported: Like(`%${search}%`)
-                        },
-                        {
-                            Remaining: Like(`%${search}%`)
-                        },
-                        {
-                            Comments: Like(`%${search}%`)
-                        }
-                    ])
-                    .orWhere(`MaterialTab.PartialRegistryCode LIKE '%${search}%' OR MaterialTab.Name LIKE '%${search}%'`)
-                    .getMany();
-            }
-            */
             const importsexportstbls_query = App.app.dbmanager.importsexportstblRepo.createQueryBuilder("ImportsExportsTbl")
                 .leftJoinAndSelect("ImportsExportsTbl.MaterialTab", "MaterialTab");
 

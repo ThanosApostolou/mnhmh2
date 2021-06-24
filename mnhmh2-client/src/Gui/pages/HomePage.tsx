@@ -30,12 +30,6 @@ export class HomePage extends React.Component {
                                 <MenuBook style={styles.largeIcon} />
                             </Grid>
                         </Button>
-                        <Button variant="contained" component={NavLink} to="/importsexportstbl" style={{margin: "10px"}}>
-                            <Grid container direction="column" justify="center" alignItems="center">
-                                <h3>ΣΥΓΚΡΙΤΙΚΕΣ</h3>
-                                <CompareArrows style={styles.largeIcon} />
-                            </Grid>
-                        </Button>
                         <Button variant="contained" component={NavLink} to="/categories" style={{margin: "10px"}}>
                             <Grid container direction="column" justify="center" alignItems="center">
                                 <h3>ΣΥΓΚΡΟΤΗΜΑΤΑ</h3>
@@ -45,12 +39,6 @@ export class HomePage extends React.Component {
                         <Button variant="contained" component={NavLink} to="/subcategories" style={{margin: "10px"}}>
                             <Grid container direction="column" justify="center" alignItems="center">
                                 <h3>ΥΠΟΣΥΓΚΡΟΤΗΜΑΤΑ</h3>
-                                <GroupWorkTwoTone style={styles.largeIcon} />
-                            </Grid>
-                        </Button>
-                        <Button variant="contained" component={NavLink} to="/subcategorycontents" style={{margin: "10px"}}>
-                            <Grid container direction="column" justify="center" alignItems="center">
-                                <h3>ΠΕΡΙΕΧΟΜΕΝΑ ΥΠΟΣΥΓΚΡΟΤΗΜΑΤΩΝ</h3>
                                 <GroupWorkTwoTone style={styles.largeIcon} />
                             </Grid>
                         </Button>
@@ -72,6 +60,18 @@ export class HomePage extends React.Component {
                 <Card elevation={24}>
                     <CardHeader title="ΔΕΔΟΜΕΝΑ" style={{ textAlign: "center" }} />
                     <Grid container direction="row" justify="center" alignItems="center">
+                        <Button variant="contained" component={NavLink} to="/importsexportstbl" style={{margin: "10px"}}>
+                            <Grid container direction="column" justify="center" alignItems="center">
+                                <h3>ΕΙΣΑΓΩΓΕΣ/ΕΞΑΓΩΓΕΣ</h3>
+                                <CompareArrows style={styles.largeIcon} />
+                            </Grid>
+                        </Button>
+                        <Button variant="contained" component={NavLink} to="/subcategorycontents" style={{margin: "10px"}}>
+                            <Grid container direction="column" justify="center" alignItems="center">
+                                <h3>ΠΕΡΙΕΧΟΜΕΝΑ ΥΠΟΣΥΓΚΡΟΤΗΜΑΤΩΝ</h3>
+                                <GroupWorkTwoTone style={styles.largeIcon} />
+                            </Grid>
+                        </Button>
                         <Button variant="contained" component={NavLink} to="/borrowers" style={{margin: "10px"}}>
                             <Grid container direction="column" justify="center" alignItems="center">
                                 <h3>ΜΕΡΙΚΟΙ ΔΙΑΧΕΙΡΙΣΤΕΣ</h3>

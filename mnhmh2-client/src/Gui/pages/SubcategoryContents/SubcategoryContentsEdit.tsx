@@ -25,6 +25,7 @@ export class SubcategoryContentsEdit extends React.Component<SubcategoryContents
             materialTab: null,
             loading: false,
             errorSnackbarOpen: false,
+            errorMessage: "",
             tabValue: 0
         };
     }
@@ -45,6 +46,7 @@ export class SubcategoryContentsEdit extends React.Component<SubcategoryContents
             }
         }).catch((error) => {
             console.log(error);
+            this.setState({errorMessage: ApiConsumer.getErrorMessage(error)});
             this.setState({loading: false, errorSnackbarOpen: true});
         });
     }
@@ -166,7 +168,7 @@ export class SubcategoryContentsEdit extends React.Component<SubcategoryContents
                     open={this.state.errorSnackbarOpen}
                     onClose={() => this.setState({errorSnackbarOpen: false})}
                     severity="error"
-                    message="Αποτυχία τροποποίησης!"
+                    message={`Αποτυχία τροποποίησης περιεχομένου υποσυγκροτήματος!${this.state.errorMessage}`}
                 />
             </Drawer>
         );
@@ -186,5 +188,6 @@ interface SubcategoryContentsEditState {
     materialTab: MaterialTab;
     loading: boolean;
     errorSnackbarOpen: boolean;
+    errorMessage: string;
     tabValue: number;
 }
