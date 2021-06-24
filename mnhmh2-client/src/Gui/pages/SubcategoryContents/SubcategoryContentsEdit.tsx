@@ -112,7 +112,7 @@ export class SubcategoryContentsEdit extends React.Component<SubcategoryContents
         return (
             <Drawer anchor="right" open={this.props.openEditDrawer} >
                 <Card className="drawer-card">
-                    <CardHeader title="Τροποποίηση Υποσυγκροτήματος" style={{textAlign: "center"}} />
+                    <CardHeader title={`Τροποποίηση Περιεχομένου Υποσυγκροτήματος: ${this.props.subcategoryContent.SubcategoryContentTab.Name}`} style={{textAlign: "center"}} />
                     <Tabs value={this.state.tabValue} onChange={(event: React.ChangeEvent<any>, newValue: number) => this.setState({tabValue: newValue})} >
                         <Tab label="Στοιχεία" value={0} {...a11yProps(0)} />
                     </Tabs>

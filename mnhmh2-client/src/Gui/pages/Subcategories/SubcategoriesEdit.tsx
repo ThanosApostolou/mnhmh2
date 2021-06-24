@@ -10,6 +10,7 @@ import { Borrower } from "../../../entities/Borrower";
 import { BorrowerSingleDataGrid } from "../Borrowers/BorrowerSingleDataGrid";
 import { TabPanel, a11yProps } from "../../components/TabPanel";
 import { MySnackbar } from "../../components/MySnackbar";
+import { SubcategoriesEditSubcategoryContents } from "./SubcategoriesEditSubcategoryContents";
 
 export class SubcategoriesEdit extends React.Component<SubcategoriesEditProps, SubcategoriesEditState> {
     state: Readonly<SubcategoriesEditState>;
@@ -25,6 +26,7 @@ export class SubcategoriesEdit extends React.Component<SubcategoriesEditProps, S
             borrower: null,
             loading: false,
             errorSnackbarOpen: false,
+            errorMessage: "",
             tabValue: 0
         };
     }
@@ -47,6 +49,7 @@ export class SubcategoriesEdit extends React.Component<SubcategoriesEditProps, S
             }
         }).catch((error) => {
             console.log(error);
+            this.setState({errorMessage: ApiConsumer.getErrorMessage(error)});
             this.setState({loading: false, errorSnackbarOpen: true});
         });
     }
@@ -108,15 +111,16 @@ export class SubcategoriesEdit extends React.Component<SubcategoriesEditProps, S
         const textfields =
             <Grid container direction="column" justify="flex-start" alignContent="center" alignItems="center">
                 <TextField size="small" InputLabelProps={{ shrink: true }} label="Id" type="number" value={this.props.subcategory.Id} disabled />
-                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ" defaultValue={this.props.subcategory.Name} inputRef={this.nameInputRef} />
+                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ*" defaultValue={this.props.subcategory.Name} inputRef={this.nameInputRef} />
             </Grid>
         ;
         return (
             <Drawer anchor="right" open={this.props.openEditDrawer} >
                 <Card className="drawer-card">
-                    <CardHeader title="Τροποποίηση Υποσυγκροτήματος" style={{textAlign: "center"}} />
+                    <CardHeader title={`Τροποποίηση Υποσυγκροτήματος: ${this.props.subcategory.Name}`} style={{textAlign: "center"}} />
                     <Tabs value={this.state.tabValue} onChange={(event: React.ChangeEvent<any>, newValue: number) => this.setState({tabValue: newValue})} >
                         <Tab label="Στοιχεία" value={0} {...a11yProps(0)} />
+                        <Tab label="Περιεχόμενα Υποσυγκροτήματος" value={1} {...a11yProps(1)} />
                     </Tabs>
                     <CardContent className="drawer-cardcontent">
                         <TabPanel value={this.state.tabValue} index={0} style={{flexGrow: 1}}>
@@ -126,7 +130,7 @@ export class SubcategoriesEdit extends React.Component<SubcategoriesEditProps, S
                                     {textfields}
                                 </fieldset>
                                 <fieldset style={{display: "flex", height: "270px"}}>
-                                    <legend>Καρτέλα Υλικού:</legend>
+                                    <legend>Καρτέλα Υλικού*:</legend>
                                     <MaterialTabSingleDataGrid materialTab={this.state.materialTab}
                                         onRemoveClick={this.onMaterialTabRemove.bind(this)}
                                         onSelectClick={this.onMaterialTabSelect.bind(this)}
@@ -134,7 +138,7 @@ export class SubcategoriesEdit extends React.Component<SubcategoriesEditProps, S
                                     />
                                 </fieldset>
                                 <fieldset style={{display: "flex", height: "270px"}}>
-                                    <legend>Μερικός Διαχειριστής:</legend>
+                                    <legend>Μερικός Διαχειριστής*:</legend>
                                     <BorrowerSingleDataGrid borrower={this.state.borrower}
                                         onRemoveClick={this.onBorrowerRemove.bind(this)}
                                         onSelectClick={this.onBorrowerSelect.bind(this)}
@@ -149,6 +153,14 @@ export class SubcategoriesEdit extends React.Component<SubcategoriesEditProps, S
                             </form>
                             <div style={{display:"flex", flexGrow: 1}} />
                         </TabPanel >
+                        <TabPanel value={this.state.tabValue} index={1} style={{display: "flex", flexGrow: 1}}>
+                            <Grid container direction="column" style={{display:"flex", flexGrow: 1}}>
+                                <fieldset style={{display: "flex", flexGrow: 1}}>
+                                    <legend>Περιεχόμενα του υποσυγκροτήματος:</legend>
+                                    <SubcategoriesEditSubcategoryContents subcategory={this.props.subcategory} />
+                                </fieldset>
+                            </Grid>
+                        </TabPanel>
                     </CardContent>
                     <CardActions>
                         <Grid container direction="row" justify="flex-end">
@@ -168,7 +180,7 @@ export class SubcategoriesEdit extends React.Component<SubcategoriesEditProps, S
                     open={this.state.errorSnackbarOpen}
                     onClose={() => this.setState({errorSnackbarOpen: false})}
                     severity="error"
-                    message="Αποτυχία τροποποίησης!"
+                    message={`Αποτυχία τροποποίησης υποσυγκροτήματος!${this.state.errorMessage}`}
                 />
             </Drawer>
         );
@@ -188,5 +200,6 @@ interface SubcategoriesEditState {
     borrower: Borrower;
     loading: boolean;
     errorSnackbarOpen: boolean;
+    errorMessage: string;
     tabValue: number;
 }

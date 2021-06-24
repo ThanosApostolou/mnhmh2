@@ -22,6 +22,7 @@ export class SubcategoriesAdd extends React.Component<SubcategoriesAddProps, Sub
         this.state = {
             loading: false,
             errorSnackbarOpen: false,
+            errorMessage: "",
             materialTab: null,
             borrower: null
         };
@@ -45,6 +46,7 @@ export class SubcategoriesAdd extends React.Component<SubcategoriesAddProps, Sub
             }
         }).catch((error) => {
             console.log(error);
+            this.setState({errorMessage: ApiConsumer.getErrorMessage(error)});
             this.setState({loading: false, errorSnackbarOpen: true});
         });
     }
@@ -90,7 +92,7 @@ export class SubcategoriesAdd extends React.Component<SubcategoriesAddProps, Sub
         }
         const textfields =
             <Grid container direction="column" justify="flex-start" alignContent="center" alignItems="center">
-                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ" inputRef={this.nameInputRef} />
+                <TextField size="small" InputLabelProps={{ shrink: true }} label="ΟΝΟΜΑ*" inputRef={this.nameInputRef} />
             </Grid>
         ;
         return (
@@ -104,7 +106,7 @@ export class SubcategoriesAdd extends React.Component<SubcategoriesAddProps, Sub
                                 {textfields}
                             </fieldset>
                             <fieldset style={{display: "flex", height: "270px"}}>
-                                <legend>Καρτέλα Υλικού:</legend>
+                                <legend>Καρτέλα Υλικού*:</legend>
                                 <MaterialTabSingleDataGrid materialTab={this.state.materialTab}
                                     onRemoveClick={this.onMaterialTabRemove.bind(this)}
                                     onSelectClick={this.onMaterialTabSelect.bind(this)}
@@ -112,7 +114,7 @@ export class SubcategoriesAdd extends React.Component<SubcategoriesAddProps, Sub
                                 />
                             </fieldset>
                             <fieldset style={{display: "flex", height: "270px"}}>
-                                <legend>Μερικός Διαχειριστής:</legend>
+                                <legend>Μερικός Διαχειριστής*:</legend>
                                 <BorrowerSingleDataGrid borrower={this.state.borrower}
                                     onRemoveClick={this.onBorrowerRemove.bind(this)}
                                     onSelectClick={this.onBorrowerSelect.bind(this)}
@@ -139,7 +141,7 @@ export class SubcategoriesAdd extends React.Component<SubcategoriesAddProps, Sub
                     open={this.state.errorSnackbarOpen}
                     onClose={() => this.setState({errorSnackbarOpen: false})}
                     severity="error"
-                    message="Αποτυχία προσθήκης!"
+                    message={`Αποτυχία προσθήκης υποσυγκροτήματος!${this.state.errorMessage}`}
                 />
             </Drawer>
         );
@@ -155,6 +157,7 @@ export interface SubcategoriesAddProps {
 interface SubcategoriesAddState {
     loading: boolean;
     errorSnackbarOpen: boolean;
+    errorMessage: string;
     materialTab: MaterialTab;
     borrower: Borrower;
 }
