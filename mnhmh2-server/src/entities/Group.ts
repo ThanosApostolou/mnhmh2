@@ -74,7 +74,7 @@ export class Group {
     }
     static async insertToDB(group: Group): Promise<Group> {
         try {
-            const result = await App.app.dbmanager.groupRepo.createQueryBuilder().select("MAX(Group.Id)", "maxId").addSelect("Max(Group.SerialNumber)", "maxSerialNumber").getRawOne();
+            const result = await App.app.dbmanager.groupRepo.createQueryBuilder("Group").select("MAX(Group.Id)", "maxId").addSelect("Max(Group.SerialNumber)", "maxSerialNumber").getRawOne();
             console.log("RESULT", result);
             const maxId = result["maxId"];
             group.Id = 1 + maxId;

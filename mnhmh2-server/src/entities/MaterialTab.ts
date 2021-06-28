@@ -189,10 +189,10 @@ export class MaterialTab {
     }
     static async insertToDB(mtb: MaterialTab): Promise<MaterialTab> {
         try {
-            const result = await App.app.dbmanager.materialTabRepo.createQueryBuilder().select("MAX(MaterialTab.Id)", "max").getRawOne();
+            const result = await App.app.dbmanager.materialTabRepo.createQueryBuilder("MaterialTab").select("MAX(MaterialTab.Id)", "max").getRawOne();
             const maxId = result.max;
             mtb.Id = 1 + maxId;
-            const materialTabsWithGroupQueryBuilder = App.app.dbmanager.materialTabRepo.createQueryBuilder().leftJoinAndSelect("MaterialTab.Group", "Group").where(`Group.Id = '${mtb.Group.Id}'`);
+            const materialTabsWithGroupQueryBuilder = App.app.dbmanager.materialTabRepo.createQueryBuilder("MaterialTab").leftJoinAndSelect("MaterialTab.Group", "Group").where(`Group.Id = '${mtb.Group.Id}'`);
             const groups = await Group.listSelectFromDB(mtb.Group.Id, null, null);
             if (groups.length > 0) {
                 const group = groups[0];
@@ -202,7 +202,7 @@ export class MaterialTab {
             } else {
                 mtb.PartialRegistryCodeNumber = 1;
             }
-            const result3 = await App.app.dbmanager.materialTabRepo.createQueryBuilder().select("MAX(MaterialTab.SerialNumber)", "max").getRawOne();
+            const result3 = await App.app.dbmanager.materialTabRepo.createQueryBuilder("MaterialTab").select("MAX(MaterialTab.SerialNumber)", "max").getRawOne();
             const maxSerialNumber = result3.max;
             mtb.SerialNumber = 1 + maxSerialNumber;
 

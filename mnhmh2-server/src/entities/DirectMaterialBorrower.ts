@@ -136,7 +136,7 @@ export class DirectMaterialBorrower {
     }
     static async insertToDB(dmb: DirectMaterialBorrower): Promise<DirectMaterialBorrower> {
         try {
-            const result = await App.app.dbmanager.directMaterialBorrowerRepo.createQueryBuilder().select("MAX(DirectMaterialBorrower.Id)", "max").getRawOne();
+            const result = await App.app.dbmanager.directMaterialBorrowerRepo.createQueryBuilder("DirectMaterialBorrower").select("MAX(DirectMaterialBorrower.Id)", "max").getRawOne();
             const maxId = result.max;
             dmb.Id = 1 + maxId;
             await App.app.dbmanager.directMaterialBorrowerRepo.insert(dmb);

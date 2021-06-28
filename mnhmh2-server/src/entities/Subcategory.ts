@@ -113,7 +113,7 @@ export class Subcategory {
     }
     static async insertToDB(subcategory: Subcategory): Promise<Subcategory> {
         try {
-            const result = await App.app.dbmanager.subcategoryRepo.createQueryBuilder().select("MAX(Subcategory.Id)", "max").getRawOne();
+            const result = await App.app.dbmanager.subcategoryRepo.createQueryBuilder("Subcategory").select("MAX(Subcategory.Id)", "max").getRawOne();
             const maxId = result.max;
             subcategory.Id = 1 + maxId;
             await App.app.dbmanager.subcategoryRepo.insert(subcategory);

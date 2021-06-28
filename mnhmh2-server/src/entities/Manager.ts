@@ -92,7 +92,7 @@ export class Manager {
     }
     static async insertToDB(manager: Manager): Promise<Manager> {
         try {
-            const result = await App.app.dbmanager.managerRepo.createQueryBuilder().select("MAX(Manager.Id)", "max").getRawOne();
+            const result = await App.app.dbmanager.managerRepo.createQueryBuilder("Manager").select("MAX(Manager.Id)", "max").getRawOne();
             const maxId = result.max;
             manager.Id = 1 + maxId;
             await App.app.dbmanager.managerRepo.insert(manager);

@@ -108,7 +108,7 @@ export class Category {
     }
     static async insertToDB(category: Category): Promise<Category> {
         try {
-            const result = await App.app.dbmanager.categoryRepo.createQueryBuilder().select("MAX(Category.Id)", "maxId").addSelect("Max(Category.SerialNumber)", "maxSerialNumber").getRawOne();
+            const result = await App.app.dbmanager.categoryRepo.createQueryBuilder("Category").select("MAX(Category.Id)", "maxId").addSelect("Max(Category.SerialNumber)", "maxSerialNumber").getRawOne();
             const maxId = result["maxId"];
             category.Id = 1 + maxId;
             const maxSerialNumber = result["maxSerialNumber"];

@@ -71,7 +71,7 @@ export class AmmunitionStore {
     }
     static async insertToDB(store: AmmunitionStore): Promise<AmmunitionStore> {
         try {
-            const result = await App.app.dbmanager.ammunitionStoreRepo.createQueryBuilder().select("MAX(AmmunitionStore.Id)", "maxId").addSelect("Max(AmmunitionStore.SerialNumber)", "maxSerialNumber").getRawOne();
+            const result = await App.app.dbmanager.ammunitionStoreRepo.createQueryBuilder("AmmunitionStore").select("MAX(AmmunitionStore.Id)", "maxId").addSelect("Max(AmmunitionStore.SerialNumber)", "maxSerialNumber").getRawOne();
             const maxId = result["maxId"];
             store.Id = 1 + maxId;
             const maxSerialNumber = result["maxSerialNumber"];
